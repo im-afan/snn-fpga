@@ -1,0 +1,28 @@
+#-----------------------------------------------------------
+# Vivado v2024.1 (64-bit)
+# SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
+# IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+# SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+# Start of session at: Fri Dec  6 19:33:04 2024
+# Process ID: 7372
+# Current directory: C:/Users/andre/Desktop/snn-fpga/big-snn/vivado
+# Command line: vivado.exe -mode tcl -source .\basys3_project.tcl
+# Log file: C:/Users/andre/Desktop/snn-fpga/big-snn/vivado/vivado.log
+# Journal file: C:/Users/andre/Desktop/snn-fpga/big-snn/vivado\vivado.jou
+# Running On        :DESKTOP-OVIC86T
+# Platform          :Windows Server 2016 or Windows 10
+# Operating System  :19045
+# Processor Detail  :Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+# CPU Frequency     :2304 MHz
+# CPU Physical cores:8
+# CPU Logical cores :16
+# Host memory       :34248 MB
+# Swap memory       :5100 MB
+# Total Virtual     :39349 MB
+# Available Virtual :26954 MB
+#-----------------------------------------------------------
+source {.\basys3_project.tcl}
+# create_project -force fpga_risp_microblaze ./fpga_risp_microblaze -part xc7a35tcpg236-1
+ERROR: [Project 1-161] Failed to remove the directory 'C:/Users/andre/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs'. The directory might be in use by some other process.
+Vivado% exit
+INFO: [Common 17-206] Exiting Vivado at Fri Dec  6 19:33:44 2024...

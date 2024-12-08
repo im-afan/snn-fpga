@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2024.1 (64-bit)
+# SW Build 5076996 on Wed May 22 18:36:09 MDT 2024
+# IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+# SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+# Start of session at: Mon Dec  2 13:23:13 2024
+# Process ID: 17976
+# Current directory: /home/andrew/Desktop/snn-fpga/big-snn/vivado
+# Command line: vivado -mode tcl -source basys3_project.tcl
+# Log file: /home/andrew/Desktop/snn-fpga/big-snn/vivado/vivado.log
+# Journal file: /home/andrew/Desktop/snn-fpga/big-snn/vivado/vivado.jou
+# Running On        :andrew-X510UAR
+# Platform          :Ubuntu
+# Operating System  :Ubuntu 22.04.4 LTS
+# Processor Detail  :Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+# CPU Frequency     :3000.189 MHz
+# CPU Physical cores:4
+# CPU Logical cores :8
+# Host memory       :8203 MB
+# Swap memory       :2138 MB
+# Total Virtual     :10341 MB
+# Available Virtual :5627 MB
+#-----------------------------------------------------------
+source basys3_project.tcl

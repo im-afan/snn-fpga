@@ -1,0 +1,526 @@
+#-----------------------------------------------------------
+# Vivado v2024.1 (64-bit)
+# SW Build 5076996 on Wed May 22 18:36:09 MDT 2024
+# IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+# SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+# Start of session at: Mon Dec  2 13:23:13 2024
+# Process ID: 17976
+# Current directory: /home/andrew/Desktop/snn-fpga/big-snn/vivado
+# Command line: vivado -mode tcl -source basys3_project.tcl
+# Log file: /home/andrew/Desktop/snn-fpga/big-snn/vivado/vivado.log
+# Journal file: /home/andrew/Desktop/snn-fpga/big-snn/vivado/vivado.jou
+# Running On        :andrew-X510UAR
+# Platform          :Ubuntu
+# Operating System  :Ubuntu 22.04.4 LTS
+# Processor Detail  :Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+# CPU Frequency     :3000.189 MHz
+# CPU Physical cores:4
+# CPU Logical cores :8
+# Host memory       :8203 MB
+# Swap memory       :2138 MB
+# Total Virtual     :10341 MB
+# Available Virtual :5627 MB
+#-----------------------------------------------------------
+source basys3_project.tcl
+# create_project -force fpga_risp_microblaze ./fpga_risp_microblaze -part xc7a35tcpg236-1
+create_project: Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1412.656 ; gain = 132.836 ; free physical = 326 ; free virtual = 4926
+# add_files ../src/core.sv
+# add_files ../src/lif.sv
+# add_files ../src/synapse.sv
+# add_files ../src/network_bram_wrapper.sv
+# add_files ../src/network_wrapper.sv
+# add_files ../src/microblaze_top.sv
+# add_files ../src/basys3-constraints.xdc
+# source ../src/microblaze_snn.tcl
+## namespace eval _tcl {
+## proc get_script_folder {} {
+##    set script_path [file normalize [info script]]
+##    set script_folder [file dirname $script_path]
+##    return $script_folder
+## }
+## }
+## variable script_folder
+## set script_folder [_tcl::get_script_folder]
+## set scripts_vivado_version 2024.1
+## set current_vivado_version [version -short]
+## if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
+##    puts ""
+##    if { [string compare $scripts_vivado_version $current_vivado_version] > 0 } {
+##       catch {common::send_gid_msg -ssname BD::TCL -id 2042 -severity "ERROR" " This script was generated using Vivado <$scripts_vivado_version> and is being run in <$current_vivado_version> of Vivado. Sourcing the script failed since it was created with a future version of Vivado."}
+## 
+##    } else {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2041 -severity "ERROR" "This script was generated using Vivado <$scripts_vivado_version> and is being run in <$current_vivado_version> of Vivado. Please run the script in Vivado <$scripts_vivado_version> then open the design in Vivado <$current_vivado_version>. Upgrade the design by running \"Tools => Report => Report IP Status...\", then run write_bd_tcl to create an updated script."}
+## 
+##    }
+## 
+##    return 1
+## }
+## set list_projs [get_projects -quiet]
+## if { $list_projs eq "" } {
+##    create_project project_1 myproj -part xc7a35tcpg236-1
+## }
+## variable design_name
+## set design_name microblaze_snn
+## set errMsg ""
+## set nRet 0
+## set cur_design [current_bd_design -quiet]
+## set list_cells [get_bd_cells -quiet]
+## if { ${design_name} eq "" } {
+##    # USE CASES:
+##    #    1) Design_name not set
+## 
+##    set errMsg "Please set the variable <design_name> to a non-empty value."
+##    set nRet 1
+## 
+## } elseif { ${cur_design} ne "" && ${list_cells} eq "" } {
+##    # USE CASES:
+##    #    2): Current design opened AND is empty AND names same.
+##    #    3): Current design opened AND is empty AND names diff; design_name NOT in project.
+##    #    4): Current design opened AND is empty AND names diff; design_name exists in project.
+## 
+##    if { $cur_design ne $design_name } {
+##       common::send_gid_msg -ssname BD::TCL -id 2001 -severity "INFO" "Changing value of <design_name> from <$design_name> to <$cur_design> since current design is empty."
+##       set design_name [get_property NAME $cur_design]
+##    }
+##    common::send_gid_msg -ssname BD::TCL -id 2002 -severity "INFO" "Constructing design in IPI design <$cur_design>..."
+## 
+## } elseif { ${cur_design} ne "" && $list_cells ne "" && $cur_design eq $design_name } {
+##    # USE CASES:
+##    #    5) Current design opened AND has components AND same names.
+## 
+##    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+##    set nRet 1
+## } elseif { [get_files -quiet ${design_name}.bd] ne "" } {
+##    # USE CASES: 
+##    #    6) Current opened design, has components, but diff names, design_name exists in project.
+##    #    7) No opened design, design_name exists in project.
+## 
+##    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+##    set nRet 2
+## 
+## } else {
+##    # USE CASES:
+##    #    8) No opened design, design_name not in project.
+##    #    9) Current opened design, has components, but diff names, design_name not in project.
+## 
+##    common::send_gid_msg -ssname BD::TCL -id 2003 -severity "INFO" "Currently there is no design <$design_name> in project, so creating one..."
+## 
+##    create_bd_design $design_name
+## 
+##    common::send_gid_msg -ssname BD::TCL -id 2004 -severity "INFO" "Making design <$design_name> as current_bd_design."
+##    current_bd_design $design_name
+## 
+## }
+INFO: [BD::TCL 103-2003] Currently there is no design <microblaze_snn> in project, so creating one...
+Wrote  : </home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.srcs/sources_1/bd/microblaze_snn/microblaze_snn.bd> 
+INFO: [BD::TCL 103-2004] Making design <microblaze_snn> as current_bd_design.
+## common::send_gid_msg -ssname BD::TCL -id 2005 -severity "INFO" "Currently the variable <design_name> is equal to \"$design_name\"."
+INFO: [BD::TCL 103-2005] Currently the variable <design_name> is equal to "microblaze_snn".
+## if { $nRet != 0 } {
+##    catch {common::send_gid_msg -ssname BD::TCL -id 2006 -severity "ERROR" $errMsg}
+##    return $nRet
+## }
+## set bCheckIPsPassed 1
+## set bCheckIPs 1
+## if { $bCheckIPs == 1 } {
+##    set list_check_ips "\ 
+## xilinx.com:ip:clk_wiz:6.0\
+## xilinx.com:ip:axi_uartlite:2.0\
+## xilinx.com:ip:microblaze:11.0\
+## xilinx.com:ip:mdm:3.2\
+## xilinx.com:ip:proc_sys_reset:5.0\
+## xilinx.com:ip:blk_mem_gen:8.4\
+## xilinx.com:ip:axi_bram_ctrl:4.1\
+## xilinx.com:ip:lmb_v10:3.0\
+## xilinx.com:ip:lmb_bram_if_cntlr:4.0\
+## "
+## 
+##    set list_ips_missing ""
+##    common::send_gid_msg -ssname BD::TCL -id 2011 -severity "INFO" "Checking if the following IPs exist in the project's IP catalog: $list_check_ips ."
+## 
+##    foreach ip_vlnv $list_check_ips {
+##       set ip_obj [get_ipdefs -all $ip_vlnv]
+##       if { $ip_obj eq "" } {
+##          lappend list_ips_missing $ip_vlnv
+##       }
+##    }
+## 
+##    if { $list_ips_missing ne "" } {
+##       catch {common::send_gid_msg -ssname BD::TCL -id 2012 -severity "ERROR" "The following IPs are not found in the IP Catalog:\n  $list_ips_missing\n\nResolution: Please add the repository containing the IP(s) to the project." }
+##       set bCheckIPsPassed 0
+##    }
+## 
+## }
+INFO: [BD::TCL 103-2011] Checking if the following IPs exist in the project's IP catalog:  
+xilinx.com:ip:clk_wiz:6.0 xilinx.com:ip:axi_uartlite:2.0 xilinx.com:ip:microblaze:11.0 xilinx.com:ip:mdm:3.2 xilinx.com:ip:proc_sys_reset:5.0 xilinx.com:ip:blk_mem_gen:8.4 xilinx.com:ip:axi_bram_ctrl:4.1 xilinx.com:ip:lmb_v10:3.0 xilinx.com:ip:lmb_bram_if_cntlr:4.0  .
+## if { $bCheckIPsPassed != 1 } {
+##   common::send_gid_msg -ssname BD::TCL -id 2023 -severity "WARNING" "Will not continue with creation of design due to the error(s) above."
+##   return 3
+## }
+## proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
+## 
+##   variable script_folder
+## 
+##   if { $parentCell eq "" || $nameHier eq "" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2092 -severity "ERROR" "create_hier_cell_microblaze_0_local_memory() - Empty argument(s)!"}
+##      return
+##   }
+## 
+##   # Get object for parentCell
+##   set parentObj [get_bd_cells $parentCell]
+##   if { $parentObj == "" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2090 -severity "ERROR" "Unable to find parent cell <$parentCell>!"}
+##      return
+##   }
+## 
+##   # Make sure parentObj is hier blk
+##   set parentType [get_property TYPE $parentObj]
+##   if { $parentType ne "hier" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2091 -severity "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+##      return
+##   }
+## 
+##   # Save current instance; Restore later
+##   set oldCurInst [current_bd_instance .]
+## 
+##   # Set parent object as current
+##   current_bd_instance $parentObj
+## 
+##   # Create cell and set as current instance
+##   set hier_obj [create_bd_cell -type hier $nameHier]
+##   current_bd_instance $hier_obj
+## 
+##   # Create interface pins
+##   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 DLMB
+## 
+##   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 ILMB
+## 
+## 
+##   # Create pins
+##   create_bd_pin -dir I -type clk LMB_Clk
+##   create_bd_pin -dir I -type rst SYS_Rst
+## 
+##   # Create instance: dlmb_v10, and set properties
+##   set dlmb_v10 [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_v10:3.0 dlmb_v10 ]
+## 
+##   # Create instance: ilmb_v10, and set properties
+##   set ilmb_v10 [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_v10:3.0 ilmb_v10 ]
+## 
+##   # Create instance: dlmb_bram_if_cntlr, and set properties
+##   set dlmb_bram_if_cntlr [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 dlmb_bram_if_cntlr ]
+##   set_property CONFIG.C_ECC {0} $dlmb_bram_if_cntlr
+## 
+## 
+##   # Create instance: ilmb_bram_if_cntlr, and set properties
+##   set ilmb_bram_if_cntlr [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 ilmb_bram_if_cntlr ]
+##   set_property CONFIG.C_ECC {0} $ilmb_bram_if_cntlr
+## 
+## 
+##   # Create instance: lmb_bram, and set properties
+##   set lmb_bram [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.4 lmb_bram ]
+##   set_property -dict [list \
+##     CONFIG.Memory_Type {True_Dual_Port_RAM} \
+##     CONFIG.use_bram_block {BRAM_Controller} \
+##   ] $lmb_bram
+## 
+## 
+##   # Create interface connections
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb [get_bd_intf_pins dlmb_v10/LMB_M] [get_bd_intf_pins DLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb_bus [get_bd_intf_pins dlmb_v10/LMB_Sl_0] [get_bd_intf_pins dlmb_bram_if_cntlr/SLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb_cntlr [get_bd_intf_pins dlmb_bram_if_cntlr/BRAM_PORT] [get_bd_intf_pins lmb_bram/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb [get_bd_intf_pins ilmb_v10/LMB_M] [get_bd_intf_pins ILMB]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb_bus [get_bd_intf_pins ilmb_v10/LMB_Sl_0] [get_bd_intf_pins ilmb_bram_if_cntlr/SLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb_cntlr [get_bd_intf_pins ilmb_bram_if_cntlr/BRAM_PORT] [get_bd_intf_pins lmb_bram/BRAM_PORTB]
+## 
+##   # Create port connections
+##   connect_bd_net -net SYS_Rst_1 [get_bd_pins SYS_Rst] [get_bd_pins dlmb_v10/SYS_Rst] [get_bd_pins dlmb_bram_if_cntlr/LMB_Rst] [get_bd_pins ilmb_v10/SYS_Rst] [get_bd_pins ilmb_bram_if_cntlr/LMB_Rst]
+##   connect_bd_net -net microblaze_0_Clk [get_bd_pins LMB_Clk] [get_bd_pins dlmb_v10/LMB_Clk] [get_bd_pins dlmb_bram_if_cntlr/LMB_Clk] [get_bd_pins ilmb_v10/LMB_Clk] [get_bd_pins ilmb_bram_if_cntlr/LMB_Clk]
+## 
+##   # Restore current instance
+##   current_bd_instance $oldCurInst
+## }
+## proc create_root_design { parentCell } {
+## 
+##   variable script_folder
+##   variable design_name
+## 
+##   if { $parentCell eq "" } {
+##      set parentCell [get_bd_cells /]
+##   }
+## 
+##   # Get object for parentCell
+##   set parentObj [get_bd_cells $parentCell]
+##   if { $parentObj == "" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2090 -severity "ERROR" "Unable to find parent cell <$parentCell>!"}
+##      return
+##   }
+## 
+##   # Make sure parentObj is hier blk
+##   set parentType [get_property TYPE $parentObj]
+##   if { $parentType ne "hier" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2091 -severity "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+##      return
+##   }
+## 
+##   # Save current instance; Restore later
+##   set oldCurInst [current_bd_instance .]
+## 
+##   # Set parent object as current
+##   current_bd_instance $parentObj
+## 
+## 
+##   # Create interface ports
+##   set usb_uart [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 usb_uart ]
+## 
+##   set BRAM_PORTB_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:bram_rtl:1.0 BRAM_PORTB_0 ]
+##   set_property -dict [ list \
+##    CONFIG.MASTER_TYPE {BRAM_CTRL} \
+##    ] $BRAM_PORTB_0
+## 
+## 
+##   # Create ports
+##   set sys_clock [ create_bd_port -dir I -type clk -freq_hz 100000000 sys_clock ]
+##   set reset [ create_bd_port -dir I -type rst reset ]
+##   set_property -dict [ list \
+##    CONFIG.POLARITY {ACTIVE_LOW} \
+##  ] $reset
+## 
+##   # Create instance: clk_wiz_0, and set properties
+##   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
+## 
+##   # Create instance: axi_uartlite_0, and set properties
+##   set axi_uartlite_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0 ]
+## 
+##   # Create instance: microblaze_0, and set properties
+##   set microblaze_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:11.0 microblaze_0 ]
+##   set_property -dict [list \
+##     CONFIG.C_DEBUG_ENABLED {1} \
+##     CONFIG.C_D_AXI {1} \
+##     CONFIG.C_D_LMB {1} \
+##     CONFIG.C_I_LMB {1} \
+##   ] $microblaze_0
+## 
+## 
+##   # Create instance: microblaze_0_local_memory
+##   create_hier_cell_microblaze_0_local_memory [current_bd_instance .] microblaze_0_local_memory
+## 
+##   # Create instance: mdm_1, and set properties
+##   set mdm_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.2 mdm_1 ]
+## 
+##   # Create instance: rst_clk_wiz_0_100M, and set properties
+##   set rst_clk_wiz_0_100M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_clk_wiz_0_100M ]
+## 
+##   # Create instance: axi_interconnect_0, and set properties
+##   set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
+## 
+##   # Create instance: blk_mem_gen_0, and set properties
+##   set blk_mem_gen_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.4 blk_mem_gen_0 ]
+##   set_property -dict [list \
+##     CONFIG.Coe_File {/home/andrew/Desktop/snn-fpga/big-snn/src/snn_bram_64.coe} \
+##     CONFIG.Enable_32bit_Address {true} \
+##     CONFIG.Load_Init_File {true} \
+##     CONFIG.Memory_Type {True_Dual_Port_RAM} \
+##     CONFIG.Register_PortA_Output_of_Memory_Primitives {false} \
+##     CONFIG.Register_PortB_Output_of_Memory_Primitives {false} \
+##     CONFIG.Use_RSTA_Pin {false} \
+##     CONFIG.Use_RSTB_Pin {false} \
+##     CONFIG.Write_Depth_A {8192} \
+##     CONFIG.Write_Width_A {128} \
+##     CONFIG.use_bram_block {Stand_Alone} \
+##   ] $blk_mem_gen_0
+## 
+## 
+##   # Create instance: axi_bram_ctrl_0, and set properties
+##   set axi_bram_ctrl_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_0 ]
+##   set_property -dict [list \
+##     CONFIG.DATA_WIDTH {128} \
+##     CONFIG.SINGLE_PORT_BRAM {1} \
+##   ] $axi_bram_ctrl_0
+## 
+## 
+##   # Create interface connections
+##   connect_bd_intf_net -intf_net BRAM_PORTB_0_1 [get_bd_intf_ports BRAM_PORTB_0] [get_bd_intf_pins blk_mem_gen_0/BRAM_PORTB]
+##   connect_bd_intf_net -intf_net axi_bram_ctrl_0_BRAM_PORTA [get_bd_intf_pins blk_mem_gen_0/BRAM_PORTA] [get_bd_intf_pins axi_bram_ctrl_0/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_interconnect_0/M00_AXI] [get_bd_intf_pins axi_bram_ctrl_0/S_AXI]
+##   connect_bd_intf_net -intf_net axi_interconnect_0_M01_AXI [get_bd_intf_pins axi_interconnect_0/M01_AXI] [get_bd_intf_pins axi_uartlite_0/S_AXI]
+##   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports usb_uart] [get_bd_intf_pins axi_uartlite_0/UART]
+##   connect_bd_intf_net -intf_net microblaze_0_M_AXI_DP [get_bd_intf_pins microblaze_0/M_AXI_DP] [get_bd_intf_pins axi_interconnect_0/S00_AXI]
+##   connect_bd_intf_net -intf_net microblaze_0_debug [get_bd_intf_pins mdm_1/MBDEBUG_0] [get_bd_intf_pins microblaze_0/DEBUG]
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb_1 [get_bd_intf_pins microblaze_0/DLMB] [get_bd_intf_pins microblaze_0_local_memory/DLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb_1 [get_bd_intf_pins microblaze_0/ILMB] [get_bd_intf_pins microblaze_0_local_memory/ILMB]
+## 
+##   # Create port connections
+##   connect_bd_net -net clk_100MHz_1 [get_bd_ports sys_clock] [get_bd_pins clk_wiz_0/clk_in1]
+##   connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins rst_clk_wiz_0_100M/dcm_locked]
+##   connect_bd_net -net mdm_1_debug_sys_rst [get_bd_pins mdm_1/Debug_SYS_Rst] [get_bd_pins rst_clk_wiz_0_100M/mb_debug_sys_rst] [get_bd_pins clk_wiz_0/reset]
+##   connect_bd_net -net microblaze_0_Clk [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins microblaze_0/Clk] [get_bd_pins microblaze_0_local_memory/LMB_Clk] [get_bd_pins rst_clk_wiz_0_100M/slowest_sync_clk] [get_bd_pins axi_uartlite_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/M01_ACLK] [get_bd_pins axi_bram_ctrl_0/s_axi_aclk]
+##   connect_bd_net -net reset_rtl_0_1 [get_bd_ports reset] [get_bd_pins rst_clk_wiz_0_100M/ext_reset_in]
+##   connect_bd_net -net rst_clk_wiz_0_100M_bus_struct_reset [get_bd_pins rst_clk_wiz_0_100M/bus_struct_reset] [get_bd_pins microblaze_0_local_memory/SYS_Rst]
+##   connect_bd_net -net rst_clk_wiz_0_100M_mb_reset [get_bd_pins rst_clk_wiz_0_100M/mb_reset] [get_bd_pins microblaze_0/Reset]
+##   connect_bd_net -net rst_clk_wiz_0_100M_peripheral_aresetn [get_bd_pins rst_clk_wiz_0_100M/peripheral_aresetn] [get_bd_pins axi_uartlite_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_0/M01_ARESETN] [get_bd_pins axi_bram_ctrl_0/s_axi_aresetn]
+## 
+##   # Create address segments
+##   assign_bd_address -offset 0xC0000000 -range 0x00008000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_bram_ctrl_0/S_AXI/Mem0] -force
+##   assign_bd_address -offset 0x40600000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] -force
+##   assign_bd_address -offset 0x00000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem] -force
+##   assign_bd_address -offset 0x00000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Instruction] [get_bd_addr_segs microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] -force
+## 
+## 
+##   # Restore current instance
+##   current_bd_instance $oldCurInst
+## 
+##   validate_bd_design
+##   save_bd_design
+## }
+## create_root_design ""
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Device 21-9227] Part: xc7a35tcpg236-1 does not have CEAM library.
+create_bd_cell: Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1870.574 ; gain = 348.852 ; free physical = 334 ; free virtual = 4709
+INFO: [IP_Flow 19-3484] Absolute path of file '/home/andrew/Desktop/snn-fpga/big-snn/src/snn_bram_64.coe' provided. It will be converted relative to IP Instance files '../../../../../../../../src/snn_bram_64.coe'
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_snn_axi_bram_ctrl_0_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_snn_axi_bram_ctrl_0_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_snn_axi_bram_ctrl_0_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_snn_axi_bram_ctrl_0_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+Slave segment '/axi_bram_ctrl_0/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC000_0000 [ 32K ]>.
+Slave segment '/axi_uartlite_0/S_AXI/Reg' is being assigned into address space '/microblaze_0/Data' at <0x4060_0000 [ 64K ]>.
+Slave segment '/microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem' is being assigned into address space '/microblaze_0/Data' at <0x0000_0000 [ 64K ]>.
+Slave segment '/microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem' is being assigned into address space '/microblaze_0/Instruction' at <0x0000_0000 [ 64K ]>.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+INFO: [xilinx.com:ip:microblaze:11.0-9] /microblaze_0: Setting C_BASE_VECTORS to 0x00000000.
+INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
+CRITICAL WARNING: [BD 41-237] Bus Interface property MASTER_TYPE does not match between /blk_mem_gen_0/BRAM_PORTB(OTHER) and /BRAM_PORTB_0(BRAM_CTRL)
+CRITICAL WARNING: [BD 41-237] Bus Interface property MASTER_TYPE does not match between /blk_mem_gen_0/BRAM_PORTA(OTHER) and /axi_bram_ctrl_0/BRAM_PORTA(BRAM_CTRL)
+Wrote  : </home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.srcs/sources_1/bd/microblaze_snn/microblaze_snn.bd> 
+# make_wrapper -top -files [get_files microblaze_snn.bd]
+INFO: [BD 41-1662] The design 'microblaze_snn.bd' is already validated. Therefore parameter propagation will not be re-run.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [BD 41-2384] Width mismatch when connecting pin: '/blk_mem_gen_0/addra'(32) to pin: '/axi_bram_ctrl_0/bram_addr_a'(15) - Only lower order bits will be connected.
+Verilog Output written to : /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/synth/microblaze_snn.v
+WARNING: [BD 41-2384] Width mismatch when connecting pin: '/blk_mem_gen_0/addra'(32) to pin: '/axi_bram_ctrl_0/bram_addr_a'(15) - Only lower order bits will be connected.
+Verilog Output written to : /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/sim/microblaze_snn.v
+Verilog Output written to : /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/hdl/microblaze_snn_wrapper.v
+# add_files -norecurse ./fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/hdl/microblaze_snn_wrapper.v
+# set_property top microblaze_top [current_fileset]
+# launch_runs synth_1
+WARNING: [HDL 9-3756] overwriting previous definition of module 'core' [/home/andrew/Desktop/snn-fpga/big-snn/src/core.sv:12]
+WARNING: [HDL 9-3756] overwriting previous definition of module 'lif' [/home/andrew/Desktop/snn-fpga/big-snn/src/lif.sv:9]
+WARNING: [HDL 9-3756] overwriting previous definition of module 'network_bram_wrapper' [/home/andrew/Desktop/snn-fpga/big-snn/src/network_bram_wrapper.sv:6]
+WARNING: [HDL 9-3756] overwriting previous definition of module 'synapse' [/home/andrew/Desktop/snn-fpga/big-snn/src/synapse.sv:9]
+WARNING: [HDL 9-3756] overwriting previous definition of module 'synapse' [/home/andrew/Desktop/snn-fpga/big-snn/src/synapse.sv:9]
+WARNING: [filemgmt 20-1318] Duplicate Design Unit 'synapse()' found in library 'xil_defaultlib'
+Duplicate found at line 9 of file /home/andrew/Desktop/snn-fpga/big-snn/src/core.sv
+Duplicate found at line 9 of file /home/andrew/Desktop/snn-fpga/big-snn/src/network_wrapper.sv
+	(Active) Duplicate found at line 9 of file /home/andrew/Desktop/snn-fpga/big-snn/src/synapse.sv
+WARNING: [filemgmt 20-1318] Duplicate Design Unit 'core()' found in library 'xil_defaultlib'
+	(Active) Duplicate found at line 12 of file /home/andrew/Desktop/snn-fpga/big-snn/src/core.sv
+Duplicate found at line 12 of file /home/andrew/Desktop/snn-fpga/big-snn/src/network_wrapper.sv
+WARNING: [filemgmt 20-1318] Duplicate Design Unit 'lif()' found in library 'xil_defaultlib'
+	(Active) Duplicate found at line 9 of file /home/andrew/Desktop/snn-fpga/big-snn/src/lif.sv
+Duplicate found at line 9 of file /home/andrew/Desktop/snn-fpga/big-snn/src/network_wrapper.sv
+WARNING: [filemgmt 20-1318] Duplicate Design Unit 'network_bram_wrapper()' found in library 'xil_defaultlib'
+	(Active) Duplicate found at line 6 of file /home/andrew/Desktop/snn-fpga/big-snn/src/network_bram_wrapper.sv
+Duplicate found at line 6 of file /home/andrew/Desktop/snn-fpga/big-snn/src/network_wrapper.sv
+INFO: [BD 41-1662] The design 'microblaze_snn.bd' is already validated. Therefore parameter propagation will not be re-run.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [BD 41-2384] Width mismatch when connecting pin: '/blk_mem_gen_0/addra'(32) to pin: '/axi_bram_ctrl_0/bram_addr_a'(15) - Only lower order bits will be connected.
+Verilog Output written to : /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/synth/microblaze_snn.v
+WARNING: [BD 41-2384] Width mismatch when connecting pin: '/blk_mem_gen_0/addra'(32) to pin: '/axi_bram_ctrl_0/bram_addr_a'(15) - Only lower order bits will be connected.
+Verilog Output written to : /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/sim/microblaze_snn.v
+Verilog Output written to : /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/hdl/microblaze_snn_wrapper.v
+INFO: [BD 41-1029] Generation completed for the IP Integrator block clk_wiz_0 .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file '/home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/ip/microblaze_snn_axi_uartlite_0_0/microblaze_snn_axi_uartlite_0_0_ooc.xdc'
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_uartlite_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/lmb_bram .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block mdm_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block rst_clk_wiz_0_100M .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/xbar .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file '/home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/ip/microblaze_snn_auto_us_1/microblaze_snn_auto_us_1_ooc.xdc'
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'S_AXI'. A default connection has been created.
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI'. A default connection has been created.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/s00_couplers/auto_us .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file '/home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/ip/microblaze_snn_auto_pc_0/microblaze_snn_auto_pc_0_ooc.xdc'
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_pc .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file '/home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/ip/microblaze_snn_auto_us_0/microblaze_snn_auto_us_0_ooc.xdc'
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'S_AXI'. A default connection has been created.
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI'. A default connection has been created.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m00_couplers/auto_us .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file '/home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/ip/microblaze_snn_auto_ds_0/microblaze_snn_auto_ds_0_ooc.xdc'
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'S_AXI'. A default connection has been created.
+INFO: [IP_Flow 19-5611] Unable to find an associated reset port for the interface 'M_AXI'. A default connection has been created.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_interconnect_0/m01_couplers/auto_ds .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block blk_mem_gen_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_bram_ctrl_0 .
+Exporting to file /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/hw_handoff/microblaze_snn.hwh
+Generated Hardware Definition File /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.gen/sources_1/bd/microblaze_snn/synth/microblaze_snn.hwdef
+INFO: [IP_Flow 19-6930] IPCACHE: runCacheChecks() number of threads = 8
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_auto_ds_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_auto_pc_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_auto_us_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_auto_us_1
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_axi_bram_ctrl_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_axi_uartlite_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_blk_mem_gen_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_clk_wiz_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_dlmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_dlmb_v10_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_ilmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_ilmb_v10_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_lmb_bram_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_mdm_1_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_microblaze_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_rst_clk_wiz_0_100M_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_snn_xbar_0
+INFO: [IP_Flow 19-8020] IPCACHE: runCacheChecks() calling threadPool finishWork()
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_auto_ds_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_microblaze_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_auto_pc_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_ilmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_rst_clk_wiz_0_100M_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_auto_us_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_auto_us_1
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_axi_bram_ctrl_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_ilmb_v10_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_xbar_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_axi_uartlite_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_blk_mem_gen_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_clk_wiz_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_dlmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_lmb_bram_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_dlmb_v10_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_snn_mdm_1_0
+WARNING: [Vivado 12-7122] Auto Incremental Compile:: No reference checkpoint was found in run synth_1. Auto-incremental flow will not be run, the standard flow will be run instead.
+[Mon Dec  2 13:23:55 2024] Launched microblaze_snn_lmb_bram_0_synth_1, microblaze_snn_ilmb_v10_0_synth_1, microblaze_snn_dlmb_v10_0_synth_1, microblaze_snn_ilmb_bram_if_cntlr_0_synth_1, microblaze_snn_dlmb_bram_if_cntlr_0_synth_1, microblaze_snn_blk_mem_gen_0_0_synth_1, microblaze_snn_axi_bram_ctrl_0_0_synth_1, microblaze_snn_auto_pc_0_synth_1, microblaze_snn_axi_uartlite_0_0_synth_1, microblaze_snn_clk_wiz_0_0_synth_1, microblaze_snn_microblaze_0_0_synth_1, microblaze_snn_auto_us_0_synth_1, microblaze_snn_auto_ds_0_synth_1, microblaze_snn_xbar_0_synth_1, microblaze_snn_auto_us_1_synth_1, microblaze_snn_rst_clk_wiz_0_100M_0_synth_1, microblaze_snn_mdm_1_0_synth_1...
+Run output will be captured here:
+microblaze_snn_lmb_bram_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_lmb_bram_0_synth_1/runme.log
+microblaze_snn_ilmb_v10_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_ilmb_v10_0_synth_1/runme.log
+microblaze_snn_dlmb_v10_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_dlmb_v10_0_synth_1/runme.log
+microblaze_snn_ilmb_bram_if_cntlr_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_ilmb_bram_if_cntlr_0_synth_1/runme.log
+microblaze_snn_dlmb_bram_if_cntlr_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_dlmb_bram_if_cntlr_0_synth_1/runme.log
+microblaze_snn_blk_mem_gen_0_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_blk_mem_gen_0_0_synth_1/runme.log
+microblaze_snn_axi_bram_ctrl_0_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_axi_bram_ctrl_0_0_synth_1/runme.log
+microblaze_snn_auto_pc_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_auto_pc_0_synth_1/runme.log
+microblaze_snn_axi_uartlite_0_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_axi_uartlite_0_0_synth_1/runme.log
+microblaze_snn_clk_wiz_0_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_clk_wiz_0_0_synth_1/runme.log
+microblaze_snn_microblaze_0_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_microblaze_0_0_synth_1/runme.log
+microblaze_snn_auto_us_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_auto_us_0_synth_1/runme.log
+microblaze_snn_auto_ds_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_auto_ds_0_synth_1/runme.log
+microblaze_snn_xbar_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_xbar_0_synth_1/runme.log
+microblaze_snn_auto_us_1_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_auto_us_1_synth_1/runme.log
+microblaze_snn_rst_clk_wiz_0_100M_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_rst_clk_wiz_0_100M_0_synth_1/runme.log
+microblaze_snn_mdm_1_0_synth_1: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/microblaze_snn_mdm_1_0_synth_1/runme.log
+[Mon Dec  2 13:23:55 2024] Launched synth_1...
+Run output will be captured here: /home/andrew/Desktop/snn-fpga/big-snn/vivado/fpga_risp_microblaze/fpga_risp_microblaze.runs/synth_1/runme.log
+launch_runs: Time (s): cpu = 00:00:09 ; elapsed = 00:00:11 . Memory (MB): peak = 2303.254 ; gain = 324.125 ; free physical = 189 ; free virtual = 4678
+# wait_on_runs synth_1
+[Mon Dec  2 13:23:55 2024] Waiting for synth_1 to finish...
