@@ -21,7 +21,7 @@ module microblaze_top #(
 	localparam WIDTH = 8;
 	localparam MAX_TILES = 32;
     localparam integer BYTES_PER_WIDTH = BRAM_DATA_WIDTH / WIDTH;
-    localparam integer THRESH = 32;
+    localparam integer THRESH = 127;
 
 	wire rst;
 	//assign rst = ~reset;

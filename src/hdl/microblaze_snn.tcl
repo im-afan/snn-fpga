@@ -331,7 +331,7 @@ proc create_root_design { parentCell } {
   # Create instance: blk_mem_gen_0, and set properties
   set blk_mem_gen_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.4 blk_mem_gen_0 ]
   set_property -dict [list \
-    CONFIG.Coe_File {C:/Users/andre/Desktop/snn-fpga/big-snn/src/hdl/snn_bram_64.coe} \
+    CONFIG.Coe_File {C:/Users/andre/Desktop/snn-fpga/src/hdl/snn_bram_64.coe} \
     CONFIG.Enable_32bit_Address {true} \
     CONFIG.Load_Init_File {true} \
     CONFIG.Memory_Type {True_Dual_Port_RAM} \

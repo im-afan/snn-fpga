@@ -51,7 +51,8 @@ module lif#(
                     mem_out <= RESET_VAL;
                 end else begin
                     spk_out <= 0;
-                    mem_out <= (sum_clamp >>> 1); // todo, no leak in bram yet
+                    //mem_out <= (sum_clamp >>> 1); // todo, no leak in bram yet
+                    mem_out <= sum_clamp;
                 end
 
                 local_done <= 1;

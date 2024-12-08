@@ -3,10 +3,10 @@
 # SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
 # IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
 # SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Sat Dec  7 21:26:54 2024
-# Process ID: 2084
+# Start of session at: Sat Dec  7 21:25:07 2024
+# Process ID: 1148
 # Current directory: C:/Users/andre/Desktop/snn-fpga/vivado
-# Command line: vivado.exe -mode tcl -source .\basys3_project.tcl
+# Command line: vivado.exe -mode tcl .\basys3_project.tcl
 # Log file: C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
 # Journal file: C:/Users/andre/Desktop/snn-fpga/vivado\vivado.jou
 # Running On        :DESKTOP-OVIC86T
@@ -19,6 +19,9 @@
 # Host memory       :34248 MB
 # Swap memory       :5100 MB
 # Total Virtual     :39349 MB
-# Available Virtual :22016 MB
+# Available Virtual :21824 MB
 #-----------------------------------------------------------
-source {.\basys3_project.tcl}
+open_project {.\basys3_project.tcl}
+ERROR: [Coretcl 2-1982] Invalid project file name. File must have a valid project extension (.ppr/.xpr). Provided: .\basys3_project.tcl
+Vivado% exit
+INFO: [Common 17-206] Exiting Vivado at Sat Dec  7 21:25:15 2024...
