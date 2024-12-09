@@ -1,0 +1,2 @@
+mb-ar qc libuartlite.a CMakeFiles/uartlite.dir/xuartlite.c.obj CMakeFiles/uartlite.dir/xuartlite_g.c.obj CMakeFiles/uartlite.dir/xuartlite_intr.c.obj CMakeFiles/uartlite.dir/xuartlite_l.c.obj CMakeFiles/uartlite.dir/xuartlite_selftest.c.obj CMakeFiles/uartlite.dir/xuartlite_sinit.c.obj CMakeFiles/uartlite.dir/xuartlite_stats.c.obj
+/home/andrew/.Xilinx/Vitis/2024.1/gnu/microblaze/lin/bin/mb-ranlib libuartlite.a

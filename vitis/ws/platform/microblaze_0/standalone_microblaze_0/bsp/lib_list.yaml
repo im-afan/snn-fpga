@@ -1,0 +1,122 @@
+microblaze_0:
+  standalone:
+    lwip220:
+      description: lwip220 library lwIP (light weight IP) is an open source TCP/IP stack configured for AMD hard and soft Ethernet MACs.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/ThirdParty/sw_services/lwip220_v1_0
+    xilflash:
+      description: Xilinx Flash library for Intel/AMD CFI compliant parallel flash.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilflash_v4_11
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilflash_v4_10
+    xilloader:
+      description: Xilinx Versal Platform Loader Library.
+      depends_libs:
+      - xilplmi
+      - xilpm
+      - xilpdi
+      - xilffs
+      - xilmailbox
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilloader_v2_0
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilloader_v1_9
+    xilmailbox:
+      description: Xilinx IPI Mailbox Library.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilmailbox_v1_9
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilmailbox_v1_8
+    xilnvm:
+      description: Xilinx NVM Library provides interface to accessing eFUSE and BBRAM of Versal.
+      depends_libs:
+      - xiltimer
+      - xilplmi
+      - xilmailbox
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilnvm_v3_3
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilnvm_v3_2
+    xilplmi:
+      description: Xilinx Versal Platform Loader and Manager Interface Library.
+      depends_libs:
+      - xilmailbox
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilplmi_v2_0
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilplmi_v1_9
+    xilpuf:
+      description: Xilinx PUF Library provides interface for registration and regeneration.
+      depends_libs:
+      - xilplmi
+      - xilmailbox
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilpuf_v2_3
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilpuf_v2_2
+    xilsecure:
+      description: Xilinx Secure Library provides interface to AES, RSA and SHA hardware engines on ZynqMP Soc and Versal.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilsecure_v5_3
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilsecure_v5_2
+    xilsem:
+      description: Xilinx Versal Soft Error Mitigation Library.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilsem_v1_9
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilsem_v1_8
+    xilskey:
+      description: Xilinx Secure Key Library supports programming efuse and bbram.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilskey_v7_6
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilskey_v7_5
+    xiltimer:
+      description: Xiltimer library provides generic timer interface for the timer IP's.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xiltimer_v2_0
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xiltimer_v1_4
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xiltimer_v1_3
+  freertos:
+    lwip220:
+      description: lwip220 library lwIP (light weight IP) is an open source TCP/IP stack configured for AMD hard and soft Ethernet MACs.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/ThirdParty/sw_services/lwip220_v1_0
+    xilflash:
+      description: Xilinx Flash library for Intel/AMD CFI compliant parallel flash.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilflash_v4_11
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilflash_v4_10
+    xilmailbox:
+      description: Xilinx IPI Mailbox Library.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilmailbox_v1_9
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilmailbox_v1_8
+    xilsecure:
+      description: Xilinx Secure Library provides interface to AES, RSA and SHA hardware engines on ZynqMP Soc and Versal.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilsecure_v5_3
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilsecure_v5_2
+    xilsem:
+      description: Xilinx Versal Soft Error Mitigation Library.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilsem_v1_9
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilsem_v1_8
+    xilskey:
+      description: Xilinx Secure Key Library supports programming efuse and bbram.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilskey_v7_6
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xilskey_v7_5
+    xiltimer:
+      description: Xiltimer library provides generic timer interface for the timer IP's.
+      depends_libs: []
+      path:
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xiltimer_v2_0
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xiltimer_v1_4
+      - /home/andrew/.Xilinx/Vitis/2024.1/data/embeddedsw/lib/sw_services/xiltimer_v1_3

@@ -1,1 +1,8 @@
 vivado/fpga_risp_microblaze
+vitis/app_component
+vitis/.wsdata
+vitis/.rigel_looper
+vitis/logs
+vitis/platform
+vitis/.gitignore
+vitis/.lock

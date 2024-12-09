@@ -1,0 +1,129 @@
+-- The C compiler identification is GNU 12.2.0
+-- The CXX compiler identification is GNU 12.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /home/andrew/.Xilinx/Vitis/2024.1/gnu/microblaze/lin/bin/mb-gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /home/andrew/.Xilinx/Vitis/2024.1/gnu/microblaze/lin/bin/mb-g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- The ASM compiler identification is GNU
+-- Found assembler: /home/andrew/.Xilinx/Vitis/2024.1/gnu/microblaze/lin/bin/mb-gcc
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/build_configs/gen_bsp
+-- Cache values
+// Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ...
+CMAKE_BUILD_TYPE:STRING=
+
+// LDFLAGS
+CMAKE_CXX_LINK_FLAGS:STRING= -Wl,--no-relax -Wl,--gc-sections
+
+// LDFLAGS
+CMAKE_C_LINK_FLAGS:STRING= -Wl,--no-relax -Wl,--gc-sections
+
+// Install path prefix, prepended onto install directories.
+CMAKE_INSTALL_PREFIX:PATH=/usr/local
+
+// CMAKE MACHINE
+CMAKE_MACHINE:STRING=artix7
+
+// Size
+CMAKE_SIZE:FILEPATH=mb-size
+
+// Specs file path for using CMAKE toolchain files
+CMAKE_SPECS_FILE:STRING=/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/Xilinx.spec
+
+// The CMake toolchain file
+CMAKE_TOOLCHAIN_FILE:FILEPATH=/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/microblaze_toolchain.cmake
+
+// Device Id
+DEVICE_ID:STRING=7a35t
+
+// The directory containing a CMake configuration file for INTC.
+INTC_DIR:PATH=INTC_DIR-NOTFOUND
+
+// The directory containing a CMake configuration file for SCUGIC.
+SCUGIC_DIR:PATH=SCUGIC_DIR-NOTFOUND
+
+// sub dir list
+SUBDIR_LIST:STRING=ALL
+
+// ASM FLAGS
+TOOLCHAIN_ASM_FLAGS:STRING= -O2 -mlittle-endian -mxl-soft-mul -mcpu=v11.0 -DSDT
+
+// CXXFLAGS
+TOOLCHAIN_CXX_FLAGS:STRING= -O2 -mlittle-endian -mxl-soft-mul -mcpu=v11.0 -DSDT
+
+// CFLAGS
+TOOLCHAIN_C_FLAGS:STRING= -O2 -mlittle-endian -mxl-soft-mul -mcpu=v11.0 -DSDT
+
+// Flags used by compiler to generate dependency files
+TOOLCHAIN_DEP_FLAGS:STRING= -MMD -MP
+
+// Extra CFLAGS
+TOOLCHAIN_EXTRA_C_FLAGS:STRING= -g -ffunction-sections -fdata-sections -Wall -Wextra -fno-tree-loop-distribute-patterns
+
+// Enable Interval Timer
+XILTIMER_en_interval_timer:BOOL=OFF
+
+// This parameter is used to select specific timer for sleep functionality
+XILTIMER_sleep_timer:STRING=Default
+
+// This parameter is used to select specific timer for tick functionality
+XILTIMER_tick_timer:STRING=None
+
+// Yocto based embeddedsw FLOW
+YOCTO:BOOL=OFF
+
+// Archiver
+proc_archiver:STRING=mb-gcc-ar
+
+// Assembler
+proc_assembler:STRING=mb-gcc
+
+// Compiler
+proc_compiler:STRING=mb-gcc
+
+// Compiler Flags
+proc_compiler_flags:STRING= -O2 -mlittle-endian -mxl-soft-mul -mcpu=v11.0 -DSDT;-c
+
+// Extra Compiler Flags
+proc_extra_compiler_flags:STRING= -g -ffunction-sections -fdata-sections -Wall -Wextra -fno-tree-loop-distribute-patterns
+
+// This option is not supported in the Unified Vitis IDE in this version. Change to the classic IDE if you want to use this option.
+standalone_clocking:STRING=None
+
+// This option is not supported in the Unified Vitis IDE in this version. Change to the classic IDE if you want to use this option
+standalone_enable_sw_intrusive_profiling:STRING=None
+
+// Unused option and deprecated
+standalone_microblaze_exceptions:STRING=None
+
+// Deprecated in favor of xiltimer
+standalone_pmu_sleep_timer:STRING=None
+
+// This option is not supported in the Unified Vitis IDE in this version. Change to the classic IDE if you want to use this option
+standalone_profile_timer:STRING=None
+
+// Deprecated in favor of xiltimer
+standalone_sleep_timer:STRING=None
+
+// stdin peripheral
+standalone_stdin:STRING=axi_uartlite_0
+
+// stdout peripheral
+standalone_stdout:STRING=axi_uartlite_0
+
+// Deprecated in favor of xiltimer
+standalone_ttc_select_cntr:STRING=None
+
+// This option is not supported in the Unified Vitis IDE in this version. Change to the classic IDE if you want to use this option.
+standalone_xpm_support:STRING=None
+
+// Not needed any more in Unified Vitis
+standalone_zynqmp_fsbl_bsp:STRING=None
+

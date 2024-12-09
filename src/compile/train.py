@@ -4,6 +4,7 @@
 import snntorch as snn
 from snntorch import spikeplot as splt
 from snntorch import spikegen
+from snntorch import surrogate
 
 import torch
 import torch.nn as nn
@@ -16,13 +17,13 @@ import itertools
 
 # Network Architecture
 num_inputs = 8*8
-num_hidden = 20
+num_hidden = 31 
 num_outputs = 10
 thresh = 1
 
 # Temporal Dynamics
-num_steps = 10
-beta = 0.5
+num_steps = 25
+beta = 1
 
 # Define Network
 class Net(nn.Module):
@@ -30,33 +31,65 @@ class Net(nn.Module):
         super().__init__()
 
         # Initialize layers
-        self.spkgen = snn.Leaky(beta=beta, threshold=thresh)
-        self.fc1 = nn.Linear(num_inputs, num_hidden)
-        self.lif1 = snn.Leaky(beta=beta, threshold=thresh)
-        self.fc2 = nn.Linear(num_hidden, num_outputs)
-        self.lif2 = snn.Leaky(beta=beta, threshold=thresh)
+        self.spkgen = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
+        self.fc1 = nn.Linear(num_inputs, num_hidden, bias=False)
+        self.lif1 = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
+        self.fc2 = nn.Linear(num_hidden, num_outputs, bias=False)
+        self.lif2 = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
 
-    def forward(self, x):
-
+    def forward(self, x, debug=False):
+        #print(x.shape)
         # Initialize hidden states at t=0
         mem0 = self.spkgen.init_leaky()
         mem1 = self.lif1.init_leaky()
         mem2 = self.lif2.init_leaky()
+        spk0 = torch.zeros((x.shape[0], num_inputs)) 
+        spk1 = torch.zeros((x.shape[0], num_hidden))
+        spk2 = torch.zeros((x.shape[0], num_outputs))
+
+        #print(spk0.shape, mem0.shape)
 
         # Record the final layer
+        spk0_rec = []
+        spk1_rec = []
+        mem1_rec = []
         spk2_rec = []
         mem2_rec = []
 
         for step in range(num_steps):
-            spk0, mem0 = self.spkgen(x, mem0)
+            spk0_next, mem0 = self.spkgen(x, mem0)
             cur1 = self.fc1(spk0)
-            spk1, mem1 = self.lif1(cur1, mem1)
+            spk1_next, mem1 = self.lif1(cur1, mem1)
             cur2 = self.fc2(spk1)
-            spk2, mem2 = self.lif2(cur2, mem2)
+            spk2_next, mem2 = self.lif2(cur2, mem2) 
+
+            mem0 = torch.clamp(mem0, -self.spkgen.threshold, self.spkgen.threshold)
+            mem1 = torch.clamp(mem1, -self.lif1.threshold, self.lif1.threshold)
+            mem2 = torch.clamp(mem2, -self.lif2.threshold, self.lif2.threshold)
+            
+            spk0_rec.append(spk0)
+            spk1_rec.append(spk1)
+            mem1_rec.append(mem1)
             spk2_rec.append(spk2)
             mem2_rec.append(mem2)
 
-        return torch.stack(spk2_rec, dim=0), torch.stack(mem2_rec, dim=0)
+            spk0 = spk0_next
+            spk1 = spk1_next
+            spk2 = spk2_next
+
+
+
+        if(not debug):
+            return torch.stack(spk2_rec, dim=0), torch.stack(mem2_rec, dim=0)
+        return spk0_rec, spk1_rec, spk2_rec, mem1_rec
+
+    def quantize(self, new_thresh):
+        with torch.no_grad():
+            self.spkgen.threshold = new_thresh
+            self.lif1.threshold = new_thresh
+            self.lif2.threshold = new_thresh
+            self.fc1.weight.data = torch.round(self.fc1.weight*new_thresh)
+            self.fc2.weight.data = torch.round(self.fc2.weight*new_thresh)
 
 if __name__ == "__main__":
     # dataloader arguments
@@ -66,13 +99,12 @@ if __name__ == "__main__":
     dtype = torch.float
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-    multiply = transforms.Lambda(lambda img: img*2)
+    multiply = transforms.Lambda(lambda img: torch.clamp(img*4, min=0, max=thresh))
     # Define a transform
     transform = transforms.Compose([
                 transforms.Resize((8, 8)),
                 transforms.Grayscale(),
                 transforms.ToTensor(),
-                transforms.Normalize((0,), (1,)),
                 multiply])
 
     mnist_train = datasets.MNIST(data_path, train=True, download=True, transform=transform)
@@ -122,7 +154,7 @@ if __name__ == "__main__":
     loss = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(net.parameters(), lr=5e-4, betas=(0.9, 0.999))
 
-    num_epochs = 5
+    num_epochs = 1
     loss_hist = []
     test_loss_hist = []
     counter = 0
@@ -144,7 +176,7 @@ if __name__ == "__main__":
             # initialize the loss & sum over time
             loss_val = torch.zeros((1), dtype=dtype, device=device)
             for step in range(num_steps):
-                loss_val += loss(mem_rec[step], targets)
+                loss_val += loss(spk_rec[step], targets)
 
             # Gradient calculation + weight update
             optimizer.zero_grad()
@@ -167,7 +199,7 @@ if __name__ == "__main__":
                 # Test set loss
                 test_loss = torch.zeros((1), dtype=dtype, device=device)
                 for step in range(num_steps):
-                    test_loss += loss(test_mem[step], test_targets)
+                    test_loss += loss(test_spk[step], test_targets)
                 test_loss_hist.append(test_loss.item())
 
                 # Print train/test loss/accuracy

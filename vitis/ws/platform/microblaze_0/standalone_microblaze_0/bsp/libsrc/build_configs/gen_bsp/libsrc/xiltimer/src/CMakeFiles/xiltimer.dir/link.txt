@@ -1,0 +1,2 @@
+mb-ar qc libxiltimer.a CMakeFiles/xiltimer.dir/core/default_timer/microblaze_sleep.c.obj CMakeFiles/xiltimer.dir/xiltimer.c.obj
+/home/andrew/.Xilinx/Vitis/2024.1/gnu/microblaze/lin/bin/mb-ranlib libxiltimer.a

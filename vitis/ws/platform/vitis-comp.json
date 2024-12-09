@@ -1,0 +1,37 @@
+{
+  "name": "platform",
+  "type": "PLATFORM",
+  "configuration": {
+    "description": "",
+    "xsa": "/home/andrew/Desktop/snn-soc/vitis/microblaze_top.xsa",
+    "xsaPathInPlatform": "platform/hw/microblaze_top.xsa",
+    "emulationXsa": "",
+    "emulationXsaPathInPlatform": "",
+    "isCustomFSBL": false,
+    "fsblPath": "",
+    "pmufwElf": "",
+    "flow": "EMBEDDED",
+    "processorsMap": {
+      "microblaze_0": "microblaze"
+    },
+    "supportedFamily": "fpga",
+    "componentType": "PLATFORM",
+    "domains": [
+      {
+        "name": "standalone_microblaze_0",
+        "displayName": "standalone_microblaze_0",
+        "processor": "microblaze_0",
+        "cpuType": "microblaze",
+        "cpuInstance": "microblaze_0",
+        "os": "standalone",
+        "appTemplate": "empty_application",
+        "isBootDomain": false,
+        "qemuData": "",
+        "qemuArgsFile": "",
+        "pmcQemuArgsFile": "",
+        "isBSPGenReq": false
+      }
+    ],
+    "emptyToolchainConfiguration": []
+  }
+}

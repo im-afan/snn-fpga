@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/include/xparameters.h
+
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/hw_exception_handler.S
+microblaze_exceptions_g.h
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/microblaze_exceptions_g.h
+bspconfig.h
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/bspconfig.h
+xparameters.h
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/xparameters.h
+microblaze_instructions.h
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/microblaze_instructions.h
+
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/microblaze_exceptions_g.h
+
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/microblaze_instructions.h
+
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/microblaze_scrub.S
+bspconfig.h
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/bspconfig.h
+xparameters.h
+/home/andrew/Desktop/snn-soc/vitis/ws/platform/microblaze_0/standalone_microblaze_0/bsp/libsrc/standalone/src/microblaze/xparameters.h
+
+include/bspconfig.h
+xmem_config.h
+include/xmem_config.h
+
+include/xmem_config.h
+

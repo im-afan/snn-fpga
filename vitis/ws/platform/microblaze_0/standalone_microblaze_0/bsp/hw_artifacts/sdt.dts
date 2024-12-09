@@ -1,0 +1,366 @@
+/dts-v1/;
+
+/ {
+        device_id = "7a35t";
+        #address-cells = <0x1>;
+        #size-cells = <0x1>;
+
+        clock: clocks {
+                #address-cells = <0x1>;
+                #size-cells = <0x0>;
+                phandle = <0x8>;
+
+                clk_cpu_0: clk_cpu@0 {
+                        compatible = "fixed-clock";
+                        reg = <0x0>;
+                        clock-frequency = <0x5f5e100>;
+                        clock-output-names = "clk_cpu";
+                        #clock-cells = <0x0>;
+                        phandle = <0x9>;
+                };
+
+                clk_bus_0: clk_bus_0@1 {
+                        compatible = "fixed-clock";
+                        reg = <0x1>;
+                        clock-frequency = <0x5f5e100>;
+                        clock-output-names = "clk_bus_0";
+                        #clock-cells = <0x0>;
+                        phandle = <0x7>;
+                };
+        };
+
+        amba_pl: amba_pl {
+                ranges;
+                compatible = "simple-bus";
+                #address-cells = <0x1>;
+                #size-cells = <0x1>;
+                phandle = <0x6>;
+
+                cpus_microblaze_0: cpus_microblaze@0 {
+                        #cpu-mask-cells = <0x1>;
+                        compatible = "cpus,cluster";
+                        #address-cells = <0x1>;
+                        #size-cells = <0x0>;
+                        address-map = <0xc0000000 &axi_bram_ctrl_0_memory 0xc0000000 0x8000>,
+                         <0xc0000000 &axi_bram_ctrl_0 0xc0000000 0x8000>,
+                         <0x0 &microblaze_0_local_memory_dlmb_bram_if_cntlr_memory 0x0 0x10000>,
+                         <0x0 &microblaze_0_local_memory_dlmb_bram_if_cntlr 0x0 0x10000>,
+                         <0x40600000 &axi_uartlite_0 0x40600000 0x10000>;
+                        #ranges-address-cells = <0x1>;
+                        #ranges-size-cells = <0x1>;
+                        phandle = <0xa>;
+
+                        microblaze_0: cpu@0 {
+                                xlnx,reset-msr-dce = <0x0>;
+                                model = "microblaze,11.0";
+                                xlnx,addr-tag-bits = <0x0>;
+                                xlnx,d-axi = <0x1>;
+                                xlnx,interrupt-mon = <0x0>;
+                                xlnx,iaddr-size = <0x20>;
+                                xlnx,number-of-wr-addr-brk = <0x0>;
+                                xlnx,dynamic-bus-sizing = <0x0>;
+                                xlnx,temporal-depth = <0x0>;
+                                xlnx,rable = <0x0>;
+                                xlnx,use-interrupt = <0x0>;
+                                xlnx,optimization = <0x0>;
+                                xlnx,ip-axi-mon = <0x0>;
+                                xlnx,ip-name = "microblaze";
+                                d-cache-highaddr = <0x3fffffff>;
+                                xlnx,dcache-force-tag-lutram = <0x0>;
+                                xlnx,pc-width = <0x20>;
+                                xlnx,interrupt-is-edge = <0x0>;
+                                reg = <0x0>;
+                                xlnx,async-interrupt = <0x1>;
+                                xlnx,use-mmu = <0x0>;
+                                xlnx,reset-msr-ee = <0x0>;
+                                xlnx,icache-victims = <0x0>;
+                                xlnx,use-reorder-instr = <0x1>;
+                                xlnx,d-lmb-mon = <0x0>;
+                                xlnx,d-lmb-protocol = <0x0>;
+                                xlnx,ill-opcode-exception = <0x0>;
+                                xlnx,dcache-always-used = <0x1>;
+                                xlnx,use-div = <0x0>;
+                                xlnx,dc-axi-mon = <0x0>;
+                                xlnx,debug-trace-async-reset = <0x0>;
+                                xlnx,trace = <0x0>;
+                                xlnx,part = "xc7a35tcpg236-1";
+                                i-cache-baseaddr = <0x0>;
+                                xlnx,use-config-reset = <0x0>;
+                                xlnx,pvr = <0x0>;
+                                xlnx,i-lmb-mon = <0x0>;
+                                xlnx,dcache-byte-size = <0x2000>;
+                                xlnx,fault-tolerant = <0x0>;
+                                xlnx,family = "artix7";
+                                compatible = "xlnx,microblaze-11.0", "xlnx,microblaze";
+                                xlnx,data-size = <0x20>;
+                                xlnx,mmu-zones = <0x10>;
+                                xlnx,debug-trace-size = <0x2000>;
+                                xlnx,mmu-privileged-instr = <0x0>;
+                                xlnx,enable-discrete-ports = <0x0>;
+                                d-cache-line-size = <0x10>;
+                                xlnx,d-lmb = <0x1>;
+                                xlnx,sco = <0x0>;
+                                xlnx,reset-msr-eip = <0x0>;
+                                clock-frequency = <0x5f5e100>;
+                                xlnx,debug-interface = <0x0>;
+                                xlnx,use-ext-brk = <0x0>;
+                                xlnx,daddr-size = <0x20>;
+                                xlnx,debug-enabled = <0x1>;
+                                xlnx,reset-msr-ice = <0x0>;
+                                xlnx,num-sync-ff-dbg-trace-clk = <0x2>;
+                                xlnx,i-lmb-protocol = <0x0>;
+                                xlnx,endianness = <0x1>;
+                                xlnx,fsl-exception = <0x0>;
+                                i-cache-line-size = <0x10>;
+                                xlnx,use-extended-fsl-instr = <0x0>;
+                                xlnx,reset-msr = <0x0>;
+                                xlnx,dp-axi-mon = <0x0>;
+                                xlnx,branch-target-cache-size = <0x0>;
+                                xlnx,dcache-use-writeback = <0x0>;
+                                xlnx,div-zero-exception = <0x0>;
+                                xlnx,mmu-tlb-access = <0x3>;
+                                bus-handle = <0x6>;
+                                xlnx,cache-byte-size = <0x2000>;
+                                xlnx,pvr-user2 = <0x0>;
+                                xlnx,opcode-0x0-illegal = <0x0>;
+                                xlnx,icache-line-len = <0x4>;
+                                xlnx,ecc-use-ce-exception = <0x0>;
+                                xlnx,base-vectors = <0x0 0x0>;
+                                xlnx,use-dcache = <0x0>;
+                                xlnx,use-barrel = <0x0>;
+                                xlnx,reset-msr-bip = <0x0>;
+                                xlnx,edk-special = "microblaze";
+                                xlnx,allow-dcache-wr = <0x1>;
+                                xlnx,addr-size = <0x20>;
+                                xlnx,debug-external-trace = <0x0>;
+                                xlnx,piaddr-size = <0x20>;
+                                i-cache-highaddr = <0x3fffffff>;
+                                xlnx,num-sync-ff-clk-debug = <0x2>;
+                                xlnx,debug-event-counters = <0x5>;
+                                xlnx,fpu-exception = <0x0>;
+                                xlnx,allow-icache-wr = <0x1>;
+                                xlnx,i-axi = <0x0>;
+                                xlnx,g-use-exceptions = <0x0>;
+                                xlnx,icache-streams = <0x0>;
+                                xlnx,g-template-list = <0x0>;
+                                xlnx,dcache-line-len = <0x4>;
+                                xlnx,num-sync-ff-clk = <0x2>;
+                                xlnx,use-stack-protection = <0x0>;
+                                xlnx,use-hw-mul = <0x0>;
+                                xlnx,num-sync-ff-dbg-clk = <0x1>;
+                                xlnx,interconnect = <0x2>;
+                                xlnx,edk-iptype = "PROCESSOR";
+                                i-cache-size = <0x2000>;
+                                xlnx,debug-latency-counters = <0x1>;
+                                xlnx,use-fpu = <0x0>;
+                                xlnx,reset-msr-ie = <0x0>;
+                                xlnx,edge-is-positive = <0x1>;
+                                xlnx,use-pcmp-instr = <0x0>;
+                                xlnx,use-icache = <0x0>;
+                                d-cache-size = <0x2000>;
+                                xlnx,async-wakeup = <0x3>;
+                                xlnx,use-non-secure = <0x0>;
+                                xlnx,dcache-addr-tag = <0x0>;
+                                xlnx,number-of-rd-addr-brk = <0x0>;
+                                d-cache-baseaddr = <0x0>;
+                                xlnx,area-optimized = <0x0>;
+                                xlnx,avoid-primitives = <0x0>;
+                                xlnx,lockstep-slave = <0x0>;
+                                xlnx,use-ext-nm-brk = <0x0>;
+                                xlnx,instr-size = <0x20>;
+                                xlnx,icache-always-used = <0x1>;
+                                xlnx,i-lmb = <0x1>;
+                                xlnx,mmu-dtlb-size = <0x4>;
+                                xlnx,lockstep-select = <0x0>;
+                                xlnx,lmb-data-size = <0x20>;
+                                xlnx,ic-axi-mon = <0x0>;
+                                xlnx,enable-conversion = <0x1>;
+                                xlnx,num-sync-ff-clk-irq = <0x1>;
+                                xlnx,fsl-links = <0x0>;
+                                timebase-frequency = <0x5f5e100>;
+                                xlnx,icache-force-tag-lutram = <0x0>;
+                                xlnx,dcache-data-width = <0x0>;
+                                xlnx,dcache-victims = <0x0>;
+                                xlnx,use-branch-target-cache = <0x0>;
+                                xlnx,debug-profile-size = <0x0>;
+                                xlnx,unaligned-exceptions = <0x0>;
+                                xlnx,lockstep-master = <0x0>;
+                                xlnx,freq = <0x5f5e100>;
+                                xlnx,number-of-pc-brk = <0x1>;
+                                xlnx,mmu-itlb-size = <0x2>;
+                                xlnx,imprecise-exceptions = <0x0>;
+                                xlnx,use-msr-instr = <0x0>;
+                                xlnx,icache-data-width = <0x0>;
+                                xlnx,debug-counter-width = <0x20>;
+                                phandle = <0xb>;
+                        };
+                };
+
+                axi_bram_ctrl_0: axi_bram_ctrl@c0000000 {
+                        xlnx,protocol = "AXI4";
+                        xlnx,edk-special = "BRAM_CTRL";
+                        compatible = "xlnx,axi-bram-ctrl-4.1";
+                        xlnx,ecc-onoff-reset-value = <0x0>;
+                        xlnx,ecc-type = <0x0>;
+                        xlnx,rd-cmd-optimization = <0x0>;
+                        xlnx,memory-depth = <0x800>;
+                        xlnx,use-ecc = <0x0>;
+                        xlnx,rable = <0x0>;
+                        xlnx,fault-inject = <0x0>;
+                        xlnx,ip-name = "axi_bram_ctrl";
+                        reg = <0xc0000000 0x8000>;
+                        xlnx,bmg-instance = "EXTERNAL";
+                        xlnx,s-axi-ctrl-addr-width = <0x20>;
+                        xlnx,read-latency = <0x1>;
+                        xlnx,s-axi-supports-narrow-burst = <0x0>;
+                        xlnx,id-width = <0x0>;
+                        xlnx,supports-narrow-burst = <0x0>;
+                        xlnx,single-port-bram = <0x1>;
+                        xlnx,ecc = <0x0>;
+                        xlnx,edk-iptype = "PERIPHERAL";
+                        status = "okay";
+                        xlnx,bram-addr-width = <0xb>;
+                        xlnx,bram-inst-mode = "EXTERNAL";
+                        xlnx,data-width = <0x80>;
+                        xlnx,s-axi-ctrl-data-width = <0x20>;
+                        xlnx,s-axi-id-width = <0x1>;
+                        xlnx,mem-depth = <0x800>;
+                        xlnx,name = "axi_bram_ctrl_0";
+                        phandle = <0x2>;
+                };
+
+                axi_uartlite_0: axi_uartlite@40600000 {
+                        compatible = "xlnx,axi-uartlite-2.0", "xlnx,xps-uartlite-1.00.a";
+                        clock-frequency = <0x5f5e100>;
+                        xlnx,uartlite-board-interface = "Custom";
+                        xlnx,s-axi-aclk-freq-hz-d = <0x64>;
+                        xlnx,rable = <0x0>;
+                        xlnx,ip-name = "axi_uartlite";
+                        reg = <0x40600000 0x10000>;
+                        xlnx,baudrate = <0x2580>;
+                        clocks = <&clk_bus_0>;
+                        current-speed = <0x2580>;
+                        xlnx,use-parity = <0x0>;
+                        xlnx,edk-iptype = "PERIPHERAL";
+                        xlnx,odd-parity = <0x0>;
+                        status = "okay";
+                        xlnx,name = "axi_uartlite_0";
+                        xlnx,data-bits = <0x8>;
+                        xlnx,parity = "No_Parity";
+                        phandle = <0x5>;
+                };
+
+                microblaze_0_local_memory_dlmb_bram_if_cntlr: lmb_bram_if_cntlr@0 {
+                        xlnx,write-access = <0x2>;
+                        compatible = "xlnx,lmb-bram-if-cntlr-4.0";
+                        xlnx,ecc-onoff-register = <0x0>;
+                        xlnx,ecc-onoff-reset-value = <0x1>;
+                        xlnx,edk-special = "BRAM_CTRL";
+                        xlnx,s-axi-ctrl-protocol = "AXI4LITE";
+                        xlnx,mask = <0x0 0x40000000>;
+                        xlnx,mask1 = <0x0 0x800000>;
+                        xlnx,rable = <0x0>;
+                        xlnx,mask2 = <0x0 0x800000>;
+                        xlnx,fault-inject = <0x0>;
+                        xlnx,mask3 = <0x0 0x800000>;
+                        xlnx,arbitration = <0x0>;
+                        xlnx,num-lmb = <0x1>;
+                        xlnx,mask4 = <0x0 0x800000>;
+                        reg = <0x0 0x10000>;
+                        xlnx,s-axi-ctrl-addr-width = <0x20>;
+                        xlnx,mask5 = <0x0 0x800000>;
+                        xlnx,ecc-status-registers = <0x0>;
+                        xlnx,mask6 = <0x0 0x800000>;
+                        xlnx,lmb-protocol = <0x0>;
+                        xlnx,ce-counter-width = <0x0>;
+                        xlnx,mask7 = <0x0 0x800000>;
+                        xlnx,ecc = <0x0>;
+                        xlnx,lmb-dwidth = <0x20>;
+                        xlnx,interconnect = <0x0>;
+                        xlnx,ce-failing-registers = <0x0>;
+                        xlnx,edk-iptype = "PERIPHERAL";
+                        xlnx,ue-failing-registers = <0x0>;
+                        xlnx,s-axi-ctrl-data-width = <0x20>;
+                        xlnx,bram-awidth = <0x20>;
+                        xlnx,lmb-awidth = <0x20>;
+                        phandle = <0x4>;
+                };
+
+                microblaze_0_local_memory_ilmb_bram_if_cntlr: lmb_bram_if_cntlr@1 {
+                        xlnx,write-access = <0x2>;
+                        compatible = "xlnx,lmb-bram-if-cntlr-4.0";
+                        xlnx,ecc-onoff-register = <0x0>;
+                        xlnx,ecc-onoff-reset-value = <0x1>;
+                        xlnx,edk-special = "BRAM_CTRL";
+                        xlnx,s-axi-ctrl-protocol = "AXI4LITE";
+                        xlnx,mask = <0x0 0x0>;
+                        xlnx,mask1 = <0x0 0x800000>;
+                        xlnx,rable = <0x0>;
+                        xlnx,mask2 = <0x0 0x800000>;
+                        xlnx,fault-inject = <0x0>;
+                        xlnx,mask3 = <0x0 0x800000>;
+                        xlnx,arbitration = <0x0>;
+                        xlnx,num-lmb = <0x1>;
+                        xlnx,mask4 = <0x0 0x800000>;
+                        reg = <0x0 0x10000>;
+                        xlnx,s-axi-ctrl-addr-width = <0x20>;
+                        xlnx,mask5 = <0x0 0x800000>;
+                        xlnx,ecc-status-registers = <0x0>;
+                        xlnx,mask6 = <0x0 0x800000>;
+                        xlnx,lmb-protocol = <0x0>;
+                        xlnx,ce-counter-width = <0x0>;
+                        xlnx,mask7 = <0x0 0x800000>;
+                        xlnx,ecc = <0x0>;
+                        xlnx,lmb-dwidth = <0x20>;
+                        xlnx,interconnect = <0x0>;
+                        xlnx,ce-failing-registers = <0x0>;
+                        xlnx,edk-iptype = "PERIPHERAL";
+                        xlnx,ue-failing-registers = <0x0>;
+                        xlnx,s-axi-ctrl-data-width = <0x20>;
+                        xlnx,bram-awidth = <0x20>;
+                        xlnx,lmb-awidth = <0x20>;
+                        phandle = <0xc>;
+                };
+        };
+
+        axi_bram_ctrl_0_memory: memory@c0000000 {
+                compatible = "xlnx,axi-bram-ctrl-4.1";
+                xlnx,ip-name = "axi_bram_ctrl";
+                device_type = "memory";
+                memory_type = "memory";
+                reg = <0xc0000000 0x8000>;
+                phandle = <0x1>;
+        };
+
+        microblaze_0_local_memory_dlmb_bram_if_cntlr_memory: memory@0 {
+                compatible = "xlnx,lmb-bram-if-cntlr-4.0";
+                xlnx,ip-name = "lmb_bram_if_cntlr";
+                device_type = "memory";
+                memory_type = "memory";
+                reg = <0x0 0x10000>;
+                phandle = <0x3>;
+        };
+
+        chosen {
+                stdout-path = "serial0:9600n8";
+        };
+
+        aliases {
+                serial0 = "/amba_pl/axi_uartlite@40600000";
+        };
+
+        __symbols__ {
+                clock = "/clocks";
+                clk_cpu_0 = "/clocks/clk_cpu@0";
+                clk_bus_0 = "/clocks/clk_bus_0@1";
+                amba_pl = "/amba_pl";
+                cpus_microblaze_0 = "/amba_pl/cpus_microblaze@0";
+                microblaze_0 = "/amba_pl/cpus_microblaze@0/cpu@0";
+                axi_bram_ctrl_0 = "/amba_pl/axi_bram_ctrl@c0000000";
+                axi_uartlite_0 = "/amba_pl/axi_uartlite@40600000";
+                microblaze_0_local_memory_dlmb_bram_if_cntlr = "/amba_pl/lmb_bram_if_cntlr@0";
+                microblaze_0_local_memory_ilmb_bram_if_cntlr = "/amba_pl/lmb_bram_if_cntlr@1";
+                axi_bram_ctrl_0_memory = "/memory@c0000000";
+                microblaze_0_local_memory_dlmb_bram_if_cntlr_memory = "/memory@0";
+        };
+};

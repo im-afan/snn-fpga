@@ -1,0 +1,15 @@
+{
+  "name": "app_component",
+  "type": "HOST",
+  "platform": "/home/andrew/Desktop/snn-soc/vitis/ws/platform/export/platform/platform.xpfm",
+  "domain": "standalone_microblaze_0",
+  "cpuInstance": "microblaze_0",
+  "cpuType": "microblaze",
+  "os": "standalone",
+  "configuration": {
+    "componentType": "HOST",
+    "hostToolchainConfigurations": []
+  },
+  "domainRealName": "standalone_microblaze_0",
+  "applicationFlow": "EMBEDDED"
+}

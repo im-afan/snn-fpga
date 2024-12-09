@@ -210,8 +210,8 @@ module network_bram_wrapper #(
                                     mem_out[y+i] <= local_dout[i];
                                 end
                             end else if(z == 2) begin
-                                //snn_en <= data_out[0] & ~prev_enable;
-                                snn_en <= 1;
+                                snn_en <= data_out[0] & ~prev_enable;
+                                //snn_en <= 1;
                                 snn_rst <= data_out[2];
                                 prev_enable <= data_out[0];
                                 //snn_done <= data_out[1];
@@ -246,7 +246,7 @@ module network_bram_wrapper #(
                                 end else begin
                                     if(~spk_in_core[x+1]) begin // save time by not loading weights if no spike
                                         for(integer i = 0; i < NEURONS_PER_CORE; i++) begin
-                                            weight[x+1][i] <= 0;
+                                           weight[x+1][i] <= 0;
                                         end
                                         step <= INCREMENT_STEP;
                                     end else begin

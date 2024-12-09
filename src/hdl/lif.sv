@@ -48,7 +48,7 @@ module lif#(
                 //if(mem_in + spk_in >= THRESH) begin
                 if(sum_clamp >= THRESH) begin
                     spk_out <= SPK_CURRENT;
-                    mem_out <= RESET_VAL;
+                    mem_out <= 0;
                 end else begin
                     spk_out <= 0;
                     //mem_out <= (sum_clamp >>> 1); // todo, no leak in bram yet
