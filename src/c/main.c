@@ -3,7 +3,8 @@
 #include "xil_printf.h"
 #include "xil_io.h"
 #include "snn_driver.h"
-#include "model.h"
+//#include "model.h"
+#include "read_model.h"
 
 // overrides default SNN block memory
 // with own weights and runs the neural network
@@ -12,7 +13,8 @@
 int main()
 {
     init_platform();
-    write_model();
+    //write_model();
+	read_model();
 
     print("\n\r--------BEGINNING SNN INFERENCE--------------\n\r");
 

@@ -1,2 +1,0 @@
-mb-ar qc libbram.a CMakeFiles/bram.dir/xbram.c.obj CMakeFiles/bram.dir/xbram_g.c.obj CMakeFiles/bram.dir/xbram_intr.c.obj CMakeFiles/bram.dir/xbram_selftest.c.obj CMakeFiles/bram.dir/xbram_sinit.c.obj
-/home/andrew/.Xilinx/Vitis/2024.1/gnu/microblaze/lin/bin/mb-ranlib libbram.a

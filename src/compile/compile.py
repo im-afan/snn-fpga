@@ -87,12 +87,33 @@ def compile_to_c(model, img=None, spk=None, mem=None):
 
     print("}")
 
+def compile_to_uart(model, img=None, spk_out=None, mem=None):
+	ser = serial.Serial("/dev/USB0", baudrate=115200)		
+
+	for i in range(len(tiles)):
+			ser.write(f"0 {i} {tile_idx[i][0]} {tile_idx[i][1]}\n")
+			for x in range(NEURONS_PER_TILE):
+				for y in range(NEURONS_PER_TILE):
+					ser.write(f"1 {i} {x} {y} {int(tiles[i][y][x])}\n")
+
+    if(img is not None):
+        for i in range(64):
+            ser.write(f"2 {i} {int(round(img[i].item() * THRESH))}\n")
+
+	ser.write("end\n")
+
+
 if __name__ == "__main__":
     try:
-        out_path = sys.argv[1]
+        out_path = sys.argv[2]
         sys.stdout = open(out_path, "w")
     except Exception:
         pass
+
+	try:
+		mode = sys.argv[1]
+	except Exception:
+		mode = "c"	
     
     model = Net()
     state_dict = torch.load("./mnist_16x16_spk.h5", weights_only=True)
@@ -110,16 +131,12 @@ if __name__ == "__main__":
     mnist_test = datasets.MNIST(data_path, train=False, download=True, transform=transform)
     test_loader = iter(DataLoader(mnist_test, batch_size=1, shuffle=True, drop_last=True))
     img, label = next(test_loader)
-    #img = torch.zeros_like(img)
-    #img[0][0][0] = 1
-    plt.imshow(img.view(8, 8).numpy())
 
     model.quantize(torch.tensor(THRESH))
     spk0, spk1, spk2, mem1 = model((img.view(1, -1) * THRESH).round(), debug=True)
-    #print(spk)
-    #print(label)
 
-    #tile_idx, tiles = compile(model)
-    compile_to_c(model, img=img.view(8*8), spk=[spk0, spk1, spk2], mem=[None, mem1, None])
-    plt.show()
-
+	if(mode == "c"):
+		#tile_idx, tiles = compile(model)
+		compile_to_c(model, img=img.view(8*8), spk=[spk0, spk1, spk2], mem=[None, mem1, None])
+	elif(mode == "uart"):
+		compile_to_uart(model, img=img.view(8*8))
