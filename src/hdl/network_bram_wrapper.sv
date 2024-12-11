@@ -11,7 +11,8 @@ module network_bram_wrapper #(
     parameter integer MAX_DELAY = 8,
     parameter integer WIDTH = 8,
     parameter integer BYTES_PER_WIDTH = 4,
-    parameter integer MAX_TILES = 16
+    parameter integer MAX_TILES = 16,
+    parameter integer TILE_IDX_WIDTH
 )(
     input wire clk, 
     input wire [4:0] mode, //  0=read params 1=write queued_spikes 2=read spikes 3=write spikes
@@ -25,18 +26,18 @@ module network_bram_wrapper #(
     output reg [BYTES_PER_WIDTH-1:0] bram_we,
 
     input wire snn_done,
-    input wire [BRAM_DATA_WIDTH-1:0] core_idx,
+    input wire [TILE_IDX_WIDTH-1:0] core_idx,
     input wire [NEURONS_PER_CORE-1:0] spk_out,
     input wire signed [WIDTH-1:0] mem_in [NEURONS_PER_CORE],
-    input wire [BRAM_DATA_WIDTH-1:0] lif_tile_idx,
+    input wire [TILE_IDX_WIDTH-1:0] lif_tile_idx,
 
     output reg signed [WIDTH-1:0] weight [NEURONS_PER_CORE][NEURONS_PER_CORE],
     output reg signed [WIDTH-1:0] network_input [NEURONS_PER_CORE],
     output reg [MAX_NEURONS-1:0] leak,
     output reg snn_en, // should do timestep?
     output reg snn_rst, // should reset membrane potentials? 
-    output reg [BRAM_DATA_WIDTH-1:0] core_idx_x,
-    output reg [BRAM_DATA_WIDTH-1:0] core_idx_y,
+    output reg [TILE_IDX_WIDTH-1:0] core_idx_x,
+    output reg [TILE_IDX_WIDTH-1:0] core_idx_y,
     output reg signed [WIDTH-1:0] mem_out [NEURONS_PER_CORE],
     output reg [NEURONS_PER_CORE-1:0] spk_in_core,
 
@@ -51,13 +52,20 @@ module network_bram_wrapper #(
     localparam integer LIF_READ_INPUT = 2;
     localparam integer LIF_WRITE_SPIKES = 3;
 
-    localparam integer TILE_WIDTH = BYTES_PER_WIDTH + NEURONS_PER_CORE*NEURONS_PER_CORE;
+    //localparam integer TILE_WIDTH = BYTES_PER_WIDTH + NEURONS_PER_CORE*NEURONS_PER_CORE;
+    localparam integer TILE_WIDTH = NEURONS_PER_CORE * NEURONS_PER_CORE * WIDTH / 8;
 
-    localparam integer WEIGHT_OFFSET = 0; // word 1: core index, word 2...NEURONS_PER_TILE: weights
-    localparam integer NETWORK_INPUT_OFFSET = TILE_WIDTH * MAX_TILES;
-    localparam integer SPK_OUT_OFFSET = NETWORK_INPUT_OFFSET + MAX_NEURONS;
-    localparam integer FLAGS_OFFSET = SPK_OUT_OFFSET + MAX_NEURONS;
-    localparam integer MEM_OFFSET = FLAGS_OFFSET + MAX_NEURONS;
+    localparam integer TILE_IDX_OFFSET = 0;
+    localparam integer WEIGHT_OFFSET = TILE_IDX_OFFSET + 2*TILE_IDX_WIDTH*MAX_TILES / 8; // word 1: core index, word 2...NEURONS_PER_TILE: weights
+    localparam integer NETWORK_INPUT_OFFSET = WEIGHT_OFFSET + TILE_WIDTH * MAX_TILES;
+    localparam integer SPK_OUT_OFFSET = NETWORK_INPUT_OFFSET + MAX_NEURONS * WIDTH / 8;
+    localparam integer FLAGS_OFFSET = SPK_OUT_OFFSET + MAX_NEURONS * WIDTH / 8;
+    localparam integer MEM_OFFSET = FLAGS_OFFSET + MAX_NEURONS * WIDTH / 8;
+
+    assert(WEIGHT_OFFSET % (BRAM_DATA_WIDTH/8) == 0) $display("offset ok");
+    else $error("offset needs to be divisible by 1024") 
+    assert(NETWORK_INPUT_OFFSET % (BRAM_DATA_WIDTH/8) == 0) $display("offset ok");
+    else $error("offset needs to be divisible by 1024")
 
     localparam integer EN = 0; // within word at FLAGS_OFFSET 
     localparam integer DONE = 1;
@@ -100,6 +108,17 @@ module network_bram_wrapper #(
         end
     endgenerate
 
+    reg [WIDTH-1:0] local_weight[NEURONS_PER_CORE*NEURONS_PER_CORE];
+    generate
+        genvar i;
+        genvar j;
+        for(i = 0; i < NEURONS_PER_CORE; i++) begin
+            for(j = 0; j < NEURONS_PER_CORE; j++) begin
+                assign weight[i][j] = local_weight[i*NEURONS_PER_CORE + j];
+            end
+        end
+
+    endgenerate
 
     assign leak = 0;
 
@@ -136,7 +155,7 @@ module network_bram_wrapper #(
                     cnt <= 0;
                     if(mode == CORE_READ_PARAMS) begin
                         //addr <= ((z << LOG_MAX_NEURONS) << LOG_MAX_NEURONS) + ((x + (core_idx_x << LOG_NEURONS_PER_CORE)) << LOG_MAX_NEURONS) + (y + (core_idx_y << LOG_NEURONS_PER_CORE));
-                        if(z == 0) local_addr <= WEIGHT_OFFSET + TILE_WIDTH*core_idx;
+                        if(z == 0) local_addr <= TILE_IDX_OFFSET + 2*(core_idx;
                         if(z == 1) local_addr <= MEM_OFFSET + core_idx_y*NEURONS_PER_CORE + y;
                         if(z == 2) local_addr <= SPK_OUT_OFFSET + core_idx_x*NEURONS_PER_CORE + y;
                         if(z == 3) local_addr <= WEIGHT_OFFSET + TILE_WIDTH*core_idx + ((x << LOG_NEURONS_PER_CORE) + y) + BYTES_PER_WIDTH;

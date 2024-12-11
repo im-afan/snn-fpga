@@ -38,20 +38,12 @@ module lif#(
             done <= 0;
             local_done <= 0;
         end else begin
-            /*if(rst) begin
-                mem <= RESET_VAL;
-                spk_out <= 0;
-            end*/
-
             if(~local_done) begin
-				//$display("mem = %d, spk_in = %d", mem, spk_in);
-                //if(mem_in + spk_in >= THRESH) begin
                 if(sum_clamp >= THRESH) begin
                     spk_out <= SPK_CURRENT;
                     mem_out <= 0;
                 end else begin
                     spk_out <= 0;
-                    //mem_out <= (sum_clamp >>> 1); // todo, no leak in bram yet
                     mem_out <= sum_clamp;
                 end
 

@@ -20,7 +20,8 @@ module network_wrapper#(
     parameter integer BRAM_DATA_WIDTH = 32,
     parameter integer BYTES_PER_WIDTH = 4,
     parameter integer MAX_TILES = 64,
-    parameter integer THRESH = 32
+    parameter integer THRESH = 32,
+    parameter integer TILE_IDX_WIDTH,
 )(
     input wire clk,
     input wire enable,
@@ -85,10 +86,10 @@ module network_wrapper#(
     localparam integer LOG_NEURONS_PER_CORE = $clog2(NEURONS_PER_CORE);
     reg enable_core = 1;
     reg core_done;
-    reg signed [BRAM_DATA_WIDTH-1:0] lif_tile_idx = 0;
-    reg signed [BRAM_DATA_WIDTH-1:0] core_idx = 0;
-    wire signed [BRAM_DATA_WIDTH-1:0] core_idx_x;
-    wire signed [BRAM_DATA_WIDTH-1:0] core_idx_y;
+    reg signed [TILE_IDX_WIDTH-1:0] lif_tile_idx = 0;
+    reg signed [TILE_IDX_WIDTH-1:0] core_idx = 0;
+    wire signed [TILE_IDX_WIDTH-1:0] core_idx_x;
+    wire signed [TILE_IDX_WIDTH-1:0] core_idx_y;
     reg want_lif_step = 0;
     reg [WIDTH-1:0] cur_step = LIF_STEP_READ_INPUT;
 	reg debug = 0;
@@ -113,7 +114,8 @@ module network_wrapper#(
 		.BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
 		.BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
 		.BYTES_PER_WIDTH(BYTES_PER_WIDTH),
-		.MAX_TILES(MAX_TILES)
+		.MAX_TILES(MAX_TILES),
+		.TILE_IDX_WIDTH(TILE_IDX_WIDTH)
 	) bram (
 		.clk(bram_clk),
 		.enable(bram_wrapper_enable),

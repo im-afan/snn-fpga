@@ -22,6 +22,7 @@ module microblaze_top #(
 	localparam MAX_TILES = 32;
     localparam integer BYTES_PER_WIDTH = BRAM_DATA_WIDTH / WIDTH;
     localparam integer THRESH = 127;
+    localparam TILE_IDX_WIDTH = 16;
 
 	wire rst;
 	//assign rst = ~reset;
@@ -77,7 +78,8 @@ module microblaze_top #(
 		.BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
 		.BYTES_PER_WIDTH(BYTES_PER_WIDTH),
 		.MAX_TILES(MAX_TILES),
-		.THRESH(THRESH)
+		.THRESH(THRESH),
+		.TILE_IDX_WIDTH(TILE_IDX_WIDTH)
 	) network (
 		.clk(clk),
 		.enable(network_enable),

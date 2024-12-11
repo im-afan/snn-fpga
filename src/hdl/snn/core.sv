@@ -20,9 +20,7 @@ module core#(
     input wire debug,
     input wire signed [WIDTH-1:0] weight [MAX_NEURONS][MAX_NEURONS],
     input wire [MAX_NEURONS-1:0] spk_in,
-    input wire signed [WIDTH-1:0] mem_in [MAX_NEURONS],
-    output reg signed [WIDTH-1:0] spk_buffer [MAX_NEURONS],
-    output reg signed [WIDTH-1:0] mem_out [MAX_NEURONS],
+    output reg signed [WIDTH-1:0] mac_out [MAX_NEURONS],
     output reg done // timestep done
 );
     
@@ -64,7 +62,7 @@ module core#(
                         .spk_in(spk_in[j]),
                         .weight(weight[j][i]),
                         //.mac_out(spk_buffer[i])
-                        .mac_out(mem_out[i])
+                        .mac_out(mac_out[i])
                     );
                 end
             end
