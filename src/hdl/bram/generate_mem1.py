@@ -4,28 +4,33 @@ sys.stdout = open("bram.mem", "w")
 
 MAX_TILES = 64
 MAX_NEURONS = 1024
+TILE_IDX_WIDTH = 16
+BRAM_DATA_WIDTH = 1024
+CROSSBAR_NEURONS = 16
+NETWORK_WIDTH = 8
+
+TILE_IDX_BITS = ((2*TILE_IDX_WIDTH*MAX_TILES) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
+WEIGHT_BITS = ((CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
+NETWORK_INPUT_BITS = ((MAX_NEURONS*NETWORK_WIDTH) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
+SPK_OUT_BITS = ((MAX_NEURONS) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
+FLAGS_BITS = 1;
+TILE_IDX_OFFSET = 0;
+
+WEIGHT_OFFSET = TILE_IDX_OFFSET + TILE_IDX_BITS;
+NETWORK_INPUT_OFFSET = WEIGHT_OFFSET + WEIGHT_BITS;
+SPK_OUT_OFFSET = NETWORK_INPUT_OFFSET + NETWORK_INPUT_BITS;
+FLAGS_OFFSET = SPK_OUT_OFFSET + SPK_OUT_BITS;
+MEM_OFFSET = FLAGS_OFFSET + FLAGS_BITS;
 
 tile_idx = [[0, 0] for i in range(MAX_TILES)]
+tile = [[[i for i in range(CROSSBAR_NEURONS)] for i in range(CROSSBAR_NEURONS)] for i in range(MAX_TILES)]
 #arr = ["0" for i in range(1024)]
-mem = "" 
-
+mem = ["0" for i in range(BRAM_DATA_WIDTH*1024)] 
 
 for i in range(MAX_TILES):
 	tile_idx[i] = [i // 8, i % 8]
 
-BRAM_DATA_WIDTH = 1024
-TILE_IDX_WIDTH = 16
-CROSSBAR_NEURONS = 16
-NETWORK_WIDTH = 8
-
-TILE_IDX_OFFSET = 0;
-WEIGHT_OFFSET = TILE_IDX_OFFSET + ((2*TILE_IDX_WIDTH*MAX_TILES) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH / 8;
-NETWORK_INPUT_OFFSET = WEIGHT_OFFSET + CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH/8 * MAX_TILES;
-SPK_OUT_OFFSET = NETWORK_INPUT_OFFSET + (MAX_NEURONS * NETWORK_WIDTH // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH / 8;
-FLAGS_OFFSET = SPK_OUT_OFFSET + BRAM_DATA_WIDTH / 8;
-MEM_OFFSET = FLAGS_OFFSET + BRAM_DATA_WIDTH / 8;
-
-def bin_(num, bit_width=16):
+def bin_(num, bit_width=8):
     """Convert a signed decimal number to binary with a fixed bit width."""
     if num < 0:
         # Convert to two's complement binary
@@ -33,15 +38,35 @@ def bin_(num, bit_width=16):
     # Format as binary with the specified width
     return format(num, f'0{bit_width}b')
 
-mem0 = ""
-mem1 = ""
-for i in range(0, MAX_TILES // 2):
-    mem0 = bin_(tile_idx[i][0], TILE_IDX_WIDTH) + mem0
-    mem0 = bin_(tile_idx[i][1], TILE_IDX_WIDTH) + mem0
-for i in range(MAX_TILES // 2, MAX_TILES):
-    mem1 = bin_(tile_idx[i][0], TILE_IDX_WIDTH) + mem1
-    mem1 = bin_(tile_idx[i][1], TILE_IDX_WIDTH) + mem1
+def endian(binary_string):
+    if len(binary_string) % 8 != 0:
+        raise ValueError("Binary string length must be a multiple of 8")
+    
+    byte_chunks = [binary_string[i:i+8] for i in range(0, len(binary_string), 8)]
+    reversed_chunks = byte_chunks[::-1]
+    big_endian_string = ''.join(reversed_chunks)
+    
+    return big_endian_string
+
+for i in range(0, MAX_TILES):
+    mem[TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*i : TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*(i+1)] = bin_(tile_idx[i][0], 16) + bin_(tile_idx[i][1], 16)
+
+for i in range(0, MAX_TILES):
+    for j in range(CROSSBAR_NEURONS):
+        for k in range(CROSSBAR_NEURONS):
+            base = WEIGHT_OFFSET + (i*CROSSBAR_NEURONS*CROSSBAR_NEURONS + j*CROSSBAR_NEURONS + k) * NETWORK_WIDTH
+            #print(base, bin_(tile[i][j][k], 8))
+            mem[base:base+NETWORK_WIDTH] = bin_(tile[i][j][k], 8)
+
+for i in range(0, MAX_TILES):
+    for j in range(CROSSBAR_NEURONS):
+        for k in range(CROSSBAR_NEURONS):
+            base = WEIGHT_OFFSET + (i*CROSSBAR_NEURONS*CROSSBAR_NEURONS + j*CROSSBAR_NEURONS + k) * NETWORK_WIDTH
+            #print(base, bin_(tile[i][j][k], 8))
+            mem[base:base+NETWORK_WIDTH] = bin_(tile[i][j][k], 8)
 
 
-print(mem0)
-print(mem1)
+for i in range(0, 1024):
+    s = ''.join(mem[i*1024 : (i+1)*1024])
+    s = endian(s)
+    print(s)
