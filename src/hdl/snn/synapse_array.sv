@@ -9,41 +9,38 @@
  * based on TrueNorth architecture https://open-neuromorphic.org/blog/truenorth-deep-dive-ibm-neuromorphic-chip-design/
  */
 
-module core#(
-    parameter integer MAX_NEURONS = 8,
-    parameter integer WIDTH = 32,
-    parameter integer MAX_DELAY = 8,
-    parameter integer THRESH = 32
+module synapse_array#(
+    parameter integer CROSSBAR_NEURONS,
+    parameter integer NETWORK_WIDTH
 )(
     input wire clk,
     input wire enable,
-    input wire debug,
-    input wire signed [WIDTH-1:0] weight [MAX_NEURONS][MAX_NEURONS],
-    input wire [MAX_NEURONS-1:0] spk_in,
-    output reg signed [WIDTH-1:0] mac_out [MAX_NEURONS],
-    output reg done // timestep done
+
+    input wire signed [NETWORK_WIDTH-1:0] weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS],
+    input wire [CROSSBAR_NEURONS-1:0] spk_in,
+    output reg signed [NETWORK_WIDTH-1:0] mac_out [CROSSBAR_NEURONS],
+    output reg done
 );
     
-    reg [MAX_NEURONS*MAX_NEURONS-1:0] synapse_done;
-    reg all_done = 0;
+    reg [CROSSBAR_NEURONS*CROSSBAR_NEURONS-1:0] synapse_done;
+    assign done = &synapse_done && enable;
 
     generate
         genvar i;
         genvar j;
     
-        for(i=0; i<MAX_NEURONS; i++) begin // west to east
-            wire signed [WIDTH-1:0] column [MAX_NEURONS];
-            wire column_spike [MAX_NEURONS];
-            //assign column[0] = 0;
-            assign column[0] = mem_in[i];
+        for(i=0; i<CROSSBAR_NEURONS; i++) begin // west to east
+            wire signed [NETWORK_WIDTH-1:0] column [CROSSBAR_NEURONS];
+            wire column_spike [CROSSBAR_NEURONS];
+            assign column[0] = 0;
             assign column_spike[0] = 1;
-            for(j=0; j<MAX_NEURONS; j++) begin // north to south
-                if(j < MAX_NEURONS-1) begin
-                    synapse #(.WIDTH(WIDTH), .ROW(j), .COL(i), .MAX_DELAY(MAX_DELAY), .THRESH(THRESH)) syn(
+            for(j=0; j<CROSSBAR_NEURONS; j++) begin // north to south
+                if(j < CROSSBAR_NEURONS-1) begin
+                    synapse #(.NETWORK_WIDTH(NETWORK_WIDTH)) syn(
                         .clk(clk),
                         .enable(enable),
                         .debug(debug),
-                        .done(synapse_done[j*MAX_NEURONS+i]),
+                        .done(synapse_done[j*CROSSBAR_NEURONS+i]),
                         .mac_in(column[j]),
                         .spk_above(column_spike[j]),
                         .spk_in(spk_in[j]),
@@ -52,28 +49,19 @@ module core#(
                         .spk_below(column_spike[j+1])
                     );
                 end else begin
-                    synapse  #(.WIDTH(WIDTH), .ROW(j), .COL(i), .MAX_DELAY(MAX_DELAY), .THRESH(THRESH)) syn(
+                    synapse  #(.NETWORK_WIDTH(NETWORK_WIDTH)) syn(
                         .clk(clk),
                         .enable(enable),
                         .debug(debug),
-                        .done(synapse_done[j*MAX_NEURONS+i]),
+                        .done(synapse_done[j*CROSSBAR_NEURONS+i]),
                         .mac_in(column[j]),
                         .spk_above(column_spike[j]),
                         .spk_in(spk_in[j]),
                         .weight(weight[j][i]),
-                        //.mac_out(spk_buffer[i])
                         .mac_out(mac_out[i])
                     );
                 end
             end
         end
     endgenerate
-
-    always @(posedge clk or negedge enable) begin 
-        if(~enable) begin
-            done <= 0; 
-        end else begin
-            done <= &synapse_done;
-        end
-    end
 endmodule

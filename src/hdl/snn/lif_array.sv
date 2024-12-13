@@ -1,5 +1,7 @@
 `include "lif.sv"
 
+/* TODO UNTESTED */
+
 module lif_array #(
     parameter integer CROSSBAR_NEURONS, 
     parameter integer THRESH,
@@ -8,16 +10,27 @@ module lif_array #(
     input wire clk,
     input wire enable,
 
+    input wire bram_done,
+
     input wire [CROSSBAR_NEURONS] spk_in,
     input wire [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS],
     input wire [NETWORK_WIDTH-1:0] mac_in [CROSSBAR_NEURONS],
 
     output reg [CROSSBAR_NEURONS-1:0] spk_out,
-    output reg [NETWORK_WIDTH-1:0] mem_out [CROSSBAR_NEURONS]
-    output wire done;
+    output reg [NETWORK_WIDTH-1:0] mem_out [CROSSBAR_NEURONS],
+    output wire done,
+    output reg bram_we
 );
+    localparam READ = 0;
+    localparam LIF = 1;
+    localparam WRITE = 2;
+
+    reg step;
+
+    reg lif_enable;
     wire [CROSSBAR_NEURONS-1:0] lif_done;
-    assign done = &lif_done;
+    wire all_lif_done;
+    assign all_lif_done = lif_done;
 
     generate
         genvar i;
@@ -27,7 +40,7 @@ module lif_array #(
                 .NETWORK_WIDTH(NETWORK_WIDTH)
             ) neuron (
                 .clk(clk),
-                .enable(enable),
+                .enable(lif_enable),
                 .spk_in(spk_in[i]),
                 .mac_in(mac_in[i]),
                 .mem_in(mem_in[i]),
@@ -37,4 +50,47 @@ module lif_array #(
             );
         end
     endgenerate
+
+    always @(posedge clk) begin
+        if(~enable) begin
+            step <= READ;
+            lif_enable <= 0;
+            done <= 0;
+        end else begin
+            if(~done) begin
+                case step:
+                    READ: begin
+                        if(~bram_enable) begin
+                            bram_we <= 0;
+                            bram_enable <= 1;
+                        end 
+                        if(bram_done) begin
+                            step <= LIF;
+                            bram_enable <= 0;
+                        end
+                    end
+                    LIF: begin
+                        if(~lif_enable) begin
+                            lif_enable <= 1;
+                        end
+                        if(all_lif_done) begin
+                            lif_enable <= 0;
+                            step <= WRITE;
+                        end
+                    end
+                    WRITE: begin
+                        if(~bram_enable) begin
+                            bram_we <= 1;
+                            bram_enable <= 1;
+                        end
+                        if(bram_done) begin
+                            done <= 1;
+                            step <= READ;
+                            bram_enable <= 0;
+                        end
+                    end
+                endcase
+            end
+        end
+    end
 endmodule

@@ -1,5 +1,5 @@
 $date
-	Fri Dec 13 00:22:25 2024
+	Fri Dec 13 12:59:49 2024
 $end
 $version
 	Icarus Verilog
@@ -7,6700 +7,5802 @@ $end
 $timescale
 	10ps
 $end
-$scope module lif_bram_tb $end
-$var wire 16 ! spk_in [15:0] $end
-$var wire 1024 " dout [1023:0] $end
-$var wire 1024 # din [1023:0] $end
-$var wire 128 $ bram_we [127:0] $end
-$var wire 1 % bram_rst $end
-$var wire 1 & bram_en $end
-$var wire 16 ' addr [15:0] $end
-$var parameter 32 ( BRAM_ADDR_WIDTH $end
-$var parameter 32 ) BRAM_DATA_WIDTH $end
-$var parameter 32 * CROSSBAR_NEURONS $end
-$var parameter 32 + MAX_NEURONS $end
-$var parameter 32 , MAX_TILES $end
-$var parameter 32 - NETWORK_WIDTH $end
-$var parameter 32 . TILE_IDX_WIDTH $end
-$var reg 1 / clk $end
-$var reg 1 0 enable $end
-$var reg 16 1 spk_out [15:0] $end
-$var reg 16 2 tile_idx_x [15:0] $end
-$var reg 16 3 tile_idx_y [15:0] $end
-$var reg 1 4 we $end
+$scope module input_bram_tb $end
+$var wire 32 ! tile_idx_fifo_din [31:0] $end
+$var wire 128 " mac_out_fifo_din [127:0] $end
+$var wire 1024 # dout [1023:0] $end
+$var wire 1024 $ din [1023:0] $end
+$var wire 128 % bram_we [127:0] $end
+$var wire 1 & bram_rst $end
+$var wire 1 ' bram_en $end
+$var wire 16 ( addr [15:0] $end
+$var parameter 32 ) BRAM_ADDR_WIDTH $end
+$var parameter 32 * BRAM_DATA_WIDTH $end
+$var parameter 32 + CROSSBAR_NEURONS $end
+$var parameter 32 , MAX_NEURONS $end
+$var parameter 32 - MAX_TILES $end
+$var parameter 32 . NETWORK_WIDTH $end
+$var parameter 32 / TILE_IDX_WIDTH $end
+$var reg 1 0 bram_active $end
+$var reg 1 1 clk $end
+$var reg 1 2 enable $end
+$var reg 1 3 mac_out_fifo_full $end
+$var reg 1 4 mac_out_fifo_push_done $end
+$var reg 1 5 tile_idx_fifo_full $end
+$var reg 1 6 tile_idx_fifo_push_done $end
+$scope module lif $end
+$var wire 1 0 bram_active $end
+$var wire 1 1 clk $end
+$var wire 1 2 enable $end
+$var wire 1 7 fifo_done $end
+$var wire 1 8 fifo_full $end
+$var wire 1 3 mac_out_fifo_full $end
+$var wire 1 4 mac_out_fifo_push_done $end
+$var wire 1 5 tile_idx_fifo_full $end
+$var wire 1 6 tile_idx_fifo_push_done $end
+$var wire 1 9 tiles_done $end
+$var wire 12 : tile_idx_base [11:0] $end
+$var wire 1024 ; dout [1023:0] $end
+$var parameter 32 < BRAM_ADDR_WIDTH $end
+$var parameter 32 = BRAM_DATA_WIDTH $end
+$var parameter 32 > CROSSBAR_NEURONS $end
+$var parameter 32 ? FLAGS_BITS $end
+$var parameter 32 @ FLAGS_OFFSET $end
+$var parameter 32 A INCREMENT $end
+$var parameter 32 B MAX_NEURONS $end
+$var parameter 32 C MAX_TILES $end
+$var parameter 32 D MEM_OFFSET $end
+$var parameter 32 E NETWORK_INPUT_BITS $end
+$var parameter 32 F NETWORK_INPUT_OFFSET $end
+$var parameter 32 G NETWORK_WIDTH $end
+$var parameter 32 H SEND $end
+$var parameter 32 I SPK_OUT_BITS $end
+$var parameter 32 J SPK_OUT_OFFSET $end
+$var parameter 32 K TILE_IDX_BITS $end
+$var parameter 32 L TILE_IDX_OFFSET $end
+$var parameter 32 M TILE_IDX_WIDTH $end
+$var parameter 32 N WAIT $end
+$var parameter 32 O WEIGHT_BITS $end
+$var parameter 32 P WEIGHT_OFFSET $end
+$var reg 16 Q addr [15:0] $end
+$var reg 1 R bram_done $end
+$var reg 1 ' bram_en $end
+$var reg 1 & bram_rst $end
+$var reg 5 S bram_step [4:0] $end
+$var reg 128 T bram_we [127:0] $end
+$var reg 1024 U din [1023:0] $end
+$var reg 128 V mac_out_fifo_din [127:0] $end
+$var reg 1 W mac_out_fifo_push $end
+$var reg 16 X tile_idx [15:0] $end
+$var reg 32 Y tile_idx_fifo_din [31:0] $end
+$var reg 1 Z tile_idx_fifo_push $end
 $scope begin genblk1[0] $end
-$var wire 8 5 mem_in_debug [7:0] $end
-$var wire 8 6 mem_out_debug [7:0] $end
-$var parameter 2 7 i $end
+$var parameter 2 [ i $end
+$scope begin genblk1[0] $end
+$var parameter 2 \ j $end
 $upscope $end
 $scope begin genblk1[1] $end
-$var wire 8 8 mem_in_debug [7:0] $end
-$var wire 8 9 mem_out_debug [7:0] $end
-$var parameter 2 : i $end
+$var parameter 2 ] j $end
 $upscope $end
 $scope begin genblk1[2] $end
-$var wire 8 ; mem_in_debug [7:0] $end
-$var wire 8 < mem_out_debug [7:0] $end
-$var parameter 3 = i $end
+$var parameter 3 ^ j $end
 $upscope $end
 $scope begin genblk1[3] $end
-$var wire 8 > mem_in_debug [7:0] $end
-$var wire 8 ? mem_out_debug [7:0] $end
-$var parameter 3 @ i $end
+$var parameter 3 _ j $end
 $upscope $end
 $scope begin genblk1[4] $end
-$var wire 8 A mem_in_debug [7:0] $end
-$var wire 8 B mem_out_debug [7:0] $end
-$var parameter 4 C i $end
+$var parameter 4 ` j $end
 $upscope $end
 $scope begin genblk1[5] $end
-$var wire 8 D mem_in_debug [7:0] $end
-$var wire 8 E mem_out_debug [7:0] $end
-$var parameter 4 F i $end
+$var parameter 4 a j $end
 $upscope $end
 $scope begin genblk1[6] $end
-$var wire 8 G mem_in_debug [7:0] $end
-$var wire 8 H mem_out_debug [7:0] $end
-$var parameter 4 I i $end
+$var parameter 4 b j $end
 $upscope $end
 $scope begin genblk1[7] $end
-$var wire 8 J mem_in_debug [7:0] $end
-$var wire 8 K mem_out_debug [7:0] $end
-$var parameter 4 L i $end
+$var parameter 4 c j $end
 $upscope $end
 $scope begin genblk1[8] $end
-$var wire 8 M mem_in_debug [7:0] $end
-$var wire 8 N mem_out_debug [7:0] $end
-$var parameter 5 O i $end
+$var parameter 5 d j $end
 $upscope $end
 $scope begin genblk1[9] $end
-$var wire 8 P mem_in_debug [7:0] $end
-$var wire 8 Q mem_out_debug [7:0] $end
-$var parameter 5 R i $end
+$var parameter 5 e j $end
 $upscope $end
 $scope begin genblk1[10] $end
-$var wire 8 S mem_in_debug [7:0] $end
-$var wire 8 T mem_out_debug [7:0] $end
-$var parameter 5 U i $end
+$var parameter 5 f j $end
 $upscope $end
 $scope begin genblk1[11] $end
-$var wire 8 V mem_in_debug [7:0] $end
-$var wire 8 W mem_out_debug [7:0] $end
-$var parameter 5 X i $end
+$var parameter 5 g j $end
 $upscope $end
 $scope begin genblk1[12] $end
-$var wire 8 Y mem_in_debug [7:0] $end
-$var wire 8 Z mem_out_debug [7:0] $end
-$var parameter 5 [ i $end
+$var parameter 5 h j $end
 $upscope $end
 $scope begin genblk1[13] $end
-$var wire 8 \ mem_in_debug [7:0] $end
-$var wire 8 ] mem_out_debug [7:0] $end
-$var parameter 5 ^ i $end
+$var parameter 5 i j $end
 $upscope $end
 $scope begin genblk1[14] $end
-$var wire 8 _ mem_in_debug [7:0] $end
-$var wire 8 ` mem_out_debug [7:0] $end
-$var parameter 5 a i $end
+$var parameter 5 j j $end
 $upscope $end
 $scope begin genblk1[15] $end
-$var wire 8 b mem_in_debug [7:0] $end
-$var wire 8 c mem_out_debug [7:0] $end
-$var parameter 5 d i $end
+$var parameter 5 k j $end
 $upscope $end
-$scope module lif $end
-$var wire 1 / clk $end
-$var wire 1 0 enable $end
-$var wire 1 e local_we $end
-$var wire 16 f spk_out [15:0] $end
-$var wire 16 g tile_idx_x [15:0] $end
-$var wire 16 h tile_idx_y [15:0] $end
-$var wire 1 4 we $end
-$var wire 12 i spk_tile_idx_base [11:0] $end
-$var wire 12 j mem_tile_idx_base [11:0] $end
-$var wire 1024 k dout [1023:0] $end
-$var wire 128 l din_tile [127:0] $end
-$var wire 128 m bram_we_spk [127:0] $end
-$var wire 128 n bram_we_mem [127:0] $end
-$var wire 128 o bram_we [127:0] $end
-$var parameter 32 p BRAM_ADDR_WIDTH $end
-$var parameter 32 q BRAM_DATA_WIDTH $end
-$var parameter 32 r CROSSBAR_NEURONS $end
-$var parameter 32 s FLAGS_BITS $end
-$var parameter 32 t FLAGS_OFFSET $end
-$var parameter 32 u INCREMENT $end
-$var parameter 32 v MAX_NEURONS $end
-$var parameter 32 w MAX_TILES $end
-$var parameter 32 x MEM $end
-$var parameter 32 y MEM_OFFSET $end
-$var parameter 32 z NETWORK_INPUT_BITS $end
-$var parameter 32 { NETWORK_INPUT_OFFSET $end
-$var parameter 32 | NETWORK_WIDTH $end
-$var parameter 32 } SEND $end
-$var parameter 32 ~ SPK $end
-$var parameter 32 !" SPK_OUT_BITS $end
-$var parameter 32 "" SPK_OUT_OFFSET $end
-$var parameter 32 #" TILE_IDX_BITS $end
-$var parameter 32 $" TILE_IDX_OFFSET $end
-$var parameter 32 %" TILE_IDX_WIDTH $end
-$var parameter 32 &" WAIT $end
-$var parameter 32 '" WEIGHT_BITS $end
-$var parameter 32 (" WEIGHT_OFFSET $end
-$var reg 16 )" addr [15:0] $end
-$var reg 1 *" bram_done $end
-$var reg 1 & bram_en $end
-$var reg 1 % bram_rst $end
-$var reg 5 +" bram_step [4:0] $end
-$var reg 1024 ," din [1023:0] $end
-$var reg 1 -" done $end
-$var reg 5 ." param_step [4:0] $end
-$var reg 16 /" spk_in [15:0] $end
-$var reg 64 0" spk_we_tile [63:0] $end
-$var reg 8 1" we_tile [7:0] $end
-$scope begin genblk1[0] $end
-$var parameter 2 2" i $end
-$scope begin genblk1[0] $end
-$var parameter 2 3" j $end
 $upscope $end
 $scope begin genblk1[1] $end
-$var parameter 2 4" j $end
+$var parameter 2 l i $end
+$scope begin genblk1[0] $end
+$var parameter 2 m j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 n j $end
 $upscope $end
 $scope begin genblk1[2] $end
-$var parameter 3 5" j $end
+$var parameter 3 o j $end
 $upscope $end
 $scope begin genblk1[3] $end
-$var parameter 3 6" j $end
+$var parameter 3 p j $end
 $upscope $end
 $scope begin genblk1[4] $end
+$var parameter 4 q j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 r j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 s j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 t j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 u j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 v j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 w j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 x j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 y j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 z j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 { j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 | j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 } i $end
+$scope begin genblk1[0] $end
+$var parameter 2 ~ j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 !" j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 "" j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 #" j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 $" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 %" j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 &" j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 '" j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 (" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 )" j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 *" j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 +" j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 ," j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 -" j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 ." j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 /" j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 0" i $end
+$scope begin genblk1[0] $end
+$var parameter 2 1" j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 2" j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 3" j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 4" j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 5" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 6" j $end
+$upscope $end
+$scope begin genblk1[6] $end
 $var parameter 4 7" j $end
 $upscope $end
-$scope begin genblk1[5] $end
+$scope begin genblk1[7] $end
 $var parameter 4 8" j $end
 $upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 9" j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 :" j $end
-$upscope $end
 $scope begin genblk1[8] $end
+$var parameter 5 9" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 :" j $end
+$upscope $end
+$scope begin genblk1[10] $end
 $var parameter 5 ;" j $end
 $upscope $end
-$scope begin genblk1[9] $end
+$scope begin genblk1[11] $end
 $var parameter 5 <" j $end
 $upscope $end
-$scope begin genblk1[10] $end
+$scope begin genblk1[12] $end
 $var parameter 5 =" j $end
 $upscope $end
-$scope begin genblk1[11] $end
+$scope begin genblk1[13] $end
 $var parameter 5 >" j $end
 $upscope $end
-$scope begin genblk1[12] $end
+$scope begin genblk1[14] $end
 $var parameter 5 ?" j $end
 $upscope $end
-$scope begin genblk1[13] $end
+$scope begin genblk1[15] $end
 $var parameter 5 @" j $end
 $upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 A" j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 B" j $end
-$upscope $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 C" i $end
-$scope begin genblk1[0] $end
-$var parameter 2 D" j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 E" j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 F" j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 G" j $end
 $upscope $end
 $scope begin genblk1[4] $end
+$var parameter 4 A" i $end
+$scope begin genblk1[0] $end
+$var parameter 2 B" j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 C" j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 D" j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 E" j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 F" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 G" j $end
+$upscope $end
+$scope begin genblk1[6] $end
 $var parameter 4 H" j $end
 $upscope $end
-$scope begin genblk1[5] $end
+$scope begin genblk1[7] $end
 $var parameter 4 I" j $end
 $upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 J" j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 K" j $end
-$upscope $end
 $scope begin genblk1[8] $end
+$var parameter 5 J" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 K" j $end
+$upscope $end
+$scope begin genblk1[10] $end
 $var parameter 5 L" j $end
 $upscope $end
-$scope begin genblk1[9] $end
+$scope begin genblk1[11] $end
 $var parameter 5 M" j $end
 $upscope $end
-$scope begin genblk1[10] $end
+$scope begin genblk1[12] $end
 $var parameter 5 N" j $end
 $upscope $end
-$scope begin genblk1[11] $end
+$scope begin genblk1[13] $end
 $var parameter 5 O" j $end
 $upscope $end
-$scope begin genblk1[12] $end
+$scope begin genblk1[14] $end
 $var parameter 5 P" j $end
 $upscope $end
-$scope begin genblk1[13] $end
+$scope begin genblk1[15] $end
 $var parameter 5 Q" j $end
 $upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 R" j $end
 $upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 S" j $end
-$upscope $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 T" i $end
+$scope begin genblk1[5] $end
+$var parameter 4 R" i $end
 $scope begin genblk1[0] $end
-$var parameter 2 U" j $end
+$var parameter 2 S" j $end
 $upscope $end
 $scope begin genblk1[1] $end
-$var parameter 2 V" j $end
+$var parameter 2 T" j $end
 $upscope $end
 $scope begin genblk1[2] $end
-$var parameter 3 W" j $end
+$var parameter 3 U" j $end
 $upscope $end
 $scope begin genblk1[3] $end
-$var parameter 3 X" j $end
+$var parameter 3 V" j $end
 $upscope $end
 $scope begin genblk1[4] $end
+$var parameter 4 W" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 X" j $end
+$upscope $end
+$scope begin genblk1[6] $end
 $var parameter 4 Y" j $end
 $upscope $end
-$scope begin genblk1[5] $end
+$scope begin genblk1[7] $end
 $var parameter 4 Z" j $end
 $upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 [" j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 \" j $end
-$upscope $end
 $scope begin genblk1[8] $end
+$var parameter 5 [" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 \" j $end
+$upscope $end
+$scope begin genblk1[10] $end
 $var parameter 5 ]" j $end
 $upscope $end
-$scope begin genblk1[9] $end
+$scope begin genblk1[11] $end
 $var parameter 5 ^" j $end
 $upscope $end
-$scope begin genblk1[10] $end
+$scope begin genblk1[12] $end
 $var parameter 5 _" j $end
 $upscope $end
-$scope begin genblk1[11] $end
+$scope begin genblk1[13] $end
 $var parameter 5 `" j $end
 $upscope $end
-$scope begin genblk1[12] $end
+$scope begin genblk1[14] $end
 $var parameter 5 a" j $end
 $upscope $end
-$scope begin genblk1[13] $end
+$scope begin genblk1[15] $end
 $var parameter 5 b" j $end
 $upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 c" j $end
 $upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 d" j $end
-$upscope $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 e" i $end
+$scope begin genblk1[6] $end
+$var parameter 4 c" i $end
 $scope begin genblk1[0] $end
-$var parameter 2 f" j $end
+$var parameter 2 d" j $end
 $upscope $end
 $scope begin genblk1[1] $end
-$var parameter 2 g" j $end
+$var parameter 2 e" j $end
 $upscope $end
 $scope begin genblk1[2] $end
-$var parameter 3 h" j $end
+$var parameter 3 f" j $end
 $upscope $end
 $scope begin genblk1[3] $end
-$var parameter 3 i" j $end
+$var parameter 3 g" j $end
 $upscope $end
 $scope begin genblk1[4] $end
+$var parameter 4 h" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 i" j $end
+$upscope $end
+$scope begin genblk1[6] $end
 $var parameter 4 j" j $end
 $upscope $end
-$scope begin genblk1[5] $end
+$scope begin genblk1[7] $end
 $var parameter 4 k" j $end
 $upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 l" j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 m" j $end
-$upscope $end
 $scope begin genblk1[8] $end
+$var parameter 5 l" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 m" j $end
+$upscope $end
+$scope begin genblk1[10] $end
 $var parameter 5 n" j $end
 $upscope $end
-$scope begin genblk1[9] $end
+$scope begin genblk1[11] $end
 $var parameter 5 o" j $end
 $upscope $end
-$scope begin genblk1[10] $end
+$scope begin genblk1[12] $end
 $var parameter 5 p" j $end
 $upscope $end
-$scope begin genblk1[11] $end
+$scope begin genblk1[13] $end
 $var parameter 5 q" j $end
 $upscope $end
-$scope begin genblk1[12] $end
+$scope begin genblk1[14] $end
 $var parameter 5 r" j $end
 $upscope $end
-$scope begin genblk1[13] $end
+$scope begin genblk1[15] $end
 $var parameter 5 s" j $end
 $upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 t" j $end
 $upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 u" j $end
-$upscope $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 v" i $end
+$scope begin genblk1[7] $end
+$var parameter 4 t" i $end
 $scope begin genblk1[0] $end
-$var parameter 2 w" j $end
+$var parameter 2 u" j $end
 $upscope $end
 $scope begin genblk1[1] $end
-$var parameter 2 x" j $end
+$var parameter 2 v" j $end
 $upscope $end
 $scope begin genblk1[2] $end
-$var parameter 3 y" j $end
+$var parameter 3 w" j $end
 $upscope $end
 $scope begin genblk1[3] $end
-$var parameter 3 z" j $end
+$var parameter 3 x" j $end
 $upscope $end
 $scope begin genblk1[4] $end
+$var parameter 4 y" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 z" j $end
+$upscope $end
+$scope begin genblk1[6] $end
 $var parameter 4 {" j $end
 $upscope $end
-$scope begin genblk1[5] $end
+$scope begin genblk1[7] $end
 $var parameter 4 |" j $end
 $upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 }" j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 ~" j $end
-$upscope $end
 $scope begin genblk1[8] $end
+$var parameter 5 }" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 ~" j $end
+$upscope $end
+$scope begin genblk1[10] $end
 $var parameter 5 !# j $end
 $upscope $end
-$scope begin genblk1[9] $end
+$scope begin genblk1[11] $end
 $var parameter 5 "# j $end
 $upscope $end
-$scope begin genblk1[10] $end
+$scope begin genblk1[12] $end
 $var parameter 5 ## j $end
 $upscope $end
-$scope begin genblk1[11] $end
+$scope begin genblk1[13] $end
 $var parameter 5 $# j $end
 $upscope $end
-$scope begin genblk1[12] $end
+$scope begin genblk1[14] $end
 $var parameter 5 %# j $end
 $upscope $end
-$scope begin genblk1[13] $end
+$scope begin genblk1[15] $end
 $var parameter 5 &# j $end
 $upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 '# j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 (# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 )# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 *# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 +# j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 ,# j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 -# j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 .# j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 /# j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 0# j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 1# j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 2# j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 3# j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 4# j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 5# j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 6# j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 7# j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 8# j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 9# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 :# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 ;# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 <# j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 =# j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 ># j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 ?# j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 @# j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 A# j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 B# j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 C# j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 D# j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 E# j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 F# j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 G# j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 H# j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 I# j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 J# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 K# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 L# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 M# j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 N# j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 O# j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 P# j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 Q# j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 R# j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 S# j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 T# j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 U# j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 V# j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 W# j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 X# j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 Y# j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 Z# j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 [# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[0] $end
-$var parameter 2 \# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 ]# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 ^# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[1] $end
-$var parameter 2 _# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 `# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 a# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[2] $end
-$var parameter 3 b# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 c# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 d# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[3] $end
-$var parameter 3 e# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 f# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 g# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[4] $end
-$var parameter 4 h# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 i# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 j# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[5] $end
-$var parameter 4 k# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 l# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 m# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[6] $end
-$var parameter 4 n# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 o# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 p# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[7] $end
-$var parameter 4 q# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 r# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 s# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[8] $end
-$var parameter 5 t# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 u# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 v# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[9] $end
-$var parameter 5 w# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 x# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 y# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[10] $end
-$var parameter 5 z# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 {# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 |# j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[11] $end
-$var parameter 5 }# i $end
-$scope begin genblk1[0] $end
-$var parameter 2 ~# j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 !$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[12] $end
-$var parameter 5 "$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 #$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 $$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[13] $end
-$var parameter 5 %$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 &$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 '$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[14] $end
-$var parameter 5 ($ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 )$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 *$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[15] $end
-$var parameter 5 +$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 ,$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 -$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[16] $end
-$var parameter 6 .$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 /$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 0$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[17] $end
-$var parameter 6 1$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 2$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 3$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[18] $end
-$var parameter 6 4$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 5$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 6$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[19] $end
-$var parameter 6 7$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 8$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 9$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[20] $end
-$var parameter 6 :$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 ;$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 <$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[21] $end
-$var parameter 6 =$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 >$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 ?$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[22] $end
-$var parameter 6 @$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 A$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 B$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[23] $end
-$var parameter 6 C$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 D$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 E$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[24] $end
-$var parameter 6 F$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 G$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 H$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[25] $end
-$var parameter 6 I$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 J$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 K$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[26] $end
-$var parameter 6 L$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 M$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 N$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[27] $end
-$var parameter 6 O$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 P$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 Q$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[28] $end
-$var parameter 6 R$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 S$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 T$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[29] $end
-$var parameter 6 U$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 V$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 W$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[30] $end
-$var parameter 6 X$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 Y$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 Z$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[31] $end
-$var parameter 6 [$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 \$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 ]$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[32] $end
-$var parameter 7 ^$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 _$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 `$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[33] $end
-$var parameter 7 a$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 b$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 c$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[34] $end
-$var parameter 7 d$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 e$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 f$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[35] $end
-$var parameter 7 g$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 h$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 i$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[36] $end
-$var parameter 7 j$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 k$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 l$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[37] $end
-$var parameter 7 m$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 n$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 o$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[38] $end
-$var parameter 7 p$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 q$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 r$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[39] $end
-$var parameter 7 s$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 t$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 u$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[40] $end
-$var parameter 7 v$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 w$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 x$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[41] $end
-$var parameter 7 y$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 z$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 {$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[42] $end
-$var parameter 7 |$ i $end
-$scope begin genblk1[0] $end
-$var parameter 2 }$ j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 ~$ j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[43] $end
-$var parameter 7 !% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 "% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 #% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[44] $end
-$var parameter 7 $% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 %% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 &% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[45] $end
-$var parameter 7 '% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 (% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 )% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[46] $end
-$var parameter 7 *% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 +% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 ,% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[47] $end
-$var parameter 7 -% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 .% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 /% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[48] $end
-$var parameter 7 0% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 1% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 2% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[49] $end
-$var parameter 7 3% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 4% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 5% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[50] $end
-$var parameter 7 6% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 7% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 8% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[51] $end
-$var parameter 7 9% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 :% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 ;% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[52] $end
-$var parameter 7 <% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 =% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 >% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[53] $end
-$var parameter 7 ?% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 @% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 A% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[54] $end
-$var parameter 7 B% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 C% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 D% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[55] $end
-$var parameter 7 E% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 F% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 G% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[56] $end
-$var parameter 7 H% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 I% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 J% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[57] $end
-$var parameter 7 K% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 L% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 M% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[58] $end
-$var parameter 7 N% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 O% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 P% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[59] $end
-$var parameter 7 Q% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 R% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 S% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[60] $end
-$var parameter 7 T% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 U% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 V% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[61] $end
-$var parameter 7 W% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 X% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 Y% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[62] $end
-$var parameter 7 Z% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 [% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 \% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk2[63] $end
-$var parameter 7 ]% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 ^% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 _% j $end
-$upscope $end
-$upscope $end
-$scope begin genblk3[0] $end
-$var parameter 2 `% i $end
-$upscope $end
-$scope begin genblk3[1] $end
-$var parameter 2 a% i $end
-$upscope $end
-$scope begin genblk3[2] $end
-$var parameter 3 b% i $end
-$upscope $end
-$scope begin genblk3[3] $end
-$var parameter 3 c% i $end
-$upscope $end
-$scope begin genblk3[4] $end
-$var parameter 4 d% i $end
-$upscope $end
-$scope begin genblk3[5] $end
-$var parameter 4 e% i $end
-$upscope $end
-$scope begin genblk3[6] $end
-$var parameter 4 f% i $end
-$upscope $end
-$scope begin genblk3[7] $end
-$var parameter 4 g% i $end
-$upscope $end
-$scope begin genblk3[8] $end
-$var parameter 5 h% i $end
-$upscope $end
-$scope begin genblk3[9] $end
-$var parameter 5 i% i $end
-$upscope $end
-$scope begin genblk3[10] $end
-$var parameter 5 j% i $end
-$upscope $end
-$scope begin genblk3[11] $end
-$var parameter 5 k% i $end
-$upscope $end
-$scope begin genblk3[12] $end
-$var parameter 5 l% i $end
-$upscope $end
-$scope begin genblk3[13] $end
-$var parameter 5 m% i $end
-$upscope $end
-$scope begin genblk3[14] $end
-$var parameter 5 n% i $end
-$upscope $end
-$scope begin genblk3[15] $end
-$var parameter 5 o% i $end
-$upscope $end
-$scope begin genblk4[0] $end
-$var parameter 2 p% i $end
-$scope begin genblk1[0] $end
-$var parameter 2 q% j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 r% j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 s% j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 t% j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 u% j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 v% j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 w% j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 x% j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 y% j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 z% j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 {% j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 |% j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 }% j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 ~% j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 !& j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 "& j $end
-$upscope $end
-$upscope $end
-$scope begin genblk4[1] $end
-$var parameter 2 #& i $end
-$scope begin genblk1[0] $end
-$var parameter 2 $& j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 %& j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 && j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 '& j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 (& j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 )& j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 *& j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 +& j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 ,& j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 -& j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 .& j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 /& j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 0& j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 1& j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 2& j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 3& j $end
-$upscope $end
-$upscope $end
-$scope begin genblk4[2] $end
-$var parameter 3 4& i $end
-$scope begin genblk1[0] $end
-$var parameter 2 5& j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 6& j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 7& j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 8& j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 9& j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 :& j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 ;& j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 <& j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 =& j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 >& j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 ?& j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 @& j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 A& j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 B& j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 C& j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 D& j $end
-$upscope $end
-$upscope $end
-$scope begin genblk4[3] $end
-$var parameter 3 E& i $end
-$scope begin genblk1[0] $end
-$var parameter 2 F& j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 G& j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 H& j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 I& j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 J& j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 K& j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 L& j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 M& j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 N& j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 O& j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 P& j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 Q& j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 R& j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 S& j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 T& j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 U& j $end
-$upscope $end
-$upscope $end
-$scope begin genblk4[4] $end
-$var parameter 4 V& i $end
-$scope begin genblk1[0] $end
-$var parameter 2 W& j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 X& j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 Y& j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 Z& j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 [& j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 \& j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 ]& j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 ^& j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 _& j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 `& j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 a& j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 b& j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 c& j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 d& j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 e& j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 f& j $end
-$upscope $end
-$upscope $end
-$scope begin genblk4[5] $end
-$var parameter 4 g& i $end
-$scope begin genblk1[0] $end
-$var parameter 2 h& j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 i& j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 j& j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 k& j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 l& j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 m& j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 n& j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 o& j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 p& j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 q& j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 r& j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 s& j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 t& j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 u& j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 v& j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 w& j $end
-$upscope $end
-$upscope $end
-$scope begin genblk4[6] $end
-$var parameter 4 x& i $end
-$scope begin genblk1[0] $end
-$var parameter 2 y& j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 z& j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 {& j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 |& j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 }& j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 ~& j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 !' j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 "' j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 #' j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 $' j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 %' j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 &' j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 '' j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 (' j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 )' j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 *' j $end
-$upscope $end
-$upscope $end
-$scope begin genblk4[7] $end
-$var parameter 4 +' i $end
-$scope begin genblk1[0] $end
-$var parameter 2 ,' j $end
-$upscope $end
-$scope begin genblk1[1] $end
-$var parameter 2 -' j $end
-$upscope $end
-$scope begin genblk1[2] $end
-$var parameter 3 .' j $end
-$upscope $end
-$scope begin genblk1[3] $end
-$var parameter 3 /' j $end
-$upscope $end
-$scope begin genblk1[4] $end
-$var parameter 4 0' j $end
-$upscope $end
-$scope begin genblk1[5] $end
-$var parameter 4 1' j $end
-$upscope $end
-$scope begin genblk1[6] $end
-$var parameter 4 2' j $end
-$upscope $end
-$scope begin genblk1[7] $end
-$var parameter 4 3' j $end
-$upscope $end
-$scope begin genblk1[8] $end
-$var parameter 5 4' j $end
-$upscope $end
-$scope begin genblk1[9] $end
-$var parameter 5 5' j $end
-$upscope $end
-$scope begin genblk1[10] $end
-$var parameter 5 6' j $end
-$upscope $end
-$scope begin genblk1[11] $end
-$var parameter 5 7' j $end
-$upscope $end
-$scope begin genblk1[12] $end
-$var parameter 5 8' j $end
-$upscope $end
-$scope begin genblk1[13] $end
-$var parameter 5 9' j $end
-$upscope $end
-$scope begin genblk1[14] $end
-$var parameter 5 :' j $end
-$upscope $end
-$scope begin genblk1[15] $end
-$var parameter 5 ;' j $end
-$upscope $end
-$upscope $end
-$scope begin genblk5[0] $end
-$var parameter 2 <' i $end
-$upscope $end
-$scope begin genblk5[1] $end
-$var parameter 2 =' i $end
-$upscope $end
-$scope begin genblk5[2] $end
-$var parameter 3 >' i $end
-$upscope $end
-$scope begin genblk5[3] $end
-$var parameter 3 ?' i $end
-$upscope $end
-$scope begin genblk5[4] $end
-$var parameter 4 @' i $end
-$upscope $end
-$scope begin genblk5[5] $end
-$var parameter 4 A' i $end
-$upscope $end
-$scope begin genblk5[6] $end
-$var parameter 4 B' i $end
-$upscope $end
-$scope begin genblk5[7] $end
-$var parameter 4 C' i $end
-$upscope $end
-$scope begin genblk5[8] $end
-$var parameter 5 D' i $end
-$upscope $end
-$scope begin genblk5[9] $end
-$var parameter 5 E' i $end
-$upscope $end
-$scope begin genblk5[10] $end
-$var parameter 5 F' i $end
-$upscope $end
-$scope begin genblk5[11] $end
-$var parameter 5 G' i $end
-$upscope $end
-$scope begin genblk5[12] $end
-$var parameter 5 H' i $end
-$upscope $end
-$scope begin genblk5[13] $end
-$var parameter 5 I' i $end
-$upscope $end
-$scope begin genblk5[14] $end
-$var parameter 5 J' i $end
-$upscope $end
-$scope begin genblk5[15] $end
-$var parameter 5 K' i $end
-$upscope $end
-$scope begin genblk5[16] $end
-$var parameter 6 L' i $end
-$upscope $end
-$scope begin genblk5[17] $end
-$var parameter 6 M' i $end
-$upscope $end
-$scope begin genblk5[18] $end
-$var parameter 6 N' i $end
-$upscope $end
-$scope begin genblk5[19] $end
-$var parameter 6 O' i $end
-$upscope $end
-$scope begin genblk5[20] $end
-$var parameter 6 P' i $end
-$upscope $end
-$scope begin genblk5[21] $end
-$var parameter 6 Q' i $end
-$upscope $end
-$scope begin genblk5[22] $end
-$var parameter 6 R' i $end
-$upscope $end
-$scope begin genblk5[23] $end
-$var parameter 6 S' i $end
-$upscope $end
-$scope begin genblk5[24] $end
-$var parameter 6 T' i $end
-$upscope $end
-$scope begin genblk5[25] $end
-$var parameter 6 U' i $end
-$upscope $end
-$scope begin genblk5[26] $end
-$var parameter 6 V' i $end
-$upscope $end
-$scope begin genblk5[27] $end
-$var parameter 6 W' i $end
-$upscope $end
-$scope begin genblk5[28] $end
-$var parameter 6 X' i $end
-$upscope $end
-$scope begin genblk5[29] $end
-$var parameter 6 Y' i $end
-$upscope $end
-$scope begin genblk5[30] $end
-$var parameter 6 Z' i $end
-$upscope $end
-$scope begin genblk5[31] $end
-$var parameter 6 [' i $end
-$upscope $end
-$scope begin genblk5[32] $end
-$var parameter 7 \' i $end
-$upscope $end
-$scope begin genblk5[33] $end
-$var parameter 7 ]' i $end
-$upscope $end
-$scope begin genblk5[34] $end
-$var parameter 7 ^' i $end
-$upscope $end
-$scope begin genblk5[35] $end
-$var parameter 7 _' i $end
-$upscope $end
-$scope begin genblk5[36] $end
-$var parameter 7 `' i $end
-$upscope $end
-$scope begin genblk5[37] $end
-$var parameter 7 a' i $end
-$upscope $end
-$scope begin genblk5[38] $end
-$var parameter 7 b' i $end
-$upscope $end
-$scope begin genblk5[39] $end
-$var parameter 7 c' i $end
-$upscope $end
-$scope begin genblk5[40] $end
-$var parameter 7 d' i $end
-$upscope $end
-$scope begin genblk5[41] $end
-$var parameter 7 e' i $end
-$upscope $end
-$scope begin genblk5[42] $end
-$var parameter 7 f' i $end
-$upscope $end
-$scope begin genblk5[43] $end
-$var parameter 7 g' i $end
-$upscope $end
-$scope begin genblk5[44] $end
-$var parameter 7 h' i $end
-$upscope $end
-$scope begin genblk5[45] $end
-$var parameter 7 i' i $end
-$upscope $end
-$scope begin genblk5[46] $end
-$var parameter 7 j' i $end
-$upscope $end
-$scope begin genblk5[47] $end
-$var parameter 7 k' i $end
-$upscope $end
-$scope begin genblk5[48] $end
-$var parameter 7 l' i $end
-$upscope $end
-$scope begin genblk5[49] $end
-$var parameter 7 m' i $end
-$upscope $end
-$scope begin genblk5[50] $end
-$var parameter 7 n' i $end
-$upscope $end
-$scope begin genblk5[51] $end
-$var parameter 7 o' i $end
-$upscope $end
-$scope begin genblk5[52] $end
-$var parameter 7 p' i $end
-$upscope $end
-$scope begin genblk5[53] $end
-$var parameter 7 q' i $end
-$upscope $end
-$scope begin genblk5[54] $end
-$var parameter 7 r' i $end
-$upscope $end
-$scope begin genblk5[55] $end
-$var parameter 7 s' i $end
-$upscope $end
-$scope begin genblk5[56] $end
-$var parameter 7 t' i $end
-$upscope $end
-$scope begin genblk5[57] $end
-$var parameter 7 u' i $end
-$upscope $end
-$scope begin genblk5[58] $end
-$var parameter 7 v' i $end
-$upscope $end
-$scope begin genblk5[59] $end
-$var parameter 7 w' i $end
-$upscope $end
-$scope begin genblk5[60] $end
-$var parameter 7 x' i $end
-$upscope $end
-$scope begin genblk5[61] $end
-$var parameter 7 y' i $end
-$upscope $end
-$scope begin genblk5[62] $end
-$var parameter 7 z' i $end
-$upscope $end
-$scope begin genblk5[63] $end
-$var parameter 7 {' i $end
-$upscope $end
-$scope begin $ivl_for_loop0 $end
-$var integer 32 |' i [31:0] $end
 $upscope $end
 $upscope $end
 $scope module ram $end
-$var wire 16 }' addra [15:0] $end
-$var wire 16 ~' addrb [15:0] $end
-$var wire 1 / clka $end
-$var wire 1 !( clkb $end
-$var wire 1024 "( dina [1023:0] $end
-$var wire 1024 #( dinb [1023:0] $end
-$var wire 1 & ena $end
-$var wire 1 $( enb $end
-$var wire 128 %( wea [127:0] $end
-$var wire 128 &( web [127:0] $end
-$var parameter 32 '( BRAM_ADDR_WIDTH $end
-$var parameter 32 (( BRAM_DATA_WIDTH $end
-$var parameter 32 )( LOG_WORD_WIDTH $end
-$var reg 1024 *( douta [1023:0] $end
-$var reg 1024 +( doutb [1023:0] $end
-$var integer 32 ,( i [31:0] $end
-$scope begin $ivl_for_loop1 $end
-$var integer 32 -( asdf [31:0] $end
+$var wire 16 '# addra [15:0] $end
+$var wire 16 (# addrb [15:0] $end
+$var wire 1 1 clka $end
+$var wire 1 )# clkb $end
+$var wire 1024 *# dina [1023:0] $end
+$var wire 1024 +# dinb [1023:0] $end
+$var wire 1 ' ena $end
+$var wire 1 ,# enb $end
+$var wire 128 -# wea [127:0] $end
+$var wire 128 .# web [127:0] $end
+$var parameter 32 /# BRAM_ADDR_WIDTH $end
+$var parameter 32 0# BRAM_DATA_WIDTH $end
+$var parameter 32 1# LOG_WORD_WIDTH $end
+$var reg 1024 2# douta [1023:0] $end
+$var reg 1024 3# doutb [1023:0] $end
+$var integer 32 4# i [31:0] $end
+$scope begin $ivl_for_loop0 $end
+$var integer 32 5# asdf [31:0] $end
 $upscope $end
-$upscope $end
-$scope begin $ivl_for_loop2 $end
-$var integer 32 .( i [31:0] $end
-$upscope $end
-$scope begin $ivl_for_loop3 $end
-$var integer 32 /( i [31:0] $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 $comment Show the parameter values. $end
 $dumpall
-b111 )(
-b10000000000 ((
-b10000 '(
-b111111 {'
-b111110 z'
-b111101 y'
-b111100 x'
-b111011 w'
-b111010 v'
-b111001 u'
-b111000 t'
-b110111 s'
-b110110 r'
-b110101 q'
-b110100 p'
-b110011 o'
-b110010 n'
-b110001 m'
-b110000 l'
-b101111 k'
-b101110 j'
-b101101 i'
-b101100 h'
-b101011 g'
-b101010 f'
-b101001 e'
-b101000 d'
-b100111 c'
-b100110 b'
-b100101 a'
-b100100 `'
-b100011 _'
-b100010 ^'
-b100001 ]'
-b100000 \'
-b11111 ['
-b11110 Z'
-b11101 Y'
-b11100 X'
-b11011 W'
-b11010 V'
-b11001 U'
-b11000 T'
-b10111 S'
-b10110 R'
-b10101 Q'
-b10100 P'
-b10011 O'
-b10010 N'
-b10001 M'
-b10000 L'
-b1111 K'
-b1110 J'
-b1101 I'
-b1100 H'
-b1011 G'
-b1010 F'
-b1001 E'
-b1000 D'
-b111 C'
-b110 B'
-b101 A'
-b100 @'
-b11 ?'
-b10 >'
-b1 ='
-b0 <'
-b1111 ;'
-b1110 :'
-b1101 9'
-b1100 8'
-b1011 7'
-b1010 6'
-b1001 5'
-b1000 4'
-b111 3'
-b110 2'
-b101 1'
-b100 0'
-b11 /'
-b10 .'
-b1 -'
-b0 ,'
-b111 +'
-b1111 *'
-b1110 )'
-b1101 ('
-b1100 ''
-b1011 &'
-b1010 %'
-b1001 $'
-b1000 #'
-b111 "'
-b110 !'
-b101 ~&
-b100 }&
-b11 |&
-b10 {&
-b1 z&
-b0 y&
-b110 x&
-b1111 w&
-b1110 v&
-b1101 u&
-b1100 t&
-b1011 s&
-b1010 r&
-b1001 q&
-b1000 p&
-b111 o&
-b110 n&
-b101 m&
-b100 l&
-b11 k&
-b10 j&
-b1 i&
-b0 h&
-b101 g&
-b1111 f&
-b1110 e&
-b1101 d&
-b1100 c&
-b1011 b&
-b1010 a&
-b1001 `&
-b1000 _&
-b111 ^&
-b110 ]&
-b101 \&
-b100 [&
-b11 Z&
-b10 Y&
-b1 X&
-b0 W&
-b100 V&
-b1111 U&
-b1110 T&
-b1101 S&
-b1100 R&
-b1011 Q&
-b1010 P&
-b1001 O&
-b1000 N&
-b111 M&
-b110 L&
-b101 K&
-b100 J&
-b11 I&
-b10 H&
-b1 G&
-b0 F&
-b11 E&
-b1111 D&
-b1110 C&
-b1101 B&
-b1100 A&
-b1011 @&
-b1010 ?&
-b1001 >&
-b1000 =&
-b111 <&
-b110 ;&
-b101 :&
-b100 9&
-b11 8&
-b10 7&
-b1 6&
-b0 5&
-b10 4&
-b1111 3&
-b1110 2&
-b1101 1&
-b1100 0&
-b1011 /&
-b1010 .&
-b1001 -&
-b1000 ,&
-b111 +&
-b110 *&
-b101 )&
-b100 (&
-b11 '&
-b10 &&
-b1 %&
-b0 $&
-b1 #&
-b1111 "&
-b1110 !&
-b1101 ~%
-b1100 }%
-b1011 |%
-b1010 {%
-b1001 z%
-b1000 y%
-b111 x%
-b110 w%
-b101 v%
-b100 u%
-b11 t%
-b10 s%
-b1 r%
-b0 q%
-b0 p%
-b1111 o%
-b1110 n%
-b1101 m%
-b1100 l%
-b1011 k%
-b1010 j%
-b1001 i%
-b1000 h%
-b111 g%
-b110 f%
-b101 e%
-b100 d%
-b11 c%
-b10 b%
-b1 a%
-b0 `%
-b1 _%
-b0 ^%
-b111111 ]%
-b1 \%
-b0 [%
-b111110 Z%
-b1 Y%
-b0 X%
-b111101 W%
-b1 V%
-b0 U%
-b111100 T%
-b1 S%
-b0 R%
-b111011 Q%
-b1 P%
-b0 O%
-b111010 N%
-b1 M%
-b0 L%
-b111001 K%
-b1 J%
-b0 I%
-b111000 H%
-b1 G%
-b0 F%
-b110111 E%
-b1 D%
-b0 C%
-b110110 B%
-b1 A%
-b0 @%
-b110101 ?%
-b1 >%
-b0 =%
-b110100 <%
-b1 ;%
-b0 :%
-b110011 9%
-b1 8%
-b0 7%
-b110010 6%
-b1 5%
-b0 4%
-b110001 3%
-b1 2%
-b0 1%
-b110000 0%
-b1 /%
-b0 .%
-b101111 -%
-b1 ,%
-b0 +%
-b101110 *%
-b1 )%
-b0 (%
-b101101 '%
-b1 &%
-b0 %%
-b101100 $%
-b1 #%
-b0 "%
-b101011 !%
-b1 ~$
-b0 }$
-b101010 |$
-b1 {$
-b0 z$
-b101001 y$
-b1 x$
-b0 w$
-b101000 v$
-b1 u$
-b0 t$
-b100111 s$
-b1 r$
-b0 q$
-b100110 p$
-b1 o$
-b0 n$
-b100101 m$
-b1 l$
-b0 k$
-b100100 j$
-b1 i$
-b0 h$
-b100011 g$
-b1 f$
-b0 e$
-b100010 d$
-b1 c$
-b0 b$
-b100001 a$
-b1 `$
-b0 _$
-b100000 ^$
-b1 ]$
-b0 \$
-b11111 [$
-b1 Z$
-b0 Y$
-b11110 X$
-b1 W$
-b0 V$
-b11101 U$
-b1 T$
-b0 S$
-b11100 R$
-b1 Q$
-b0 P$
-b11011 O$
-b1 N$
-b0 M$
-b11010 L$
-b1 K$
-b0 J$
-b11001 I$
-b1 H$
-b0 G$
-b11000 F$
-b1 E$
-b0 D$
-b10111 C$
-b1 B$
-b0 A$
-b10110 @$
-b1 ?$
-b0 >$
-b10101 =$
-b1 <$
-b0 ;$
-b10100 :$
-b1 9$
-b0 8$
-b10011 7$
-b1 6$
-b0 5$
-b10010 4$
-b1 3$
-b0 2$
-b10001 1$
-b1 0$
-b0 /$
-b10000 .$
-b1 -$
-b0 ,$
-b1111 +$
-b1 *$
-b0 )$
-b1110 ($
-b1 '$
-b0 &$
-b1101 %$
-b1 $$
-b0 #$
-b1100 "$
-b1 !$
-b0 ~#
-b1011 }#
-b1 |#
-b0 {#
-b1010 z#
-b1 y#
-b0 x#
-b1001 w#
-b1 v#
-b0 u#
-b1000 t#
-b1 s#
-b0 r#
-b111 q#
-b1 p#
-b0 o#
-b110 n#
-b1 m#
-b0 l#
-b101 k#
-b1 j#
-b0 i#
-b100 h#
-b1 g#
-b0 f#
-b11 e#
-b1 d#
-b0 c#
-b10 b#
-b1 a#
-b0 `#
-b1 _#
-b1 ^#
-b0 ]#
-b0 \#
-b1111 [#
-b1110 Z#
-b1101 Y#
-b1100 X#
-b1011 W#
-b1010 V#
-b1001 U#
-b1000 T#
-b111 S#
-b110 R#
-b101 Q#
-b100 P#
-b11 O#
-b10 N#
-b1 M#
-b0 L#
-b111 K#
-b1111 J#
-b1110 I#
-b1101 H#
-b1100 G#
-b1011 F#
-b1010 E#
-b1001 D#
-b1000 C#
-b111 B#
-b110 A#
-b101 @#
-b100 ?#
-b11 >#
-b10 =#
-b1 <#
-b0 ;#
-b110 :#
-b1111 9#
-b1110 8#
-b1101 7#
-b1100 6#
-b1011 5#
-b1010 4#
-b1001 3#
-b1000 2#
 b111 1#
-b110 0#
-b101 /#
-b100 .#
-b11 -#
-b10 ,#
-b1 +#
-b0 *#
-b101 )#
-b1111 (#
-b1110 '#
-b1101 &#
-b1100 %#
-b1011 $#
-b1010 ##
-b1001 "#
-b1000 !#
-b111 ~"
-b110 }"
-b101 |"
-b100 {"
-b11 z"
-b10 y"
-b1 x"
-b0 w"
-b100 v"
-b1111 u"
-b1110 t"
-b1101 s"
-b1100 r"
-b1011 q"
-b1010 p"
-b1001 o"
-b1000 n"
-b111 m"
-b110 l"
-b101 k"
-b100 j"
-b11 i"
-b10 h"
-b1 g"
-b0 f"
-b11 e"
-b1111 d"
-b1110 c"
-b1101 b"
-b1100 a"
-b1011 `"
-b1010 _"
-b1001 ^"
-b1000 ]"
-b111 \"
-b110 ["
-b101 Z"
-b100 Y"
-b11 X"
-b10 W"
-b1 V"
-b0 U"
-b10 T"
-b1111 S"
-b1110 R"
-b1101 Q"
-b1100 P"
-b1011 O"
-b1010 N"
-b1001 M"
-b1000 L"
-b111 K"
-b110 J"
-b101 I"
-b100 H"
-b11 G"
-b10 F"
-b1 E"
-b0 D"
+b10000000000 0#
+b10000 /#
+b1111 &#
+b1110 %#
+b1101 $#
+b1100 ##
+b1011 "#
+b1010 !#
+b1001 ~"
+b1000 }"
+b111 |"
+b110 {"
+b101 z"
+b100 y"
+b11 x"
+b10 w"
+b1 v"
+b0 u"
+b111 t"
+b1111 s"
+b1110 r"
+b1101 q"
+b1100 p"
+b1011 o"
+b1010 n"
+b1001 m"
+b1000 l"
+b111 k"
+b110 j"
+b101 i"
+b100 h"
+b11 g"
+b10 f"
+b1 e"
+b0 d"
+b110 c"
+b1111 b"
+b1110 a"
+b1101 `"
+b1100 _"
+b1011 ^"
+b1010 ]"
+b1001 \"
+b1000 ["
+b111 Z"
+b110 Y"
+b101 X"
+b100 W"
+b11 V"
+b10 U"
+b1 T"
+b0 S"
+b101 R"
+b1111 Q"
+b1110 P"
+b1101 O"
+b1100 N"
+b1011 M"
+b1010 L"
+b1001 K"
+b1000 J"
+b111 I"
+b110 H"
+b101 G"
+b100 F"
+b11 E"
+b10 D"
 b1 C"
-b1111 B"
-b1110 A"
-b1101 @"
-b1100 ?"
-b1011 >"
-b1010 ="
-b1001 <"
-b1000 ;"
-b111 :"
-b110 9"
-b101 8"
-b100 7"
-b11 6"
-b10 5"
-b1 4"
-b0 3"
-b0 2"
-b110000000 ("
-b100000010000000000 '"
-b1 &"
-b10000 %"
-b0 $"
-b110000000000 #"
-b100011010000000 ""
-b100000000000 !"
-b1 ~
-b0 }
-b1000 |
-b100001000000000 {
-b10010000000000 z
-b100100000000000 y
-b0 x
-b1000000 w
-b10000000000 v
-b10 u
-b100011110000000 t
-b10000000000 s
-b10000 r
-b10000000000 q
-b10000 p
-b1111 d
-b1110 a
-b1101 ^
-b1100 [
-b1011 X
-b1010 U
-b1001 R
-b1000 O
-b111 L
-b110 I
-b101 F
-b100 C
-b11 @
-b10 =
-b1 :
-b0 7
-b10000 .
-b1000 -
-b1000000 ,
-b10000000000 +
-b10000 *
-b10000000000 )
-b10000 (
-$end
-#1000
-$dumpvars
-bx /(
-b10000 .(
-b10000000000 -(
-bx ,(
-bx +(
-bx *(
-bz &(
-b0 %(
-z$(
-bz #(
-bx "(
-z!(
-bz ~'
-bx }'
-bx |'
-bx 1"
-bx 0"
-bx /"
-b0 ."
-0-"
-bx ,"
-b0 +"
-x*"
-bx )"
-b0 o
-bx n
-bx m
-b0 l
-bx k
-b0 j
-b1 i
-b1 h
-b0 g
-bx f
-0e
-b0 c
-bx b
-b0 `
-bx _
-b0 ]
-bx \
-b0 Z
-bx Y
-b0 W
-bx V
-b0 T
-bx S
-b0 Q
-bx P
-b0 N
-bx M
-b0 K
-bx J
+b0 B"
+b100 A"
+b1111 @"
+b1110 ?"
+b1101 >"
+b1100 ="
+b1011 <"
+b1010 ;"
+b1001 :"
+b1000 9"
+b111 8"
+b110 7"
+b101 6"
+b100 5"
+b11 4"
+b10 3"
+b1 2"
+b0 1"
+b11 0"
+b1111 /"
+b1110 ."
+b1101 -"
+b1100 ,"
+b1011 +"
+b1010 *"
+b1001 )"
+b1000 ("
+b111 '"
+b110 &"
+b101 %"
+b100 $"
+b11 #"
+b10 ""
+b1 !"
+b0 ~
+b10 }
+b1111 |
+b1110 {
+b1101 z
+b1100 y
+b1011 x
+b1010 w
+b1001 v
+b1000 u
+b111 t
+b110 s
+b101 r
+b100 q
+b11 p
+b10 o
+b1 n
+b0 m
+b1 l
+b1111 k
+b1110 j
+b1101 i
+b1100 h
+b1011 g
+b1010 f
+b1001 e
+b1000 d
+b111 c
+b110 b
+b101 a
+b100 `
+b11 _
+b10 ^
+b1 ]
+b0 \
+b0 [
+b110000000 P
+b100000010000000000 O
+b1 N
+b10000 M
+b0 L
+b110000000000 K
+b100011010000000 J
+b100000000000 I
 b0 H
-bx G
-b0 E
-bx D
-b0 B
-bx A
-b0 ?
-bx >
-b0 <
+b1000 G
+b100001000000000 F
+b10010000000000 E
+b100100000000000 D
+b1000000 C
+b10000000000 B
+b10 A
+b100011110000000 @
+b10000000000 ?
+b10000 >
+b10000000000 =
+b10000 <
+b10000 /
+b1000 .
+b1000000 -
+b10000000000 ,
+b10000 +
+b10000000000 *
+b10000 )
+$end
+#0
+$dumpvars
+b10000000000 5#
+bx 4#
+bx 3#
+bx 2#
+bz .#
+bx -#
+z,#
+bz +#
+bx *#
+z)#
+bz (#
+bx '#
+xZ
+bx Y
+bx X
+xW
+bx V
+bx U
+bx T
+b0 S
+xR
+bx Q
 bx ;
-b0 9
-bx 8
-b0 6
-bx 5
-04
-b1 3
-b0 2
-bx 1
+bx :
+x9
+08
+17
+16
+05
+14
+03
+02
+01
 10
-0/
-bx '
-0&
-x%
-b0 $
+bx (
+x'
+x&
+bx %
+bx $
 bx #
 bx "
 bx !
 $end
+#500
+b0 :
+09
+b0 %
+b0 T
+b0 -#
+0'
+b0 X
+11
+#1000
+01
 #1500
-b0 n
-1&
-b0 1"
-0*"
-b1 +"
-b100100000000000 '
-b100100000000000 )"
-b100100000000000 }'
-1/
+11
 #2000
-0/
+01
 #2500
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 "
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 k
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 *(
-1*"
-b10000000 ,(
-1/
+11
 #3000
-0/
+01
 #3500
-b10 +"
-0&
-b1111 b
-b1110 _
-b1101 \
-b1100 Y
-b1011 V
-b1010 S
-b1001 P
-b1000 M
-b111 J
-b110 G
-b101 D
-b100 A
-b11 >
-b10 ;
-b1 8
-b0 5
-b10000 |'
-b10000000 ,(
-1/
+11
 #4000
-0/
+01
 #4500
-b0 +"
-b1 ."
-1/
+11
 #5000
-0/
+01
 #5500
-1&
-0*"
-b1 +"
-b100011010000010 '
-b100011010000010 )"
-b100011010000010 }'
-1/
+11
 #6000
-0/
+01
 #6500
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 "
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 k
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 *(
-1*"
-b10000000 ,(
-1/
+11
 #7000
-0/
+01
 #7500
-b10 +"
-0&
-b1111111111111111 !
-b1111111111111111 /"
-b10000000 ,(
-1/
+11
 #8000
-0/
+01
 #8500
-b0 +"
-1-"
-1/
+11
 #9000
-0/
+01
 #9500
-b0 ."
-1/
+11
 #10000
-1e
-14
-b10100 c
-b10011 `
-b10010 ]
-b10001 Z
-b10000 W
-b1111 T
-b1110 Q
-b1101 N
-b1100 K
-b1011 H
-b1010 E
-b1001 B
-b1000 ?
-b111 <
-b110 9
-b0 1
-b0 f
-b10100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 l
-b101 6
-0/
-b10000 /(
+01
+12
 #10500
-1/
+b0 !
+b0 Y
+b1 S
+0R
+1'
+b100001000000000 (
+b100001000000000 Q
+b100001000000000 '#
+11
 #11000
-0/
+01
 #11500
-1/
+1R
+b100000000000000010000000100000 #
+b100000000000000010000000100000 ;
+b100000000000000010000000100000 2#
+b10000000 4#
+11
 #12000
-0/
+01
 #12500
-1/
+b100000000000000010000000100000 "
+b100000000000000010000000100000 V
+b10 S
+0'
+b10000000 4#
+11
 #13000
-0/
+01
 #13500
-1/
+b1 :
+b0 S
+b1 X
+11
 #14000
-0/
+01
 #14500
-1/
+b10000000000000001 !
+b10000000000000001 Y
+b1 S
+0R
+1'
+b100001000010000 (
+b100001000010000 Q
+b100001000010000 '#
+11
 #15000
-0/
-00
+01
 #15500
-0-"
-1/
+1R
+b10000000 4#
+11
 #16000
-0/
+01
 #16500
-1/
+b0 "
+b0 V
+b10 S
+0'
+b10000000 4#
+11
 #17000
-0/
+01
 #17500
-1/
+b10 :
+b0 S
+b10 X
+11
 #18000
-0/
+01
 #18500
-1/
+b100000000000000010 !
+b100000000000000010 Y
+b1 S
+0R
+1'
+b100001000100000 (
+b100001000100000 Q
+b100001000100000 '#
+11
 #19000
-0/
+01
 #19500
-1/
+1R
+b10000000 4#
+11
 #20000
-0/
-10
+01
 #20500
-b1111111111111111 $
-b1111111111111111 o
-b1111111111111111 %(
-b1111111111111111 n
-1&
-0*"
-b1 +"
-b1 1"
-b10100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 #
-b10100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 ,"
-b10100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 "(
-b100100000000000 '
-b100100000000000 )"
-b100100000000000 }'
-1/
+b10 S
+0'
+b10000000 4#
+11
 #21000
-0/
+01
 #21500
-1*"
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 "
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 k
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 *(
-b10000000 ,(
-1/
+b11 :
+b0 S
+b11 X
+11
 #22000
-0/
+01
 #22500
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000010100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 "
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000010100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 k
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000010100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 *(
-b10 +"
-0&
-b10000000 ,(
-1/
+b110000000000000011 !
+b110000000000000011 Y
+b1 S
+0R
+1'
+b100001000110000 (
+b100001000110000 Q
+b100001000110000 '#
+11
 #23000
-0/
+01
 #23500
-bx $
-bx o
-bx %(
-b0 +"
-b1 ."
-1/
+1R
+b10000000 4#
+11
 #24000
-0/
+01
 #24500
-b1100 $
-b1100 o
-b1100 %(
-b1100 m
-1&
-0*"
-b1 +"
-b10 0"
-b0 #
-b0 ,"
-b0 "(
-b100011010000010 '
-b100011010000010 )"
-b100011010000010 }'
-1/
+b10 S
+0'
+b10000000 4#
+11
 #25000
-0/
+01
 #25500
-1*"
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 "
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 k
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 *(
-b10000000 ,(
-1/
+b100 :
+b0 S
+b100 X
+11
 #26000
-0/
+01
 #26500
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000001111111111111111 "
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000001111111111111111 k
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000001111111111111111 *(
-b10 +"
-0&
-b10000000 ,(
-1/
+b1000000000000000100 !
+b1000000000000000100 Y
+b1 S
+0R
+1'
+b100001001000000 (
+b100001001000000 Q
+b100001001000000 '#
+11
 #27000
-0/
+01
 #27500
-b0 +"
-1-"
-1/
+1R
+b10000000 4#
+11
 #28000
-0/
+01
 #28500
-b1111111111111111 $
-b1111111111111111 o
-b1111111111111111 %(
-b0 ."
-1/
+b10 S
+0'
+b10000000 4#
+11
 #29000
-0/
+01
 #29500
-1/
+b101 :
+b0 S
+b101 X
+11
 #30000
-b0 $
-b0 o
-b0 %(
-0/
-0e
-04
+01
 #30500
-1/
+b1010000000000000101 !
+b1010000000000000101 Y
+b1 S
+0R
+1'
+b100001001010000 (
+b100001001010000 Q
+b100001001010000 '#
+11
 #31000
-0/
+01
 #31500
-1/
+1R
+b10000000 4#
+11
 #32000
-0/
+01
 #32500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #33000
-0/
+01
 #33500
-1/
+b110 :
+b0 S
+b110 X
+11
 #34000
-0/
+01
 #34500
-1/
+b1100000000000000110 !
+b1100000000000000110 Y
+b1 S
+0R
+1'
+b100001001100000 (
+b100001001100000 Q
+b100001001100000 '#
+11
 #35000
-b0 i
-0/
-b0 3
-b0 h
+01
 #35500
-1/
+1R
+b10000000 4#
+11
 #36000
-0/
+01
 #36500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #37000
-0/
+01
 #37500
-1/
+b111 :
+b0 S
+b111 X
+11
 #38000
-0/
+01
 #38500
-1/
+b1110000000000000111 !
+b1110000000000000111 Y
+b1 S
+0R
+1'
+b100001001110000 (
+b100001001110000 Q
+b100001001110000 '#
+11
 #39000
-0/
+01
 #39500
-1/
+1R
+b10000000 4#
+11
 #40000
-0/
+01
 #40500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #41000
-0/
+01
 #41500
-1/
+b0 :
+b0 S
+b1000 X
+11
 #42000
-0/
+01
 #42500
-1/
+b10000000000000001000 !
+b10000000000000001000 Y
+b1 S
+0R
+1'
+b100001010000000 (
+b100001010000000 Q
+b100001010000000 '#
+11
 #43000
-0/
+01
 #43500
-1/
+1R
+b0 #
+b0 ;
+b0 2#
+b10000000 4#
+11
 #44000
-0/
+01
 #44500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #45000
-0/
-00
+01
 #45500
-0-"
-1/
+b1 :
+b0 S
+b1001 X
+11
 #46000
-0/
+01
 #46500
-1/
+b10010000000000001001 !
+b10010000000000001001 Y
+b1 S
+0R
+1'
+b100001010010000 (
+b100001010010000 Q
+b100001010010000 '#
+11
 #47000
-0/
+01
 #47500
-1/
+1R
+b10000000 4#
+11
 #48000
-0/
+01
 #48500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #49000
-0/
+01
 #49500
-1/
+b10 :
+b0 S
+b1010 X
+11
 #50000
-0/
-10
+01
 #50500
-b0 n
-1&
-b0 1"
-0*"
-b1 +"
-b100100000000000 '
-b100100000000000 )"
-b100100000000000 }'
-1/
+b10100000000000001010 !
+b10100000000000001010 Y
+b1 S
+0R
+1'
+b100001010100000 (
+b100001010100000 Q
+b100001010100000 '#
+11
 #51000
-0/
+01
 #51500
-1*"
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000010100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 "
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000010100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 k
-b111111101111110011111010111110001111011011110100111100101111000011101110111011001110101011101000111001101110010011100010111000001101111011011100110110101101100011010110110101001101001011010000110011101100110011001010110010001100011011000100110000101100000010111110101111001011101010111000101101101011010010110010101100001010111010101100101010101010100010100110101001001010001010100000100111101001110010011010100110001001011010010100100100101001000010001110100011001000101010001000100001101000010010000010100000000111111001111100011110100111100001110110011101000111001001110000011011100110110001101010011010000110011001100100011000100110000001011110010111000101101001011000010101100101010001010010010100000100111001001100010010100100100001000110010001000100001001000000001111100011110000111010001110000011011000110100001100100011000000101110001011000010101000101000001001100010010000100010001000000010100000100110001001000010001000100000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101 *(
-b10000000 ,(
-1/
+1R
+b10000000 4#
+11
 #52000
-0/
+01
 #52500
-b10 +"
-0&
-b10100 b
-b10011 _
-b10010 \
-b10001 Y
-b10000 V
-b1111 S
-b1110 P
-b1101 M
-b1100 J
-b1011 G
-b1010 D
-b1001 A
-b1000 >
-b111 ;
-b110 8
-b101 5
-b10000 |'
-b10000000 ,(
-1/
+b10 S
+0'
+b10000000 4#
+11
 #53000
-0/
+01
 #53500
-b0 +"
-b1 ."
-1/
+b11 :
+b0 S
+b1011 X
+11
 #54000
-0/
+01
 #54500
-1&
-0*"
-b1 +"
-b100011010000000 '
-b100011010000000 )"
-b100011010000000 }'
-1/
+b10110000000000001011 !
+b10110000000000001011 Y
+b1 S
+0R
+1'
+b100001010110000 (
+b100001010110000 Q
+b100001010110000 '#
+11
 #55000
-0/
+01
 #55500
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000001111111111111111 "
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000001111111111111111 k
-b1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111100000000000000001111111111111111 *(
-1*"
-b10000000 ,(
-1/
+1R
+b10000000 4#
+11
 #56000
-0/
+01
 #56500
-b10 +"
-0&
-b10000000 ,(
-1/
+b10 S
+0'
+b10000000 4#
+11
 #57000
-0/
+01
 #57500
-b0 +"
-1-"
-1/
+b100 :
+b0 S
+b1100 X
+11
 #58000
-0/
+01
 #58500
-b0 ."
-1/
+b11000000000000001100 !
+b11000000000000001100 Y
+b1 S
+0R
+1'
+b100001011000000 (
+b100001011000000 Q
+b100001011000000 '#
+11
 #59000
-0/
+01
 #59500
-1/
+1R
+b10000000 4#
+11
 #60000
-0/
+01
 #60500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #61000
-0/
+01
 #61500
-1/
+b101 :
+b0 S
+b1101 X
+11
 #62000
-0/
+01
 #62500
-1/
+b11010000000000001101 !
+b11010000000000001101 Y
+b1 S
+0R
+1'
+b100001011010000 (
+b100001011010000 Q
+b100001011010000 '#
+11
 #63000
-0/
+01
 #63500
-1/
+1R
+b10000000 4#
+11
 #64000
-0/
+01
 #64500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #65000
-0/
+01
 #65500
-1/
+b110 :
+b0 S
+b1110 X
+11
 #66000
-0/
+01
 #66500
-1/
+b11100000000000001110 !
+b11100000000000001110 Y
+b1 S
+0R
+1'
+b100001011100000 (
+b100001011100000 Q
+b100001011100000 '#
+11
 #67000
-0/
+01
 #67500
-1/
+1R
+b10000000 4#
+11
 #68000
-0/
+01
 #68500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #69000
-0/
+01
 #69500
-1/
+b111 :
+b0 S
+b1111 X
+11
 #70000
-0/
+01
 #70500
-1/
+b11110000000000001111 !
+b11110000000000001111 Y
+b1 S
+0R
+1'
+b100001011110000 (
+b100001011110000 Q
+b100001011110000 '#
+11
 #71000
-0/
+01
 #71500
-1/
+1R
+b10000000 4#
+11
 #72000
-0/
+01
 #72500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #73000
-0/
+01
 #73500
-1/
+b0 :
+b0 S
+b10000 X
+11
 #74000
-0/
+01
 #74500
-1/
+b100000000000000010000 !
+b100000000000000010000 Y
+b1 S
+0R
+1'
+b100001100000000 (
+b100001100000000 Q
+b100001100000000 '#
+11
 #75000
-0/
+01
 #75500
-1/
+1R
+b10000000 4#
+11
 #76000
-0/
+01
 #76500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #77000
-0/
+01
 #77500
-1/
+b1 :
+b0 S
+b10001 X
+11
 #78000
-0/
+01
 #78500
-1/
+b100010000000000010001 !
+b100010000000000010001 Y
+b1 S
+0R
+1'
+b100001100010000 (
+b100001100010000 Q
+b100001100010000 '#
+11
 #79000
-0/
+01
 #79500
-1/
+1R
+b10000000 4#
+11
 #80000
-0/
+01
 #80500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #81000
-0/
+01
 #81500
-1/
+b10 :
+b0 S
+b10010 X
+11
 #82000
-0/
+01
 #82500
-1/
+b100100000000000010010 !
+b100100000000000010010 Y
+b1 S
+0R
+1'
+b100001100100000 (
+b100001100100000 Q
+b100001100100000 '#
+11
 #83000
-0/
+01
 #83500
-1/
+1R
+b10000000 4#
+11
 #84000
-0/
+01
 #84500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #85000
-0/
+01
 #85500
-1/
+b11 :
+b0 S
+b10011 X
+11
 #86000
-0/
+01
 #86500
-1/
+b100110000000000010011 !
+b100110000000000010011 Y
+b1 S
+0R
+1'
+b100001100110000 (
+b100001100110000 Q
+b100001100110000 '#
+11
 #87000
-0/
+01
 #87500
-1/
+1R
+b10000000 4#
+11
 #88000
-0/
+01
 #88500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #89000
-0/
+01
 #89500
-1/
+b100 :
+b0 S
+b10100 X
+11
 #90000
-0/
+01
 #90500
-1/
+b101000000000000010100 !
+b101000000000000010100 Y
+b1 S
+0R
+1'
+b100001101000000 (
+b100001101000000 Q
+b100001101000000 '#
+11
 #91000
-0/
+01
 #91500
-1/
+1R
+b10000000 4#
+11
 #92000
-0/
+01
 #92500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #93000
-0/
+01
 #93500
-1/
+b101 :
+b0 S
+b10101 X
+11
 #94000
-0/
+01
 #94500
-1/
+b101010000000000010101 !
+b101010000000000010101 Y
+b1 S
+0R
+1'
+b100001101010000 (
+b100001101010000 Q
+b100001101010000 '#
+11
 #95000
-0/
+01
 #95500
-1/
+1R
+b10000000 4#
+11
 #96000
-0/
+01
 #96500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #97000
-0/
+01
 #97500
-1/
+b110 :
+b0 S
+b10110 X
+11
 #98000
-0/
+01
 #98500
-1/
+b101100000000000010110 !
+b101100000000000010110 Y
+b1 S
+0R
+1'
+b100001101100000 (
+b100001101100000 Q
+b100001101100000 '#
+11
 #99000
-0/
+01
 #99500
-1/
+1R
+b10000000 4#
+11
 #100000
-0/
+01
 #100500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #101000
-0/
+01
 #101500
-1/
+b111 :
+b0 S
+b10111 X
+11
 #102000
-0/
+01
 #102500
-1/
+b101110000000000010111 !
+b101110000000000010111 Y
+b1 S
+0R
+1'
+b100001101110000 (
+b100001101110000 Q
+b100001101110000 '#
+11
 #103000
-0/
+01
 #103500
-1/
+1R
+b10000000 4#
+11
 #104000
-0/
+01
 #104500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #105000
-0/
+01
 #105500
-1/
+b0 :
+b0 S
+b11000 X
+11
 #106000
-0/
+01
 #106500
-1/
+b110000000000000011000 !
+b110000000000000011000 Y
+b1 S
+0R
+1'
+b100001110000000 (
+b100001110000000 Q
+b100001110000000 '#
+11
 #107000
-0/
+01
 #107500
-1/
+1R
+b10000000 4#
+11
 #108000
-0/
+01
 #108500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #109000
-0/
+01
 #109500
-1/
+b1 :
+b0 S
+b11001 X
+11
 #110000
-0/
+01
 #110500
-1/
+b110010000000000011001 !
+b110010000000000011001 Y
+b1 S
+0R
+1'
+b100001110010000 (
+b100001110010000 Q
+b100001110010000 '#
+11
 #111000
-0/
+01
 #111500
-1/
+1R
+b10000000 4#
+11
 #112000
-0/
+01
 #112500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #113000
-0/
+01
 #113500
-1/
+b10 :
+b0 S
+b11010 X
+11
 #114000
-0/
+01
 #114500
-1/
+b110100000000000011010 !
+b110100000000000011010 Y
+b1 S
+0R
+1'
+b100001110100000 (
+b100001110100000 Q
+b100001110100000 '#
+11
 #115000
-0/
+01
 #115500
-1/
+1R
+b10000000 4#
+11
 #116000
-0/
+01
 #116500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #117000
-0/
+01
 #117500
-1/
+b11 :
+b0 S
+b11011 X
+11
 #118000
-0/
+01
 #118500
-1/
+b110110000000000011011 !
+b110110000000000011011 Y
+b1 S
+0R
+1'
+b100001110110000 (
+b100001110110000 Q
+b100001110110000 '#
+11
 #119000
-0/
+01
 #119500
-1/
+1R
+b10000000 4#
+11
 #120000
-0/
+01
 #120500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #121000
-0/
+01
 #121500
-1/
+b100 :
+b0 S
+b11100 X
+11
 #122000
-0/
+01
 #122500
-1/
+b111000000000000011100 !
+b111000000000000011100 Y
+b1 S
+0R
+1'
+b100001111000000 (
+b100001111000000 Q
+b100001111000000 '#
+11
 #123000
-0/
+01
 #123500
-1/
+1R
+b10000000 4#
+11
 #124000
-0/
+01
 #124500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #125000
-0/
+01
 #125500
-1/
+b101 :
+b0 S
+b11101 X
+11
 #126000
-0/
+01
 #126500
-1/
+b111010000000000011101 !
+b111010000000000011101 Y
+b1 S
+0R
+1'
+b100001111010000 (
+b100001111010000 Q
+b100001111010000 '#
+11
 #127000
-0/
+01
 #127500
-1/
+1R
+b10000000 4#
+11
 #128000
-0/
+01
 #128500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #129000
-0/
+01
 #129500
-1/
+b110 :
+b0 S
+b11110 X
+11
 #130000
-0/
+01
 #130500
-1/
+b111100000000000011110 !
+b111100000000000011110 Y
+b1 S
+0R
+1'
+b100001111100000 (
+b100001111100000 Q
+b100001111100000 '#
+11
 #131000
-0/
+01
 #131500
-1/
+1R
+b10000000 4#
+11
 #132000
-0/
+01
 #132500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #133000
-0/
+01
 #133500
-1/
+b111 :
+b0 S
+b11111 X
+11
 #134000
-0/
+01
 #134500
-1/
+b111110000000000011111 !
+b111110000000000011111 Y
+b1 S
+0R
+1'
+b100001111110000 (
+b100001111110000 Q
+b100001111110000 '#
+11
 #135000
-0/
+01
 #135500
-1/
+1R
+b10000000 4#
+11
 #136000
-0/
+01
 #136500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #137000
-0/
+01
 #137500
-1/
+b0 :
+b0 S
+b100000 X
+11
 #138000
-0/
+01
 #138500
-1/
+b1000000000000000100000 !
+b1000000000000000100000 Y
+b1 S
+0R
+1'
+b100010000000000 (
+b100010000000000 Q
+b100010000000000 '#
+11
 #139000
-0/
+01
 #139500
-1/
+1R
+b10000000 4#
+11
 #140000
-0/
+01
 #140500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #141000
-0/
+01
 #141500
-1/
+b1 :
+b0 S
+b100001 X
+11
 #142000
-0/
+01
 #142500
-1/
+b1000010000000000100001 !
+b1000010000000000100001 Y
+b1 S
+0R
+1'
+b100010000010000 (
+b100010000010000 Q
+b100010000010000 '#
+11
 #143000
-0/
+01
 #143500
-1/
+1R
+b10000000 4#
+11
 #144000
-0/
+01
 #144500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #145000
-0/
+01
 #145500
-1/
+b10 :
+b0 S
+b100010 X
+11
 #146000
-0/
+01
 #146500
-1/
+b1000100000000000100010 !
+b1000100000000000100010 Y
+b1 S
+0R
+1'
+b100010000100000 (
+b100010000100000 Q
+b100010000100000 '#
+11
 #147000
-0/
+01
 #147500
-1/
+1R
+b10000000 4#
+11
 #148000
-0/
+01
 #148500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #149000
-0/
+01
 #149500
-1/
+b11 :
+b0 S
+b100011 X
+11
 #150000
-0/
+01
 #150500
-1/
+b1000110000000000100011 !
+b1000110000000000100011 Y
+b1 S
+0R
+1'
+b100010000110000 (
+b100010000110000 Q
+b100010000110000 '#
+11
 #151000
-0/
+01
 #151500
-1/
+1R
+b10000000 4#
+11
 #152000
-0/
+01
 #152500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #153000
-0/
+01
 #153500
-1/
+b100 :
+b0 S
+b100100 X
+11
 #154000
-0/
+01
 #154500
-1/
+b1001000000000000100100 !
+b1001000000000000100100 Y
+b1 S
+0R
+1'
+b100010001000000 (
+b100010001000000 Q
+b100010001000000 '#
+11
 #155000
-0/
+01
 #155500
-1/
+1R
+b10000000 4#
+11
 #156000
-0/
+01
 #156500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #157000
-0/
+01
 #157500
-1/
+b101 :
+b0 S
+b100101 X
+11
 #158000
-0/
+01
 #158500
-1/
+b1001010000000000100101 !
+b1001010000000000100101 Y
+b1 S
+0R
+1'
+b100010001010000 (
+b100010001010000 Q
+b100010001010000 '#
+11
 #159000
-0/
+01
 #159500
-1/
+1R
+b10000000 4#
+11
 #160000
-0/
+01
 #160500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #161000
-0/
+01
 #161500
-1/
+b110 :
+b0 S
+b100110 X
+11
 #162000
-0/
+01
 #162500
-1/
+b1001100000000000100110 !
+b1001100000000000100110 Y
+b1 S
+0R
+1'
+b100010001100000 (
+b100010001100000 Q
+b100010001100000 '#
+11
 #163000
-0/
+01
 #163500
-1/
+1R
+b10000000 4#
+11
 #164000
-0/
+01
 #164500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #165000
-0/
+01
 #165500
-1/
+b111 :
+b0 S
+b100111 X
+11
 #166000
-0/
+01
 #166500
-1/
+b1001110000000000100111 !
+b1001110000000000100111 Y
+b1 S
+0R
+1'
+b100010001110000 (
+b100010001110000 Q
+b100010001110000 '#
+11
 #167000
-0/
+01
 #167500
-1/
+1R
+b10000000 4#
+11
 #168000
-0/
+01
 #168500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #169000
-0/
+01
 #169500
-1/
+b0 :
+b0 S
+b101000 X
+11
 #170000
-0/
+01
 #170500
-1/
+b1010000000000000101000 !
+b1010000000000000101000 Y
+b1 S
+0R
+1'
+b100010010000000 (
+b100010010000000 Q
+b100010010000000 '#
+11
 #171000
-0/
+01
 #171500
-1/
+1R
+b10000000 4#
+11
 #172000
-0/
+01
 #172500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #173000
-0/
+01
 #173500
-1/
+b1 :
+b0 S
+b101001 X
+11
 #174000
-0/
+01
 #174500
-1/
+b1010010000000000101001 !
+b1010010000000000101001 Y
+b1 S
+0R
+1'
+b100010010010000 (
+b100010010010000 Q
+b100010010010000 '#
+11
 #175000
-0/
+01
 #175500
-1/
+1R
+b10000000 4#
+11
 #176000
-0/
+01
 #176500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #177000
-0/
+01
 #177500
-1/
+b10 :
+b0 S
+b101010 X
+11
 #178000
-0/
+01
 #178500
-1/
+b1010100000000000101010 !
+b1010100000000000101010 Y
+b1 S
+0R
+1'
+b100010010100000 (
+b100010010100000 Q
+b100010010100000 '#
+11
 #179000
-0/
+01
 #179500
-1/
+1R
+b10000000 4#
+11
 #180000
-0/
+01
 #180500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #181000
-0/
+01
 #181500
-1/
+b11 :
+b0 S
+b101011 X
+11
 #182000
-0/
+01
 #182500
-1/
+b1010110000000000101011 !
+b1010110000000000101011 Y
+b1 S
+0R
+1'
+b100010010110000 (
+b100010010110000 Q
+b100010010110000 '#
+11
 #183000
-0/
+01
 #183500
-1/
+1R
+b10000000 4#
+11
 #184000
-0/
+01
 #184500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #185000
-0/
+01
 #185500
-1/
+b100 :
+b0 S
+b101100 X
+11
 #186000
-0/
+01
 #186500
-1/
+b1011000000000000101100 !
+b1011000000000000101100 Y
+b1 S
+0R
+1'
+b100010011000000 (
+b100010011000000 Q
+b100010011000000 '#
+11
 #187000
-0/
+01
 #187500
-1/
+1R
+b10000000 4#
+11
 #188000
-0/
+01
 #188500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #189000
-0/
+01
 #189500
-1/
+b101 :
+b0 S
+b101101 X
+11
 #190000
-0/
+01
 #190500
-1/
+b1011010000000000101101 !
+b1011010000000000101101 Y
+b1 S
+0R
+1'
+b100010011010000 (
+b100010011010000 Q
+b100010011010000 '#
+11
 #191000
-0/
+01
 #191500
-1/
+1R
+b10000000 4#
+11
 #192000
-0/
+01
 #192500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #193000
-0/
+01
 #193500
-1/
+b110 :
+b0 S
+b101110 X
+11
 #194000
-0/
+01
 #194500
-1/
+b1011100000000000101110 !
+b1011100000000000101110 Y
+b1 S
+0R
+1'
+b100010011100000 (
+b100010011100000 Q
+b100010011100000 '#
+11
 #195000
-0/
+01
 #195500
-1/
+1R
+b10000000 4#
+11
 #196000
-0/
+01
 #196500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #197000
-0/
+01
 #197500
-1/
+b111 :
+b0 S
+b101111 X
+11
 #198000
-0/
+01
 #198500
-1/
+b1011110000000000101111 !
+b1011110000000000101111 Y
+b1 S
+0R
+1'
+b100010011110000 (
+b100010011110000 Q
+b100010011110000 '#
+11
 #199000
-0/
+01
 #199500
-1/
+1R
+b10000000 4#
+11
 #200000
-0/
+01
 #200500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #201000
-0/
+01
 #201500
-1/
+b0 :
+b0 S
+b110000 X
+11
 #202000
-0/
+01
 #202500
-1/
+b1100000000000000110000 !
+b1100000000000000110000 Y
+b1 S
+0R
+1'
+b100010100000000 (
+b100010100000000 Q
+b100010100000000 '#
+11
 #203000
-0/
+01
 #203500
-1/
+1R
+b10000000 4#
+11
 #204000
-0/
+01
 #204500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #205000
-0/
+01
 #205500
-1/
+b1 :
+b0 S
+b110001 X
+11
 #206000
-0/
+01
 #206500
-1/
+b1100010000000000110001 !
+b1100010000000000110001 Y
+b1 S
+0R
+1'
+b100010100010000 (
+b100010100010000 Q
+b100010100010000 '#
+11
 #207000
-0/
+01
 #207500
-1/
+1R
+b10000000 4#
+11
 #208000
-0/
+01
 #208500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #209000
-0/
+01
 #209500
-1/
+b10 :
+b0 S
+b110010 X
+11
 #210000
-0/
+01
 #210500
-1/
+b1100100000000000110010 !
+b1100100000000000110010 Y
+b1 S
+0R
+1'
+b100010100100000 (
+b100010100100000 Q
+b100010100100000 '#
+11
 #211000
-0/
+01
 #211500
-1/
+1R
+b10000000 4#
+11
 #212000
-0/
+01
 #212500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #213000
-0/
+01
 #213500
-1/
+b11 :
+b0 S
+b110011 X
+11
 #214000
-0/
+01
 #214500
-1/
+b1100110000000000110011 !
+b1100110000000000110011 Y
+b1 S
+0R
+1'
+b100010100110000 (
+b100010100110000 Q
+b100010100110000 '#
+11
 #215000
-0/
+01
 #215500
-1/
+1R
+b10000000 4#
+11
 #216000
-0/
+01
 #216500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #217000
-0/
+01
 #217500
-1/
+b100 :
+b0 S
+b110100 X
+11
 #218000
-0/
+01
 #218500
-1/
+b1101000000000000110100 !
+b1101000000000000110100 Y
+b1 S
+0R
+1'
+b100010101000000 (
+b100010101000000 Q
+b100010101000000 '#
+11
 #219000
-0/
+01
 #219500
-1/
+1R
+b10000000 4#
+11
 #220000
-0/
+01
 #220500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #221000
-0/
+01
 #221500
-1/
+b101 :
+b0 S
+b110101 X
+11
 #222000
-0/
+01
 #222500
-1/
+b1101010000000000110101 !
+b1101010000000000110101 Y
+b1 S
+0R
+1'
+b100010101010000 (
+b100010101010000 Q
+b100010101010000 '#
+11
 #223000
-0/
+01
 #223500
-1/
+1R
+b10000000 4#
+11
 #224000
-0/
+01
 #224500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #225000
-0/
+01
 #225500
-1/
+b110 :
+b0 S
+b110110 X
+11
 #226000
-0/
+01
 #226500
-1/
+b1101100000000000110110 !
+b1101100000000000110110 Y
+b1 S
+0R
+1'
+b100010101100000 (
+b100010101100000 Q
+b100010101100000 '#
+11
 #227000
-0/
+01
 #227500
-1/
+1R
+b10000000 4#
+11
 #228000
-0/
+01
 #228500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #229000
-0/
+01
 #229500
-1/
+b111 :
+b0 S
+b110111 X
+11
 #230000
-0/
+01
 #230500
-1/
+b1101110000000000110111 !
+b1101110000000000110111 Y
+b1 S
+0R
+1'
+b100010101110000 (
+b100010101110000 Q
+b100010101110000 '#
+11
 #231000
-0/
+01
 #231500
-1/
+1R
+b10000000 4#
+11
 #232000
-0/
+01
 #232500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #233000
-0/
+01
 #233500
-1/
+b0 :
+b0 S
+b111000 X
+11
 #234000
-0/
+01
 #234500
-1/
+b1110000000000000111000 !
+b1110000000000000111000 Y
+b1 S
+0R
+1'
+b100010110000000 (
+b100010110000000 Q
+b100010110000000 '#
+11
 #235000
-0/
+01
 #235500
-1/
+1R
+b10000000 4#
+11
 #236000
-0/
+01
 #236500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #237000
-0/
+01
 #237500
-1/
+b1 :
+b0 S
+b111001 X
+11
 #238000
-0/
+01
 #238500
-1/
+b1110010000000000111001 !
+b1110010000000000111001 Y
+b1 S
+0R
+1'
+b100010110010000 (
+b100010110010000 Q
+b100010110010000 '#
+11
 #239000
-0/
+01
 #239500
-1/
+1R
+b10000000 4#
+11
 #240000
-0/
+01
 #240500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #241000
-0/
+01
 #241500
-1/
+b10 :
+b0 S
+b111010 X
+11
 #242000
-0/
+01
 #242500
-1/
+b1110100000000000111010 !
+b1110100000000000111010 Y
+b1 S
+0R
+1'
+b100010110100000 (
+b100010110100000 Q
+b100010110100000 '#
+11
 #243000
-0/
+01
 #243500
-1/
+1R
+b10000000 4#
+11
 #244000
-0/
+01
 #244500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #245000
-0/
+01
 #245500
-1/
+b11 :
+b0 S
+b111011 X
+11
 #246000
-0/
+01
 #246500
-1/
+b1110110000000000111011 !
+b1110110000000000111011 Y
+b1 S
+0R
+1'
+b100010110110000 (
+b100010110110000 Q
+b100010110110000 '#
+11
 #247000
-0/
+01
 #247500
-1/
+1R
+b10000000 4#
+11
 #248000
-0/
+01
 #248500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #249000
-0/
+01
 #249500
-1/
+b100 :
+b0 S
+b111100 X
+11
 #250000
-0/
+01
 #250500
-1/
+b1111000000000000111100 !
+b1111000000000000111100 Y
+b1 S
+0R
+1'
+b100010111000000 (
+b100010111000000 Q
+b100010111000000 '#
+11
 #251000
-0/
+01
 #251500
-1/
+1R
+b10000000 4#
+11
 #252000
-0/
+01
 #252500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #253000
-0/
+01
 #253500
-1/
+b101 :
+b0 S
+b111101 X
+11
 #254000
-0/
+01
 #254500
-1/
+b1111010000000000111101 !
+b1111010000000000111101 Y
+b1 S
+0R
+1'
+b100010111010000 (
+b100010111010000 Q
+b100010111010000 '#
+11
 #255000
-0/
+01
 #255500
-1/
+1R
+b10000000 4#
+11
 #256000
-0/
+01
 #256500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #257000
-0/
+01
 #257500
-1/
+b110 :
+b0 S
+b111110 X
+11
 #258000
-0/
+01
 #258500
-1/
+b1111100000000000111110 !
+b1111100000000000111110 Y
+b1 S
+0R
+1'
+b100010111100000 (
+b100010111100000 Q
+b100010111100000 '#
+11
 #259000
-0/
+01
 #259500
-1/
+1R
+b10000000 4#
+11
 #260000
-0/
+01
 #260500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #261000
-0/
+01
 #261500
-1/
+b111 :
+b0 S
+b111111 X
+11
 #262000
-0/
+01
 #262500
-1/
+b1111110000000000111111 !
+b1111110000000000111111 Y
+b1 S
+0R
+1'
+b100010111110000 (
+b100010111110000 Q
+b100010111110000 '#
+11
 #263000
-0/
+01
 #263500
-1/
+1R
+b10000000 4#
+11
 #264000
-0/
+01
 #264500
-1/
+b10 S
+0'
+b10000000 4#
+11
 #265000
-0/
+01
 #265500
-1/
+b0 :
+19
+b0 S
+b1000000 X
+11
 #266000
-0/
+01
 #266500
-1/
+11
 #267000
-0/
+01
 #267500
-1/
+11
 #268000
-0/
+01
 #268500
-1/
+11
 #269000
-0/
+01
 #269500
-1/
+11
 #270000
-0/
+01
 #270500
-1/
+11
 #271000
-0/
+01
 #271500
-1/
+11
 #272000
-0/
+01
 #272500
-1/
+11
 #273000
-0/
+01
 #273500
-1/
+11
 #274000
-0/
+01
 #274500
-1/
+11
 #275000
-0/
+01
 #275500
-1/
+11
 #276000
-0/
+01
 #276500
-1/
+11
 #277000
-0/
+01
 #277500
-1/
+11
 #278000
-0/
+01
 #278500
-1/
+11
 #279000
-0/
+01
 #279500
-1/
+11
 #280000
-0/
+01
 #280500
-1/
+11
 #281000
-0/
+01
 #281500
-1/
+11
 #282000
-0/
+01
 #282500
-1/
+11
 #283000
-0/
+01
 #283500
-1/
+11
 #284000
-0/
+01
 #284500
-1/
+11
 #285000
-0/
+01
 #285500
-1/
+11
 #286000
-0/
+01
 #286500
-1/
+11
 #287000
-0/
+01
 #287500
-1/
+11
 #288000
-0/
+01
 #288500
-1/
+11
 #289000
-0/
+01
 #289500
-1/
+11
 #290000
-0/
+01
 #290500
-1/
+11
 #291000
-0/
+01
 #291500
-1/
+11
 #292000
-0/
+01
 #292500
-1/
+11
 #293000
-0/
+01
 #293500
-1/
+11
 #294000
-0/
+01
 #294500
-1/
+11
 #295000
-0/
+01
 #295500
-1/
+11
 #296000
-0/
+01
 #296500
-1/
+11
 #297000
-0/
+01
 #297500
-1/
+11
 #298000
-0/
+01
 #298500
-1/
+11
 #299000
-0/
+01
 #299500
-1/
+11
 #300000
-0/
+01
 #300500
-1/
+11
 #301000
-0/
+01
 #301500
-1/
+11
 #302000
-0/
+01
 #302500
-1/
+11
 #303000
-0/
+01
 #303500
-1/
+11
 #304000
-0/
+01
 #304500
-1/
+11
 #305000
-0/
+01
 #305500
-1/
+11
 #306000
-0/
+01
 #306500
-1/
+11
 #307000
-0/
+01
 #307500
-1/
+11
 #308000
-0/
+01
 #308500
-1/
+11
 #309000
-0/
+01
 #309500
-1/
+11
 #310000
-0/
+01
 #310500
-1/
+11
 #311000
-0/
+01
 #311500
-1/
+11
 #312000
-0/
+01
 #312500
-1/
+11
 #313000
-0/
+01
 #313500
-1/
+11
 #314000
-0/
+01
 #314500
-1/
+11
 #315000
-0/
+01
 #315500
-1/
+11
 #316000
-0/
+01
 #316500
-1/
+11
 #317000
-0/
+01
 #317500
-1/
+11
 #318000
-0/
+01
 #318500
-1/
+11
 #319000
-0/
+01
 #319500
-1/
+11
 #320000
-0/
+01
 #320500
-1/
+11
 #321000
-0/
+01
 #321500
-1/
+11
 #322000
-0/
+01
 #322500
-1/
+11
 #323000
-0/
+01
 #323500
-1/
+11
 #324000
-0/
+01
 #324500
-1/
+11
 #325000
-0/
+01
 #325500
-1/
+11
 #326000
-0/
+01
 #326500
-1/
+11
 #327000
-0/
+01
 #327500
-1/
+11
 #328000
-0/
+01
 #328500
-1/
+11
 #329000
-0/
+01
 #329500
-1/
+11
 #330000
-0/
+01
 #330500
-1/
+11
 #331000
-0/
+01
 #331500
-1/
+11
 #332000
-0/
+01
 #332500
-1/
+11
 #333000
-0/
+01
 #333500
-1/
+11
 #334000
-0/
+01
 #334500
-1/
+11
 #335000
-0/
+01
 #335500
-1/
+11
 #336000
-0/
+01
 #336500
-1/
+11
 #337000
-0/
+01
 #337500
-1/
+11
 #338000
-0/
+01
 #338500
-1/
+11
 #339000
-0/
+01
 #339500
-1/
+11
 #340000
-0/
+01
 #340500
-1/
+11
 #341000
-0/
+01
 #341500
-1/
+11
 #342000
-0/
+01
 #342500
-1/
+11
 #343000
-0/
+01
 #343500
-1/
+11
 #344000
-0/
+01
 #344500
-1/
+11
 #345000
-0/
+01
 #345500
-1/
+11
 #346000
-0/
+01
 #346500
-1/
+11
 #347000
-0/
+01
 #347500
-1/
+11
 #348000
-0/
+01
 #348500
-1/
+11
 #349000
-0/
+01
 #349500
-1/
+11
 #350000
-0/
+01
 #350500
-1/
+11
 #351000
-0/
+01
 #351500
-1/
+11
 #352000
-0/
+01
 #352500
-1/
+11
 #353000
-0/
+01
 #353500
-1/
+11
 #354000
-0/
+01
 #354500
-1/
+11
 #355000
-0/
+01
 #355500
-1/
+11
 #356000
-0/
+01
 #356500
-1/
+11
 #357000
-0/
+01
 #357500
-1/
+11
 #358000
-0/
+01
 #358500
-1/
+11
 #359000
-0/
+01
 #359500
-1/
+11
 #360000
-0/
+01
 #360500
-1/
+11
 #361000
-0/
+01
 #361500
-1/
+11
 #362000
-0/
+01
 #362500
-1/
+11
 #363000
-0/
+01
 #363500
-1/
+11
 #364000
-0/
+01
 #364500
-1/
+11
 #365000
-0/
+01
 #365500
-1/
+11
 #366000
-0/
+01
 #366500
-1/
+11
 #367000
-0/
+01
 #367500
-1/
+11
 #368000
-0/
+01
 #368500
-1/
+11
 #369000
-0/
+01
 #369500
-1/
+11
 #370000
-0/
+01
 #370500
-1/
+11
 #371000
-0/
+01
 #371500
-1/
+11
 #372000
-0/
+01
 #372500
-1/
+11
 #373000
-0/
+01
 #373500
-1/
+11
 #374000
-0/
+01
 #374500
-1/
+11
 #375000
-0/
+01
 #375500
-1/
+11
 #376000
-0/
+01
 #376500
-1/
+11
 #377000
-0/
+01
 #377500
-1/
+11
 #378000
-0/
+01
 #378500
-1/
+11
 #379000
-0/
+01
 #379500
-1/
+11
 #380000
-0/
+01
 #380500
-1/
+11
 #381000
-0/
+01
 #381500
-1/
+11
 #382000
-0/
+01
 #382500
-1/
+11
 #383000
-0/
+01
 #383500
-1/
+11
 #384000
-0/
+01
 #384500
-1/
+11
 #385000
-0/
+01
 #385500
-1/
+11
 #386000
-0/
+01
 #386500
-1/
+11
 #387000
-0/
+01
 #387500
-1/
+11
 #388000
-0/
+01
 #388500
-1/
+11
 #389000
-0/
+01
 #389500
-1/
+11
 #390000
-0/
+01
 #390500
-1/
+11
 #391000
-0/
+01
 #391500
-1/
+11
 #392000
-0/
+01
 #392500
-1/
+11
 #393000
-0/
+01
 #393500
-1/
+11
 #394000
-0/
+01
 #394500
-1/
+11
 #395000
-0/
+01
 #395500
-1/
+11
 #396000
-0/
+01
 #396500
-1/
+11
 #397000
-0/
+01
 #397500
-1/
+11
 #398000
-0/
+01
 #398500
-1/
+11
 #399000
-0/
+01
 #399500
-1/
+11
 #400000
-0/
+01
 #400500
-1/
+11
 #401000
-0/
+01
 #401500
-1/
+11
 #402000
-0/
+01
 #402500
-1/
+11
 #403000
-0/
+01
 #403500
-1/
+11
 #404000
-0/
+01
 #404500
-1/
+11
 #405000
-0/
+01
 #405500
-1/
+11
 #406000
-0/
+01
 #406500
-1/
+11
 #407000
-0/
+01
 #407500
-1/
+11
 #408000
-0/
+01
 #408500
-1/
+11
 #409000
-0/
+01
 #409500
-1/
+11
 #410000
-0/
+01
 #410500
-1/
+11
 #411000
-0/
+01
 #411500
-1/
+11
 #412000
-0/
+01
 #412500
-1/
+11
 #413000
-0/
+01
 #413500
-1/
+11
 #414000
-0/
+01
 #414500
-1/
+11
 #415000
-0/
+01
 #415500
-1/
+11
 #416000
-0/
+01
 #416500
-1/
+11
 #417000
-0/
+01
 #417500
-1/
+11
 #418000
-0/
+01
 #418500
-1/
+11
 #419000
-0/
+01
 #419500
-1/
+11
 #420000
-0/
+01
 #420500
-1/
+11
 #421000
-0/
+01
 #421500
-1/
+11
 #422000
-0/
+01
 #422500
-1/
+11
 #423000
-0/
+01
 #423500
-1/
+11
 #424000
-0/
+01
 #424500
-1/
+11
 #425000
-0/
+01
 #425500
-1/
+11
 #426000
-0/
+01
 #426500
-1/
+11
 #427000
-0/
+01
 #427500
-1/
+11
 #428000
-0/
+01
 #428500
-1/
+11
 #429000
-0/
+01
 #429500
-1/
+11
 #430000
-0/
+01
 #430500
-1/
+11
 #431000
-0/
+01
 #431500
-1/
+11
 #432000
-0/
+01
 #432500
-1/
+11
 #433000
-0/
+01
 #433500
-1/
+11
 #434000
-0/
+01
 #434500
-1/
+11
 #435000
-0/
+01
 #435500
-1/
+11
 #436000
-0/
+01
 #436500
-1/
+11
 #437000
-0/
+01
 #437500
-1/
+11
 #438000
-0/
+01
 #438500
-1/
+11
 #439000
-0/
+01
 #439500
-1/
+11
 #440000
-0/
+01
 #440500
-1/
+11
 #441000
-0/
+01
 #441500
-1/
+11
 #442000
-0/
+01
 #442500
-1/
+11
 #443000
-0/
+01
 #443500
-1/
+11
 #444000
-0/
+01
 #444500
-1/
+11
 #445000
-0/
+01
 #445500
-1/
+11
 #446000
-0/
+01
 #446500
-1/
+11
 #447000
-0/
+01
 #447500
-1/
+11
 #448000
-0/
+01
 #448500
-1/
+11
 #449000
-0/
+01
 #449500
-1/
+11
 #450000
-0/
+01
 #450500
-1/
+11
 #451000
-0/
+01
 #451500
-1/
+11
 #452000
-0/
+01
 #452500
-1/
+11
 #453000
-0/
+01
 #453500
-1/
+11
 #454000
-0/
+01
 #454500
-1/
+11
 #455000
-0/
+01
 #455500
-1/
+11
 #456000
-0/
+01
 #456500
-1/
+11
 #457000
-0/
+01
 #457500
-1/
+11
 #458000
-0/
+01
 #458500
-1/
+11
 #459000
-0/
+01
 #459500
-1/
+11
 #460000
-0/
+01
 #460500
-1/
+11
 #461000
-0/
+01
 #461500
-1/
+11
 #462000
-0/
+01
 #462500
-1/
+11
 #463000
-0/
+01
 #463500
-1/
+11
 #464000
-0/
+01
 #464500
-1/
+11
 #465000
-0/
+01
 #465500
-1/
+11
 #466000
-0/
+01
 #466500
-1/
+11
 #467000
-0/
+01
 #467500
-1/
+11
 #468000
-0/
+01
 #468500
-1/
+11
 #469000
-0/
+01
 #469500
-1/
+11
 #470000
-0/
+01
 #470500
-1/
+11
 #471000
-0/
+01
 #471500
-1/
+11
 #472000
-0/
+01
 #472500
-1/
+11
 #473000
-0/
+01
 #473500
-1/
+11
 #474000
-0/
+01
 #474500
-1/
+11
 #475000
-0/
+01
 #475500
-1/
+11
 #476000
-0/
+01
 #476500
-1/
+11
 #477000
-0/
+01
 #477500
-1/
+11
 #478000
-0/
+01
 #478500
-1/
+11
 #479000
-0/
+01
 #479500
-1/
+11
 #480000
-0/
+01
 #480500
-1/
+11
 #481000
-0/
+01
 #481500
-1/
+11
 #482000
-0/
+01
 #482500
-1/
+11
 #483000
-0/
+01
 #483500
-1/
+11
 #484000
-0/
+01
 #484500
-1/
+11
 #485000
-0/
+01
 #485500
-1/
+11
 #486000
-0/
+01
 #486500
-1/
+11
 #487000
-0/
+01
 #487500
-1/
+11
 #488000
-0/
+01
 #488500
-1/
+11
 #489000
-0/
+01
 #489500
-1/
+11
 #490000
-0/
+01
 #490500
-1/
+11
 #491000
-0/
+01
 #491500
-1/
+11
 #492000
-0/
+01
 #492500
-1/
+11
 #493000
-0/
+01
 #493500
-1/
+11
 #494000
-0/
+01
 #494500
-1/
+11
 #495000
-0/
+01
 #495500
-1/
+11
 #496000
-0/
+01
 #496500
-1/
+11
 #497000
-0/
+01
 #497500
-1/
+11
 #498000
-0/
+01
 #498500
-1/
+11
 #499000
-0/
+01
 #499500
-1/
+11
 #500000
-0/
+01
 #500500
-1/
+11
 #501000
-0/
+01
 #501500
-1/
+11
 #502000
-0/
+01
 #502500
-1/
+11
 #503000
-0/
+01
 #503500
-1/
+11
 #504000
-0/
+01
 #504500
-1/
+11
 #505000
-0/
+01
 #505500
-1/
+11
 #506000
-0/
+01
 #506500
-1/
+11
 #507000
-0/
+01
 #507500
-1/
+11
 #508000
-0/
+01
 #508500
-1/
+11
 #509000
-0/
+01
 #509500
-1/
+11
 #510000
-0/
+01
 #510500
-1/
+11
 #511000
-0/
+01
 #511500
-1/
+11
 #512000
-0/
+01
 #512500
-1/
+11
 #513000
-0/
+01
 #513500
-1/
+11
 #514000
-0/
+01
 #514500
-1/
+11
 #515000
-0/
+01
 #515500
-1/
+11
 #516000
-0/
+01
 #516500
-1/
+11
 #517000
-0/
+01
 #517500
-1/
+11
 #518000
-0/
+01
 #518500
-1/
+11
 #519000
-0/
+01
 #519500
-1/
+11
 #520000
-0/
+01
 #520500
-1/
+11
 #521000
-0/
+01
 #521500
-1/
+11
 #522000
-0/
+01
 #522500
-1/
+11
 #523000
-0/
+01
 #523500
-1/
+11
 #524000
-0/
+01
 #524500
-1/
+11
 #525000
-0/
+01
 #525500
-1/
+11
 #526000
-0/
+01
 #526500
-1/
+11
 #527000
-0/
+01
 #527500
-1/
+11
 #528000
-0/
+01
 #528500
-1/
+11
 #529000
-0/
+01
 #529500
-1/
+11
 #530000
-0/
+01
 #530500
-1/
+11
 #531000
-0/
+01
 #531500
-1/
+11
 #532000
-0/
+01
 #532500
-1/
+11
 #533000
-0/
+01
 #533500
-1/
+11
 #534000
-0/
+01
 #534500
-1/
+11
 #535000
-0/
+01
 #535500
-1/
+11
 #536000
-0/
+01
 #536500
-1/
+11
 #537000
-0/
+01
 #537500
-1/
+11
 #538000
-0/
+01
 #538500
-1/
+11
 #539000
-0/
+01
 #539500
-1/
+11
 #540000
-0/
+01
 #540500
-1/
+11
 #541000
-0/
+01
 #541500
-1/
+11
 #542000
-0/
+01
 #542500
-1/
+11
 #543000
-0/
+01
 #543500
-1/
+11
 #544000
-0/
+01
 #544500
-1/
+11
 #545000
-0/
+01
 #545500
-1/
+11
 #546000
-0/
+01
 #546500
-1/
+11
 #547000
-0/
+01
 #547500
-1/
+11
 #548000
-0/
+01
 #548500
-1/
+11
 #549000
-0/
+01
 #549500
-1/
+11
 #550000
-0/
+01
 #550500
-1/
+11
 #551000
-0/
+01
 #551500
-1/
+11
 #552000
-0/
+01
 #552500
-1/
+11
 #553000
-0/
+01
 #553500
-1/
+11
 #554000
-0/
+01
 #554500
-1/
+11
 #555000
-0/
+01
 #555500
-1/
+11
 #556000
-0/
+01
 #556500
-1/
+11
 #557000
-0/
+01
 #557500
-1/
+11
 #558000
-0/
+01
 #558500
-1/
+11
 #559000
-0/
+01
 #559500
-1/
+11
 #560000
-0/
+01
 #560500
-1/
+11
 #561000
-0/
+01
 #561500
-1/
+11
 #562000
-0/
+01
 #562500
-1/
+11
 #563000
-0/
+01
 #563500
-1/
+11
 #564000
-0/
+01
 #564500
-1/
+11
 #565000
-0/
+01
 #565500
-1/
+11
 #566000
-0/
+01
 #566500
-1/
+11
 #567000
-0/
+01
 #567500
-1/
+11
 #568000
-0/
+01
 #568500
-1/
+11
 #569000
-0/
+01
 #569500
-1/
+11
 #570000
-0/
+01
 #570500
-1/
+11
 #571000
-0/
+01
 #571500
-1/
+11
 #572000
-0/
+01
 #572500
-1/
+11
 #573000
-0/
+01
 #573500
-1/
+11
 #574000
-0/
+01
 #574500
-1/
+11
 #575000
-0/
+01
 #575500
-1/
+11
 #576000
-0/
+01
 #576500
-1/
+11
 #577000
-0/
+01
 #577500
-1/
+11
 #578000
-0/
+01
 #578500
-1/
+11
 #579000
-0/
+01
 #579500
-1/
+11
 #580000
-0/
+01
 #580500
-1/
+11
 #581000
-0/
+01
 #581500
-1/
+11
 #582000
-0/
+01
 #582500
-1/
+11
 #583000
-0/
+01
 #583500
-1/
+11
 #584000
-0/
+01
 #584500
-1/
+11
 #585000
-0/
+01
 #585500
-1/
+11
 #586000
-0/
+01
 #586500
-1/
+11
 #587000
-0/
+01
 #587500
-1/
+11
 #588000
-0/
+01
 #588500
-1/
+11
 #589000
-0/
+01
 #589500
-1/
+11
 #590000
-0/
+01
 #590500
-1/
+11
 #591000
-0/
+01
 #591500
-1/
+11
 #592000
-0/
+01
 #592500
-1/
+11
 #593000
-0/
+01
 #593500
-1/
+11
 #594000
-0/
+01
 #594500
-1/
+11
 #595000
-0/
+01
 #595500
-1/
+11
 #596000
-0/
+01
 #596500
-1/
+11
 #597000
-0/
+01
 #597500
-1/
+11
 #598000
-0/
+01
 #598500
-1/
+11
 #599000
-0/
+01
 #599500
-1/
+11
 #600000
-0/
+01
 #600500
-1/
+11
 #601000
-0/
+01
 #601500
-1/
+11
 #602000
-0/
+01
 #602500
-1/
+11
 #603000
-0/
+01
 #603500
-1/
+11
 #604000
-0/
+01
 #604500
-1/
+11
 #605000
-0/
+01
 #605500
-1/
+11
 #606000
-0/
+01
 #606500
-1/
+11
 #607000
-0/
+01
 #607500
-1/
+11
 #608000
-0/
+01
 #608500
-1/
+11
 #609000
-0/
+01
 #609500
-1/
+11
 #610000
-0/
+01
 #610500
-1/
+11
 #611000
-0/
+01
 #611500
-1/
+11
 #612000
-0/
+01
 #612500
-1/
+11
 #613000
-0/
+01
 #613500
-1/
+11
 #614000
-0/
+01
 #614500
-1/
+11
 #615000
-0/
+01
 #615500
-1/
+11
 #616000
-0/
+01
 #616500
-1/
+11
 #617000
-0/
+01
 #617500
-1/
+11
 #618000
-0/
+01
 #618500
-1/
+11
 #619000
-0/
+01
 #619500
-1/
+11
 #620000
-0/
+01
 #620500
-1/
+11
 #621000
-0/
+01
 #621500
-1/
+11
 #622000
-0/
+01
 #622500
-1/
+11
 #623000
-0/
+01
 #623500
-1/
+11
 #624000
-0/
+01
 #624500
-1/
+11
 #625000
-0/
+01
 #625500
-1/
+11
 #626000
-0/
+01
 #626500
-1/
+11
 #627000
-0/
+01
 #627500
-1/
+11
 #628000
-0/
+01
 #628500
-1/
+11
 #629000
-0/
+01
 #629500
-1/
+11
 #630000
-0/
+01
 #630500
-1/
+11
 #631000
-0/
+01
 #631500
-1/
+11
 #632000
-0/
+01
 #632500
-1/
+11
 #633000
-0/
+01
 #633500
-1/
+11
 #634000
-0/
+01
 #634500
-1/
+11
 #635000
-0/
+01
 #635500
-1/
+11
 #636000
-0/
+01
 #636500
-1/
+11
 #637000
-0/
+01
 #637500
-1/
+11
 #638000
-0/
+01
 #638500
-1/
+11
 #639000
-0/
+01
 #639500
-1/
+11
 #640000
-0/
+01
 #640500
-1/
+11
 #641000
-0/
+01
 #641500
-1/
+11
 #642000
-0/
+01
 #642500
-1/
+11
 #643000
-0/
+01
 #643500
-1/
+11
 #644000
-0/
+01
 #644500
-1/
+11
 #645000
-0/
+01
 #645500
-1/
+11
 #646000
-0/
+01
 #646500
-1/
+11
 #647000
-0/
+01
 #647500
-1/
+11
 #648000
-0/
+01
 #648500
-1/
+11
 #649000
-0/
+01
 #649500
-1/
+11
 #650000
-0/
+01
 #650500
-1/
+11
 #651000
-0/
+01
 #651500
-1/
+11
 #652000
-0/
+01
 #652500
-1/
+11
 #653000
-0/
+01
 #653500
-1/
+11
 #654000
-0/
+01
 #654500
-1/
+11
 #655000
-0/
+01
 #655500
-1/
+11
 #656000
-0/
+01
 #656500
-1/
+11
 #657000
-0/
+01
 #657500
-1/
+11
 #658000
-0/
+01
 #658500
-1/
+11
 #659000
-0/
+01
 #659500
-1/
+11
 #660000
-0/
+01
 #660500
-1/
+11
 #661000
-0/
+01
 #661500
-1/
+11
 #662000
-0/
+01
 #662500
-1/
+11
 #663000
-0/
+01
 #663500
-1/
+11
 #664000
-0/
+01
 #664500
-1/
+11
 #665000
-0/
+01
 #665500
-1/
+11
 #666000
-0/
+01
 #666500
-1/
+11
 #667000
-0/
+01
 #667500
-1/
+11
 #668000
-0/
+01
 #668500
-1/
+11
 #669000
-0/
+01
 #669500
-1/
+11
 #670000
-0/
+01
 #670500
-1/
+11
 #671000
-0/
+01
 #671500
-1/
+11
 #672000
-0/
+01
 #672500
-1/
+11
 #673000
-0/
+01
 #673500
-1/
+11
 #674000
-0/
+01
 #674500
-1/
+11
 #675000
-0/
+01
 #675500
-1/
+11
 #676000
-0/
+01
 #676500
-1/
+11
 #677000
-0/
+01
 #677500
-1/
+11
 #678000
-0/
+01
 #678500
-1/
+11
 #679000
-0/
+01
 #679500
-1/
+11
 #680000
-0/
+01
 #680500
-1/
+11
 #681000
-0/
+01
 #681500
-1/
+11
 #682000
-0/
+01
 #682500
-1/
+11
 #683000
-0/
+01
 #683500
-1/
+11
 #684000
-0/
+01
 #684500
-1/
+11
 #685000
-0/
+01
 #685500
-1/
+11
 #686000
-0/
+01
 #686500
-1/
+11
 #687000
-0/
+01
 #687500
-1/
+11
 #688000
-0/
+01
 #688500
-1/
+11
 #689000
-0/
+01
 #689500
-1/
+11
 #690000
-0/
+01
 #690500
-1/
+11
 #691000
-0/
+01
 #691500
-1/
+11
 #692000
-0/
+01
 #692500
-1/
+11
 #693000
-0/
+01
 #693500
-1/
+11
 #694000
-0/
+01
 #694500
-1/
+11
 #695000
-0/
+01
 #695500
-1/
+11
 #696000
-0/
+01
 #696500
-1/
+11
 #697000
-0/
+01
 #697500
-1/
+11
 #698000
-0/
+01
 #698500
-1/
+11
 #699000
-0/
+01
 #699500
-1/
+11
 #700000
-0/
+01
 #700500
-1/
+11
 #701000
-0/
+01
 #701500
-1/
+11
 #702000
-0/
+01
 #702500
-1/
+11
 #703000
-0/
+01
 #703500
-1/
+11
 #704000
-0/
+01
 #704500
-1/
+11
 #705000
-0/
+01
 #705500
-1/
+11
 #706000
-0/
+01
 #706500
-1/
+11
 #707000
-0/
+01
 #707500
-1/
+11
 #708000
-0/
+01
 #708500
-1/
+11
 #709000
-0/
+01
 #709500
-1/
+11
 #710000
-0/
+01
 #710500
-1/
+11
 #711000
-0/
+01
 #711500
-1/
+11
 #712000
-0/
+01
 #712500
-1/
+11
 #713000
-0/
+01
 #713500
-1/
+11
 #714000
-0/
+01
 #714500
-1/
+11
 #715000
-0/
+01
 #715500
-1/
+11
 #716000
-0/
+01
 #716500
-1/
+11
 #717000
-0/
+01
 #717500
-1/
+11
 #718000
-0/
+01
 #718500
-1/
+11
 #719000
-0/
+01
 #719500
-1/
+11
 #720000
-0/
+01
 #720500
-1/
+11
 #721000
-0/
+01
 #721500
-1/
+11
 #722000
-0/
+01
 #722500
-1/
+11
 #723000
-0/
+01
 #723500
-1/
+11
 #724000
-0/
+01
 #724500
-1/
+11
 #725000
-0/
+01
 #725500
-1/
+11
 #726000
-0/
+01
 #726500
-1/
+11
 #727000
-0/
+01
 #727500
-1/
+11
 #728000
-0/
+01
 #728500
-1/
+11
 #729000
-0/
+01
 #729500
-1/
+11
 #730000
-0/
+01
 #730500
-1/
+11
 #731000
-0/
+01
 #731500
-1/
+11
 #732000
-0/
+01
 #732500
-1/
+11
 #733000
-0/
+01
 #733500
-1/
+11
 #734000
-0/
+01
 #734500
-1/
+11
 #735000
-0/
+01
 #735500
-1/
+11
 #736000
-0/
+01
 #736500
-1/
+11
 #737000
-0/
+01
 #737500
-1/
+11
 #738000
-0/
+01
 #738500
-1/
+11
 #739000
-0/
+01
 #739500
-1/
+11
 #740000
-0/
+01
 #740500
-1/
+11
 #741000
-0/
+01
 #741500
-1/
+11
 #742000
-0/
+01
 #742500
-1/
+11
 #743000
-0/
+01
 #743500
-1/
+11
 #744000
-0/
+01
 #744500
-1/
+11
 #745000
-0/
+01
 #745500
-1/
+11
 #746000
-0/
+01
 #746500
-1/
+11
 #747000
-0/
+01
 #747500
-1/
+11
 #748000
-0/
+01
 #748500
-1/
+11
 #749000
-0/
+01
 #749500
-1/
+11
 #750000
-0/
+01
 #750500
-1/
+11
 #751000
-0/
+01
 #751500
-1/
+11
 #752000
-0/
+01
 #752500
-1/
+11
 #753000
-0/
+01
 #753500
-1/
+11
 #754000
-0/
+01
 #754500
-1/
+11
 #755000
-0/
+01
 #755500
-1/
+11
 #756000
-0/
+01
 #756500
-1/
+11
 #757000
-0/
+01
 #757500
-1/
+11
 #758000
-0/
+01
 #758500
-1/
+11
 #759000
-0/
+01
 #759500
-1/
+11
 #760000
-0/
+01
 #760500
-1/
+11
 #761000
-0/
+01
 #761500
-1/
+11
 #762000
-0/
+01
 #762500
-1/
+11
 #763000
-0/
+01
 #763500
-1/
+11
 #764000
-0/
+01
 #764500
-1/
+11
 #765000
-0/
+01
 #765500
-1/
+11
 #766000
-0/
+01
 #766500
-1/
+11
 #767000
-0/
+01
 #767500
-1/
+11
 #768000
-0/
+01
 #768500
-1/
+11
 #769000
-0/
+01
 #769500
-1/
+11
 #770000
-0/
+01
 #770500
-1/
+11
 #771000
-0/
+01
 #771500
-1/
+11
 #772000
-0/
+01
 #772500
-1/
+11
 #773000
-0/
+01
 #773500
-1/
+11
 #774000
-0/
+01
 #774500
-1/
+11
 #775000
-0/
+01
 #775500
-1/
+11
 #776000
-0/
+01
 #776500
-1/
+11
 #777000
-0/
+01
 #777500
-1/
+11
 #778000
-0/
+01
 #778500
-1/
+11
 #779000
-0/
+01
 #779500
-1/
+11
 #780000
-0/
+01
 #780500
-1/
+11
 #781000
-0/
+01
 #781500
-1/
+11
 #782000
-0/
+01
 #782500
-1/
+11
 #783000
-0/
+01
 #783500
-1/
+11
 #784000
-0/
+01
 #784500
-1/
+11
 #785000
-0/
+01
 #785500
-1/
+11
 #786000
-0/
+01
 #786500
-1/
+11
 #787000
-0/
+01
 #787500
-1/
+11
 #788000
-0/
+01
 #788500
-1/
+11
 #789000
-0/
+01
 #789500
-1/
+11
 #790000
-0/
+01
 #790500
-1/
+11
 #791000
-0/
+01
 #791500
-1/
+11
 #792000
-0/
+01
 #792500
-1/
+11
 #793000
-0/
+01
 #793500
-1/
+11
 #794000
-0/
+01
 #794500
-1/
+11
 #795000
-0/
+01
 #795500
-1/
+11
 #796000
-0/
+01
 #796500
-1/
+11
 #797000
-0/
+01
 #797500
-1/
+11
 #798000
-0/
+01
 #798500
-1/
+11
 #799000
-0/
+01
 #799500
-1/
+11
 #800000
-0/
+01
 #800500
-1/
+11
 #801000
-0/
+01
 #801500
-1/
+11
 #802000
-0/
+01
 #802500
-1/
+11
 #803000
-0/
+01
 #803500
-1/
+11
 #804000
-0/
+01
 #804500
-1/
+11
 #805000
-0/
+01
 #805500
-1/
+11
 #806000
-0/
+01
 #806500
-1/
+11
 #807000
-0/
+01
 #807500
-1/
+11
 #808000
-0/
+01
 #808500
-1/
+11
 #809000
-0/
+01
 #809500
-1/
+11
 #810000
-0/
+01
 #810500
-1/
+11
 #811000
-0/
+01
 #811500
-1/
+11
 #812000
-0/
+01
 #812500
-1/
+11
 #813000
-0/
+01
 #813500
-1/
+11
 #814000
-0/
+01
 #814500
-1/
+11
 #815000
-0/
+01
 #815500
-1/
+11
 #816000
-0/
+01
 #816500
-1/
+11
 #817000
-0/
+01
 #817500
-1/
+11
 #818000
-0/
+01
 #818500
-1/
+11
 #819000
-0/
+01
 #819500
-1/
+11
 #820000
-0/
+01
 #820500
-1/
+11
 #821000
-0/
+01
 #821500
-1/
+11
 #822000
-0/
+01
 #822500
-1/
+11
 #823000
-0/
+01
 #823500
-1/
+11
 #824000
-0/
+01
 #824500
-1/
+11
 #825000
-0/
+01
 #825500
-1/
+11
 #826000
-0/
+01
 #826500
-1/
+11
 #827000
-0/
+01
 #827500
-1/
+11
 #828000
-0/
+01
 #828500
-1/
+11
 #829000
-0/
+01
 #829500
-1/
+11
 #830000
-0/
+01
 #830500
-1/
+11
 #831000
-0/
+01
 #831500
-1/
+11
 #832000
-0/
+01
 #832500
-1/
+11
 #833000
-0/
+01
 #833500
-1/
+11
 #834000
-0/
+01
 #834500
-1/
+11
 #835000
-0/
+01
 #835500
-1/
+11
 #836000
-0/
+01
 #836500
-1/
+11
 #837000
-0/
+01
 #837500
-1/
+11
 #838000
-0/
+01
 #838500
-1/
+11
 #839000
-0/
+01
 #839500
-1/
+11
 #840000
-0/
+01
 #840500
-1/
+11
 #841000
-0/
+01
 #841500
-1/
+11
 #842000
-0/
+01
 #842500
-1/
+11
 #843000
-0/
+01
 #843500
-1/
+11
 #844000
-0/
+01
 #844500
-1/
+11
 #845000
-0/
+01
 #845500
-1/
+11
 #846000
-0/
+01
 #846500
-1/
+11
 #847000
-0/
+01
 #847500
-1/
+11
 #848000
-0/
+01
 #848500
-1/
+11
 #849000
-0/
+01
 #849500
-1/
+11
 #850000
-0/
+01
 #850500
-1/
+11
 #851000
-0/
+01
 #851500
-1/
+11
 #852000
-0/
+01
 #852500
-1/
+11
 #853000
-0/
+01
 #853500
-1/
+11
 #854000
-0/
+01
 #854500
-1/
+11
 #855000
-0/
+01
 #855500
-1/
+11
 #856000
-0/
+01
 #856500
-1/
+11
 #857000
-0/
+01
 #857500
-1/
+11
 #858000
-0/
+01
 #858500
-1/
+11
 #859000
-0/
+01
 #859500
-1/
+11
 #860000
-0/
+01
 #860500
-1/
+11
 #861000
-0/
+01
 #861500
-1/
+11
 #862000
-0/
+01
 #862500
-1/
+11
 #863000
-0/
+01
 #863500
-1/
+11
 #864000
-0/
+01
 #864500
-1/
+11
 #865000
-0/
+01
 #865500
-1/
+11
 #866000
-0/
+01
 #866500
-1/
+11
 #867000
-0/
+01
 #867500
-1/
+11
 #868000
-0/
+01
 #868500
-1/
+11
 #869000
-0/
+01
 #869500
-1/
+11
 #870000
-0/
+01
 #870500
-1/
+11
 #871000
-0/
+01
 #871500
-1/
+11
 #872000
-0/
+01
 #872500
-1/
+11
 #873000
-0/
+01
 #873500
-1/
+11
 #874000
-0/
+01
 #874500
-1/
+11
 #875000
-0/
+01
 #875500
-1/
+11
 #876000
-0/
+01
 #876500
-1/
+11
 #877000
-0/
+01
 #877500
-1/
+11
 #878000
-0/
+01
 #878500
-1/
+11
 #879000
-0/
+01
 #879500
-1/
+11
 #880000
-0/
+01
 #880500
-1/
+11
 #881000
-0/
+01
 #881500
-1/
+11
 #882000
-0/
+01
 #882500
-1/
+11
 #883000
-0/
+01
 #883500
-1/
+11
 #884000
-0/
+01
 #884500
-1/
+11
 #885000
-0/
+01
 #885500
-1/
+11
 #886000
-0/
+01
 #886500
-1/
+11
 #887000
-0/
+01
 #887500
-1/
+11
 #888000
-0/
+01
 #888500
-1/
+11
 #889000
-0/
+01
 #889500
-1/
+11
 #890000
-0/
+01
 #890500
-1/
+11
 #891000
-0/
+01
 #891500
-1/
+11
 #892000
-0/
+01
 #892500
-1/
+11
 #893000
-0/
+01
 #893500
-1/
+11
 #894000
-0/
+01
 #894500
-1/
+11
 #895000
-0/
+01
 #895500
-1/
+11
 #896000
-0/
+01
 #896500
-1/
+11
 #897000
-0/
+01
 #897500
-1/
+11
 #898000
-0/
+01
 #898500
-1/
+11
 #899000
-0/
+01
 #899500
-1/
+11
 #900000
-0/
+01
 #900500
-1/
+11
 #901000
-0/
+01
 #901500
-1/
+11
 #902000
-0/
+01
 #902500
-1/
+11
 #903000
-0/
+01
 #903500
-1/
+11
 #904000
-0/
+01
 #904500
-1/
+11
 #905000
-0/
+01
 #905500
-1/
+11
 #906000
-0/
+01
 #906500
-1/
+11
 #907000
-0/
+01
 #907500
-1/
+11
 #908000
-0/
+01
 #908500
-1/
+11
 #909000
-0/
+01
 #909500
-1/
+11
 #910000
-0/
+01
 #910500
-1/
+11
 #911000
-0/
+01
 #911500
-1/
+11
 #912000
-0/
+01
 #912500
-1/
+11
 #913000
-0/
+01
 #913500
-1/
+11
 #914000
-0/
+01
 #914500
-1/
+11
 #915000
-0/
+01
 #915500
-1/
+11
 #916000
-0/
+01
 #916500
-1/
+11
 #917000
-0/
+01
 #917500
-1/
+11
 #918000
-0/
+01
 #918500
-1/
+11
 #919000
-0/
+01
 #919500
-1/
+11
 #920000
-0/
+01
 #920500
-1/
+11
 #921000
-0/
+01
 #921500
-1/
+11
 #922000
-0/
+01
 #922500
-1/
+11
 #923000
-0/
+01
 #923500
-1/
+11
 #924000
-0/
+01
 #924500
-1/
+11
 #925000
-0/
+01
 #925500
-1/
+11
 #926000
-0/
+01
 #926500
-1/
+11
 #927000
-0/
+01
 #927500
-1/
+11
 #928000
-0/
+01
 #928500
-1/
+11
 #929000
-0/
+01
 #929500
-1/
+11
 #930000
-0/
+01
 #930500
-1/
+11
 #931000
-0/
+01
 #931500
-1/
+11
 #932000
-0/
+01
 #932500
-1/
+11
 #933000
-0/
+01
 #933500
-1/
+11
 #934000
-0/
+01
 #934500
-1/
+11
 #935000
-0/
+01
 #935500
-1/
+11
 #936000
-0/
+01
 #936500
-1/
+11
 #937000
-0/
+01
 #937500
-1/
+11
 #938000
-0/
+01
 #938500
-1/
+11
 #939000
-0/
+01
 #939500
-1/
+11
 #940000
-0/
+01
 #940500
-1/
+11
 #941000
-0/
+01
 #941500
-1/
+11
 #942000
-0/
+01
 #942500
-1/
+11
 #943000
-0/
+01
 #943500
-1/
+11
 #944000
-0/
+01
 #944500
-1/
+11
 #945000
-0/
+01
 #945500
-1/
+11
 #946000
-0/
+01
 #946500
-1/
+11
 #947000
-0/
+01
 #947500
-1/
+11
 #948000
-0/
+01
 #948500
-1/
+11
 #949000
-0/
+01
 #949500
-1/
+11
 #950000
-0/
+01
 #950500
-1/
+11
 #951000
-0/
+01
 #951500
-1/
+11
 #952000
-0/
+01
 #952500
-1/
+11
 #953000
-0/
+01
 #953500
-1/
+11
 #954000
-0/
+01
 #954500
-1/
+11
 #955000
-0/
+01
 #955500
-1/
+11
 #956000
-0/
+01
 #956500
-1/
+11
 #957000
-0/
+01
 #957500
-1/
+11
 #958000
-0/
+01
 #958500
-1/
+11
 #959000
-0/
+01
 #959500
-1/
+11
 #960000
-0/
+01
 #960500
-1/
+11
 #961000
-0/
+01
 #961500
-1/
+11
 #962000
-0/
+01
 #962500
-1/
+11
 #963000
-0/
+01
 #963500
-1/
+11
 #964000
-0/
+01
 #964500
-1/
+11
 #965000
-0/
+01
 #965500
-1/
+11
 #966000
-0/
+01
 #966500
-1/
+11
 #967000
-0/
+01
 #967500
-1/
+11
 #968000
-0/
+01
 #968500
-1/
+11
 #969000
-0/
+01
 #969500
-1/
+11
 #970000
-0/
+01
 #970500
-1/
+11
 #971000
-0/
+01
 #971500
-1/
+11
 #972000
-0/
+01
 #972500
-1/
+11
 #973000
-0/
+01
 #973500
-1/
+11
 #974000
-0/
+01
 #974500
-1/
+11
 #975000
-0/
+01
 #975500
-1/
+11
 #976000
-0/
+01
 #976500
-1/
+11
 #977000
-0/
+01
 #977500
-1/
+11
 #978000
-0/
+01
 #978500
-1/
+11
 #979000
-0/
+01
 #979500
-1/
+11
 #980000
-0/
+01
 #980500
-1/
+11
 #981000
-0/
+01
 #981500
-1/
+11
 #982000
-0/
+01
 #982500
-1/
+11
 #983000
-0/
+01
 #983500
-1/
+11
 #984000
-0/
+01
 #984500
-1/
+11
 #985000
-0/
+01
 #985500
-1/
+11
 #986000
-0/
+01
 #986500
-1/
+11
 #987000
-0/
+01
 #987500
-1/
+11
 #988000
-0/
+01
 #988500
-1/
+11
 #989000
-0/
+01
 #989500
-1/
+11
 #990000
-0/
+01
 #990500
-1/
+11
 #991000
-0/
+01
 #991500
-1/
+11
 #992000
-0/
+01
 #992500
-1/
+11
 #993000
-0/
+01
 #993500
-1/
+11
 #994000
-0/
+01
 #994500
-1/
+11
 #995000
-0/
+01
 #995500
-1/
+11
 #996000
-0/
+01
 #996500
-1/
+11
 #997000
-0/
+01
 #997500
-1/
+11
 #998000
-0/
+01
 #998500
-1/
+11
 #999000
-0/
+01
 #999500
-1/
+11
 #1000000
-0/
+01
 #1000500
-1/
+11
 #1001000
-0/
+01
+#1001500
+11
+#1002000
+01
+#1002500
+11
+#1003000
+01
+#1003500
+11
+#1004000
+01
+#1004500
+11
+#1005000
+01
+#1005500
+11
+#1006000
+01
+#1006500
+11
+#1007000
+01
+#1007500
+11
+#1008000
+01
+#1008500
+11
+#1009000
+01
+#1009500
+11
+#1010000
+01

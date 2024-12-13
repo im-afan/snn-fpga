@@ -1,3 +1,6 @@
+
+/* PASSED TESTS */
+
 module weight_fifo #(
 	parameter integer CROSSBAR_NEURONS,
 	parameter integer BRAM_DATA_WIDTH,

@@ -1,3 +1,12 @@
+/* PASSED TESTS */
+
+/*
+ * Asynchronous streaming BRAM
+ * Streams BRAM and pushes to FIFOs neccessary for spike accumulation
+ * in synaptic array
+ * reads: weight, spk_in, tile_idx
+ */
+
 module xbar_bram #(
     parameter integer BRAM_ADDR_WIDTH,
     parameter integer BRAM_DATA_WIDTH,
@@ -31,7 +40,8 @@ module xbar_bram #(
     output reg [BRAM_DATA_WIDTH-1:0] din,
     output reg bram_en,
     output reg bram_rst,
-    output reg [BRAM_DATA_WIDTH/8-1:0] bram_we
+    output reg [BRAM_DATA_WIDTH/8-1:0] bram_we,
+    input wire bram_active
 );
     localparam integer SEND = 0; // send addr to bram
     localparam integer WAIT = 1; // wait for bram
@@ -59,6 +69,8 @@ module xbar_bram #(
     reg [4:0] param_step;
     reg [15:0] tile_idx;
     reg [15:0] weight_idx; // takes multiple steps to read weight
+    wire tiles_done;
+    assign tiles_done = (tile_idx == MAX_TILES);
 
     wire fifo_done;
     assign fifo_done = (weight_fifo_push_done || ~weight_fifo_push) && (spk_in_fifo_push_done || ~spk_in_fifo_push)
@@ -94,8 +106,9 @@ module xbar_bram #(
             param_step <= READ_IDX;
             tile_idx <= 0;
             weight_idx <= 0;
+            bram_en <= 0;
         end else begin
-            if(fifo_done && ~fifo_full) begin
+            if(fifo_done && ~fifo_full && ~tiles_done) begin
                 if(bram_step == SEND) begin
                     case(param_step)
                         READ_IDX: addr <= TILE_IDX_OFFSET + tile_idx * 2*TILE_IDX_WIDTH/8;
@@ -126,7 +139,7 @@ module xbar_bram #(
                         bram_step <= INCREMENT;
                         bram_en <= 0;
                     end else begin
-                        bram_done <= 1; // wait 1 clock cycle for bram to finish
+                        bram_done <= bram_active; // wait 1 clock cycle for bram to finish if it is active
                     end
                 end else if(bram_step == INCREMENT) begin
                     case(param_step)
@@ -142,8 +155,7 @@ module xbar_bram #(
                             end
                         end
                         READ_SPK: begin
-                            if(tile_idx+1 < MAX_TILES) tile_idx <= tile_idx + 1;
-                            else tile_idx <= 0;
+                            tile_idx <= tile_idx + 1;
                             param_step <= READ_IDX;
                         end
                     endcase

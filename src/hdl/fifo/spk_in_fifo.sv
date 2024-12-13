@@ -2,6 +2,8 @@
  * fifo for core inputs spikes
  */
 
+/* PASSED TESTS */
+
 module spk_in_fifo #(
 	parameter integer CROSSBAR_NEURONS,
 	parameter integer BRAM_DATA_WIDTH,

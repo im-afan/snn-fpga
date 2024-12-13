@@ -2,6 +2,8 @@
  * fifo for tile idx 
  */
 
+/* PASSED TESTS */
+
 module tile_idx_fifo #(
 	parameter integer CROSSBAR_NEURONS,
 	parameter integer BRAM_DATA_WIDTH,

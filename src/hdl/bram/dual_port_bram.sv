@@ -1,6 +1,14 @@
+/* PASSED TESTS */
+
+/*
+ * FOR SIMULATION USE ONLY
+ * USE BLOCK MEMORY GENERATOR IN DEPLOYMENT
+ * True dual-port RAM
+ */
+
 module dual_port_bram #(
-    parameter BRAM_DATA_WIDTH = 32,
-    parameter BRAM_ADDR_WIDTH = 10
+    parameter BRAM_DATA_WIDTH,
+    parameter BRAM_ADDR_WIDTH
 )(
     input wire clka,
     // Port A signals
@@ -27,7 +35,7 @@ module dual_port_bram #(
         for(integer asdf = 0; asdf < 1024; asdf++) begin
             mem[asdf] = 0;
         end
-        $readmemb("bram.mem", mem);
+        $readmemb("/home/andrew/Desktop/snn-soc/src/hdl/bram/bram.mem", mem);
     end
 
     integer i;

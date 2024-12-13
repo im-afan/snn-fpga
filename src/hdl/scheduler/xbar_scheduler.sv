@@ -1,56 +1,59 @@
-module scheduler #(
-    parameter integer MAX_NEURONS,
+/* TODO TEST */
+
+module xbar_scheduler #(
     parameter integer NETWORK_WIDTH,
-    parameter integer NEURONS_PER_TILE,
-    parameter integer BRAM_ADDR_WIDTH,
-    parameter integer BRAM_DATA_WIDTH,
-    parameter integer MAX_TILES,
+    parameter integer CROSSBAR_NEURONS,
     parameter integer TILE_IDX_WIDTH
 ) (
 	input wire clk,
 	input wire en,
 
+	input wire crossbar_done,
+
 	input wire weight_fifo_empty,
 	input wire spk_in_fifo_empty,
 	input wire tile_idx_fifo_empty,
+	input wire mac_out_fifo_full,
 
 	input wire weight_fifo_pop_done,
 	input wire spk_in_fifo_pop_done,
 	input wire tile_idx_fifo_pop_done,
-
-	input wire crossbar_done,
-
-	input wire [NETWORK_WIDTH-1:0] weight [NEURONS_PER_TILE][NEURONS_PER_TILE],
-	input wire [NEURONS_PER_TILE-1:0] spk_in,
-	input wire [TILE_IDX_WIDTH-1:0] tile_idx_x_in,
-	input wire [TILE_IDX_WIDTH-1:0] tile_idx_y_in,
+	input wire mac_out_fifo_push_done,
 
 	output reg weight_fifo_pop,
 	output reg spk_in_fifo_pop,
 	output reg tile_idx_fifo_pop,
+	output reg mac_out_fifo_push,
 
-	output wire [NEURONS_PER_TILE-1:0] spk_out,
-	output wire [TILE_IDX_WIDTH-1:0] tile_idx_x_out,
-	output wire [TILE_IDX_WIDTH-1:0] tile_idx_y_out,
-
-	output reg crossbar_en,
-	output reg lif_en
+	output reg crossbar_en
 );
 	wire ready;
 	wire pop_done;
-	assign ready = ~(weight_fifo_empty || spk_in_fifo_empty || tile_idx_fifo_empty);
-	assign pop_done = weight_fifo_pop_done && spk_in_fifo_pop_done && tile_idx_fifo_pop_done;
+	assign ready = ~(weight_fifo_empty || spk_in_fifo_empty || tile_idx_fifo_empty) && ~mac_out_fifo_full;
+	assign pop_done = (weight_fifo_pop_done && spk_in_fifo_pop_done && tile_idx_fifo_pop_done && mac_out_fifo_push) 
+					|| ~(weight_fifo_pop || spk_in_fifo_pop || tile_idx_fifo_pop || mac_out_fifo_push);
 
 	always @(posedge clk) begin
-		if(en) begin
+		if(~en) begin
+			crossbar_en <= 0;
+			weight_fifo_pop <= 0;
+			spk_in_fifo_pop <= 0;
+			tile_idx_fifo_pop <= 0;
+			mac_out_fifo_push <= 0;
+		end else begin
 			if(ready && pop_done) begin
 				if(~crossbar_done) begin
 					crossbar_en <= 1;	
+					weight_fifo_pop <= 0;
+					spk_in_fifo_pop <= 0;
+					tile_idx_fifo_pop <= 0;
+					mac_out_fifo_push <= 0;
 				end else begin
 					crossbar_en <= 0;
 					weight_fifo_pop <= 1;
 					spk_in_fifo_pop <= 1;
 					tile_idx_fifo_pop <= 1;
+					mac_out_fifo_push <= 1;
 				end
 			end	else begin 
 				crossbar_en <= 0;

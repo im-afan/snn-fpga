@@ -1,6 +1,10 @@
+/* TODO UNTESTED */
+
 /*
-Most priority to least priority:
-0 = highest 3 = lowest
+ * Gives BRAM ports to the ones with most priority
+ * Because we have 3 writes at a time but CPU is least important
+ * Most priority to least priority:
+ * 0 = highest 3 = lowest
 */
 
 module bram_switcher #(

@@ -2,6 +2,8 @@
  * fifo for input mem potential 
  */
 
+/* PASSED TESTS */
+
 module mem_in_fifo #(
 	parameter integer CROSSBAR_NEURONS,
 	parameter integer BRAM_DATA_WIDTH,

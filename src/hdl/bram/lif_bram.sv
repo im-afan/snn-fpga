@@ -1,3 +1,12 @@
+/* PASSED TESTS */
+
+/*
+ * Synchronous BRAM
+ * Reads and writes neccessary values for LIF
+ * writes: mem_out, spk_out, reads: mem_in, mem_out
+ * tile_idx_x, tile_idx_y are FIFO inputs
+*/
+
 module lif_bram #(
     parameter integer BRAM_ADDR_WIDTH,
     parameter integer BRAM_DATA_WIDTH,
@@ -28,7 +37,8 @@ module lif_bram #(
     output reg [BRAM_DATA_WIDTH-1:0] din,
     output reg bram_en,
     output reg bram_rst,
-    output wire [BRAM_DATA_WIDTH/8-1:0] bram_we
+    output wire [BRAM_DATA_WIDTH/8-1:0] bram_we,
+    input wire bram_active
 );
     localparam integer SEND = 0;
     localparam integer WAIT = 1;
@@ -154,7 +164,7 @@ module lif_bram #(
                             bram_en <= 0;
                             bram_step <= INCREMENT;
                         end else begin
-                            bram_done <= 1;
+                            bram_done <= bram_active;
                         end
                     end else if(bram_step == INCREMENT) begin
                         if(param_step == MEM) param_step <= SPK;

@@ -23,10 +23,37 @@ FLAGS_OFFSET = SPK_OUT_OFFSET + SPK_OUT_BITS;
 MEM_OFFSET = FLAGS_OFFSET + FLAGS_BITS;
 
 tile_idx = [[0, 0] for i in range(MAX_TILES)]
-tile = [[[i for i in range(CROSSBAR_NEURONS)] for i in range(CROSSBAR_NEURONS)] for i in range(MAX_TILES)]
+tile = [[[0 for i in range(CROSSBAR_NEURONS)] for i in range(CROSSBAR_NEURONS)] for i in range(MAX_TILES)]
 mem = [i%256 for i in range(MAX_NEURONS)]
-#arr = ["0" for i in range(1024)]
+snn_in = [0 for i in range(MAX_NEURONS)]
 memory = ["0" for i in range(BRAM_DATA_WIDTH*1024)] 
+
+snn_in[0] = 32;
+snn_in[1] = 32;
+snn_in[3] = 32;
+
+tile[0][0][4] = 32;
+tile[0][0][5] = -32;
+tile[0][1][4] = -32;
+tile[0][1][5] = 32;
+tile[0][2][6] = 32;
+tile[0][2][7] = -32;
+tile[0][3][6] = -32;
+tile[0][3][7] = 32;
+
+tile[0][4][8] = 32;
+tile[0][5][8] = 32;
+tile[0][6][9] = 32;
+tile[0][7][9] = 32;
+
+tile[0][8][10] = 32;
+tile[0][8][11] = -32;
+tile[0][9][10] = -32;
+tile[0][9][11] = 32;
+
+tile[1][10][0] = 32;
+tile[1][11][0] = 32;
+
 
 for i in range(MAX_TILES):
 	tile_idx[i] = [i // 8, i % 8]
@@ -58,6 +85,10 @@ for i in range(0, MAX_TILES):
             base = WEIGHT_OFFSET + (i*CROSSBAR_NEURONS*CROSSBAR_NEURONS + j*CROSSBAR_NEURONS + k) * NETWORK_WIDTH
             #print(base, bin_(tile[i][j][k], 8))
             memory[base:base+NETWORK_WIDTH] = bin_(tile[i][j][k], NETWORK_WIDTH)
+
+for i in range(0, MAX_NEURONS):
+    base = NETWORK_INPUT_OFFSET + i*NETWORK_WIDTH
+    memory[base:base+NETWORK_WIDTH] = bin_(snn_in[i], NETWORK_WIDTH);
 
 for i in range(0, MAX_NEURONS):
     base = MEM_OFFSET + i*NETWORK_WIDTH
