@@ -1,4 +1,4 @@
-`include "lif.sv"
+`include "snn/lif.sv"
 
 /* TODO UNTESTED */
 
@@ -13,14 +13,28 @@ module lif_array #(
     input wire bram_done,
 
     input wire [CROSSBAR_NEURONS] spk_in,
-    input wire [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS],
-    input wire [NETWORK_WIDTH-1:0] mac_in [CROSSBAR_NEURONS],
+    input wire [NETWORK_WIDTH-1:0] u_mem_in [CROSSBAR_NEURONS],
+    input wire [NETWORK_WIDTH-1:0] u_mac_out [CROSSBAR_NEURONS],
 
     output reg [CROSSBAR_NEURONS-1:0] spk_out,
-    output reg [NETWORK_WIDTH-1:0] mem_out [CROSSBAR_NEURONS],
-    output wire done,
-    output reg bram_we
+    output reg [NETWORK_WIDTH-1:0] u_mem_out [CROSSBAR_NEURONS],
+    output reg done,
+    output reg bram_we,
+    output reg bram_enable
 );
+    wire signed [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS];
+    wire signed [NETWORK_WIDTH-1:0] mac_out [CROSSBAR_NEURONS];
+    reg signed [NETWORK_WIDTH-1:0] mem_out[CROSSBAR_NEURONS];
+
+    generate
+        genvar i;
+        for(i = 0 ; i < CROSSBAR_NEURONS; i++) begin
+            assign mem_in[i] = signed'(u_mem_in[i]);
+            assign mac_out[i] = signed'(mac_out[i]);
+            assign u_mem_out[i] = unsigned'(mem_out[i]);
+        end
+    endgenerate
+
     localparam READ = 0;
     localparam LIF = 1;
     localparam WRITE = 2;
@@ -33,7 +47,7 @@ module lif_array #(
     assign all_lif_done = lif_done;
 
     generate
-        genvar i;
+        //genvar i;
         for(i = 0; i < CROSSBAR_NEURONS; i++) begin
             lif #(
                 .THRESH(THRESH),
@@ -42,7 +56,7 @@ module lif_array #(
                 .clk(clk),
                 .enable(lif_enable),
                 .spk_in(spk_in[i]),
-                .mac_in(mac_in[i]),
+                .mac_out(mac_out[i]),
                 .mem_in(mem_in[i]),
                 .spk_out(spk_out[i]),
                 .mem_out(mem_out[i]),
@@ -58,7 +72,7 @@ module lif_array #(
             done <= 0;
         end else begin
             if(~done) begin
-                case step:
+                case(step)
                     READ: begin
                         if(~bram_enable) begin
                             bram_we <= 0;

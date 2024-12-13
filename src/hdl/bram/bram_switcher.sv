@@ -16,24 +16,24 @@ module bram_switcher #(
     input wire [BRAM_ADDR_WIDTH-1:0] addr[3:0],
     input wire [BRAM_DATA_WIDTH/8-1:0] we[3:0],
     input wire [BRAM_DATA_WIDTH-1:0] din[3:0],
-    output wire [BRAM_DATA_WIDTH-1:0] dout[3:0],
-    output wire active [3:0],
+    output reg [BRAM_DATA_WIDTH-1:0] dout[3:0],
+    output reg active [3:0],
 
-    output wire clka,
-    output wire ena,
-    output wire [BRAM_ADDR_WIDTH-1:0] addra,
-    output wire [BRAM_DATA_WIDTH/8-1:0] wea,
-    output wire [BRAM_DATA_WIDTH-1:0] dina,
+    output reg clka,
+    output reg ena,
+    output reg [BRAM_ADDR_WIDTH-1:0] addra,
+    output reg [BRAM_DATA_WIDTH/8-1:0] wea,
+    output reg [BRAM_DATA_WIDTH-1:0] dina,
     input wire [BRAM_DATA_WIDTH-1:0] douta,
 
-    output wire clkb,
-    output wire enb,
-    output wire [BRAM_ADDR_WIDTH-1:0] addrb,
-    output wire [BRAM_DATA_WIDTH/8-1:0] web,
-    output wire [BRAM_DATA_WIDTH-1:0] dinb,
+    output reg clkb,
+    output reg enb,
+    output reg [BRAM_ADDR_WIDTH-1:0] addrb,
+    output reg [BRAM_DATA_WIDTH/8-1:0] web,
+    output reg [BRAM_DATA_WIDTH-1:0] dinb,
     input wire [BRAM_DATA_WIDTH-1:0] doutb
 ); 
-    wire a_used, b_used;
+    reg a_used, b_used;
 
     always @(*) begin
         a_used = 0;

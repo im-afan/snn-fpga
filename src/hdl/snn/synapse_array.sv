@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "synapse.sv"
+`include "snn/synapse.sv"
 
 /**
  * neuromorphic core 
@@ -16,18 +16,32 @@ module synapse_array#(
     input wire clk,
     input wire enable,
 
-    input wire signed [NETWORK_WIDTH-1:0] weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS],
+    input wire [NETWORK_WIDTH-1:0] u_weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS],
     input wire [CROSSBAR_NEURONS-1:0] spk_in,
-    output reg signed [NETWORK_WIDTH-1:0] mac_out [CROSSBAR_NEURONS],
+    output reg [NETWORK_WIDTH-1:0] u_mac_out [CROSSBAR_NEURONS],
     output reg done
 );
+
+    wire signed [NETWORK_WIDTH-1:0] weight[CROSSBAR_NEURONS][CROSSBAR_NEURONS];
+    wire signed [NETWORK_WIDTH-1:0] mac_out[CROSSBAR_NEURONS];
+
+    generate
+        genvar i, j;
+        for(i = 0; i < CROSSBAR_NEURONS; i++) begin
+            for(j = 0; j < CROSSBAR_NEURONS; j++) begin
+                assign weight[i][j] = signed'(u_weight[i][j]);
+            end
+            assign u_mac_out[i] = unsigned'(mac_out[i]);
+        end
+    endgenerate
+
     
     reg [CROSSBAR_NEURONS*CROSSBAR_NEURONS-1:0] synapse_done;
     assign done = &synapse_done && enable;
 
     generate
-        genvar i;
-        genvar j;
+        //genvar i;
+        //genvar j;
     
         for(i=0; i<CROSSBAR_NEURONS; i++) begin // west to east
             wire signed [NETWORK_WIDTH-1:0] column [CROSSBAR_NEURONS];

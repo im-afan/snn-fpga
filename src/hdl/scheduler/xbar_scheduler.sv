@@ -1,10 +1,6 @@
 /* TODO TEST */
 
-module xbar_scheduler #(
-    parameter integer NETWORK_WIDTH,
-    parameter integer CROSSBAR_NEURONS,
-    parameter integer TILE_IDX_WIDTH
-) (
+module xbar_scheduler (
 	input wire clk,
 	input wire en,
 

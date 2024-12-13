@@ -14,7 +14,7 @@ module lif#(
     input wire enable,
 
     input wire spk_in, // inhibit multiple spks in 1 timestep
-    input wire signed [NETWORK_WIDTH-1:0] mac_in,
+    input wire signed [NETWORK_WIDTH-1:0] mac_out,
     input wire signed [NETWORK_WIDTH-1:0] mem_in,
 
     output reg spk_out,
@@ -25,8 +25,8 @@ module lif#(
     wire signed [NETWORK_WIDTH-1:0] sum;
     wire signed [NETWORK_WIDTH-1:0] sum_clamp;
     wire overflow;
-    assign sum = mem_in+mac_in;
-    assign overflow = (mem_in[NETWORK_WIDTH-1] == mac_in[NETWORK_WIDTH-1]) && (mem_in[NETWORK_WIDTH-1] != sum[NETWORK_WIDTH-1]);
+    assign sum = mem_in+mac_out;
+    assign overflow = (mem_in[NETWORK_WIDTH-1] == mac_out[NETWORK_WIDTH-1]) && (mem_in[NETWORK_WIDTH-1] != sum[NETWORK_WIDTH-1]);
     assign sum_clamp = overflow ? (mem_in[NETWORK_WIDTH-1] ? -THRESH : THRESH) : sum;
 
     always @(posedge clk or negedge enable) begin

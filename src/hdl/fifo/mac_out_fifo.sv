@@ -11,11 +11,12 @@ module mac_out_fifo #(
 	parameter integer LENGTH
 )(
 	input wire clk,
+	input wire en,
 	input wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] din,
 	input wire push,
 	input wire pop,
 
-	output wire signed [NETWORK_WIDTH-1:0] mac_out [CROSSBAR_NEURONS],
+	output wire [NETWORK_WIDTH-1:0] mac_out [CROSSBAR_NEURONS],
 	output wire full,
 	output wire empty,
 
@@ -37,25 +38,32 @@ module mac_out_fifo #(
 	assign empty = (cnt == 0);
 
 	always @(posedge clk) begin
-		if(pop && ~pop_done) begin
-			buffer <= (buffer >> WIDTH);
+		if(~en) begin
 			pop_done <= 1;
-			if(~empty) begin
-				cnt <= cnt-1;
-			end
-		end	else if(push && ~push_done) begin
-			if(~full) begin
-				buffer <= (buffer | (din << (cnt*WIDTH)));
-				cnt <= cnt+1;	
-			end
 			push_done <= 1;
-		end
+			buffer <= 0;
+			cnt <= 0;
+		end else begin
+			if(pop && ~pop_done) begin
+				buffer <= (buffer >> WIDTH);
+				pop_done <= 1;
+				if(~empty) begin
+					cnt <= cnt-1;
+				end
+			end	else if(push && ~push_done) begin
+				if(~full) begin
+					buffer <= (buffer | (din << (cnt*WIDTH)));
+					cnt <= cnt+1;	
+				end
+				push_done <= 1;
+			end
 
-		if(~pop) begin
-			pop_done <= 0;
-		end
-		if(~push) begin
-			push_done <= 0;
+			if(~pop) begin
+				pop_done <= 0;
+			end
+			if(~push) begin
+				push_done <= 0;
+			end
 		end
 	end
 endmodule

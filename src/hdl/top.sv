@@ -1,4 +1,3 @@
-`include "fifo/mem_in_fifo.sv"
 `include "fifo/spk_in_fifo.sv"
 `include "fifo/tile_idx_fifo.sv"
 `include "fifo/weight_fifo.sv"
@@ -8,7 +7,10 @@
 `include "bram/dual_port_bram.sv"
 `include "bram/lif_bram.sv"
 `include "bram/xbar_bram.sv"
+`include "bram/input_bram.sv"
 `include "bram/bram_switcher.sv"
+`include "scheduler/lif_scheduler.sv"
+`include "scheduler/xbar_scheduler.sv"
 
 module top (
     input wire clk,
@@ -47,7 +49,7 @@ module top (
     wire [BRAM_DATA_WIDTH-1:0] input_bram_din;
     wire input_bram_en;
     wire input_bram_rst;
-    wire input_bram_we;
+    wire [BRAM_DATA_WIDTH/8-1:0] input_bram_we;
     wire input_bram_active;
 
     wire xbar_bram_clk;
@@ -56,7 +58,7 @@ module top (
     wire [BRAM_DATA_WIDTH-1:0] xbar_bram_din;
     wire xbar_bram_en;
     wire xbar_bram_rst;
-    wire xbar_bram_we;
+    wire [BRAM_DATA_WIDTH/8-1:0] xbar_bram_we;
     wire xbar_bram_active;
 
     wire lif_bram_clk;
@@ -65,25 +67,27 @@ module top (
     wire [BRAM_DATA_WIDTH-1:0] lif_bram_din;
     wire lif_bram_en;
     wire lif_bram_rst;
-    wire lif_bram_we;
+    wire [BRAM_DATA_WIDTH/8-1:0] lif_bram_we;
     wire lif_bram_active;
+    wire lif_we;
     
-    wire switcher_bram_clk[2:0];
-    wire [BRAM_ADDR_WIDTH-1:0] switcher_bram_addr[2:0];
-    wire [BRAM_DATA_WIDTH-1:0] switcher_bram_dout[2:0];
-    wire [BRAM_DATA_WIDTH-1:0] switcher_bram_din[2:0];
-    wire switcher_bram_en[2:0];
-    wire switcher_bram_rst[2:0];
-    wire switcher_bram_we[2:0];
+    wire switcher_bram_clk[3:0];
+    wire [BRAM_ADDR_WIDTH-1:0] switcher_bram_addr[3:0];
+    wire [BRAM_DATA_WIDTH-1:0] switcher_bram_dout[3:0];
+    wire [BRAM_DATA_WIDTH-1:0] switcher_bram_din[3:0];
+    wire switcher_bram_en[3:0];
+    wire switcher_bram_rst[3:0];
+    wire [BRAM_DATA_WIDTH/8-1:0] switcher_bram_we[3:0];
+    wire switcher_bram_active[3:0];
 
-    assign switcher_bram_clk[0] = lif_bram_clk;
-    assign switcher_bram_addr[0] = lif_bram_addr;
-    assign switcher_bram_dout[0] = lif_bram_dout;
-    assign switcher_bram_din[0] = lif_bram_din;
-    assign switcher_bram_en[0] = lif_bram_en;
-    assign switcher_bram_rst[0] = lif_bram_rst;
-    assign switcher_bram_we[0] = lif_bram_we;
-    assign switcher_bram_active[0] = lif_bram_active;
+    assign switcher_bram_clk[2] = lif_bram_clk;
+    assign switcher_bram_addr[2] = lif_bram_addr;
+    assign switcher_bram_dout[2] = lif_bram_dout;
+    assign switcher_bram_din[2] = lif_bram_din;
+    assign switcher_bram_en[2] = lif_bram_en;
+    assign switcher_bram_rst[2] = lif_bram_rst;
+    assign switcher_bram_we[2] = lif_bram_we;
+    assign switcher_bram_active[2] = lif_bram_active;
 
     assign switcher_bram_clk[1] = xbar_bram_clk;
     assign switcher_bram_addr[1] = xbar_bram_addr;
@@ -93,20 +97,20 @@ module top (
     assign switcher_bram_rst[1] = xbar_bram_rst;
     assign switcher_bram_active[1] = xbar_bram_active;
 
-    assign switcher_bram_clk[2] = input_bram_clk;
-    assign switcher_bram_addr[2] = input_bram_addr;
-    assign switcher_bram_dout[2] = input_bram_dout;
-    assign switcher_bram_din[2] = input_bram_din;
-    assign switcher_bram_en[2] = input_bram_en;
-    assign switcher_bram_rst[2] = input_bram_rst;
-    assign switcher_bram_active[2] = input_bram_active;
+    assign switcher_bram_clk[0] = input_bram_clk;
+    assign switcher_bram_addr[0] = input_bram_addr;
+    assign switcher_bram_dout[0] = input_bram_dout;
+    assign switcher_bram_din[0] = input_bram_din;
+    assign switcher_bram_en[0] = input_bram_en;
+    assign switcher_bram_rst[0] = input_bram_rst;
+    assign switcher_bram_active[0] = input_bram_active;
 
     wire [TILE_IDX_WIDTH-1:0] tile_idx_x;
     wire [TILE_IDX_WIDTH-1:0] tile_idx_y;
     wire [NETWORK_WIDTH-1:0] mem_out [CROSSBAR_NEURONS];
     wire [CROSSBAR_NEURONS-1:0] spk_out;
     wire [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS];
-    wire [NETWORK_WIDTH-1:0] mac_in [CROSSBAR_NEURONS];
+    wire [NETWORK_WIDTH-1:0] mac_out [CROSSBAR_NEURONS];
     wire [CROSSBAR_NEURONS-1:0] spk_in;
     wire [NETWORK_WIDTH-1:0] weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS];
 
@@ -114,6 +118,7 @@ module top (
 
     wire weight_fifo_full;
     wire weight_fifo_push_done;
+    wire weight_fifo_pop_done;
     wire weight_fifo_push;
     wire weight_fifo_pop;
     wire weight_fifo_empty;
@@ -121,6 +126,7 @@ module top (
 
     wire spk_in_fifo_full;
     wire spk_in_fifo_push_done;
+    wire spk_in_fifo_pop_done;
     wire spk_in_fifo_push;
     wire spk_in_fifo_pop;
     wire spk_in_fifo_empty;
@@ -133,12 +139,19 @@ module top (
     wire tile_idx_fifo_empty;
     wire [2*TILE_IDX_WIDTH-1:0] tile_idx_fifo_din;
 
-    wire mac_in_fifo_full;
-    wire mac_in_fifo_push_done;
-    wire mac_in_fifo_push;
-    wire mac_in_fifo_pop;
-    wire mac_in_fifo_empty;
-    wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] mac_in_fifo_din;
+    wire mac_out_fifo_full;
+    wire mac_out_fifo_push_done;
+    wire mac_out_fifo_pop_done;
+    wire mac_out_fifo_push;
+    wire mac_out_fifo_pop;
+    wire mac_out_fifo_empty;
+    wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] mac_out_fifo_din;
+
+    wire lif_array_done;
+    wire lif_array_en;
+
+    wire synapse_array_done;
+    wire synapse_array_en;
 
     dual_port_bram #(
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -181,7 +194,7 @@ module top (
         .addrb(addrb),
         .web(web),
         .dinb(dinb),
-        .doutb(doutb),
+        .doutb(doutb)
     );
 
     lif_bram #(
@@ -195,7 +208,7 @@ module top (
     ) lif_bram_0 (
         .clk(clk),
         .enable(lif_bram_en),
-        .we(lif_bram_we),
+        .we(lif_we),
         .tile_idx_x(tile_idx_x),
         .tile_idx_y(tile_idx_y),
         .mem_out(mem_out),
@@ -223,7 +236,6 @@ module top (
     ) xbar_bram_0 (
         .clk(clk),
         .enable(xbar_bram_en),
-        .we(xbar_bram_we),
 
         .weight_fifo_full(weight_fifo_full),
         .weight_fifo_push_done(weight_fifo_push_done),
@@ -250,6 +262,14 @@ module top (
     );
 
     input_bram #(
+        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+        .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
+        .NETWORK_WIDTH(NETWORK_WIDTH),
+        .MAX_TILES(MAX_TILES),
+        .TILE_IDX_WIDTH(TILE_IDX_WIDTH),
+        .MAX_NEURONS(MAX_NEURONS),
+        .CROSSBAR_NEURONS(CROSSBAR_NEURONS)
+    ) input_bram_0 (
         .clk(clk),
         .enable(input_bram_en),
 
@@ -300,6 +320,14 @@ module top (
         .clk(clk),
         .en(en),
         .din(tile_idx_fifo_din),
+        .push(tile_idx_fifo_push),
+        .pop(tile_idx_fifo_pop),
+        .tile_idx_x(tile_idx_x),
+        .tile_idx_y(tile_idx_y),
+        .full(tile_idx_fifo_full),
+        .empty(tile_idx_fifo_empty),
+        .push_done(tile_idx_fifo_push_done),
+        .pop_done(tile_idx_fifo_pop_done)
     );
 
     /*tile_idx_fifo #( TODO maybe dont need this? maybe do.
@@ -312,22 +340,22 @@ module top (
 
     );*/
 
-    mem_in_fifo #(
-        .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
-        .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
-        .NETWORK_WIDTH(NETWORK_WIDTH),
-        .LENGTH(FIFO_LENGTH)       
-    ) mem_in_fifo_0 (
-
-    );
-
     spk_in_fifo #(
         .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
         .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
         .NETWORK_WIDTH(NETWORK_WIDTH),
         .LENGTH(FIFO_LENGTH)       
     ) spk_in_fifo_0 (
-        
+        .clk(clk),
+        .en(en),
+        .din(spk_in_fifo_din),
+        .push(spk_in_fifo_push),
+        .pop(spk_in_fifo_pop),
+        .spk_in(spk_in),
+        .full(spk_in_fifo_full),
+        .empty(spk_in_fifo_empty),
+        .pop_done(spk_in_fifo_pop_done),
+        .push_done(spk_in_fifo_push_done) 
     );
 
     mac_out_fifo #(
@@ -336,21 +364,83 @@ module top (
         .NETWORK_WIDTH(NETWORK_WIDTH),
         .LENGTH(FIFO_LENGTH)       
     ) mac_out_fifo_0 (
-
+        .clk(clk),
+        .en(en),
+        .din(mac_out_fifo_din),
+        .push(mac_out_fifo_push),
+        .pop(mac_out_fifo_pop),
+        .mac_out(mac_out),
+        .full(mac_out_fifo_full),
+        .empty(mac_out_fifo_empty),
+        .pop_done(mac_out_fifo_pop_done),
+        .push_done(mac_out_fifo_push_done) 
     );
+
+    lif_scheduler lif_scheduler_0 (
+        .clk(clk),
+        .en(en),
+        .lif_done(lif_array_done),
+        .mac_out_fifo_empty(mac_out_fifo_empty),
+        .mac_out_fifo_pop(mac_out_fifo_pop),
+        .mac_out_fifo_pop_done(mac_out_fifo_pop_done),
+        .tile_idx_fifo_empty(tile_idx_fifo_empty),
+        .tile_idx_fifo_pop(tile_idx_fifo_pop),
+        .tile_idx_fifo_pop_done(tile_idx_fifo_pop_done),
+        .lif_en(lif_array_en)
+    );
+
+    xbar_scheduler xbar_scheduler_0 (
+        .clk(clk),
+        .en(en),
+        .crossbar_done(synapse_array_done),
+
+        .weight_fifo_empty(weight_fifo_empty),
+        .weight_fifo_pop(weight_fifo_pop),
+        .weight_fifo_pop_done(weight_fifo_pop_done),
+
+        .tile_idx_fifo_empty(tile_idx_fifo_empty),
+        .tile_idx_fifo_pop(tile_idx_fifo_pop),
+        .tile_idx_fifo_pop_done(tile_idx_fifo_pop_done),
+
+        .spk_in_fifo_empty(spk_in_fifo_empty),
+        .spk_in_fifo_pop(spk_in_fifo_pop),
+        .spk_in_fifo_pop_done(spk_in_fifo_pop_done),
+
+        .mac_out_fifo_full(mac_out_fifo_full),
+        .mac_out_fifo_push(mac_out_fifo_push),
+        .mac_out_fifo_push_done(mac_out_fifo_push_done),
+
+        .crossbar_en(synapse_array_en)
+    );    
 
     lif_array #(
         .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
         .THRESH(THRESH),
         .NETWORK_WIDTH(NETWORK_WIDTH)
     ) lif_array_0 (
-
+        .clk(clk),
+        .enable(lif_array_en),
+        .bram_done(lif_bram_done),
+        .spk_in(spk_in),
+        .u_mem_in(mem_in),
+        .u_mac_out(mac_out),
+        .spk_out(spk_out),
+        .u_mem_out(mem_out),
+        .done(lif_array_done),
+        .bram_we(lif_we),
+        .bram_enable(lif_bram_en)
     );
 
     synapse_array #(
         .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
         .NETWORK_WIDTH(NETWORK_WIDTH)
     ) synapse_array_0 (
-
+        .clk(clk),
+        .enable(synapse_array_en),
+        .u_weight(weight),
+        .spk_in(spk_in),
+        .u_mac_out(mac_out),
+        .done(synapse_array_done)
     );
+
 endmodule

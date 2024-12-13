@@ -12,7 +12,7 @@ module fifo_tb;
 	reg push = 0;
 	reg pop = 0;
 
-	wire signed [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS];
+	wire [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS];
 	wire full;
 	wire empty;
 
