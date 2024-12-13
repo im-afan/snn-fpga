@@ -11,9 +11,17 @@ module lif_bram #(
     input wire enable,
 
     input wire we,
+
     input wire [TILE_IDX_WIDTH-1:0] tile_idx_x,
+    input wire [TILE_IDX_WIDTH-1:0] tile_idx_y,
+
     input wire [NETWORK_WIDTH-1:0] mem_out [CROSSBAR_NEURONS], 
+    input wire [CROSSBAR_NEURONS-1:0] spk_out,
+
     output reg [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS],
+    output reg [CROSSBAR_NEURONS-1:0] spk_in, // to inhibit multiple spikes in one timestep
+
+    output reg done,
 
     output reg [BRAM_ADDR_WIDTH-1:0] addr,
     input wire [BRAM_DATA_WIDTH-1:0] dout,
@@ -24,6 +32,10 @@ module lif_bram #(
 );
     localparam integer SEND = 0;
     localparam integer WAIT = 1;
+    localparam integer INCREMENT = 2;
+
+    localparam integer MEM = 0;
+    localparam integer SPK = 1;
 
     localparam integer TILE_IDX_BITS = ((2*TILE_IDX_WIDTH*MAX_TILES) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer WEIGHT_BITS = ((MAX_TILES*CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
@@ -40,19 +52,32 @@ module lif_bram #(
 
     reg bram_done;
     reg [4:0] bram_step = SEND;
+    reg [4:0] param_step = MEM;
+
+    wire [11:0] mem_tile_idx_base;
+    assign mem_tile_idx_base = tile_idx_x % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS / NETWORK_WIDTH);
+    wire [11:0] spk_tile_idx_base;
+    assign spk_tile_idx_base = tile_idx_y % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS); 
+
     reg [BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS-1 : 0] we_tile;
     reg [NETWORK_WIDTH*CROSSBAR_NEURONS-1:0] din_tile;
-    wire [NETWORK_WIDTH-1:0] mem_in_tiles [BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS][CROSSBAR_NEURONS];
 
-    wire [11:0] tile_idx_base;
-    assign tile_idx_base = tile_idx_x % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS);
+    wire [NETWORK_WIDTH-1:0] mem_in_tiles [BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS][CROSSBAR_NEURONS];
+    wire [CROSSBAR_NEURONS] spk_tiles [BRAM_DATA_WIDTH / CROSSBAR_NEURONS];
+
+    wire [BRAM_DATA_WIDTH/8-1:0] bram_we_mem;
+    wire [BRAM_DATA_WIDTH/8-1:0] bram_we_spk;
+    assign bram_we = (param_step == MEM) ? bram_we_mem : bram_we_spk;
 
     generate
         genvar i, j, k;
         for(i = 0; i < BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS; i++) begin
             for(j = 0; j < CROSSBAR_NEURONS; j++) begin
-                assign bram_we[i*CROSSBAR_NEURONS + j : i*CROSSBAR_NEURONS] = we_tile[i];
+                assign bram_we_mem[i*CROSSBAR_NEURONS + j : i*CROSSBAR_NEURONS] = we_tile[i];
             end
+        end
+        for(i = 0; i < BRAM_DATA_WIDTH / CROSSBAR_NEURONS; i++) begin
+            assign bram_we_spk[(i+1)*CROSSBAR_NEURONS/8-1 : i*CROSSBAR_NEURONS/8] = we_tile[i];
         end
         for(i = 0; i < CROSSBAR_NEURONS; i++) begin
             assign din_tile[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = mem_out[i];
@@ -62,35 +87,65 @@ module lif_bram #(
                 assign mem_in_tiles[i][j] = dout[i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH+NETWORK_WIDTH-1 : i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH];
             end
         end
+        for(i = 0; i < BRAM_DATA_WIDTH / CROSSBAR_NEURONS; i++) begin
+            assign spk_tiles[i] = dout[(i+1)*CROSSBAR_NEURONS : i*CROSSBAR_NEURONS];
+        end
     endgenerate
 
     always @(posedge clk) begin
         if(~enable) begin
+            param_step <= MEM;
             bram_step <= SEND;
             bram_en <= 0;
+            done <= 0;
         end else begin
-            if(bram_step == SEND) begin
-                addr <= MEM_OFFSET + tile_idx_x * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
+            if(~done) begin
                 if(we) begin
-                    din <= (din_tile << tile_idx_base);
-                    we_tile <= (1 << tile_idx_base);
-                end else begin
-                    we_tile <= 0;
-                end
-                bram_done <= 0;
-                bram_step <= WAIT;
-                bram_en <= 1;
-            end else if(bram_step == WAIT) begin
-                if(bram_done) begin
-                    for(integer i = 0; i < CROSSBAR_NEURONS; i++) begin
-                        mem_in[i] <= mem_in_tiles[tile_idx_base][i];
+                    if(bram_step == SEND) begin
+                        if(param_step == MEM) begin
+                            addr <= MEM_OFFSET + tile_idx_x * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
+                            din <= (din_tile << mem_tile_idx_base);
+                            we_tile <= (1 << mem_tile_idx_base);
+                        end else if(param_step == SPK) begin
+                            addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS;
+                            din <= (spk_out << spk_tile_idx_base);
+                            we_tile <= (1 << spk_tile_idx_base); // TODO thsi is wrong lmao
+                        end
+                        bram_step <= WAIT;
+                        bram_done <= 0;
+                    end else if(bram_step == WAIT) begin
+                        if(bram_done) bram_step <= INCREMENT;
+                        else bram_done <= 1;
+                    end else if(bram_step == INCREMENT) begin
+                        if(param_step == MEM) param_step <= SPK;
+                        else if(param_step == SPK) done <= 1;
+                        bram_step <= SEND;
                     end
-                    bram_en <= 0;
-                    bram_step <= SEND;
+
                 end else begin
-                    bram_done <= 1;
+                    if(bram_step == SEND) begin
+                        if(param_step == MEM) addr <= MEM_OFFSET + tile_idx_x * NETWORK_INPUT_BITS * CROSSBAR_NEURONS / 8;
+                        else if(param_step == SPK) addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS;
+                        bram_step <= WAIT;
+                        bram_done <= 0;
+                        we_tile <= 0;
+                    end else if(bram_step == WAIT) begin
+                        if(bram_done) begin
+                            if(param_step == MEM) begin
+                                for(integer i = 0; i < CROSSBAR_NEURONS; i++) mem_in[i] <= mem_in_tiles[mem_tile_idx_base][i];
+                            end else if(param_step == SPK) begin
+                                spk_in <= spk_tiles[spk_tile_idx_base];
+                            end
+                        end else begin
+                            bram_done <= 1;
+                        end
+                    end else if(bram_step == INCREMENT) begin
+                        if(param_step == MEM) param_step <= SPK;
+                        else if(param_step == SPK) done <= 1;
+                        bram_step <= SEND;
+                    end
                 end
-            end 
+            end
         end
     end
 endmodule

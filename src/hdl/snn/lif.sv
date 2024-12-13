@@ -7,31 +7,27 @@
  */
 
 module lif#(
-    parameter integer THRESH = 32,
-    parameter integer RESET_VAL = 0,
-    parameter integer UPDATE_FREQ = 1,
-    parameter integer SPK_CURRENT = 1,
-    parameter integer WIDTH = 32
+    parameter integer THRESH,
+    parameter integer NETWORK_WIDTH
 )(
     input wire clk,
     input wire enable,
-    input wire signed [WIDTH-1:0] spk_in,
-    input wire signed [WIDTH-1:0] network_input,
-    input wire leak,
-    input wire rst,
-    input wire signed [WIDTH-1:0] mem_in,
+
+    input wire spk_in, // inhibit multiple spks in 1 timestep
+    input wire signed [NETWORK_WIDTH-1:0] mac_in,
+    input wire signed [NETWORK_WIDTH-1:0] mem_in,
+
     output reg spk_out,
     output reg done,
-    output reg signed [WIDTH-1:0] mem_out
+    output reg signed [NETWORK_WIDTH-1:0] mem_out
 );
-    //reg signed [WIDTH-1:0] mem = 0;
     reg local_done = 0;
-    wire signed [WIDTH-1:0] sum;
-    wire signed [WIDTH-1:0] sum_clamp;
+    wire signed [NETWORK_WIDTH-1:0] sum;
+    wire signed [NETWORK_WIDTH-1:0] sum_clamp;
     wire overflow;
-    assign sum = mem_in+network_input;
-    assign overflow = (mem_in[WIDTH-1] == network_input[WIDTH-1]) && (mem_in[WIDTH-1] != sum[WIDTH-1]);
-    assign sum_clamp = overflow ? (mem_in[WIDTH-1] ? -THRESH : THRESH) : sum;
+    assign sum = mem_in+mac_in;
+    assign overflow = (mem_in[NETWORK_WIDTH-1] == mac_in[NETWORK_WIDTH-1]) && (mem_in[NETWORK_WIDTH-1] != sum[NETWORK_WIDTH-1]);
+    assign sum_clamp = overflow ? (mem_in[NETWORK_WIDTH-1] ? -THRESH : THRESH) : sum;
 
     always @(posedge clk or negedge enable) begin
         if(~enable) begin
@@ -39,14 +35,16 @@ module lif#(
             local_done <= 0;
         end else begin
             if(~local_done) begin
-                if(sum_clamp >= THRESH) begin
-                    spk_out <= SPK_CURRENT;
+                if(spk_in) begin
+                    spk_out <= 0;
+                    mem_out <= 0;
+                end else if(sum_clamp >= THRESH) begin
+                    spk_out <= 1;
                     mem_out <= 0;
                 end else begin
                     spk_out <= 0;
                     mem_out <= sum_clamp;
                 end
-
                 local_done <= 1;
             end else begin
                 done <= 1; 
