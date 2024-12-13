@@ -17,6 +17,7 @@ module dual_port_bram#(
     output reg [BRAM_DATA_WIDTH-1:0] doutb
 );
     localparam LOG_WORD_WIDTH = $clog2(BRAM_DATA_WIDTH / 8);
+    localparam LOG_BYTE_WIDTH = 7;
 
     reg [BRAM_DATA_WIDTH-1:0] memory[1024];
 
@@ -30,18 +31,18 @@ module dual_port_bram#(
     always @(posedge clka) begin
         if(ena) begin
             if(|wea) begin
-                memory[addra >>> LOG_WORD_WIDTH] <= dina;
+                memory[addra >>> LOG_BYTE_WIDTH] <= dina;
             end
-            douta <= memory[addra >>> LOG_WORD_WIDTH];
+            douta <= memory[addra >>> LOG_BYTE_WIDTH];
         end
     end
 
     always @(posedge clkb) begin
         if(enb) begin
             if(|web) begin
-                memory[addrb >>> LOG_WORD_WIDTH] <= dinb;
+                memory[addrb >>> LOG_BYTE_WIDTH] <= dinb;
             end
-            doutb <= memory[addrb >>> LOG_WORD_WIDTH];
+            doutb <= memory[addrb >>> LOG_BYTE_WIDTH];
         end
     end
 endmodule

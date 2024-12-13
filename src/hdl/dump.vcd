@@ -1,0 +1,6132 @@
+$date
+	Thu Dec 12 15:08:59 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	10ps
+$end
+$scope module xbar_bram_fifo_tb $end
+$var wire 1 ! weight_fifo_push_done $end
+$var wire 1 " weight_fifo_push $end
+$var wire 1 # weight_fifo_pop_done $end
+$var wire 1 $ weight_fifo_full $end
+$var wire 1 % weight_fifo_empty $end
+$var wire 1024 & weight_fifo_din [1023:0] $end
+$var wire 16 ' tile_idx_y [15:0] $end
+$var wire 16 ( tile_idx_x [15:0] $end
+$var wire 1 ) tile_idx_fifo_push_done $end
+$var wire 1 * tile_idx_fifo_push $end
+$var wire 1 + tile_idx_fifo_pop_done $end
+$var wire 1 , tile_idx_fifo_full $end
+$var wire 1 - tile_idx_fifo_empty $end
+$var wire 32 . tile_idx_fifo_din [31:0] $end
+$var wire 1 / spk_in_fifo_push_done $end
+$var wire 1 0 spk_in_fifo_push $end
+$var wire 1 1 spk_in_fifo_pop_done $end
+$var wire 1 2 spk_in_fifo_full $end
+$var wire 1 3 spk_in_fifo_empty $end
+$var wire 16 4 spk_in_fifo_din [15:0] $end
+$var wire 16 5 spk_in [15:0] $end
+$var wire 1024 6 dout [1023:0] $end
+$var wire 1024 7 din [1023:0] $end
+$var wire 128 8 bram_we [127:0] $end
+$var wire 1 9 bram_rst $end
+$var wire 1 : bram_en $end
+$var wire 16 ; addr [15:0] $end
+$var parameter 32 < BRAM_ADDR_WIDTH $end
+$var parameter 32 = BRAM_DATA_WIDTH $end
+$var parameter 32 > CROSSBAR_NEURONS $end
+$var parameter 32 ? MAX_NEURONS $end
+$var parameter 32 @ MAX_TILES $end
+$var parameter 32 A NETWORK_WIDTH $end
+$var parameter 32 B TILE_IDX_WIDTH $end
+$var reg 1 C clk $end
+$var reg 1 D enable $end
+$var reg 1 E spk_in_fifo_pop $end
+$var reg 1 F tile_idx_fifo_pop $end
+$var reg 1 G weight_fifo_pop $end
+$scope module fifo_spk_in $end
+$var wire 1 C clk $end
+$var wire 1 D en $end
+$var wire 1 E pop $end
+$var wire 16 H spk_in [15:0] $end
+$var wire 1 0 push $end
+$var wire 1 2 full $end
+$var wire 1 3 empty $end
+$var wire 16 I din [15:0] $end
+$var parameter 32 J BRAM_DATA_WIDTH $end
+$var parameter 32 K CROSSBAR_NEURONS $end
+$var parameter 32 L LENGTH $end
+$var parameter 32 M NETWORK_WIDTH $end
+$var parameter 32 N WIDTH $end
+$var reg 32 O buffer [31:0] $end
+$var reg 8 P cnt [7:0] $end
+$var reg 1 1 pop_done $end
+$var reg 1 / push_done $end
+$scope begin genblk1[0] $end
+$var parameter 2 Q i $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 R i $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 S i $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 T i $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 U i $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 V i $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 W i $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 X i $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 Y i $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 Z i $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 [ i $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 \ i $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 ] i $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 ^ i $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 _ i $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 ` i $end
+$upscope $end
+$upscope $end
+$scope module fifo_tile_idx $end
+$var wire 1 C clk $end
+$var wire 1 D en $end
+$var wire 1 F pop $end
+$var wire 16 a tile_idx_y [15:0] $end
+$var wire 16 b tile_idx_x [15:0] $end
+$var wire 1 * push $end
+$var wire 1 , full $end
+$var wire 1 - empty $end
+$var wire 32 c din [31:0] $end
+$var parameter 32 d BRAM_DATA_WIDTH $end
+$var parameter 32 e CROSSBAR_NEURONS $end
+$var parameter 32 f LENGTH $end
+$var parameter 32 g NETWORK_WIDTH $end
+$var parameter 32 h TILE_IDX_WIDTH $end
+$var parameter 64 i WIDTH $end
+$var reg 64 j buffer [63:0] $end
+$var reg 8 k cnt [7:0] $end
+$var reg 1 + pop_done $end
+$var reg 1 ) push_done $end
+$upscope $end
+$scope module fifo_weight $end
+$var wire 1 C clk $end
+$var wire 1 D en $end
+$var wire 1 G pop $end
+$var wire 1 " push $end
+$var wire 1 $ full $end
+$var wire 1 % empty $end
+$var wire 1024 l din [1023:0] $end
+$var parameter 32 m BRAM_DATA_WIDTH $end
+$var parameter 32 n CROSSBAR_NEURONS $end
+$var parameter 32 o DIN_WIDTH $end
+$var parameter 32 p LENGTH $end
+$var parameter 32 q NETWORK_WIDTH $end
+$var parameter 96 r WIDTH $end
+$var reg 4096 s buffer [4095:0] $end
+$var reg 8 t cnt [7:0] $end
+$var reg 1 # pop_done $end
+$var reg 1 ! push_done $end
+$scope begin genblk1[0] $end
+$var parameter 2 u i $end
+$scope begin genblk1[0] $end
+$var parameter 2 v j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 w j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 x j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 y j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 z j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 { j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 | j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 } j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 ~ j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 !" j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 "" j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 #" j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 $" j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 %" j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 &" j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 '" j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 (" i $end
+$scope begin genblk1[0] $end
+$var parameter 2 )" j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 *" j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 +" j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 ," j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 -" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 ." j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 /" j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 0" j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 1" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 2" j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 3" j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 4" j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 5" j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 6" j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 7" j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 8" j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 9" i $end
+$scope begin genblk1[0] $end
+$var parameter 2 :" j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 ;" j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 <" j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 =" j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 >" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 ?" j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 @" j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 A" j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 B" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 C" j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 D" j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 E" j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 F" j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 G" j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 H" j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 I" j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 J" i $end
+$scope begin genblk1[0] $end
+$var parameter 2 K" j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 L" j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 M" j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 N" j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 O" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 P" j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 Q" j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 R" j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 S" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 T" j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 U" j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 V" j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 W" j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 X" j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 Y" j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 Z" j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 [" i $end
+$scope begin genblk1[0] $end
+$var parameter 2 \" j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 ]" j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 ^" j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 _" j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 `" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 a" j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 b" j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 c" j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 d" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 e" j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 f" j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 g" j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 h" j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 i" j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 j" j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 k" j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 l" i $end
+$scope begin genblk1[0] $end
+$var parameter 2 m" j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 n" j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 o" j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 p" j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 q" j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 r" j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 s" j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 t" j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 u" j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 v" j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 w" j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 x" j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 y" j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 z" j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 {" j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 |" j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 }" i $end
+$scope begin genblk1[0] $end
+$var parameter 2 ~" j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 !# j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 "# j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 ## j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 $# j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 %# j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 &# j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 '# j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 (# j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 )# j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 *# j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 +# j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 ,# j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 -# j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 .# j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 /# j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 0# i $end
+$scope begin genblk1[0] $end
+$var parameter 2 1# j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 2# j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 3# j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 4# j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 5# j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 6# j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 7# j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 8# j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 9# j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 :# j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 ;# j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 <# j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 =# j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 ># j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 ?# j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 @# j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 A# i $end
+$scope begin genblk1[0] $end
+$var parameter 2 B# j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 C# j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 D# j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 E# j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 F# j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 G# j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 H# j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 I# j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 J# j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 K# j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 L# j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 M# j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 N# j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 O# j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 P# j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 Q# j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 R# i $end
+$scope begin genblk1[0] $end
+$var parameter 2 S# j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 T# j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 U# j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 V# j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 W# j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 X# j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 Y# j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 Z# j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 [# j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 \# j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 ]# j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 ^# j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 _# j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 `# j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 a# j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 b# j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 c# i $end
+$scope begin genblk1[0] $end
+$var parameter 2 d# j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 e# j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 f# j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 g# j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 h# j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 i# j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 j# j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 k# j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 l# j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 m# j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 n# j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 o# j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 p# j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 q# j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 r# j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 s# j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 t# i $end
+$scope begin genblk1[0] $end
+$var parameter 2 u# j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 v# j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 w# j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 x# j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 y# j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 z# j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 {# j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 |# j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 }# j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 ~# j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 !$ j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 "$ j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 #$ j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 $$ j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 %$ j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 &$ j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 '$ i $end
+$scope begin genblk1[0] $end
+$var parameter 2 ($ j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 )$ j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 *$ j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 +$ j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 ,$ j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 -$ j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 .$ j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 /$ j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 0$ j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 1$ j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 2$ j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 3$ j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 4$ j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 5$ j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 6$ j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 7$ j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 8$ i $end
+$scope begin genblk1[0] $end
+$var parameter 2 9$ j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 :$ j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 ;$ j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 <$ j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 =$ j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 >$ j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 ?$ j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 @$ j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 A$ j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 B$ j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 C$ j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 D$ j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 E$ j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 F$ j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 G$ j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 H$ j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 I$ i $end
+$scope begin genblk1[0] $end
+$var parameter 2 J$ j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 K$ j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 L$ j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 M$ j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 N$ j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 O$ j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 P$ j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 Q$ j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 R$ j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 S$ j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 T$ j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 U$ j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 V$ j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 W$ j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 X$ j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 Y$ j $end
+$upscope $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 Z$ i $end
+$scope begin genblk1[0] $end
+$var parameter 2 [$ j $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 \$ j $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 ]$ j $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 ^$ j $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 _$ j $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 `$ j $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 a$ j $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 b$ j $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 c$ j $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 d$ j $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 e$ j $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 f$ j $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 g$ j $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 h$ j $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 i$ j $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 j$ j $end
+$upscope $end
+$upscope $end
+$upscope $end
+$scope module ram $end
+$var wire 16 k$ addrb [15:0] $end
+$var wire 1 C clka $end
+$var wire 1 l$ clkb $end
+$var wire 1024 m$ dinb [1023:0] $end
+$var wire 1 n$ enb $end
+$var wire 128 o$ web [127:0] $end
+$var wire 128 p$ wea [127:0] $end
+$var wire 1 : ena $end
+$var wire 1024 q$ dina [1023:0] $end
+$var wire 16 r$ addra [15:0] $end
+$var parameter 32 s$ BRAM_ADDR_WIDTH $end
+$var parameter 32 t$ BRAM_DATA_WIDTH $end
+$var parameter 32 u$ LOG_BYTE_WIDTH $end
+$var parameter 32 v$ LOG_WORD_WIDTH $end
+$var reg 1024 w$ douta [1023:0] $end
+$var reg 1024 x$ doutb [1023:0] $end
+$scope begin $ivl_for_loop0 $end
+$var integer 32 y$ asdf [31:0] $end
+$upscope $end
+$upscope $end
+$scope module xbar $end
+$var wire 1 C clk $end
+$var wire 32 z$ debug_slice [31:0] $end
+$var wire 1024 {$ dout [1023:0] $end
+$var wire 1 D enable $end
+$var wire 1 |$ fifo_done $end
+$var wire 1 }$ fifo_full $end
+$var wire 1 2 spk_in_fifo_full $end
+$var wire 1 / spk_in_fifo_push_done $end
+$var wire 1 , tile_idx_fifo_full $end
+$var wire 1 ) tile_idx_fifo_push_done $end
+$var wire 1 $ weight_fifo_full $end
+$var wire 1 ! weight_fifo_push_done $end
+$var wire 11 ~$ tile_idx_base [10:0] $end
+$var wire 11 !% spk_in_idx_base [10:0] $end
+$var parameter 32 "% BRAM_ADDR_WIDTH $end
+$var parameter 32 #% BRAM_DATA_WIDTH $end
+$var parameter 32 $% CROSSBAR_NEURONS $end
+$var parameter 32 %% FLAGS_BITS $end
+$var parameter 32 &% FLAGS_OFFSET $end
+$var parameter 32 '% INCREMENT $end
+$var parameter 32 (% MAX_NEURONS $end
+$var parameter 32 )% MAX_TILES $end
+$var parameter 32 *% MEM_OFFSET $end
+$var parameter 32 +% NETWORK_INPUT_BITS $end
+$var parameter 32 ,% NETWORK_INPUT_OFFSET $end
+$var parameter 32 -% NETWORK_WIDTH $end
+$var parameter 32 .% READ_IDX $end
+$var parameter 32 /% READ_SPK $end
+$var parameter 32 0% READ_WEIGHTS $end
+$var parameter 32 1% SEND $end
+$var parameter 32 2% SPK_OUT_BITS $end
+$var parameter 32 3% SPK_OUT_OFFSET $end
+$var parameter 32 4% TILE_IDX_BITS $end
+$var parameter 32 5% TILE_IDX_OFFSET $end
+$var parameter 32 6% TILE_IDX_WIDTH $end
+$var parameter 32 7% WAIT $end
+$var parameter 32 8% WEIGHT_BITS $end
+$var parameter 32 9% WEIGHT_OFFSET $end
+$var reg 16 :% addr [15:0] $end
+$var reg 1 ;% bram_done $end
+$var reg 1 : bram_en $end
+$var reg 1 9 bram_rst $end
+$var reg 5 <% bram_step [4:0] $end
+$var reg 128 =% bram_we [127:0] $end
+$var reg 1024 >% din [1023:0] $end
+$var reg 5 ?% param_step [4:0] $end
+$var reg 16 @% spk_in_fifo_din [15:0] $end
+$var reg 1 0 spk_in_fifo_push $end
+$var reg 16 A% tile_idx [15:0] $end
+$var reg 32 B% tile_idx_fifo_din [31:0] $end
+$var reg 1 * tile_idx_fifo_push $end
+$var reg 16 C% tile_idx_x [15:0] $end
+$var reg 16 D% tile_idx_y [15:0] $end
+$var reg 1024 E% weight_fifo_din [1023:0] $end
+$var reg 1 " weight_fifo_push $end
+$var reg 16 F% weight_idx [15:0] $end
+$scope begin genblk1[0] $end
+$var parameter 2 G% i $end
+$upscope $end
+$scope begin genblk1[1] $end
+$var parameter 2 H% i $end
+$upscope $end
+$scope begin genblk1[2] $end
+$var parameter 3 I% i $end
+$upscope $end
+$scope begin genblk1[3] $end
+$var parameter 3 J% i $end
+$upscope $end
+$scope begin genblk1[4] $end
+$var parameter 4 K% i $end
+$upscope $end
+$scope begin genblk1[5] $end
+$var parameter 4 L% i $end
+$upscope $end
+$scope begin genblk1[6] $end
+$var parameter 4 M% i $end
+$upscope $end
+$scope begin genblk1[7] $end
+$var parameter 4 N% i $end
+$upscope $end
+$scope begin genblk1[8] $end
+$var parameter 5 O% i $end
+$upscope $end
+$scope begin genblk1[9] $end
+$var parameter 5 P% i $end
+$upscope $end
+$scope begin genblk1[10] $end
+$var parameter 5 Q% i $end
+$upscope $end
+$scope begin genblk1[11] $end
+$var parameter 5 R% i $end
+$upscope $end
+$scope begin genblk1[12] $end
+$var parameter 5 S% i $end
+$upscope $end
+$scope begin genblk1[13] $end
+$var parameter 5 T% i $end
+$upscope $end
+$scope begin genblk1[14] $end
+$var parameter 5 U% i $end
+$upscope $end
+$scope begin genblk1[15] $end
+$var parameter 5 V% i $end
+$upscope $end
+$scope begin genblk1[16] $end
+$var parameter 6 W% i $end
+$upscope $end
+$scope begin genblk1[17] $end
+$var parameter 6 X% i $end
+$upscope $end
+$scope begin genblk1[18] $end
+$var parameter 6 Y% i $end
+$upscope $end
+$scope begin genblk1[19] $end
+$var parameter 6 Z% i $end
+$upscope $end
+$scope begin genblk1[20] $end
+$var parameter 6 [% i $end
+$upscope $end
+$scope begin genblk1[21] $end
+$var parameter 6 \% i $end
+$upscope $end
+$scope begin genblk1[22] $end
+$var parameter 6 ]% i $end
+$upscope $end
+$scope begin genblk1[23] $end
+$var parameter 6 ^% i $end
+$upscope $end
+$scope begin genblk1[24] $end
+$var parameter 6 _% i $end
+$upscope $end
+$scope begin genblk1[25] $end
+$var parameter 6 `% i $end
+$upscope $end
+$scope begin genblk1[26] $end
+$var parameter 6 a% i $end
+$upscope $end
+$scope begin genblk1[27] $end
+$var parameter 6 b% i $end
+$upscope $end
+$scope begin genblk1[28] $end
+$var parameter 6 c% i $end
+$upscope $end
+$scope begin genblk1[29] $end
+$var parameter 6 d% i $end
+$upscope $end
+$scope begin genblk1[30] $end
+$var parameter 6 e% i $end
+$upscope $end
+$scope begin genblk1[31] $end
+$var parameter 6 f% i $end
+$upscope $end
+$scope begin genblk2[0] $end
+$var parameter 2 g% i $end
+$upscope $end
+$scope begin genblk2[1] $end
+$var parameter 2 h% i $end
+$upscope $end
+$scope begin genblk2[2] $end
+$var parameter 3 i% i $end
+$upscope $end
+$scope begin genblk2[3] $end
+$var parameter 3 j% i $end
+$upscope $end
+$scope begin genblk2[4] $end
+$var parameter 4 k% i $end
+$upscope $end
+$scope begin genblk2[5] $end
+$var parameter 4 l% i $end
+$upscope $end
+$scope begin genblk2[6] $end
+$var parameter 4 m% i $end
+$upscope $end
+$scope begin genblk2[7] $end
+$var parameter 4 n% i $end
+$upscope $end
+$scope begin genblk2[8] $end
+$var parameter 5 o% i $end
+$upscope $end
+$scope begin genblk2[9] $end
+$var parameter 5 p% i $end
+$upscope $end
+$scope begin genblk2[10] $end
+$var parameter 5 q% i $end
+$upscope $end
+$scope begin genblk2[11] $end
+$var parameter 5 r% i $end
+$upscope $end
+$scope begin genblk2[12] $end
+$var parameter 5 s% i $end
+$upscope $end
+$scope begin genblk2[13] $end
+$var parameter 5 t% i $end
+$upscope $end
+$scope begin genblk2[14] $end
+$var parameter 5 u% i $end
+$upscope $end
+$scope begin genblk2[15] $end
+$var parameter 5 v% i $end
+$upscope $end
+$scope begin genblk2[16] $end
+$var parameter 6 w% i $end
+$upscope $end
+$scope begin genblk2[17] $end
+$var parameter 6 x% i $end
+$upscope $end
+$scope begin genblk2[18] $end
+$var parameter 6 y% i $end
+$upscope $end
+$scope begin genblk2[19] $end
+$var parameter 6 z% i $end
+$upscope $end
+$scope begin genblk2[20] $end
+$var parameter 6 {% i $end
+$upscope $end
+$scope begin genblk2[21] $end
+$var parameter 6 |% i $end
+$upscope $end
+$scope begin genblk2[22] $end
+$var parameter 6 }% i $end
+$upscope $end
+$scope begin genblk2[23] $end
+$var parameter 6 ~% i $end
+$upscope $end
+$scope begin genblk2[24] $end
+$var parameter 6 !& i $end
+$upscope $end
+$scope begin genblk2[25] $end
+$var parameter 6 "& i $end
+$upscope $end
+$scope begin genblk2[26] $end
+$var parameter 6 #& i $end
+$upscope $end
+$scope begin genblk2[27] $end
+$var parameter 6 $& i $end
+$upscope $end
+$scope begin genblk2[28] $end
+$var parameter 6 %& i $end
+$upscope $end
+$scope begin genblk2[29] $end
+$var parameter 6 && i $end
+$upscope $end
+$scope begin genblk2[30] $end
+$var parameter 6 '& i $end
+$upscope $end
+$scope begin genblk2[31] $end
+$var parameter 6 (& i $end
+$upscope $end
+$scope begin genblk2[32] $end
+$var parameter 7 )& i $end
+$upscope $end
+$scope begin genblk2[33] $end
+$var parameter 7 *& i $end
+$upscope $end
+$scope begin genblk2[34] $end
+$var parameter 7 +& i $end
+$upscope $end
+$scope begin genblk2[35] $end
+$var parameter 7 ,& i $end
+$upscope $end
+$scope begin genblk2[36] $end
+$var parameter 7 -& i $end
+$upscope $end
+$scope begin genblk2[37] $end
+$var parameter 7 .& i $end
+$upscope $end
+$scope begin genblk2[38] $end
+$var parameter 7 /& i $end
+$upscope $end
+$scope begin genblk2[39] $end
+$var parameter 7 0& i $end
+$upscope $end
+$scope begin genblk2[40] $end
+$var parameter 7 1& i $end
+$upscope $end
+$scope begin genblk2[41] $end
+$var parameter 7 2& i $end
+$upscope $end
+$scope begin genblk2[42] $end
+$var parameter 7 3& i $end
+$upscope $end
+$scope begin genblk2[43] $end
+$var parameter 7 4& i $end
+$upscope $end
+$scope begin genblk2[44] $end
+$var parameter 7 5& i $end
+$upscope $end
+$scope begin genblk2[45] $end
+$var parameter 7 6& i $end
+$upscope $end
+$scope begin genblk2[46] $end
+$var parameter 7 7& i $end
+$upscope $end
+$scope begin genblk2[47] $end
+$var parameter 7 8& i $end
+$upscope $end
+$scope begin genblk2[48] $end
+$var parameter 7 9& i $end
+$upscope $end
+$scope begin genblk2[49] $end
+$var parameter 7 :& i $end
+$upscope $end
+$scope begin genblk2[50] $end
+$var parameter 7 ;& i $end
+$upscope $end
+$scope begin genblk2[51] $end
+$var parameter 7 <& i $end
+$upscope $end
+$scope begin genblk2[52] $end
+$var parameter 7 =& i $end
+$upscope $end
+$scope begin genblk2[53] $end
+$var parameter 7 >& i $end
+$upscope $end
+$scope begin genblk2[54] $end
+$var parameter 7 ?& i $end
+$upscope $end
+$scope begin genblk2[55] $end
+$var parameter 7 @& i $end
+$upscope $end
+$scope begin genblk2[56] $end
+$var parameter 7 A& i $end
+$upscope $end
+$scope begin genblk2[57] $end
+$var parameter 7 B& i $end
+$upscope $end
+$scope begin genblk2[58] $end
+$var parameter 7 C& i $end
+$upscope $end
+$scope begin genblk2[59] $end
+$var parameter 7 D& i $end
+$upscope $end
+$scope begin genblk2[60] $end
+$var parameter 7 E& i $end
+$upscope $end
+$scope begin genblk2[61] $end
+$var parameter 7 F& i $end
+$upscope $end
+$scope begin genblk2[62] $end
+$var parameter 7 G& i $end
+$upscope $end
+$scope begin genblk2[63] $end
+$var parameter 7 H& i $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b111111 H&
+b111110 G&
+b111101 F&
+b111100 E&
+b111011 D&
+b111010 C&
+b111001 B&
+b111000 A&
+b110111 @&
+b110110 ?&
+b110101 >&
+b110100 =&
+b110011 <&
+b110010 ;&
+b110001 :&
+b110000 9&
+b101111 8&
+b101110 7&
+b101101 6&
+b101100 5&
+b101011 4&
+b101010 3&
+b101001 2&
+b101000 1&
+b100111 0&
+b100110 /&
+b100101 .&
+b100100 -&
+b100011 ,&
+b100010 +&
+b100001 *&
+b100000 )&
+b11111 (&
+b11110 '&
+b11101 &&
+b11100 %&
+b11011 $&
+b11010 #&
+b11001 "&
+b11000 !&
+b10111 ~%
+b10110 }%
+b10101 |%
+b10100 {%
+b10011 z%
+b10010 y%
+b10001 x%
+b10000 w%
+b1111 v%
+b1110 u%
+b1101 t%
+b1100 s%
+b1011 r%
+b1010 q%
+b1001 p%
+b1000 o%
+b111 n%
+b110 m%
+b101 l%
+b100 k%
+b11 j%
+b10 i%
+b1 h%
+b0 g%
+b11111 f%
+b11110 e%
+b11101 d%
+b11100 c%
+b11011 b%
+b11010 a%
+b11001 `%
+b11000 _%
+b10111 ^%
+b10110 ]%
+b10101 \%
+b10100 [%
+b10011 Z%
+b10010 Y%
+b10001 X%
+b10000 W%
+b1111 V%
+b1110 U%
+b1101 T%
+b1100 S%
+b1011 R%
+b1010 Q%
+b1001 P%
+b1000 O%
+b111 N%
+b110 M%
+b101 L%
+b100 K%
+b11 J%
+b10 I%
+b1 H%
+b0 G%
+b110000000 9%
+b110000000000 8%
+b1 7%
+b10000 6%
+b0 5%
+b110000000000 4%
+b11110000000 3%
+b100000000000 2%
+b0 1%
+b10 0%
+b1 /%
+b0 .%
+b1000 -%
+b1100000000 ,%
+b10010000000000 +%
+b100010000000 *%
+b1000000 )%
+b10000000000 (%
+b10 '%
+b100010000000 &%
+b1 %%
+b10000 $%
+b10000000000 #%
+b10000 "%
+b111 v$
+b111 u$
+b10000000000 t$
+b10000 s$
+b1111 j$
+b1110 i$
+b1101 h$
+b1100 g$
+b1011 f$
+b1010 e$
+b1001 d$
+b1000 c$
+b111 b$
+b110 a$
+b101 `$
+b100 _$
+b11 ^$
+b10 ]$
+b1 \$
+b0 [$
+b1111 Z$
+b1111 Y$
+b1110 X$
+b1101 W$
+b1100 V$
+b1011 U$
+b1010 T$
+b1001 S$
+b1000 R$
+b111 Q$
+b110 P$
+b101 O$
+b100 N$
+b11 M$
+b10 L$
+b1 K$
+b0 J$
+b1110 I$
+b1111 H$
+b1110 G$
+b1101 F$
+b1100 E$
+b1011 D$
+b1010 C$
+b1001 B$
+b1000 A$
+b111 @$
+b110 ?$
+b101 >$
+b100 =$
+b11 <$
+b10 ;$
+b1 :$
+b0 9$
+b1101 8$
+b1111 7$
+b1110 6$
+b1101 5$
+b1100 4$
+b1011 3$
+b1010 2$
+b1001 1$
+b1000 0$
+b111 /$
+b110 .$
+b101 -$
+b100 ,$
+b11 +$
+b10 *$
+b1 )$
+b0 ($
+b1100 '$
+b1111 &$
+b1110 %$
+b1101 $$
+b1100 #$
+b1011 "$
+b1010 !$
+b1001 ~#
+b1000 }#
+b111 |#
+b110 {#
+b101 z#
+b100 y#
+b11 x#
+b10 w#
+b1 v#
+b0 u#
+b1011 t#
+b1111 s#
+b1110 r#
+b1101 q#
+b1100 p#
+b1011 o#
+b1010 n#
+b1001 m#
+b1000 l#
+b111 k#
+b110 j#
+b101 i#
+b100 h#
+b11 g#
+b10 f#
+b1 e#
+b0 d#
+b1010 c#
+b1111 b#
+b1110 a#
+b1101 `#
+b1100 _#
+b1011 ^#
+b1010 ]#
+b1001 \#
+b1000 [#
+b111 Z#
+b110 Y#
+b101 X#
+b100 W#
+b11 V#
+b10 U#
+b1 T#
+b0 S#
+b1001 R#
+b1111 Q#
+b1110 P#
+b1101 O#
+b1100 N#
+b1011 M#
+b1010 L#
+b1001 K#
+b1000 J#
+b111 I#
+b110 H#
+b101 G#
+b100 F#
+b11 E#
+b10 D#
+b1 C#
+b0 B#
+b1000 A#
+b1111 @#
+b1110 ?#
+b1101 >#
+b1100 =#
+b1011 <#
+b1010 ;#
+b1001 :#
+b1000 9#
+b111 8#
+b110 7#
+b101 6#
+b100 5#
+b11 4#
+b10 3#
+b1 2#
+b0 1#
+b111 0#
+b1111 /#
+b1110 .#
+b1101 -#
+b1100 ,#
+b1011 +#
+b1010 *#
+b1001 )#
+b1000 (#
+b111 '#
+b110 &#
+b101 %#
+b100 $#
+b11 ##
+b10 "#
+b1 !#
+b0 ~"
+b110 }"
+b1111 |"
+b1110 {"
+b1101 z"
+b1100 y"
+b1011 x"
+b1010 w"
+b1001 v"
+b1000 u"
+b111 t"
+b110 s"
+b101 r"
+b100 q"
+b11 p"
+b10 o"
+b1 n"
+b0 m"
+b101 l"
+b1111 k"
+b1110 j"
+b1101 i"
+b1100 h"
+b1011 g"
+b1010 f"
+b1001 e"
+b1000 d"
+b111 c"
+b110 b"
+b101 a"
+b100 `"
+b11 _"
+b10 ^"
+b1 ]"
+b0 \"
+b100 ["
+b1111 Z"
+b1110 Y"
+b1101 X"
+b1100 W"
+b1011 V"
+b1010 U"
+b1001 T"
+b1000 S"
+b111 R"
+b110 Q"
+b101 P"
+b100 O"
+b11 N"
+b10 M"
+b1 L"
+b0 K"
+b11 J"
+b1111 I"
+b1110 H"
+b1101 G"
+b1100 F"
+b1011 E"
+b1010 D"
+b1001 C"
+b1000 B"
+b111 A"
+b110 @"
+b101 ?"
+b100 >"
+b11 ="
+b10 <"
+b1 ;"
+b0 :"
+b10 9"
+b1111 8"
+b1110 7"
+b1101 6"
+b1100 5"
+b1011 4"
+b1010 3"
+b1001 2"
+b1000 1"
+b111 0"
+b110 /"
+b101 ."
+b100 -"
+b11 ,"
+b10 +"
+b1 *"
+b0 )"
+b1 ("
+b1111 '"
+b1110 &"
+b1101 %"
+b1100 $"
+b1011 #"
+b1010 ""
+b1001 !"
+b1000 ~
+b111 }
+b110 |
+b101 {
+b100 z
+b11 y
+b10 x
+b1 w
+b0 v
+b0 u
+b100000000000 r
+b1000 q
+b10 p
+b10000000000 o
+b10000 n
+b10000000000 m
+b100000 i
+b10000 h
+b1000 g
+b10 f
+b10000 e
+b10000000000 d
+b1111 `
+b1110 _
+b1101 ^
+b1100 ]
+b1011 \
+b1010 [
+b1001 Z
+b1000 Y
+b111 X
+b110 W
+b101 V
+b100 U
+b11 T
+b10 S
+b1 R
+b0 Q
+b10000 N
+b1000 M
+b10 L
+b10000 K
+b10000000000 J
+b10000 B
+b1000 A
+b1000000 @
+b10000000000 ?
+b10000 >
+b10000000000 =
+b10000 <
+$end
+#1000
+$dumpvars
+b0 F%
+bx E%
+bx D%
+bx C%
+bx B%
+b0 A%
+bx @%
+b0 ?%
+bx >%
+bx =%
+b0 <%
+x;%
+bx :%
+bx !%
+b0 ~$
+0}$
+1|$
+bx {$
+bx z$
+b10000000000 y$
+bx x$
+bx w$
+bx r$
+bx q$
+bx p$
+bz o$
+zn$
+bz m$
+zl$
+bz k$
+b0 t
+b0 s
+bx l
+b0 k
+b0 j
+bx c
+b0 b
+b0 a
+b0 P
+b0 O
+bx I
+b0 H
+0G
+0F
+0E
+1D
+0C
+bx ;
+x:
+x9
+bx 8
+bx 7
+bx 6
+b0 5
+bx 4
+13
+02
+11
+x0
+1/
+bx .
+1-
+0,
+1+
+x*
+1)
+b0 (
+b0 '
+bx &
+1%
+0$
+1#
+x"
+1!
+$end
+#1500
+0+
+01
+0#
+1:
+b1 <%
+0;%
+b0 ;
+b0 r$
+b0 :%
+1C
+#2000
+0C
+#2500
+b0 z$
+b11100000000000000110000000000000110000000000000001100000000000001010000000000000011000000000000010000000000000000110000000000000011000000000000001100000000000000100000000000000011000000000000000100000000000000110000000000000000000000000000001100000000000001110000000000000010000000000000011000000000000000100000000000000101000000000000001000000000000001000000000000000010000000000000001100000000000000100000000000000010000000000000001000000000000000010000000000000010000000000000000000000000000000100000000000000111000000000000000100000000000001100000000000000001000000000000010100000000000000010000000000000100000000000000000100000000000000110000000000000001000000000000001000000000000000010000000000000001000000000000000100000000000000000000000000000001000000000000011100000000000000000000000000000110000000000000000000000000000001010000000000000000000000000000010000000000000000000000000000000011000000000000000000000000000000100000000000000000000000000000000100000000000000000000000000000000000000000000000000000000 6
+b11100000000000000110000000000000110000000000000001100000000000001010000000000000011000000000000010000000000000000110000000000000011000000000000001100000000000000100000000000000011000000000000000100000000000000110000000000000000000000000000001100000000000001110000000000000010000000000000011000000000000000100000000000000101000000000000001000000000000001000000000000000010000000000000001100000000000000100000000000000010000000000000001000000000000000010000000000000010000000000000000000000000000000100000000000000111000000000000000100000000000001100000000000000001000000000000010100000000000000010000000000000100000000000000000100000000000000110000000000000001000000000000001000000000000000010000000000000001000000000000000100000000000000000000000000000001000000000000011100000000000000000000000000000110000000000000000000000000000001010000000000000000000000000000010000000000000000000000000000000011000000000000000000000000000000100000000000000000000000000000000100000000000000000000000000000000000000000000000000000000 w$
+b11100000000000000110000000000000110000000000000001100000000000001010000000000000011000000000000010000000000000000110000000000000011000000000000001100000000000000100000000000000011000000000000000100000000000000110000000000000000000000000000001100000000000001110000000000000010000000000000011000000000000000100000000000000101000000000000001000000000000001000000000000000010000000000000001100000000000000100000000000000010000000000000001000000000000000010000000000000010000000000000000000000000000000100000000000000111000000000000000100000000000001100000000000000001000000000000010100000000000000010000000000000100000000000000000100000000000000110000000000000001000000000000001000000000000000010000000000000001000000000000000100000000000000000000000000000001000000000000011100000000000000000000000000000110000000000000000000000000000001010000000000000000000000000000010000000000000000000000000000000011000000000000000000000000000000100000000000000000000000000000000100000000000000000000000000000000000000000000000000000000 {$
+1;%
+1C
+#3000
+0C
+#3500
+b0 !%
+0:
+b10 <%
+1*
+b0 D%
+b0 C%
+b0 .
+b0 c
+b0 B%
+1C
+#4000
+0C
+#4500
+00
+0"
+0*
+b0 <%
+b10 ?%
+1C
+#5000
+0C
+#5500
+0)
+0/
+0!
+1:
+b1 <%
+0;%
+b110000000 ;
+b110000000 r$
+b110000000 :%
+1C
+#6000
+0C
+#6500
+b11000000100000000100000000 z$
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 6
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 w$
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 {$
+1;%
+1C
+#7000
+0C
+#7500
+0|$
+0:
+b10 <%
+1"
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 &
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 l
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 E%
+1C
+#8000
+0C
+#8500
+1|$
+0%
+1!
+b1 t
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 s
+1C
+#9000
+0C
+#9500
+0"
+b0 <%
+b10000000 F%
+1C
+#10000
+0C
+#10500
+1:
+b1 <%
+0;%
+b1000000000 ;
+b1000000000 r$
+b1000000000 :%
+0!
+1C
+#11000
+0C
+#11500
+1;%
+1C
+#12000
+0C
+#12500
+0|$
+0:
+b10 <%
+1"
+1C
+#13000
+0C
+#13500
+1|$
+1!
+b10 t
+b1111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 s
+1C
+#14000
+0C
+#14500
+0"
+b0 <%
+b0 F%
+b1 ?%
+1C
+#15000
+0C
+#15500
+0!
+1:
+b1 <%
+0;%
+b11110000000 ;
+b11110000000 r$
+b11110000000 :%
+1C
+#16000
+0C
+#16500
+1;%
+1C
+#17000
+0C
+#17500
+0|$
+0:
+b10 <%
+10
+b100000000 4
+b100000000 I
+b100000000 @%
+1C
+#18000
+0C
+#18500
+1|$
+b100000000 5
+b100000000 H
+03
+1/
+b1 P
+b100000000 O
+1C
+#19000
+0C
+#19500
+b1 ~$
+00
+b0 <%
+b0 ?%
+b1 A%
+1C
+#20000
+0C
+#20500
+1:
+b1 <%
+0;%
+b100 ;
+b100 r$
+b100 :%
+0/
+1C
+#21000
+0C
+#21500
+b0 z$
+1;%
+b11100000000000000110000000000000110000000000000001100000000000001010000000000000011000000000000010000000000000000110000000000000011000000000000001100000000000000100000000000000011000000000000000100000000000000110000000000000000000000000000001100000000000001110000000000000010000000000000011000000000000000100000000000000101000000000000001000000000000001000000000000000010000000000000001100000000000000100000000000000010000000000000001000000000000000010000000000000010000000000000000000000000000000100000000000000111000000000000000100000000000001100000000000000001000000000000010100000000000000010000000000000100000000000000000100000000000000110000000000000001000000000000001000000000000000010000000000000001000000000000000100000000000000000000000000000001000000000000011100000000000000000000000000000110000000000000000000000000000001010000000000000000000000000000010000000000000000000000000000000011000000000000000000000000000000100000000000000000000000000000000100000000000000000000000000000000000000000000000000000000 6
+b11100000000000000110000000000000110000000000000001100000000000001010000000000000011000000000000010000000000000000110000000000000011000000000000001100000000000000100000000000000011000000000000000100000000000000110000000000000000000000000000001100000000000001110000000000000010000000000000011000000000000000100000000000000101000000000000001000000000000001000000000000000010000000000000001100000000000000100000000000000010000000000000001000000000000000010000000000000010000000000000000000000000000000100000000000000111000000000000000100000000000001100000000000000001000000000000010100000000000000010000000000000100000000000000000100000000000000110000000000000001000000000000001000000000000000010000000000000001000000000000000100000000000000000000000000000001000000000000011100000000000000000000000000000110000000000000000000000000000001010000000000000000000000000000010000000000000000000000000000000011000000000000000000000000000000100000000000000000000000000000000100000000000000000000000000000000000000000000000000000000 w$
+b11100000000000000110000000000000110000000000000001100000000000001010000000000000011000000000000010000000000000000110000000000000011000000000000001100000000000000100000000000000011000000000000000100000000000000110000000000000000000000000000001100000000000001110000000000000010000000000000011000000000000000100000000000000101000000000000001000000000000001000000000000000010000000000000001100000000000000100000000000000010000000000000001000000000000000010000000000000010000000000000000000000000000000100000000000000111000000000000000100000000000001100000000000000001000000000000010100000000000000010000000000000100000000000000000100000000000000110000000000000001000000000000001000000000000000010000000000000001000000000000000100000000000000000000000000000001000000000000011100000000000000000000000000000110000000000000000000000000000001010000000000000000000000000000010000000000000000000000000000000011000000000000000000000000000000100000000000000000000000000000000100000000000000000000000000000000000000000000000000000000 {$
+1C
+#22000
+0C
+#22500
+0|$
+0:
+b10 <%
+1*
+b100000000 C%
+b1000000000000000000000000 .
+b1000000000000000000000000 c
+b1000000000000000000000000 B%
+1C
+#23000
+0C
+#23500
+1|$
+0-
+b100000000 '
+b100000000 a
+1)
+b1 k
+b1000000000000000000000000 j
+1C
+#24000
+0C
+#24500
+0*
+b0 <%
+b10 ?%
+1C
+#25000
+0C
+#25500
+0)
+1:
+b1 <%
+0;%
+b1010000000 ;
+b1010000000 r$
+b1010000000 :%
+1C
+#26000
+0C
+#26500
+b11000000100000000100000000 z$
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 6
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 w$
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 {$
+1;%
+1C
+#27000
+0C
+#27500
+0|$
+0:
+b10 <%
+1"
+1C
+#28000
+0C
+#28500
+1|$
+1!
+b11 t
+b11110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 s
+1C
+#29000
+0C
+#29500
+0"
+b0 <%
+b10000000 F%
+1C
+#30000
+0C
+#30500
+1:
+b1 <%
+0;%
+b1100000000 ;
+b1100000000 r$
+b1100000000 :%
+0!
+1C
+#31000
+0C
+#31500
+1;%
+1C
+#32000
+0C
+#32500
+0|$
+0:
+b10 <%
+1"
+1C
+#33000
+0C
+#33500
+1|$
+1}$
+1$
+1!
+b100 t
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 s
+1C
+#34000
+0C
+#34500
+1C
+#35000
+0C
+#35500
+1C
+#36000
+0C
+#36500
+1C
+#37000
+0C
+#37500
+1C
+#38000
+0C
+#38500
+1C
+#39000
+0C
+#39500
+1C
+#40000
+0C
+#40500
+1C
+#41000
+0C
+#41500
+1C
+#42000
+0C
+#42500
+1C
+#43000
+0C
+#43500
+1C
+#44000
+0C
+#44500
+1C
+#45000
+0C
+#45500
+1C
+#46000
+0C
+#46500
+1C
+#47000
+0C
+#47500
+1C
+#48000
+0C
+#48500
+1C
+#49000
+0C
+#49500
+1C
+#50000
+1E
+0C
+1G
+#50500
+0}$
+b0 5
+b0 H
+0$
+13
+b11 t
+1#
+b1111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 s
+11
+b0 P
+b0 O
+1C
+#51000
+0C
+#51500
+0"
+b0 <%
+b0 F%
+b1 ?%
+1C
+#52000
+0C
+#52500
+1:
+b1 <%
+0;%
+b100010000000 ;
+b100010000000 r$
+b100010000000 :%
+0!
+1C
+#53000
+0C
+#53500
+1;%
+1C
+#54000
+0C
+#54500
+0|$
+0:
+b10 <%
+10
+1C
+#55000
+0C
+#55500
+1|$
+b100000000 5
+b100000000 H
+03
+1/
+b1 P
+b100000000 O
+1C
+#56000
+0C
+#56500
+b10 ~$
+00
+b0 <%
+b0 ?%
+b10 A%
+1C
+#57000
+0C
+#57500
+0/
+1:
+b1 <%
+0;%
+b1000 ;
+b1000 r$
+b1000 :%
+1C
+#58000
+0C
+#58500
+b0 z$
+b11100000000000000110000000000000110000000000000001100000000000001010000000000000011000000000000010000000000000000110000000000000011000000000000001100000000000000100000000000000011000000000000000100000000000000110000000000000000000000000000001100000000000001110000000000000010000000000000011000000000000000100000000000000101000000000000001000000000000001000000000000000010000000000000001100000000000000100000000000000010000000000000001000000000000000010000000000000010000000000000000000000000000000100000000000000111000000000000000100000000000001100000000000000001000000000000010100000000000000010000000000000100000000000000000100000000000000110000000000000001000000000000001000000000000000010000000000000001000000000000000100000000000000000000000000000001000000000000011100000000000000000000000000000110000000000000000000000000000001010000000000000000000000000000010000000000000000000000000000000011000000000000000000000000000000100000000000000000000000000000000100000000000000000000000000000000000000000000000000000000 6
+b11100000000000000110000000000000110000000000000001100000000000001010000000000000011000000000000010000000000000000110000000000000011000000000000001100000000000000100000000000000011000000000000000100000000000000110000000000000000000000000000001100000000000001110000000000000010000000000000011000000000000000100000000000000101000000000000001000000000000001000000000000000010000000000000001100000000000000100000000000000010000000000000001000000000000000010000000000000010000000000000000000000000000000100000000000000111000000000000000100000000000001100000000000000001000000000000010100000000000000010000000000000100000000000000000100000000000000110000000000000001000000000000001000000000000000010000000000000001000000000000000100000000000000000000000000000001000000000000011100000000000000000000000000000110000000000000000000000000000001010000000000000000000000000000010000000000000000000000000000000011000000000000000000000000000000100000000000000000000000000000000100000000000000000000000000000000000000000000000000000000 w$
+b11100000000000000110000000000000110000000000000001100000000000001010000000000000011000000000000010000000000000000110000000000000011000000000000001100000000000000100000000000000011000000000000000100000000000000110000000000000000000000000000001100000000000001110000000000000010000000000000011000000000000000100000000000000101000000000000001000000000000001000000000000000010000000000000001100000000000000100000000000000010000000000000001000000000000000010000000000000010000000000000000000000000000000100000000000000111000000000000000100000000000001100000000000000001000000000000010100000000000000010000000000000100000000000000000100000000000000110000000000000001000000000000001000000000000000010000000000000001000000000000000100000000000000000000000000000001000000000000011100000000000000000000000000000110000000000000000000000000000001010000000000000000000000000000010000000000000000000000000000000011000000000000000000000000000000100000000000000000000000000000000100000000000000000000000000000000000000000000000000000000 {$
+1;%
+1C
+#59000
+0C
+#59500
+0|$
+0:
+b10 <%
+1*
+b1000000000 C%
+b10000000000000000000000000 .
+b10000000000000000000000000 c
+b10000000000000000000000000 B%
+1C
+#60000
+0C
+#60500
+1|$
+1}$
+1,
+1)
+b10 k
+b1000000000000000000000000000000001000000000000000000000000 j
+1C
+#61000
+0C
+#61500
+1C
+#62000
+0C
+#62500
+1C
+#63000
+0C
+#63500
+1C
+#64000
+0C
+#64500
+1C
+#65000
+0C
+#65500
+1C
+#66000
+0C
+#66500
+1C
+#67000
+0C
+#67500
+1C
+#68000
+0C
+#68500
+1C
+#69000
+0C
+#69500
+1C
+#70000
+0C
+#70500
+1C
+#71000
+0C
+#71500
+1C
+#72000
+0C
+#72500
+1C
+#73000
+0C
+#73500
+1C
+#74000
+0C
+#74500
+1C
+#75000
+0C
+#75500
+1C
+#76000
+0C
+#76500
+1C
+#77000
+0C
+#77500
+1C
+#78000
+0C
+#78500
+1C
+#79000
+0C
+#79500
+1C
+#80000
+0C
+#80500
+1C
+#81000
+0C
+#81500
+1C
+#82000
+0C
+#82500
+1C
+#83000
+0C
+#83500
+1C
+#84000
+0C
+#84500
+1C
+#85000
+0C
+#85500
+1C
+#86000
+0C
+#86500
+1C
+#87000
+0C
+#87500
+1C
+#88000
+0C
+#88500
+1C
+#89000
+0C
+#89500
+1C
+#90000
+0C
+#90500
+1C
+#91000
+0C
+#91500
+1C
+#92000
+0C
+#92500
+1C
+#93000
+0C
+#93500
+1C
+#94000
+0C
+#94500
+1C
+#95000
+0C
+#95500
+1C
+#96000
+0C
+#96500
+1C
+#97000
+0C
+#97500
+1C
+#98000
+0C
+#98500
+1C
+#99000
+0C
+#99500
+1C
+#100000
+0C
+#100500
+1C
+#101000
+0C
+#101500
+1C
+#102000
+0C
+#102500
+1C
+#103000
+0C
+#103500
+1C
+#104000
+0C
+#104500
+1C
+#105000
+0C
+#105500
+1C
+#106000
+0C
+#106500
+1C
+#107000
+0C
+#107500
+1C
+#108000
+0C
+#108500
+1C
+#109000
+0C
+#109500
+1C
+#110000
+0C
+#110500
+1C
+#111000
+0C
+#111500
+1C
+#112000
+0C
+#112500
+1C
+#113000
+0C
+#113500
+1C
+#114000
+0C
+#114500
+1C
+#115000
+0C
+#115500
+1C
+#116000
+0C
+#116500
+1C
+#117000
+0C
+#117500
+1C
+#118000
+0C
+#118500
+1C
+#119000
+0C
+#119500
+1C
+#120000
+0C
+#120500
+1C
+#121000
+0C
+#121500
+1C
+#122000
+0C
+#122500
+1C
+#123000
+0C
+#123500
+1C
+#124000
+0C
+#124500
+1C
+#125000
+0C
+#125500
+1C
+#126000
+0C
+#126500
+1C
+#127000
+0C
+#127500
+1C
+#128000
+0C
+#128500
+1C
+#129000
+0C
+#129500
+1C
+#130000
+0C
+#130500
+1C
+#131000
+0C
+#131500
+1C
+#132000
+0C
+#132500
+1C
+#133000
+0C
+#133500
+1C
+#134000
+0C
+#134500
+1C
+#135000
+0C
+#135500
+1C
+#136000
+0C
+#136500
+1C
+#137000
+0C
+#137500
+1C
+#138000
+0C
+#138500
+1C
+#139000
+0C
+#139500
+1C
+#140000
+0C
+#140500
+1C
+#141000
+0C
+#141500
+1C
+#142000
+0C
+#142500
+1C
+#143000
+0C
+#143500
+1C
+#144000
+0C
+#144500
+1C
+#145000
+0C
+#145500
+1C
+#146000
+0C
+#146500
+1C
+#147000
+0C
+#147500
+1C
+#148000
+0C
+#148500
+1C
+#149000
+0C
+#149500
+1C
+#150000
+0C
+1F
+#150500
+0}$
+0,
+b1000000000 '
+b1000000000 a
+1+
+b1 k
+b10000000000000000000000000 j
+1C
+#151000
+0C
+#151500
+0*
+b0 <%
+b10 ?%
+1C
+#152000
+0C
+#152500
+1:
+b1 <%
+0;%
+b1110000000 ;
+b1110000000 r$
+b1110000000 :%
+0)
+1C
+#153000
+0C
+#153500
+b11000000100000000100000000 z$
+1;%
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 6
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 w$
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 {$
+1C
+#154000
+0C
+#154500
+0|$
+0:
+b10 <%
+1"
+1C
+#155000
+0C
+#155500
+1|$
+1}$
+1$
+1!
+b100 t
+b111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000000011110000111000001101000011000000101100001010000010010000100000000111000001100000010100000100000000110000001000000001000000000000111100001110000011010000110000001011000010100000100100001000000001110000011000000101000001000000001100000010000000010000000000001111000011100000110100001100000010110000101000001001000010000000011100000110000001010000010000000011000000100000000100000000 s
+1C
+#156000
+0C
+#156500
+1C
+#157000
+0C
+#157500
+1C
+#158000
+0C
+#158500
+1C
+#159000
+0C
+#159500
+1C
+#160000
+0C
+#160500
+1C
+#161000
+0C
+#161500
+1C
+#162000
+0C
+#162500
+1C
+#163000
+0C
+#163500
+1C
+#164000
+0C
+#164500
+1C
+#165000
+0C
+#165500
+1C
+#166000
+0C
+#166500
+1C
+#167000
+0C
+#167500
+1C
+#168000
+0C
+#168500
+1C
+#169000
+0C
+#169500
+1C
+#170000
+0C
+#170500
+1C
+#171000
+0C
+#171500
+1C
+#172000
+0C
+#172500
+1C
+#173000
+0C
+#173500
+1C
+#174000
+0C
+#174500
+1C
+#175000
+0C
+#175500
+1C
+#176000
+0C
+#176500
+1C
+#177000
+0C
+#177500
+1C
+#178000
+0C
+#178500
+1C
+#179000
+0C
+#179500
+1C
+#180000
+0C
+#180500
+1C
+#181000
+0C
+#181500
+1C
+#182000
+0C
+#182500
+1C
+#183000
+0C
+#183500
+1C
+#184000
+0C
+#184500
+1C
+#185000
+0C
+#185500
+1C
+#186000
+0C
+#186500
+1C
+#187000
+0C
+#187500
+1C
+#188000
+0C
+#188500
+1C
+#189000
+0C
+#189500
+1C
+#190000
+0C
+#190500
+1C
+#191000
+0C
+#191500
+1C
+#192000
+0C
+#192500
+1C
+#193000
+0C
+#193500
+1C
+#194000
+0C
+#194500
+1C
+#195000
+0C
+#195500
+1C
+#196000
+0C
+#196500
+1C
+#197000
+0C
+#197500
+1C
+#198000
+0C
+#198500
+1C
+#199000
+0C
+#199500
+1C
+#200000
+0C
+#200500
+1C
+#201000
+0C
+#201500
+1C
+#202000
+0C
+#202500
+1C
+#203000
+0C
+#203500
+1C
+#204000
+0C
+#204500
+1C
+#205000
+0C
+#205500
+1C
+#206000
+0C
+#206500
+1C
+#207000
+0C
+#207500
+1C
+#208000
+0C
+#208500
+1C
+#209000
+0C
+#209500
+1C
+#210000
+0C
+#210500
+1C
+#211000
+0C
+#211500
+1C
+#212000
+0C
+#212500
+1C
+#213000
+0C
+#213500
+1C
+#214000
+0C
+#214500
+1C
+#215000
+0C
+#215500
+1C
+#216000
+0C
+#216500
+1C
+#217000
+0C
+#217500
+1C
+#218000
+0C
+#218500
+1C
+#219000
+0C
+#219500
+1C
+#220000
+0C
+#220500
+1C
+#221000
+0C
+#221500
+1C
+#222000
+0C
+#222500
+1C
+#223000
+0C
+#223500
+1C
+#224000
+0C
+#224500
+1C
+#225000
+0C
+#225500
+1C
+#226000
+0C
+#226500
+1C
+#227000
+0C
+#227500
+1C
+#228000
+0C
+#228500
+1C
+#229000
+0C
+#229500
+1C
+#230000
+0C
+#230500
+1C
+#231000
+0C
+#231500
+1C
+#232000
+0C
+#232500
+1C
+#233000
+0C
+#233500
+1C
+#234000
+0C
+#234500
+1C
+#235000
+0C
+#235500
+1C
+#236000
+0C
+#236500
+1C
+#237000
+0C
+#237500
+1C
+#238000
+0C
+#238500
+1C
+#239000
+0C
+#239500
+1C
+#240000
+0C
+#240500
+1C
+#241000
+0C
+#241500
+1C
+#242000
+0C
+#242500
+1C
+#243000
+0C
+#243500
+1C
+#244000
+0C
+#244500
+1C
+#245000
+0C
+#245500
+1C
+#246000
+0C
+#246500
+1C
+#247000
+0C
+#247500
+1C
+#248000
+0C
+#248500
+1C
+#249000
+0C
+#249500
+1C
+#250000
+0C
+#250500
+1C
+#251000
+0C
+#251500
+1C
+#252000
+0C
+#252500
+1C
+#253000
+0C
+#253500
+1C
+#254000
+0C
+#254500
+1C
+#255000
+0C
+#255500
+1C
+#256000
+0C
+#256500
+1C
+#257000
+0C
+#257500
+1C
+#258000
+0C
+#258500
+1C
+#259000
+0C
+#259500
+1C
+#260000
+0C
+#260500
+1C
+#261000
+0C
+#261500
+1C
+#262000
+0C
+#262500
+1C
+#263000
+0C
+#263500
+1C
+#264000
+0C
+#264500
+1C
+#265000
+0C
+#265500
+1C
+#266000
+0C
+#266500
+1C
+#267000
+0C
+#267500
+1C
+#268000
+0C
+#268500
+1C
+#269000
+0C
+#269500
+1C
+#270000
+0C
+#270500
+1C
+#271000
+0C
+#271500
+1C
+#272000
+0C
+#272500
+1C
+#273000
+0C
+#273500
+1C
+#274000
+0C
+#274500
+1C
+#275000
+0C
+#275500
+1C
+#276000
+0C
+#276500
+1C
+#277000
+0C
+#277500
+1C
+#278000
+0C
+#278500
+1C
+#279000
+0C
+#279500
+1C
+#280000
+0C
+#280500
+1C
+#281000
+0C
+#281500
+1C
+#282000
+0C
+#282500
+1C
+#283000
+0C
+#283500
+1C
+#284000
+0C
+#284500
+1C
+#285000
+0C
+#285500
+1C
+#286000
+0C
+#286500
+1C
+#287000
+0C
+#287500
+1C
+#288000
+0C
+#288500
+1C
+#289000
+0C
+#289500
+1C
+#290000
+0C
+#290500
+1C
+#291000
+0C
+#291500
+1C
+#292000
+0C
+#292500
+1C
+#293000
+0C
+#293500
+1C
+#294000
+0C
+#294500
+1C
+#295000
+0C
+#295500
+1C
+#296000
+0C
+#296500
+1C
+#297000
+0C
+#297500
+1C
+#298000
+0C
+#298500
+1C
+#299000
+0C
+#299500
+1C
+#300000
+0C
+#300500
+1C
+#301000
+0C
+#301500
+1C
+#302000
+0C
+#302500
+1C
+#303000
+0C
+#303500
+1C
+#304000
+0C
+#304500
+1C
+#305000
+0C
+#305500
+1C
+#306000
+0C
+#306500
+1C
+#307000
+0C
+#307500
+1C
+#308000
+0C
+#308500
+1C
+#309000
+0C
+#309500
+1C
+#310000
+0C
+#310500
+1C
+#311000
+0C
+#311500
+1C
+#312000
+0C
+#312500
+1C
+#313000
+0C
+#313500
+1C
+#314000
+0C
+#314500
+1C
+#315000
+0C
+#315500
+1C
+#316000
+0C
+#316500
+1C
+#317000
+0C
+#317500
+1C
+#318000
+0C
+#318500
+1C
+#319000
+0C
+#319500
+1C
+#320000
+0C
+#320500
+1C
+#321000
+0C
+#321500
+1C
+#322000
+0C
+#322500
+1C
+#323000
+0C
+#323500
+1C
+#324000
+0C
+#324500
+1C
+#325000
+0C
+#325500
+1C
+#326000
+0C
+#326500
+1C
+#327000
+0C
+#327500
+1C
+#328000
+0C
+#328500
+1C
+#329000
+0C
+#329500
+1C
+#330000
+0C
+#330500
+1C
+#331000
+0C
+#331500
+1C
+#332000
+0C
+#332500
+1C
+#333000
+0C
+#333500
+1C
+#334000
+0C
+#334500
+1C
+#335000
+0C
+#335500
+1C
+#336000
+0C
+#336500
+1C
+#337000
+0C
+#337500
+1C
+#338000
+0C
+#338500
+1C
+#339000
+0C
+#339500
+1C
+#340000
+0C
+#340500
+1C
+#341000
+0C
+#341500
+1C
+#342000
+0C
+#342500
+1C
+#343000
+0C
+#343500
+1C
+#344000
+0C
+#344500
+1C
+#345000
+0C
+#345500
+1C
+#346000
+0C
+#346500
+1C
+#347000
+0C
+#347500
+1C
+#348000
+0C
+#348500
+1C
+#349000
+0C
+#349500
+1C
+#350000
+0C
+#350500
+1C
+#351000
+0C
+#351500
+1C
+#352000
+0C
+#352500
+1C
+#353000
+0C
+#353500
+1C
+#354000
+0C
+#354500
+1C
+#355000
+0C
+#355500
+1C
+#356000
+0C
+#356500
+1C
+#357000
+0C
+#357500
+1C
+#358000
+0C
+#358500
+1C
+#359000
+0C
+#359500
+1C
+#360000
+0C
+#360500
+1C
+#361000
+0C
+#361500
+1C
+#362000
+0C
+#362500
+1C
+#363000
+0C
+#363500
+1C
+#364000
+0C
+#364500
+1C
+#365000
+0C
+#365500
+1C
+#366000
+0C
+#366500
+1C
+#367000
+0C
+#367500
+1C
+#368000
+0C
+#368500
+1C
+#369000
+0C
+#369500
+1C
+#370000
+0C
+#370500
+1C
+#371000
+0C
+#371500
+1C
+#372000
+0C
+#372500
+1C
+#373000
+0C
+#373500
+1C
+#374000
+0C
+#374500
+1C
+#375000
+0C
+#375500
+1C
+#376000
+0C
+#376500
+1C
+#377000
+0C
+#377500
+1C
+#378000
+0C
+#378500
+1C
+#379000
+0C
+#379500
+1C
+#380000
+0C
+#380500
+1C
+#381000
+0C
+#381500
+1C
+#382000
+0C
+#382500
+1C
+#383000
+0C
+#383500
+1C
+#384000
+0C
+#384500
+1C
+#385000
+0C
+#385500
+1C
+#386000
+0C
+#386500
+1C
+#387000
+0C
+#387500
+1C
+#388000
+0C
+#388500
+1C
+#389000
+0C
+#389500
+1C
+#390000
+0C
+#390500
+1C
+#391000
+0C
+#391500
+1C
+#392000
+0C
+#392500
+1C
+#393000
+0C
+#393500
+1C
+#394000
+0C
+#394500
+1C
+#395000
+0C
+#395500
+1C
+#396000
+0C
+#396500
+1C
+#397000
+0C
+#397500
+1C
+#398000
+0C
+#398500
+1C
+#399000
+0C
+#399500
+1C
+#400000
+0C
+#400500
+1C
+#401000
+0C
+#401500
+1C
+#402000
+0C
+#402500
+1C
+#403000
+0C
+#403500
+1C
+#404000
+0C
+#404500
+1C
+#405000
+0C
+#405500
+1C
+#406000
+0C
+#406500
+1C
+#407000
+0C
+#407500
+1C
+#408000
+0C
+#408500
+1C
+#409000
+0C
+#409500
+1C
+#410000
+0C
+#410500
+1C
+#411000
+0C
+#411500
+1C
+#412000
+0C
+#412500
+1C
+#413000
+0C
+#413500
+1C
+#414000
+0C
+#414500
+1C
+#415000
+0C
+#415500
+1C
+#416000
+0C
+#416500
+1C
+#417000
+0C
+#417500
+1C
+#418000
+0C
+#418500
+1C
+#419000
+0C
+#419500
+1C
+#420000
+0C
+#420500
+1C
+#421000
+0C
+#421500
+1C
+#422000
+0C
+#422500
+1C
+#423000
+0C
+#423500
+1C
+#424000
+0C
+#424500
+1C
+#425000
+0C
+#425500
+1C
+#426000
+0C
+#426500
+1C
+#427000
+0C
+#427500
+1C
+#428000
+0C
+#428500
+1C
+#429000
+0C
+#429500
+1C
+#430000
+0C
+#430500
+1C
+#431000
+0C
+#431500
+1C
+#432000
+0C
+#432500
+1C
+#433000
+0C
+#433500
+1C
+#434000
+0C
+#434500
+1C
+#435000
+0C
+#435500
+1C
+#436000
+0C
+#436500
+1C
+#437000
+0C
+#437500
+1C
+#438000
+0C
+#438500
+1C
+#439000
+0C
+#439500
+1C
+#440000
+0C
+#440500
+1C
+#441000
+0C
+#441500
+1C
+#442000
+0C
+#442500
+1C
+#443000
+0C
+#443500
+1C
+#444000
+0C
+#444500
+1C
+#445000
+0C
+#445500
+1C
+#446000
+0C
+#446500
+1C
+#447000
+0C
+#447500
+1C
+#448000
+0C
+#448500
+1C
+#449000
+0C
+#449500
+1C
+#450000
+0C
+#450500
+1C
+#451000
+0C
+#451500
+1C
+#452000
+0C
+#452500
+1C
+#453000
+0C
+#453500
+1C
+#454000
+0C
+#454500
+1C
+#455000
+0C
+#455500
+1C
+#456000
+0C
+#456500
+1C
+#457000
+0C
+#457500
+1C
+#458000
+0C
+#458500
+1C
+#459000
+0C
+#459500
+1C
+#460000
+0C
+#460500
+1C
+#461000
+0C
+#461500
+1C
+#462000
+0C
+#462500
+1C
+#463000
+0C
+#463500
+1C
+#464000
+0C
+#464500
+1C
+#465000
+0C
+#465500
+1C
+#466000
+0C
+#466500
+1C
+#467000
+0C
+#467500
+1C
+#468000
+0C
+#468500
+1C
+#469000
+0C
+#469500
+1C
+#470000
+0C
+#470500
+1C
+#471000
+0C
+#471500
+1C
+#472000
+0C
+#472500
+1C
+#473000
+0C
+#473500
+1C
+#474000
+0C
+#474500
+1C
+#475000
+0C
+#475500
+1C
+#476000
+0C
+#476500
+1C
+#477000
+0C
+#477500
+1C
+#478000
+0C
+#478500
+1C
+#479000
+0C
+#479500
+1C
+#480000
+0C
+#480500
+1C
+#481000
+0C
+#481500
+1C
+#482000
+0C
+#482500
+1C
+#483000
+0C
+#483500
+1C
+#484000
+0C
+#484500
+1C
+#485000
+0C
+#485500
+1C
+#486000
+0C
+#486500
+1C
+#487000
+0C
+#487500
+1C
+#488000
+0C
+#488500
+1C
+#489000
+0C
+#489500
+1C
+#490000
+0C
+#490500
+1C
+#491000
+0C
+#491500
+1C
+#492000
+0C
+#492500
+1C
+#493000
+0C
+#493500
+1C
+#494000
+0C
+#494500
+1C
+#495000
+0C
+#495500
+1C
+#496000
+0C
+#496500
+1C
+#497000
+0C
+#497500
+1C
+#498000
+0C
+#498500
+1C
+#499000
+0C
+#499500
+1C
+#500000
+0C
+#500500
+1C
+#501000
+0C
+#501500
+1C
+#502000
+0C
+#502500
+1C
+#503000
+0C
+#503500
+1C
+#504000
+0C
+#504500
+1C
+#505000
+0C
+#505500
+1C
+#506000
+0C
+#506500
+1C
+#507000
+0C
+#507500
+1C
+#508000
+0C
+#508500
+1C
+#509000
+0C
+#509500
+1C
+#510000
+0C
+#510500
+1C
+#511000
+0C
+#511500
+1C
+#512000
+0C
+#512500
+1C
+#513000
+0C
+#513500
+1C
+#514000
+0C
+#514500
+1C
+#515000
+0C
+#515500
+1C
+#516000
+0C
+#516500
+1C
+#517000
+0C
+#517500
+1C
+#518000
+0C
+#518500
+1C
+#519000
+0C
+#519500
+1C
+#520000
+0C
+#520500
+1C
+#521000
+0C
+#521500
+1C
+#522000
+0C
+#522500
+1C
+#523000
+0C
+#523500
+1C
+#524000
+0C
+#524500
+1C
+#525000
+0C
+#525500
+1C
+#526000
+0C
+#526500
+1C
+#527000
+0C
+#527500
+1C
+#528000
+0C
+#528500
+1C
+#529000
+0C
+#529500
+1C
+#530000
+0C
+#530500
+1C
+#531000
+0C
+#531500
+1C
+#532000
+0C
+#532500
+1C
+#533000
+0C
+#533500
+1C
+#534000
+0C
+#534500
+1C
+#535000
+0C
+#535500
+1C
+#536000
+0C
+#536500
+1C
+#537000
+0C
+#537500
+1C
+#538000
+0C
+#538500
+1C
+#539000
+0C
+#539500
+1C
+#540000
+0C
+#540500
+1C
+#541000
+0C
+#541500
+1C
+#542000
+0C
+#542500
+1C
+#543000
+0C
+#543500
+1C
+#544000
+0C
+#544500
+1C
+#545000
+0C
+#545500
+1C
+#546000
+0C
+#546500
+1C
+#547000
+0C
+#547500
+1C
+#548000
+0C
+#548500
+1C
+#549000
+0C
+#549500
+1C
+#550000
+0C
+#550500
+1C
+#551000
+0C
+#551500
+1C
+#552000
+0C
+#552500
+1C
+#553000
+0C
+#553500
+1C
+#554000
+0C
+#554500
+1C
+#555000
+0C
+#555500
+1C
+#556000
+0C
+#556500
+1C
+#557000
+0C
+#557500
+1C
+#558000
+0C
+#558500
+1C
+#559000
+0C
+#559500
+1C
+#560000
+0C
+#560500
+1C
+#561000
+0C
+#561500
+1C
+#562000
+0C
+#562500
+1C
+#563000
+0C
+#563500
+1C
+#564000
+0C
+#564500
+1C
+#565000
+0C
+#565500
+1C
+#566000
+0C
+#566500
+1C
+#567000
+0C
+#567500
+1C
+#568000
+0C
+#568500
+1C
+#569000
+0C
+#569500
+1C
+#570000
+0C
+#570500
+1C
+#571000
+0C
+#571500
+1C
+#572000
+0C
+#572500
+1C
+#573000
+0C
+#573500
+1C
+#574000
+0C
+#574500
+1C
+#575000
+0C
+#575500
+1C
+#576000
+0C
+#576500
+1C
+#577000
+0C
+#577500
+1C
+#578000
+0C
+#578500
+1C
+#579000
+0C
+#579500
+1C
+#580000
+0C
+#580500
+1C
+#581000
+0C
+#581500
+1C
+#582000
+0C
+#582500
+1C
+#583000
+0C
+#583500
+1C
+#584000
+0C
+#584500
+1C
+#585000
+0C
+#585500
+1C
+#586000
+0C
+#586500
+1C
+#587000
+0C
+#587500
+1C
+#588000
+0C
+#588500
+1C
+#589000
+0C
+#589500
+1C
+#590000
+0C
+#590500
+1C
+#591000
+0C
+#591500
+1C
+#592000
+0C
+#592500
+1C
+#593000
+0C
+#593500
+1C
+#594000
+0C
+#594500
+1C
+#595000
+0C
+#595500
+1C
+#596000
+0C
+#596500
+1C
+#597000
+0C
+#597500
+1C
+#598000
+0C
+#598500
+1C
+#599000
+0C
+#599500
+1C
+#600000
+0C
+#600500
+1C
+#601000
+0C
+#601500
+1C
+#602000
+0C
+#602500
+1C
+#603000
+0C
+#603500
+1C
+#604000
+0C
+#604500
+1C
+#605000
+0C
+#605500
+1C
+#606000
+0C
+#606500
+1C
+#607000
+0C
+#607500
+1C
+#608000
+0C
+#608500
+1C
+#609000
+0C
+#609500
+1C
+#610000
+0C
+#610500
+1C
+#611000
+0C
+#611500
+1C
+#612000
+0C
+#612500
+1C
+#613000
+0C
+#613500
+1C
+#614000
+0C
+#614500
+1C
+#615000
+0C
+#615500
+1C
+#616000
+0C
+#616500
+1C
+#617000
+0C
+#617500
+1C
+#618000
+0C
+#618500
+1C
+#619000
+0C
+#619500
+1C
+#620000
+0C
+#620500
+1C
+#621000
+0C
+#621500
+1C
+#622000
+0C
+#622500
+1C
+#623000
+0C
+#623500
+1C
+#624000
+0C
+#624500
+1C
+#625000
+0C
+#625500
+1C
+#626000
+0C
+#626500
+1C
+#627000
+0C
+#627500
+1C
+#628000
+0C
+#628500
+1C
+#629000
+0C
+#629500
+1C
+#630000
+0C
+#630500
+1C
+#631000
+0C
+#631500
+1C
+#632000
+0C
+#632500
+1C
+#633000
+0C
+#633500
+1C
+#634000
+0C
+#634500
+1C
+#635000
+0C
+#635500
+1C
+#636000
+0C
+#636500
+1C
+#637000
+0C
+#637500
+1C
+#638000
+0C
+#638500
+1C
+#639000
+0C
+#639500
+1C
+#640000
+0C
+#640500
+1C
+#641000
+0C
+#641500
+1C
+#642000
+0C
+#642500
+1C
+#643000
+0C
+#643500
+1C
+#644000
+0C
+#644500
+1C
+#645000
+0C
+#645500
+1C
+#646000
+0C
+#646500
+1C
+#647000
+0C
+#647500
+1C
+#648000
+0C
+#648500
+1C
+#649000
+0C
+#649500
+1C
+#650000
+0C
+#650500
+1C
+#651000
+0C
+#651500
+1C
+#652000
+0C
+#652500
+1C
+#653000
+0C
+#653500
+1C
+#654000
+0C
+#654500
+1C
+#655000
+0C
+#655500
+1C
+#656000
+0C
+#656500
+1C
+#657000
+0C
+#657500
+1C
+#658000
+0C
+#658500
+1C
+#659000
+0C
+#659500
+1C
+#660000
+0C
+#660500
+1C
+#661000
+0C
+#661500
+1C
+#662000
+0C
+#662500
+1C
+#663000
+0C
+#663500
+1C
+#664000
+0C
+#664500
+1C
+#665000
+0C
+#665500
+1C
+#666000
+0C
+#666500
+1C
+#667000
+0C
+#667500
+1C
+#668000
+0C
+#668500
+1C
+#669000
+0C
+#669500
+1C
+#670000
+0C
+#670500
+1C
+#671000
+0C
+#671500
+1C
+#672000
+0C
+#672500
+1C
+#673000
+0C
+#673500
+1C
+#674000
+0C
+#674500
+1C
+#675000
+0C
+#675500
+1C
+#676000
+0C
+#676500
+1C
+#677000
+0C
+#677500
+1C
+#678000
+0C
+#678500
+1C
+#679000
+0C
+#679500
+1C
+#680000
+0C
+#680500
+1C
+#681000
+0C
+#681500
+1C
+#682000
+0C
+#682500
+1C
+#683000
+0C
+#683500
+1C
+#684000
+0C
+#684500
+1C
+#685000
+0C
+#685500
+1C
+#686000
+0C
+#686500
+1C
+#687000
+0C
+#687500
+1C
+#688000
+0C
+#688500
+1C
+#689000
+0C
+#689500
+1C
+#690000
+0C
+#690500
+1C
+#691000
+0C
+#691500
+1C
+#692000
+0C
+#692500
+1C
+#693000
+0C
+#693500
+1C
+#694000
+0C
+#694500
+1C
+#695000
+0C
+#695500
+1C
+#696000
+0C
+#696500
+1C
+#697000
+0C
+#697500
+1C
+#698000
+0C
+#698500
+1C
+#699000
+0C
+#699500
+1C
+#700000
+0C
+#700500
+1C
+#701000
+0C
+#701500
+1C
+#702000
+0C
+#702500
+1C
+#703000
+0C
+#703500
+1C
+#704000
+0C
+#704500
+1C
+#705000
+0C
+#705500
+1C
+#706000
+0C
+#706500
+1C
+#707000
+0C
+#707500
+1C
+#708000
+0C
+#708500
+1C
+#709000
+0C
+#709500
+1C
+#710000
+0C
+#710500
+1C
+#711000
+0C
+#711500
+1C
+#712000
+0C
+#712500
+1C
+#713000
+0C
+#713500
+1C
+#714000
+0C
+#714500
+1C
+#715000
+0C
+#715500
+1C
+#716000
+0C
+#716500
+1C
+#717000
+0C
+#717500
+1C
+#718000
+0C
+#718500
+1C
+#719000
+0C
+#719500
+1C
+#720000
+0C
+#720500
+1C
+#721000
+0C
+#721500
+1C
+#722000
+0C
+#722500
+1C
+#723000
+0C
+#723500
+1C
+#724000
+0C
+#724500
+1C
+#725000
+0C
+#725500
+1C
+#726000
+0C
+#726500
+1C
+#727000
+0C
+#727500
+1C
+#728000
+0C
+#728500
+1C
+#729000
+0C
+#729500
+1C
+#730000
+0C
+#730500
+1C
+#731000
+0C
+#731500
+1C
+#732000
+0C
+#732500
+1C
+#733000
+0C
+#733500
+1C
+#734000
+0C
+#734500
+1C
+#735000
+0C
+#735500
+1C
+#736000
+0C
+#736500
+1C
+#737000
+0C
+#737500
+1C
+#738000
+0C
+#738500
+1C
+#739000
+0C
+#739500
+1C
+#740000
+0C
+#740500
+1C
+#741000
+0C
+#741500
+1C
+#742000
+0C
+#742500
+1C
+#743000
+0C
+#743500
+1C
+#744000
+0C
+#744500
+1C
+#745000
+0C
+#745500
+1C
+#746000
+0C
+#746500
+1C
+#747000
+0C
+#747500
+1C
+#748000
+0C
+#748500
+1C
+#749000
+0C
+#749500
+1C
+#750000
+0C
+#750500
+1C
+#751000
+0C
+#751500
+1C
+#752000
+0C
+#752500
+1C
+#753000
+0C
+#753500
+1C
+#754000
+0C
+#754500
+1C
+#755000
+0C
+#755500
+1C
+#756000
+0C
+#756500
+1C
+#757000
+0C
+#757500
+1C
+#758000
+0C
+#758500
+1C
+#759000
+0C
+#759500
+1C
+#760000
+0C
+#760500
+1C
+#761000
+0C
+#761500
+1C
+#762000
+0C
+#762500
+1C
+#763000
+0C
+#763500
+1C
+#764000
+0C
+#764500
+1C
+#765000
+0C
+#765500
+1C
+#766000
+0C
+#766500
+1C
+#767000
+0C
+#767500
+1C
+#768000
+0C
+#768500
+1C
+#769000
+0C
+#769500
+1C
+#770000
+0C
+#770500
+1C
+#771000
+0C
+#771500
+1C
+#772000
+0C
+#772500
+1C
+#773000
+0C
+#773500
+1C
+#774000
+0C
+#774500
+1C
+#775000
+0C
+#775500
+1C
+#776000
+0C
+#776500
+1C
+#777000
+0C
+#777500
+1C
+#778000
+0C
+#778500
+1C
+#779000
+0C
+#779500
+1C
+#780000
+0C
+#780500
+1C
+#781000
+0C
+#781500
+1C
+#782000
+0C
+#782500
+1C
+#783000
+0C
+#783500
+1C
+#784000
+0C
+#784500
+1C
+#785000
+0C
+#785500
+1C
+#786000
+0C
+#786500
+1C
+#787000
+0C
+#787500
+1C
+#788000
+0C
+#788500
+1C
+#789000
+0C
+#789500
+1C
+#790000
+0C
+#790500
+1C
+#791000
+0C
+#791500
+1C
+#792000
+0C
+#792500
+1C
+#793000
+0C
+#793500
+1C
+#794000
+0C
+#794500
+1C
+#795000
+0C
+#795500
+1C
+#796000
+0C
+#796500
+1C
+#797000
+0C
+#797500
+1C
+#798000
+0C
+#798500
+1C
+#799000
+0C
+#799500
+1C
+#800000
+0C
+#800500
+1C
+#801000
+0C
+#801500
+1C
+#802000
+0C
+#802500
+1C
+#803000
+0C
+#803500
+1C
+#804000
+0C
+#804500
+1C
+#805000
+0C
+#805500
+1C
+#806000
+0C
+#806500
+1C
+#807000
+0C
+#807500
+1C
+#808000
+0C
+#808500
+1C
+#809000
+0C
+#809500
+1C
+#810000
+0C
+#810500
+1C
+#811000
+0C
+#811500
+1C
+#812000
+0C
+#812500
+1C
+#813000
+0C
+#813500
+1C
+#814000
+0C
+#814500
+1C
+#815000
+0C
+#815500
+1C
+#816000
+0C
+#816500
+1C
+#817000
+0C
+#817500
+1C
+#818000
+0C
+#818500
+1C
+#819000
+0C
+#819500
+1C
+#820000
+0C
+#820500
+1C
+#821000
+0C
+#821500
+1C
+#822000
+0C
+#822500
+1C
+#823000
+0C
+#823500
+1C
+#824000
+0C
+#824500
+1C
+#825000
+0C
+#825500
+1C
+#826000
+0C
+#826500
+1C
+#827000
+0C
+#827500
+1C
+#828000
+0C
+#828500
+1C
+#829000
+0C
+#829500
+1C
+#830000
+0C
+#830500
+1C
+#831000
+0C
+#831500
+1C
+#832000
+0C
+#832500
+1C
+#833000
+0C
+#833500
+1C
+#834000
+0C
+#834500
+1C
+#835000
+0C
+#835500
+1C
+#836000
+0C
+#836500
+1C
+#837000
+0C
+#837500
+1C
+#838000
+0C
+#838500
+1C
+#839000
+0C
+#839500
+1C
+#840000
+0C
+#840500
+1C
+#841000
+0C
+#841500
+1C
+#842000
+0C
+#842500
+1C
+#843000
+0C
+#843500
+1C
+#844000
+0C
+#844500
+1C
+#845000
+0C
+#845500
+1C
+#846000
+0C
+#846500
+1C
+#847000
+0C
+#847500
+1C
+#848000
+0C
+#848500
+1C
+#849000
+0C
+#849500
+1C
+#850000
+0C
+#850500
+1C
+#851000
+0C
+#851500
+1C
+#852000
+0C
+#852500
+1C
+#853000
+0C
+#853500
+1C
+#854000
+0C
+#854500
+1C
+#855000
+0C
+#855500
+1C
+#856000
+0C
+#856500
+1C
+#857000
+0C
+#857500
+1C
+#858000
+0C
+#858500
+1C
+#859000
+0C
+#859500
+1C
+#860000
+0C
+#860500
+1C
+#861000
+0C
+#861500
+1C
+#862000
+0C
+#862500
+1C
+#863000
+0C
+#863500
+1C
+#864000
+0C
+#864500
+1C
+#865000
+0C
+#865500
+1C
+#866000
+0C
+#866500
+1C
+#867000
+0C
+#867500
+1C
+#868000
+0C
+#868500
+1C
+#869000
+0C
+#869500
+1C
+#870000
+0C
+#870500
+1C
+#871000
+0C
+#871500
+1C
+#872000
+0C
+#872500
+1C
+#873000
+0C
+#873500
+1C
+#874000
+0C
+#874500
+1C
+#875000
+0C
+#875500
+1C
+#876000
+0C
+#876500
+1C
+#877000
+0C
+#877500
+1C
+#878000
+0C
+#878500
+1C
+#879000
+0C
+#879500
+1C
+#880000
+0C
+#880500
+1C
+#881000
+0C
+#881500
+1C
+#882000
+0C
+#882500
+1C
+#883000
+0C
+#883500
+1C
+#884000
+0C
+#884500
+1C
+#885000
+0C
+#885500
+1C
+#886000
+0C
+#886500
+1C
+#887000
+0C
+#887500
+1C
+#888000
+0C
+#888500
+1C
+#889000
+0C
+#889500
+1C
+#890000
+0C
+#890500
+1C
+#891000
+0C
+#891500
+1C
+#892000
+0C
+#892500
+1C
+#893000
+0C
+#893500
+1C
+#894000
+0C
+#894500
+1C
+#895000
+0C
+#895500
+1C
+#896000
+0C
+#896500
+1C
+#897000
+0C
+#897500
+1C
+#898000
+0C
+#898500
+1C
+#899000
+0C
+#899500
+1C
+#900000
+0C
+#900500
+1C
+#901000
+0C
+#901500
+1C
+#902000
+0C
+#902500
+1C
+#903000
+0C
+#903500
+1C
+#904000
+0C
+#904500
+1C
+#905000
+0C
+#905500
+1C
+#906000
+0C
+#906500
+1C
+#907000
+0C
+#907500
+1C
+#908000
+0C
+#908500
+1C
+#909000
+0C
+#909500
+1C
+#910000
+0C
+#910500
+1C
+#911000
+0C
+#911500
+1C
+#912000
+0C
+#912500
+1C
+#913000
+0C
+#913500
+1C
+#914000
+0C
+#914500
+1C
+#915000
+0C
+#915500
+1C
+#916000
+0C
+#916500
+1C
+#917000
+0C
+#917500
+1C
+#918000
+0C
+#918500
+1C
+#919000
+0C
+#919500
+1C
+#920000
+0C
+#920500
+1C
+#921000
+0C
+#921500
+1C
+#922000
+0C
+#922500
+1C
+#923000
+0C
+#923500
+1C
+#924000
+0C
+#924500
+1C
+#925000
+0C
+#925500
+1C
+#926000
+0C
+#926500
+1C
+#927000
+0C
+#927500
+1C
+#928000
+0C
+#928500
+1C
+#929000
+0C
+#929500
+1C
+#930000
+0C
+#930500
+1C
+#931000
+0C
+#931500
+1C
+#932000
+0C
+#932500
+1C
+#933000
+0C
+#933500
+1C
+#934000
+0C
+#934500
+1C
+#935000
+0C
+#935500
+1C
+#936000
+0C
+#936500
+1C
+#937000
+0C
+#937500
+1C
+#938000
+0C
+#938500
+1C
+#939000
+0C
+#939500
+1C
+#940000
+0C
+#940500
+1C
+#941000
+0C
+#941500
+1C
+#942000
+0C
+#942500
+1C
+#943000
+0C
+#943500
+1C
+#944000
+0C
+#944500
+1C
+#945000
+0C
+#945500
+1C
+#946000
+0C
+#946500
+1C
+#947000
+0C
+#947500
+1C
+#948000
+0C
+#948500
+1C
+#949000
+0C
+#949500
+1C
+#950000
+0C
+#950500
+1C
+#951000
+0C
+#951500
+1C
+#952000
+0C
+#952500
+1C
+#953000
+0C
+#953500
+1C
+#954000
+0C
+#954500
+1C
+#955000
+0C
+#955500
+1C
+#956000
+0C
+#956500
+1C
+#957000
+0C
+#957500
+1C
+#958000
+0C
+#958500
+1C
+#959000
+0C
+#959500
+1C
+#960000
+0C
+#960500
+1C
+#961000
+0C
+#961500
+1C
+#962000
+0C
+#962500
+1C
+#963000
+0C
+#963500
+1C
+#964000
+0C
+#964500
+1C
+#965000
+0C
+#965500
+1C
+#966000
+0C
+#966500
+1C
+#967000
+0C
+#967500
+1C
+#968000
+0C
+#968500
+1C
+#969000
+0C
+#969500
+1C
+#970000
+0C
+#970500
+1C
+#971000
+0C
+#971500
+1C
+#972000
+0C
+#972500
+1C
+#973000
+0C
+#973500
+1C
+#974000
+0C
+#974500
+1C
+#975000
+0C
+#975500
+1C
+#976000
+0C
+#976500
+1C
+#977000
+0C
+#977500
+1C
+#978000
+0C
+#978500
+1C
+#979000
+0C
+#979500
+1C
+#980000
+0C
+#980500
+1C
+#981000
+0C
+#981500
+1C
+#982000
+0C
+#982500
+1C
+#983000
+0C
+#983500
+1C
+#984000
+0C
+#984500
+1C
+#985000
+0C
+#985500
+1C
+#986000
+0C
+#986500
+1C
+#987000
+0C
+#987500
+1C
+#988000
+0C
+#988500
+1C
+#989000
+0C
+#989500
+1C
+#990000
+0C
+#990500
+1C
+#991000
+0C
+#991500
+1C
+#992000
+0C
+#992500
+1C
+#993000
+0C
+#993500
+1C
+#994000
+0C
+#994500
+1C
+#995000
+0C
+#995500
+1C
+#996000
+0C
+#996500
+1C
+#997000
+0C
+#997500
+1C
+#998000
+0C
+#998500
+1C
+#999000
+0C
+#999500
+1C
+#1000000
+0C
+#1000500
+1C
+#1001000
+0C

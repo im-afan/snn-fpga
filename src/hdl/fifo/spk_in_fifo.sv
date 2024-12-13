@@ -2,13 +2,14 @@
  * fifo for core inputs spikes
  */
 
-module spk_in_fifo (
+module spk_in_fifo #(
 	parameter integer CROSSBAR_NEURONS,
 	parameter integer BRAM_DATA_WIDTH,
 	parameter integer NETWORK_WIDTH,
 	parameter integer LENGTH
 )(
 	input wire clk,
+	input wire en,
 	input wire [CROSSBAR_NEURONS-1:0] din,
 	input wire push,
 	input wire pop,
@@ -31,24 +32,34 @@ module spk_in_fifo (
 		end
 	endgenerate
 
-	always (@posedge clk) begin
-		if(pop && ~pop_done) begin
-			buffer <= (buffer >> width);
-			if(~empty) cnt <= cnt-1;
-			pop_done <= 1;
-		end	else (push && ~push_done) begin
-			if(~full) begin
-				buffer <= (buffer | (din_local << (cnt*width)));
-				cnt <= cnt+1;	
-			end
-			push_done <= 1
-		end
+	assign full = (cnt >= LENGTH);
+	assign empty = (cnt == 0);
 
-		if(~pop) begin
-			pop_done <= 0;
-		end
-		if(~push) begin
-			push_done <= 0;
+	always @(posedge clk) begin
+		if(~en) begin
+			pop_done <= 1;
+			push_done <= 1;
+			buffer <= 0;
+			cnt <= 0;
+		end else begin
+			if(pop && ~pop_done) begin
+				buffer <= (buffer >> WIDTH);
+				if(~empty) cnt <= cnt-1;
+				pop_done <= 1;
+			end	else if(push && ~push_done) begin
+				if(~full) begin
+					buffer <= (buffer | (din << (cnt*WIDTH)));
+					cnt <= cnt+1;	
+				end
+				push_done <= 1;
+			end
+
+			if(~pop) begin
+				pop_done <= 0;
+			end
+			if(~push) begin
+				push_done <= 0;
+			end
 		end
 	end
 endmodule

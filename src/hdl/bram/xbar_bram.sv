@@ -42,10 +42,10 @@ module xbar_bram #(
     localparam integer READ_WEIGHTS = 2;
 
     localparam integer TILE_IDX_BITS = ((2*TILE_IDX_WIDTH*MAX_TILES) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-    localparam integer WEIGHT_BITS = ((CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
+    localparam integer WEIGHT_BITS = ((MAX_TILES*CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer NETWORK_INPUT_BITS = ((MAX_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer SPK_OUT_BITS = ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-    localparam integer FLAGS_BITS = 1;
+    localparam integer FLAGS_BITS = 1024;
 
     localparam integer TILE_IDX_OFFSET = 0;
     localparam integer WEIGHT_OFFSET = TILE_IDX_OFFSET + TILE_IDX_BITS / 8;
@@ -61,18 +61,19 @@ module xbar_bram #(
     reg [15:0] weight_idx; // takes multiple steps to read weight
 
     wire fifo_done;
-    assign fifo_done = (weight_fifo_push_done && spk_in_fifo_push_done && tile_idx_fifo_push_done)
-                    || ~(weight_fifo_push || spk_in_fifo_push || tile_idx_fifo_push);
+    assign fifo_done = (weight_fifo_push_done || ~weight_fifo_push) && (spk_in_fifo_push_done || ~spk_in_fifo_push)
+                     && (tile_idx_fifo_push_done || ~tile_idx_fifo_push);
+
     wire fifo_full;
     assign fifo_full = weight_fifo_full || spk_in_fifo_full || tile_idx_fifo_full;
+
+    reg [TILE_IDX_WIDTH-1:0] tile_idx_x;
+    reg [TILE_IDX_WIDTH-1:0] tile_idx_y;
 
     wire [10:0] tile_idx_base;
     assign tile_idx_base = (tile_idx) % (BRAM_DATA_WIDTH / (2*TILE_IDX_WIDTH));
     wire [10:0] spk_in_idx_base;
     assign spk_in_idx_base = (tile_idx_x % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS));
-
-    reg [TILE_IDX_WIDTH-1:0] tile_idx_x;
-    reg [TILE_IDX_WIDTH-1:0] tile_idx_y;
 
     wire [2*TILE_IDX_WIDTH-1:0] tile_idx_slices [BRAM_DATA_WIDTH / (2*TILE_IDX_WIDTH)];
     wire [CROSSBAR_NEURONS-1:0] spk_in_slices [BRAM_DATA_WIDTH / CROSSBAR_NEURONS];
@@ -88,7 +89,6 @@ module xbar_bram #(
     endgenerate
 
     always @(posedge clk) begin
-        $display("%d", tile_idx);
         if(~enable) begin
             bram_step <= SEND;
             param_step <= READ_IDX;
@@ -148,6 +148,9 @@ module xbar_bram #(
                         end
                     endcase
                     bram_step <= SEND;
+                    tile_idx_fifo_push <= 0;
+                    weight_fifo_push <= 0;
+                    spk_in_fifo_push <= 0;
                 end
             end
         end
