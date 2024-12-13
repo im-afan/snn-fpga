@@ -20,10 +20,10 @@ module lif_bram_tb;
     reg [TILE_IDX_WIDTH-1:0] tile_idx_y;
     
     reg [NETWORK_WIDTH-1:0] mem_out [CROSSBAR_NEURONS];
-    reg [NETWORK_WIDTH-1:0] spk_out [CROSSBAR_NEURONS];
+    reg [CROSSBAR_NEURONS-1:0] spk_out;
 
     wire [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS];
-    wire [NETWORK_WIDTH-1:0] spk_in [CROSSBAR_NEURONS];
+    wire [CROSSBAR_NEURONS-1:0] spk_in;
     
     wire [BRAM_ADDR_WIDTH-1:0]  addr;
     wire [BRAM_DATA_WIDTH-1:0] dout;
@@ -58,6 +58,8 @@ module lif_bram_tb;
         .we(we),
         .tile_idx_x(tile_idx_x),
         .tile_idx_y(tile_idx_y),
+        .spk_out(spk_out),
+        .spk_in(spk_in),
         .mem_out(mem_out),
         .mem_in(mem_in),
         .addr(addr),
@@ -86,7 +88,7 @@ module lif_bram_tb;
         #0 clk = 0;
         #0 enable = 0;
         #0 tile_idx_x = 0;
-        #0 tile_idx_y = 0;
+        #0 tile_idx_y = 1;
         #0 we = 0;
         for(integer i = 0; i < CROSSBAR_NEURONS; i++) begin
             #0 mem_out[i] = 0;
@@ -95,17 +97,24 @@ module lif_bram_tb;
         #10 enable = 1;
         $dumpfile(".wave/dump.vcd");
         $dumpvars(100, lif_bram_tb);
-        $writememb(".wave/dump.mem", ram.memory);
+        
+        #10000$writememb(".wave/dump.mem", ram.mem);
 
-        #10000 $finish;
+        #0 $finish;
     end
 
     initial begin
-        #500 for(integer i = 0; i < CROSSBAR_NEURONS; i++) begin
+        #100 for(integer i = 0; i < CROSSBAR_NEURONS; i++) begin
             #0 mem_out[i] = i+5;
+            #0 spk_out[i] = 0;
         end 
         #0 we = 1;
+        #50 enable = 0;
+        #50 enable = 1;
         #100 we = 0;
+        #50 tile_idx_y = 0;
+        #100 enable = 0;
+        #50 enable = 1;
     end
 
 endmodule

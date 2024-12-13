@@ -95,7 +95,7 @@ module xbar_bram_tb;
         #10 enable = 1;
 
         $dumpvars(100, xbar_bram_tb);
-        $dumpfile("xbar_bram_tb.vcd");
+        $dumpfile(".wave/xbar_bram_tb.vcd");
 
         #10000 $finish;
     end

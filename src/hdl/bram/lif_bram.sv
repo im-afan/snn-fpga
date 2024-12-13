@@ -50,6 +50,10 @@ module lif_bram #(
     localparam integer FLAGS_OFFSET = SPK_OUT_OFFSET + SPK_OUT_BITS / 8;
     localparam integer MEM_OFFSET = FLAGS_OFFSET + FLAGS_BITS / 8;
 
+
+    wire local_we;
+    assign local_we = we;
+
     reg bram_done;
     reg [4:0] bram_step = SEND;
     reg [4:0] param_step = MEM;
@@ -60,6 +64,7 @@ module lif_bram #(
     assign spk_tile_idx_base = tile_idx_y % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS); 
 
     reg [BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS-1 : 0] we_tile;
+    reg [BRAM_DATA_WIDTH / CROSSBAR_NEURONS-1 : 0] spk_we_tile;
     reg [NETWORK_WIDTH*CROSSBAR_NEURONS-1:0] din_tile;
 
     wire [NETWORK_WIDTH-1:0] mem_in_tiles [BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS][CROSSBAR_NEURONS];
@@ -67,23 +72,27 @@ module lif_bram #(
 
     wire [BRAM_DATA_WIDTH/8-1:0] bram_we_mem;
     wire [BRAM_DATA_WIDTH/8-1:0] bram_we_spk;
-    assign bram_we = (param_step == MEM) ? bram_we_mem : bram_we_spk;
+    assign bram_we = we ? ((param_step == MEM) ? bram_we_mem : bram_we_spk) : 0;
 
     generate
         genvar i, j, k;
         for(i = 0; i < BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS; i++) begin
             for(j = 0; j < CROSSBAR_NEURONS; j++) begin
-                assign bram_we_mem[i*CROSSBAR_NEURONS + j : i*CROSSBAR_NEURONS] = we_tile[i];
+                assign bram_we_mem[i*CROSSBAR_NEURONS + j] = we_tile[i];
             end
         end
         for(i = 0; i < BRAM_DATA_WIDTH / CROSSBAR_NEURONS; i++) begin
-            assign bram_we_spk[(i+1)*CROSSBAR_NEURONS/8-1 : i*CROSSBAR_NEURONS/8] = we_tile[i];
+            for(j = 0; j < CROSSBAR_NEURONS/8; j++) begin
+                assign bram_we_spk[i*CROSSBAR_NEURONS/8+j] = spk_we_tile[i];
+            end
+            //assign bram_we_spk[(i+1)*CROSSBAR_NEURONS/8-1 : i*CROSSBAR_NEURONS/8] = we_tile[i];
         end
         for(i = 0; i < CROSSBAR_NEURONS; i++) begin
             assign din_tile[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = mem_out[i];
         end
         for(i = 0; i < BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS; i++) begin
             for(j = 0; j < CROSSBAR_NEURONS; j++) begin
+                initial $display("%d %d = %d:%d", i, j, i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH+NETWORK_WIDTH-1 , i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH);
                 assign mem_in_tiles[i][j] = dout[i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH+NETWORK_WIDTH-1 : i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH];
             end
         end
@@ -100,21 +109,25 @@ module lif_bram #(
             done <= 0;
         end else begin
             if(~done) begin
-                if(we) begin
+                if(local_we) begin
                     if(bram_step == SEND) begin
                         if(param_step == MEM) begin
                             addr <= MEM_OFFSET + tile_idx_x * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
                             din <= (din_tile << mem_tile_idx_base);
                             we_tile <= (1 << mem_tile_idx_base);
                         end else if(param_step == SPK) begin
-                            addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS;
+                            addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8;
                             din <= (spk_out << spk_tile_idx_base);
-                            we_tile <= (1 << spk_tile_idx_base); // TODO thsi is wrong lmao
+                            spk_we_tile <= (1 << spk_tile_idx_base); // TODO thsi is wrong lmao
                         end
                         bram_step <= WAIT;
                         bram_done <= 0;
+                        bram_en <= 1;
                     end else if(bram_step == WAIT) begin
-                        if(bram_done) bram_step <= INCREMENT;
+                        if(bram_done) begin
+                            bram_en <= 0;
+                            bram_step <= INCREMENT;
+                        end
                         else bram_done <= 1;
                     end else if(bram_step == INCREMENT) begin
                         if(param_step == MEM) param_step <= SPK;
@@ -124,18 +137,22 @@ module lif_bram #(
 
                 end else begin
                     if(bram_step == SEND) begin
-                        if(param_step == MEM) addr <= MEM_OFFSET + tile_idx_x * NETWORK_INPUT_BITS * CROSSBAR_NEURONS / 8;
-                        else if(param_step == SPK) addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS;
+                        if(param_step == MEM) addr <= MEM_OFFSET + tile_idx_x * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
+                        else if(param_step == SPK) addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8;
                         bram_step <= WAIT;
                         bram_done <= 0;
                         we_tile <= 0;
+                        bram_en <= 1;
                     end else if(bram_step == WAIT) begin
                         if(bram_done) begin
                             if(param_step == MEM) begin
+                                $display(mem_in_tiles[mem_tile_idx_base][0]);
                                 for(integer i = 0; i < CROSSBAR_NEURONS; i++) mem_in[i] <= mem_in_tiles[mem_tile_idx_base][i];
                             end else if(param_step == SPK) begin
                                 spk_in <= spk_tiles[spk_tile_idx_base];
                             end
+                            bram_en <= 0;
+                            bram_step <= INCREMENT;
                         end else begin
                             bram_done <= 1;
                         end
@@ -145,6 +162,10 @@ module lif_bram #(
                         bram_step <= SEND;
                     end
                 end
+            end else begin
+                bram_step <= SEND;
+                param_step <= MEM;
+                //local_we <= we;
             end
         end
     end

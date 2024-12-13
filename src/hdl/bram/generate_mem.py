@@ -10,10 +10,10 @@ CROSSBAR_NEURONS = 16
 NETWORK_WIDTH = 8
 
 TILE_IDX_BITS = ((2*TILE_IDX_WIDTH*MAX_TILES) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-WEIGHT_BITS = ((CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
+WEIGHT_BITS = ((MAX_TILES*CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
 NETWORK_INPUT_BITS = ((MAX_NEURONS*NETWORK_WIDTH) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
 SPK_OUT_BITS = ((MAX_NEURONS) // BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-FLAGS_BITS = 1;
+FLAGS_BITS = BRAM_DATA_WIDTH;
 TILE_IDX_OFFSET = 0;
 
 WEIGHT_OFFSET = TILE_IDX_OFFSET + TILE_IDX_BITS;
@@ -24,8 +24,9 @@ MEM_OFFSET = FLAGS_OFFSET + FLAGS_BITS;
 
 tile_idx = [[0, 0] for i in range(MAX_TILES)]
 tile = [[[i for i in range(CROSSBAR_NEURONS)] for i in range(CROSSBAR_NEURONS)] for i in range(MAX_TILES)]
+mem = [i%256 for i in range(MAX_NEURONS)]
 #arr = ["0" for i in range(1024)]
-mem = ["0" for i in range(BRAM_DATA_WIDTH*1024)] 
+memory = ["0" for i in range(BRAM_DATA_WIDTH*1024)] 
 
 for i in range(MAX_TILES):
 	tile_idx[i] = [i // 8, i % 8]
@@ -49,24 +50,25 @@ def endian(binary_string):
     return big_endian_string
 
 for i in range(0, MAX_TILES):
-    mem[TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*i : TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*(i+1)] = bin_(tile_idx[i][0], 16) + bin_(tile_idx[i][1], 16)
+    memory[TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*i : TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*(i+1)] = bin_(tile_idx[i][0], 16) + bin_(tile_idx[i][1], 16)
 
 for i in range(0, MAX_TILES):
     for j in range(CROSSBAR_NEURONS):
         for k in range(CROSSBAR_NEURONS):
             base = WEIGHT_OFFSET + (i*CROSSBAR_NEURONS*CROSSBAR_NEURONS + j*CROSSBAR_NEURONS + k) * NETWORK_WIDTH
             #print(base, bin_(tile[i][j][k], 8))
-            mem[base:base+NETWORK_WIDTH] = bin_(tile[i][j][k], 8)
+            memory[base:base+NETWORK_WIDTH] = bin_(tile[i][j][k], NETWORK_WIDTH)
 
-for i in range(0, MAX_TILES):
-    for j in range(CROSSBAR_NEURONS):
-        for k in range(CROSSBAR_NEURONS):
-            base = WEIGHT_OFFSET + (i*CROSSBAR_NEURONS*CROSSBAR_NEURONS + j*CROSSBAR_NEURONS + k) * NETWORK_WIDTH
-            #print(base, bin_(tile[i][j][k], 8))
-            mem[base:base+NETWORK_WIDTH] = bin_(tile[i][j][k], 8)
+for i in range(0, MAX_NEURONS):
+    base = MEM_OFFSET + i*NETWORK_WIDTH
+    #print(bin_(mem[i], 8))
+    memory[base:base+NETWORK_WIDTH] = bin_(mem[i], NETWORK_WIDTH)
 
+for i in range(0, MAX_NEURONS):
+    base = SPK_OUT_OFFSET + i
+    memory[base] = '1'
 
 for i in range(0, 1024):
-    s = ''.join(mem[i*1024 : (i+1)*1024])
+    s = ''.join(memory[i*1024 : (i+1)*1024])
     s = endian(s)
     print(s)
