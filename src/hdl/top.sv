@@ -52,6 +52,7 @@ module top (
     wire input_bram_rst;
     wire [BRAM_DATA_WIDTH/8-1:0] input_bram_we;
     wire input_bram_active;
+    wire input_bram_want_active;
 
     wire xbar_bram_clk;
     assign xbar_bram_clk = clk;
@@ -62,6 +63,7 @@ module top (
     wire xbar_bram_rst;
     wire [BRAM_DATA_WIDTH/8-1:0] xbar_bram_we;
     wire xbar_bram_active;
+    wire xbar_bram_want_active;
 
     wire lif_bram_clk;
     assign lif_bram_clk = clk;
@@ -73,6 +75,7 @@ module top (
     wire [BRAM_DATA_WIDTH/8-1:0] lif_bram_we;
     wire lif_bram_active;
     wire lif_we;
+    wire lif_bram_want_active;
     
     wire switcher_bram_clk[3:0];
     wire [BRAM_ADDR_WIDTH-1:0] switcher_bram_addr[3:0];
@@ -82,24 +85,27 @@ module top (
     wire switcher_bram_rst[3:0];
     wire [BRAM_DATA_WIDTH/8-1:0] switcher_bram_we[3:0];
     wire switcher_bram_active[3:0];
+    wire switcher_bram_want_active[3:0];
 
-    assign switcher_bram_clk[2] = lif_bram_clk;
-    assign switcher_bram_addr[2] = lif_bram_addr;
-    assign lif_bram_dout = switcher_bram_dout[2];
-    assign switcher_bram_din[2] = lif_bram_din;
-    assign switcher_bram_en[2] = lif_bram_en;
-    assign switcher_bram_rst[2] = lif_bram_rst;
-    assign switcher_bram_we[2] = lif_bram_we;
-    assign lif_bram_active = switcher_bram_active[2];
+    assign switcher_bram_clk[1] = lif_bram_clk;
+    assign switcher_bram_addr[1] = lif_bram_addr;
+    assign lif_bram_dout = switcher_bram_dout[1];
+    assign switcher_bram_din[1] = lif_bram_din;
+    assign switcher_bram_en[1] = lif_bram_en;
+    assign switcher_bram_rst[1] = lif_bram_rst;
+    assign switcher_bram_we[1] = lif_bram_we;
+    assign lif_bram_active = switcher_bram_active[1];
+    assign switcher_bram_want_active[1] = lif_bram_want_active;
 
-    assign switcher_bram_clk[1] = xbar_bram_clk;
-    assign switcher_bram_addr[1] = xbar_bram_addr;
-    assign xbar_bram_dout = switcher_bram_dout[1];
-    assign switcher_bram_din[1] = xbar_bram_din;
-    assign switcher_bram_en[1] = xbar_bram_en;
-    assign switcher_bram_rst[1] = xbar_bram_rst;
-    assign switcher_bram_we[1] = xbar_bram_we;
-    assign xbar_bram_active = switcher_bram_we[1];
+    assign switcher_bram_clk[2] = xbar_bram_clk;
+    assign switcher_bram_addr[2] = xbar_bram_addr;
+    assign xbar_bram_dout = switcher_bram_dout[2];
+    assign switcher_bram_din[2] = xbar_bram_din;
+    assign switcher_bram_en[2] = xbar_bram_en;
+    assign switcher_bram_rst[2] = xbar_bram_rst;
+    assign switcher_bram_we[2] = xbar_bram_we;
+    assign xbar_bram_active = switcher_bram_active[2];
+    assign switcher_bram_want_active[2] = xbar_bram_want_active;
 
     assign switcher_bram_clk[0] = input_bram_clk;
     assign switcher_bram_addr[0] = input_bram_addr;
@@ -109,6 +115,7 @@ module top (
     assign switcher_bram_rst[0] = input_bram_rst;
     assign switcher_bram_we[0] = input_bram_we;
     assign input_bram_active = switcher_bram_active[0];
+    assign switcher_bram_want_active[0] = input_bram_want_active;
 
     wire [TILE_IDX_WIDTH-1:0] tile_idx_x;
     wire [TILE_IDX_WIDTH-1:0] tile_idx_y;
@@ -159,6 +166,10 @@ module top (
 
     wire lif_array_done;
     wire lif_array_en;
+    wire [NETWORK_WIDTH-1:0] mem_out_lif [CROSSBAR_NEURONS];
+    wire [NETWORK_WIDTH-1:0] mem_in_lif [CROSSBAR_NEURONS];
+    wire [CROSSBAR_NEURONS-1:0] spk_out_lif;
+    wire [CROSSBAR_NEURONS-1:0] spk_in_lif;
 
     wire synapse_array_done;
     wire synapse_array_en;
@@ -192,6 +203,7 @@ module top (
         .din(switcher_bram_din),
         .dout(switcher_bram_dout),
         .active(switcher_bram_active),
+        .want_active(switcher_bram_want_active),
 
         .clka(clka),
         .ena(ena),
@@ -222,10 +234,10 @@ module top (
         .we(lif_we),
         .tile_idx_x(tile_idx_x),
         .tile_idx_y(tile_idx_y),
-        .mem_out(mem_out),
-        .spk_out(spk_out),
-        .mem_in(mem_in),
-        .spk_in(spk_in),
+        .mem_out(mem_out_lif),
+        .spk_out(spk_out_lif),
+        .mem_in(mem_in_lif),
+        .spk_in(spk_in_lif),
         .done(lif_bram_done),
         .addr(lif_bram_addr),
         .dout(lif_bram_dout),
@@ -233,6 +245,7 @@ module top (
         .bram_en(lif_bram_en),
         .bram_rst(lif_bram_rst),
         .bram_we(lif_bram_we),
+        .bram_want_active(lif_bram_want_active),
         .bram_active(lif_bram_active)
     );
 
@@ -269,6 +282,7 @@ module top (
         .bram_en(xbar_bram_en),
         .bram_rst(xbar_bram_rst),
         .bram_we(xbar_bram_we),
+        .bram_want_active(xbar_bram_want_active),
         .bram_active(xbar_bram_active)
     );
 
@@ -300,6 +314,7 @@ module top (
         .bram_en(input_bram_en),
         .bram_rst(input_bram_rst),
         .bram_we(input_bram_we),
+        .bram_want_active(input_bram_want_active),
         .bram_active(input_bram_active)
     );
 
@@ -432,10 +447,10 @@ module top (
         .clk(clk),
         .enable(lif_array_en),
         .bram_done(lif_bram_done),
-        .spk_in(spk_in),
-        .u_mem_in(mem_in),
+        .spk_in(spk_in_lif),
+        .u_mem_in(mem_in_lif),
         .u_mac_out(mac_out),
-        .spk_out(spk_out),
+        .spk_out(spk_out_lif),
         .u_mem_out(mem_out),
         .done(lif_array_done),
         .bram_we(lif_we),

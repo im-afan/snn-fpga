@@ -23,7 +23,7 @@ module top_tb;
         en = 0;
         #100
         en = 1;
-        #100000
+        #50000
         $writememb(".wave/top_dump.mem", top_0.dual_port_bram_0.mem);
         $finish;
     end

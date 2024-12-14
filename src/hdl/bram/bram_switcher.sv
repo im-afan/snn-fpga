@@ -16,6 +16,7 @@ module bram_switcher #(
     input wire [BRAM_ADDR_WIDTH-1:0] addr[3:0],
     input wire [BRAM_DATA_WIDTH/8-1:0] we[3:0],
     input wire [BRAM_DATA_WIDTH-1:0] din[3:0],
+    input wire want_active[3:0],
     output reg [BRAM_DATA_WIDTH-1:0] dout[3:0],
     output reg active [3:0],
 
@@ -49,7 +50,7 @@ module bram_switcher #(
         a_used = 0;
         b_used = 0; 
         for(integer i = 0; i < 4; i++) begin
-            if(en[i]) begin
+            if(want_active[i]) begin
                 if(~a_used) begin
                     clka = clk[i];
                     ena = en[i];
@@ -71,6 +72,8 @@ module bram_switcher #(
                 end else begin
                     active[i] = 0;
                 end
+            end else begin
+                active[i] = 0;
             end
         end
     end

@@ -38,8 +38,11 @@ module lif_bram #(
     output reg bram_en,
     output reg bram_rst,
     output wire [BRAM_DATA_WIDTH/8-1:0] bram_we,
+    output reg bram_want_active,
     input wire bram_active
 );
+    assign bram_want_active = 1;
+
     localparam integer SEND = 0;
     localparam integer WAIT = 1;
     localparam integer INCREMENT = 2;
@@ -117,6 +120,8 @@ module lif_bram #(
             bram_step <= SEND;
             bram_en <= 0;
             done <= 0;
+            we_tile <= 0;
+            spk_we_tile <= 0;
         end else begin
             if(~done) begin
                 if(local_we) begin

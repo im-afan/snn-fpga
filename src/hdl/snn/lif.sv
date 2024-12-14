@@ -36,7 +36,7 @@ module lif#(
         end else begin
             if(~local_done) begin
                 if(spk_in) begin
-                    spk_out <= 0;
+                    spk_out <= 1;
                     mem_out <= 0;
                 end else if(sum_clamp >= THRESH) begin
                     spk_out <= 1;

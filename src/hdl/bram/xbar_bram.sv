@@ -41,6 +41,7 @@ module xbar_bram #(
     output reg bram_en,
     output reg bram_rst,
     output reg [BRAM_DATA_WIDTH/8-1:0] bram_we,
+    output reg bram_want_active,
     input wire bram_active
 );
     localparam integer SEND = 0; // send addr to bram
@@ -71,6 +72,7 @@ module xbar_bram #(
     reg [15:0] weight_idx; // takes multiple steps to read weight
     wire tiles_done;
     assign tiles_done = (tile_idx == MAX_TILES);
+    assign bram_want_active = ~tiles_done;
 
     wire fifo_done;
     assign fifo_done = (weight_fifo_push_done || ~weight_fifo_push) && (spk_in_fifo_push_done || ~spk_in_fifo_push)

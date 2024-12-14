@@ -36,6 +36,7 @@ module input_bram #(
     output reg bram_en,
     output reg bram_rst,
     output reg [BRAM_DATA_WIDTH/8-1:0] bram_we,
+    output reg bram_want_active,
     input wire bram_active // if this port is active in switcher
 );
     localparam integer SEND = 0;
@@ -68,6 +69,7 @@ module input_bram #(
     wire tiles_done;
     reg [TILE_IDX_WIDTH-1:0] tile_idx;
     assign tiles_done = (tile_idx == (MAX_NEURONS / CROSSBAR_NEURONS));
+    assign bram_want_active = ~tiles_done;
 
     wire [11:0] tile_idx_base;
     assign tile_idx_base = tile_idx % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS / NETWORK_WIDTH);

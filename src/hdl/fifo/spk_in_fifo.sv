@@ -28,7 +28,7 @@ module spk_in_fifo #(
 	reg [7:0] cnt = 0;
 	reg [LENGTH*WIDTH-1:0] buffer;
 	generate
-		genvar i, j;
+		genvar i;
 		for(i = 0; i < CROSSBAR_NEURONS; i++) begin
 			assign spk_in[i] = buffer[i];
 		end
