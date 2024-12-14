@@ -1,18 +1,20 @@
-create_project -force fpga_snn_microblaze ./fpga_snn_microblaze -part xc7a35tcpg236-1
-add_files ../src/hdl/core.sv
-add_files ../src/hdl/lif.sv
-add_files ../src/hdl/synapse.sv
-add_files ../src/hdl/network_bram_wrapper.sv
-add_files ../src/hdl/network_wrapper.sv
-add_files ../src/hdl/microblaze_top.sv
+create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
+
+add_files ../src/hdl/fifo/spk_in_fifo.sv
+add_files ../src/hdl/fifo/tile_idx_fifo.sv
+add_files ../src/hdl/fifo/weight_fifo.sv
+add_files ../src/hdl/fifo/mac_out_fifo.sv
+add_files ../src/hdl/snn/lif_array.sv
+add_files ../src/hdl/snn/synapse_array.sv
+add_files ../src/hdl/bram/dual_port_bram.sv
+add_files ../src/hdl/bram/lif_bram.sv
+add_files ../src/hdl/bram/xbar_bram.sv
+add_files ../src/hdl/bram/input_bram.sv
+add_files ../src/hdl/bram/bram_switcher.sv
+add_files ../src/hdl/scheduler/lif_scheduler.sv
+add_files ../src/hdl/scheduler/xbar_scheduler.sv
+add_files ../src/hdl/top.sv
+
 add_files ../src/hdl/basys3-constraints.xdc
-source ../src/hdl/microblaze_snn.tcl
 
-make_wrapper -top -files [get_files microblaze_snn.bd]
-add_files -norecurse ./fpga_snn_microblaze/fpga_snn_microblaze.gen/sources_1/bd/microblaze_snn/hdl/microblaze_snn_wrapper.v
-set_property top microblaze_top [current_fileset]
-
-launch_runs impl_1 -to_step write_bitstream -jobs 12
-wait_on_run impl_1
-
-write_hw_platform -fixed -include_bit -force -file ../vitis/microblaze_top.xsa
+set_property top top [current_fileset]

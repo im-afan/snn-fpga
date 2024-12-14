@@ -24,7 +24,8 @@ MEM_OFFSET = FLAGS_OFFSET + FLAGS_BITS;
 
 tile_idx = [[0, 0] for i in range(MAX_TILES)]
 tile = [[[0 for i in range(CROSSBAR_NEURONS)] for i in range(CROSSBAR_NEURONS)] for i in range(MAX_TILES)]
-mem = [i%256 for i in range(MAX_NEURONS)]
+#mem = [i%256 for i in range(MAX_NEURONS)]
+mem = [0 for i in range(MAX_NEURONS)]
 snn_in = [0 for i in range(MAX_NEURONS)]
 memory = ["0" for i in range(BRAM_DATA_WIDTH*1024)] 
 
@@ -97,7 +98,7 @@ for i in range(0, MAX_NEURONS):
 
 for i in range(0, MAX_NEURONS):
     base = SPK_OUT_OFFSET + i
-    memory[base] = '1'
+    memory[base] = '0'
 
 for i in range(0, 1024):
     s = ''.join(memory[i*1024 : (i+1)*1024])

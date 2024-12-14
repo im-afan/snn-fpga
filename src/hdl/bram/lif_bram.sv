@@ -78,7 +78,7 @@ module lif_bram #(
     reg [NETWORK_WIDTH*CROSSBAR_NEURONS-1:0] din_tile;
 
     wire [NETWORK_WIDTH-1:0] mem_in_tiles [BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS][CROSSBAR_NEURONS];
-    wire [CROSSBAR_NEURONS] spk_tiles [BRAM_DATA_WIDTH / CROSSBAR_NEURONS];
+    wire [CROSSBAR_NEURONS-1:0] spk_tiles [BRAM_DATA_WIDTH / CROSSBAR_NEURONS];
 
     wire [BRAM_DATA_WIDTH/8-1:0] bram_we_mem;
     wire [BRAM_DATA_WIDTH/8-1:0] bram_we_spk;
@@ -102,12 +102,12 @@ module lif_bram #(
         end
         for(i = 0; i < BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS; i++) begin
             for(j = 0; j < CROSSBAR_NEURONS; j++) begin
-                initial $display("%d %d = %d:%d", i, j, i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH+NETWORK_WIDTH-1 , i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH);
+                //initial $display("%d %d = %d:%d", i, j, i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH+NETWORK_WIDTH-1 , i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH);
                 assign mem_in_tiles[i][j] = dout[i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH+NETWORK_WIDTH-1 : i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH];
             end
         end
         for(i = 0; i < BRAM_DATA_WIDTH / CROSSBAR_NEURONS; i++) begin
-            assign spk_tiles[i] = dout[(i+1)*CROSSBAR_NEURONS : i*CROSSBAR_NEURONS];
+            assign spk_tiles[i] = dout[(i+1)*CROSSBAR_NEURONS-1 : i*CROSSBAR_NEURONS];
         end
     endgenerate
 
@@ -138,7 +138,7 @@ module lif_bram #(
                             bram_en <= 0;
                             bram_step <= INCREMENT;
                         end
-                        else bram_done <= 1;
+                        else bram_done <= bram_active;
                     end else if(bram_step == INCREMENT) begin
                         if(param_step == MEM) param_step <= SPK;
                         else if(param_step == SPK) done <= 1;

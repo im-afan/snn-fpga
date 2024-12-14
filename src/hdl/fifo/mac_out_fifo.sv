@@ -12,8 +12,13 @@ module mac_out_fifo #(
 )(
 	input wire clk,
 	input wire en,
-	input wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] din,
-	input wire push,
+
+	input wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] din0,
+	input wire push0,
+	
+	input wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] din1,
+	input wire push1,
+	
 	input wire pop,
 
 	output wire [NETWORK_WIDTH-1:0] mac_out [CROSSBAR_NEURONS],
@@ -23,6 +28,13 @@ module mac_out_fifo #(
 	output reg push_done,
 	output reg pop_done
 );
+	wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] din;
+	wire push;
+
+	assign din = push0 ? din0 : din1;
+	assign push = (push0 || push1);
+
+
 	localparam WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
 
 	reg [7:0] cnt = 0;
@@ -30,7 +42,9 @@ module mac_out_fifo #(
 	generate
 		genvar i, j;
 		for(i = 0; i < CROSSBAR_NEURONS; i++) begin
+			wire [NETWORK_WIDTH-1:0] mac_out_debug ;
 			assign mac_out[i] = buffer[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i];
+			assign mac_out_debug = buffer[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i];
 		end
 	endgenerate
 

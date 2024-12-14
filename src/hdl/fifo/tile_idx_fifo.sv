@@ -14,8 +14,12 @@ module tile_idx_fifo #(
 	input wire clk,
 	input wire en,
 
-	input wire [2*TILE_IDX_WIDTH-1:0] din,
-	input wire push,
+	input wire [2*TILE_IDX_WIDTH-1:0] din0,
+	input wire push0,
+
+	input wire [2*TILE_IDX_WIDTH-1:0] din1,
+	input wire push1,
+
 	input wire pop,
 
 	output wire [TILE_IDX_WIDTH-1:0] tile_idx_x,
@@ -23,9 +27,15 @@ module tile_idx_fifo #(
 	output wire full,
 	output wire empty,
 
-	output reg push_done,
+	output reg push_done, // TODO maybe need 2 done signals? theoretically only 1 will have push on at a time though
 	output reg pop_done
 );
+	wire [2*TILE_IDX_WIDTH-1:0] din;
+	wire push;
+
+	assign din = push0 ? din0 : din1;
+	assign push = push0 || push1;
+
 	localparam WIDTH = 2*TILE_IDX_WIDTH;
 
 	reg [7:0] cnt = 0;

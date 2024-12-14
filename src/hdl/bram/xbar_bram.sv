@@ -107,6 +107,10 @@ module xbar_bram #(
             tile_idx <= 0;
             weight_idx <= 0;
             bram_en <= 0;
+            tile_idx_fifo_push <= 0;
+            weight_fifo_push <= 0;
+            spk_in_fifo_push <= 0;
+
         end else begin
             if(fifo_done && ~fifo_full && ~tiles_done) begin
                 if(bram_step == SEND) begin
@@ -118,6 +122,7 @@ module xbar_bram #(
                     bram_done <= 0;
                     bram_step <= WAIT;
                     bram_en <= 1;
+                    bram_we <= 0;
                 end else if(bram_step == WAIT) begin
                     if(bram_done) begin
                         case(param_step) 

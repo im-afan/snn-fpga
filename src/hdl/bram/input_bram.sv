@@ -89,6 +89,9 @@ module input_bram #(
             tile_idx <= 0; 
             bram_en <= 0;
             bram_we <= 0;
+            mac_out_fifo_push <= 0;
+            tile_idx_fifo_push <= 0;
+            bram_done <= 0;
         end else begin
             if(fifo_done && ~fifo_full && ~tiles_done) begin
                 if(bram_step == SEND) begin
@@ -101,14 +104,23 @@ module input_bram #(
                 end else if(bram_step == WAIT) begin
                     if(bram_done) begin
                         bram_en <= 0;
-                        bram_step <= INCREMENT;
                         mac_out_fifo_din <= mac_out_slices[tile_idx_base];
+                        mac_out_fifo_push <= 1;
+                        tile_idx_fifo_push <= 1;
+                        bram_step <= INCREMENT;
                     end
                     else bram_done <= bram_active;
                 end else if(bram_step == INCREMENT) begin
                     tile_idx <= tile_idx+1;
                     bram_step <= SEND;
+                    mac_out_fifo_push <= 0;
+                    tile_idx_fifo_push <= 0;
                 end
+            end else begin
+                tile_idx_fifo_push <= 0;
+                mac_out_fifo_push <= 0;
+                bram_en <= 0;
+                bram_we <= 0; 
             end
         end
     end

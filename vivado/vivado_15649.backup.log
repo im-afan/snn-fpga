@@ -3,8 +3,8 @@
 # SW Build 5076996 on Wed May 22 18:36:09 MDT 2024
 # IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
 # SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Fri Dec 13 15:26:45 2024
-# Process ID: 16561
+# Start of session at: Fri Dec 13 15:23:40 2024
+# Process ID: 15649
 # Current directory: /home/andrew/Desktop/snn-soc/vivado
 # Command line: vivado -mode tcl -source basys3_project.tcl
 # Log file: /home/andrew/Desktop/snn-soc/vivado/vivado.log
@@ -13,17 +13,17 @@
 # Platform          :Ubuntu
 # Operating System  :Ubuntu 22.04.4 LTS
 # Processor Detail  :Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
-# CPU Frequency     :3400.664 MHz
+# CPU Frequency     :3101.079 MHz
 # CPU Physical cores:4
 # CPU Logical cores :8
 # Host memory       :8203 MB
 # Swap memory       :2138 MB
 # Total Virtual     :10341 MB
-# Available Virtual :7194 MB
+# Available Virtual :7180 MB
 #-----------------------------------------------------------
 source basys3_project.tcl
-# create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
-create_project: Time (s): cpu = 00:00:10 ; elapsed = 00:00:09 . Memory (MB): peak = 1414.652 ; gain = 0.023 ; free physical = 755 ; free virtual = 6472
+# create_project -force fpga_snn_microblaze ./fpga_snn_microblaze -part xc7a35tcpg236-1
+create_project: Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1420.664 ; gain = 132.836 ; free physical = 595 ; free virtual = 6301
 # add_files ../src/hdl/fifo/spk_in_fifo.sv
 # add_files ../src/hdl/fifo/tile_idx_fifo.sv
 # add_files ../src/hdl/fifo/weight_fifo.sv
@@ -37,8 +37,6 @@ create_project: Time (s): cpu = 00:00:10 ; elapsed = 00:00:09 . Memory (MB): pea
 # add_files ../src/hdl/bram/bram_switcher.sv
 # add_files ../src/hdl/scheduler/lif_scheduler.sv
 # add_files ../src/hdl/scheduler/xbar_scheduler.sv
-# add_files ../src/hdl/top.sv
 # add_files ../src/hdl/basys3-constraints.xdc
-# set_property top top [current_fileset]
 exit
-INFO: [Common 17-206] Exiting Vivado at Fri Dec 13 15:27:03 2024...
+INFO: [Common 17-206] Exiting Vivado at Fri Dec 13 15:24:16 2024...

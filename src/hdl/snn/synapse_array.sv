@@ -1,5 +1,6 @@
 `timescale 1ns / 1ps
 `include "snn/synapse.sv"
+//`include "synapse.sv"
 
 /**
  * neuromorphic core 
@@ -18,7 +19,8 @@ module synapse_array#(
 
     input wire [NETWORK_WIDTH-1:0] u_weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS],
     input wire [CROSSBAR_NEURONS-1:0] spk_in,
-    output reg [NETWORK_WIDTH-1:0] u_mac_out [CROSSBAR_NEURONS],
+    //output reg [NETWORK_WIDTH-1:0] u_mac_out [CROSSBAR_NEURONS],
+    output reg [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] u_mac_out,
     output reg done
 );
 
@@ -31,7 +33,7 @@ module synapse_array#(
             for(j = 0; j < CROSSBAR_NEURONS; j++) begin
                 assign weight[i][j] = signed'(u_weight[i][j]);
             end
-            assign u_mac_out[i] = unsigned'(mac_out[i]);
+            assign u_mac_out[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = unsigned'(mac_out[i]);
         end
     endgenerate
 

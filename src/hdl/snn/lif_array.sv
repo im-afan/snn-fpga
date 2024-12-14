@@ -1,4 +1,5 @@
 `include "snn/lif.sv"
+//`include "lif.sv"
 
 /* TODO UNTESTED */
 
@@ -12,7 +13,7 @@ module lif_array #(
 
     input wire bram_done,
 
-    input wire [CROSSBAR_NEURONS] spk_in,
+    input wire [CROSSBAR_NEURONS-1:0] spk_in,
     input wire [NETWORK_WIDTH-1:0] u_mem_in [CROSSBAR_NEURONS],
     input wire [NETWORK_WIDTH-1:0] u_mac_out [CROSSBAR_NEURONS],
 
@@ -30,8 +31,14 @@ module lif_array #(
         genvar i;
         for(i = 0 ; i < CROSSBAR_NEURONS; i++) begin
             assign mem_in[i] = signed'(u_mem_in[i]);
-            assign mac_out[i] = signed'(mac_out[i]);
+            assign mac_out[i] = signed'(u_mac_out[i]);
             assign u_mem_out[i] = unsigned'(mem_out[i]);
+            wire [NETWORK_WIDTH-1:0] mac_out_debug;
+            wire [NETWORK_WIDTH-1:0] mem_in_debug;
+            wire [NETWORK_WIDTH-1:0] mem_out_debug;
+            assign mac_out_debug = mac_out[i];
+            assign mem_in_debug = mem_in[i];
+            assign mem_out_debug = mem_out[i];
         end
     endgenerate
 
@@ -39,7 +46,7 @@ module lif_array #(
     localparam LIF = 1;
     localparam WRITE = 2;
 
-    reg step;
+    reg [3:0] step;
 
     reg lif_enable;
     wire [CROSSBAR_NEURONS-1:0] lif_done;
@@ -70,6 +77,8 @@ module lif_array #(
             step <= READ;
             lif_enable <= 0;
             done <= 0;
+            bram_we <= 0;
+            bram_enable <= 0;
         end else begin
             if(~done) begin
                 case(step)
