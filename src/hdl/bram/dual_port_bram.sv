@@ -35,7 +35,7 @@ module dual_port_bram #(
         for(integer asdf = 0; asdf < 1024; asdf++) begin
             mem[asdf] = 0;
         end
-        $readmemb("/home/andrew/Desktop/snn-soc/src/hdl/bram/bram.mem", mem);
+        $readmemb("bram/bram.mem", mem);
     end
 
     integer i;

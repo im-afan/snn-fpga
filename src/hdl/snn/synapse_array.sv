@@ -31,12 +31,15 @@ module synapse_array#(
         genvar i, j;
         for(i = 0; i < CROSSBAR_NEURONS; i++) begin
             for(j = 0; j < CROSSBAR_NEURONS; j++) begin
-                assign weight[i][j] = signed'(u_weight[i][j]);
+                //assign weight[i][j] = signed'(u_weight[i][j]);
+                assign weight[i][j] = u_weight[i][j];
                 wire [NETWORK_WIDTH-1:0] weight_debug;
-                assign weight_debug = signed'(u_weight[i][j]);
+                //assign weight_debug = signed'(u_weight[i][j]);
+                assign weight_debug = u_weight[i][j];
             end
             wire [NETWORK_WIDTH-1:0] mac_out_debug;
-            assign u_mac_out[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = unsigned'(mac_out[i]);
+            //assign u_mac_out[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = unsigned'(mac_out[i]);
+            assign u_mac_out[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = mac_out[i];
             assign mac_out_debug = mac_out[i];
         end
     endgenerate

@@ -451,7 +451,7 @@ module top (
         .u_mem_in(mem_in_lif),
         .u_mac_out(mac_out),
         .spk_out(spk_out_lif),
-        .u_mem_out(mem_out),
+        .u_mem_out(mem_out_lif),
         .done(lif_array_done),
         .bram_we(lif_we),
         .bram_enable(lif_bram_en_local)

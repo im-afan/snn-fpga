@@ -57,7 +57,7 @@ tile[1][11][0] = 32;
 
 
 for i in range(MAX_TILES):
-	tile_idx[i] = [i // 8, i % 8]
+	tile_idx[i] = [i % 8, i // 8]
 
 def bin_(num, bit_width=8):
     """Convert a signed decimal number to binary with a fixed bit width."""
@@ -67,11 +67,11 @@ def bin_(num, bit_width=8):
     # Format as binary with the specified width
     return format(num, f'0{bit_width}b')
 
-def endian(binary_string):
-    if len(binary_string) % 8 != 0:
-        raise ValueError("Binary string length must be a multiple of 8")
+def endian(binary_string, width=8):
+    if len(binary_string) % width != 0:
+        raise ValueError("Binary string length must be a multiple of width")
     
-    byte_chunks = [binary_string[i:i+8] for i in range(0, len(binary_string), 8)]
+    byte_chunks = [binary_string[i:i+width] for i in range(0, len(binary_string), width)]
     reversed_chunks = byte_chunks[::-1]
     big_endian_string = ''.join(reversed_chunks)
     
@@ -79,6 +79,7 @@ def endian(binary_string):
 
 for i in range(0, MAX_TILES):
     memory[TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*i : TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*(i+1)] = bin_(tile_idx[i][0], 16) + bin_(tile_idx[i][1], 16)
+    #print(memory[TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*i : TILE_IDX_OFFSET + TILE_IDX_WIDTH*2*(i+1)])
 
 for i in range(0, MAX_TILES):
     for j in range(CROSSBAR_NEURONS):
@@ -102,5 +103,9 @@ for i in range(0, MAX_NEURONS):
 
 for i in range(0, 1024):
     s = ''.join(memory[i*1024 : (i+1)*1024])
-    s = endian(s)
+    if(i < 2):
+        s = endian(s, 16)
+    else:
+        s = endian(s, 8)
+    #s = ''.join(reversed(s)) 
     print(s)

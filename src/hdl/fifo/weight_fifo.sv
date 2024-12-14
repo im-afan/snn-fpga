@@ -24,7 +24,10 @@ module weight_fifo #(
 	localparam DIN_WIDTH = BRAM_DATA_WIDTH;
 	localparam WIDTH = CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH;
 
-	reg [7:0] cnt = 0;
+	reg [7:0] cnt_all = 0;
+	reg cnt;
+	assign cnt = cnt_all / (WIDTH / DIN_WIDTH);
+
 	reg [LENGTH*WIDTH-1:0] buffer;
 	generate
 		genvar i, j;
@@ -38,7 +41,7 @@ module weight_fifo #(
 		end
 	endgenerate
 
-	assign full = (cnt >= 2*LENGTH);
+	assign full = (cnt >= LENGTH*WIDTH / DIN_WIDTH);
 	assign empty = (cnt == 0);
 
 	always @(posedge clk) begin
@@ -46,16 +49,16 @@ module weight_fifo #(
 			pop_done <= 1;
 			push_done <= 1;
 			buffer <= 0;
-			cnt <= 0;
+			cnt_all <= 0;
 		end else begin
 			if(pop && ~pop_done) begin
 				buffer <= (buffer >> WIDTH);
 				pop_done <= 1;
-				if(~empty) cnt <= cnt-1;
+				if(~empty) cnt_all <= cnt_all-(WIDTH / DIN_WIDTH);
 			end	else if(push && ~push_done) begin
 				if(~full) begin
 					buffer <= (buffer | (din << (cnt*DIN_WIDTH)));
-					cnt <= cnt+1;	
+					cnt_all <= cnt_all+1;	
 				end
 				push_done <= 1;
 			end
