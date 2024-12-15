@@ -29,15 +29,19 @@ module synapse#(
     assign overflow = (weight[NETWORK_WIDTH-1] == mac_in[NETWORK_WIDTH-1]) && (weight[NETWORK_WIDTH-1] != sum[NETWORK_WIDTH-1]);
     assign sum_clamp = overflow ? (weight[NETWORK_WIDTH-1] ? -INT_MAX : INT_MAX) : sum;
 
+    reg go = 0;
+    assign spk_below = spk_in ? done : spk_above;
+    assign mac_out = spk_in ? sum_clamp : mac_in;
+
     always @(posedge clk or negedge enable) begin
         if(~enable) begin
             done <= 0;
-			spk_below <= 0;
+            go <= 0;
 		end else begin
 			if(spk_above) begin
-				mac_out <= spk_in ? sum_clamp : mac_in;
+				//mac_out <= spk_in ? sum_clamp : mac_in;
 			    done <= 1;
-				spk_below <= 1;
+				//spk_below <= 1;
 			end
 		end
     end

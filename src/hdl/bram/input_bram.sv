@@ -74,7 +74,7 @@ module input_bram #(
     wire [11:0] tile_idx_base;
     assign tile_idx_base = tile_idx % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS / NETWORK_WIDTH);
     wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] mac_out_slices[BRAM_DATA_WIDTH / CROSSBAR_NEURONS / NETWORK_WIDTH];
-    
+
     generate
         genvar i, j;
         for(i = 0; i < BRAM_DATA_WIDTH / CROSSBAR_NEURONS / NETWORK_WIDTH; i++) begin

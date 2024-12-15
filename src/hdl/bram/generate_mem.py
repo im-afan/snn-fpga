@@ -55,6 +55,9 @@ tile[0][9][11] = 32;
 tile[1][10][0] = 32;
 tile[1][11][0] = 32;
 
+tile[1][0][10] = -32;
+tile[1][0][11] = 32;
+
 
 for i in range(MAX_TILES):
 	tile_idx[i] = [i % 8, i // 8]

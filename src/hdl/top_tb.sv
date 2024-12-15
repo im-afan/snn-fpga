@@ -3,11 +3,13 @@
 
 module top_tb;
     reg clk;
-    reg en;
+    wire [15:0] led;
+    reg [15:0] sw;
 
     top top_0 (
         .clk(clk),
-        .en(en)
+        .led(led),
+        .sw(sw)
     );
 
     initial begin
@@ -20,9 +22,9 @@ module top_tb;
 
         #0 
         clk = 0;
-        en = 0;
+        sw = 0;
         #100
-        en = 1;
+        sw = 1;
         #100000
         $writememb(".wave/top_dump.mem", top_0.dual_port_bram_0.mem);
         $finish;

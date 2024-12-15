@@ -14,7 +14,9 @@
 
 module top (
     input wire clk,
-    input wire en
+    input wire [15:0] sw,
+    output wire [15:0] led
+    //input wire en
 );
     localparam integer BRAM_ADDR_WIDTH = 16;
     localparam integer BRAM_DATA_WIDTH = 1024;
@@ -23,11 +25,11 @@ module top (
     localparam integer TILE_IDX_WIDTH = 16;
     localparam integer MAX_NEURONS = 1024;
     localparam integer CROSSBAR_NEURONS = 16;
-    localparam integer FIFO_LENGTH = 2;
+    localparam integer FIFO_LENGTH = 3;
     localparam integer THRESH = 32;
 
-    //wire en;
-    //assign en = 1;
+    wire en;
+    assign en = sw[0];
     
     wire clka; 
     wire [BRAM_ADDR_WIDTH-1:0] addra;
@@ -171,8 +173,11 @@ module top (
     wire [CROSSBAR_NEURONS-1:0] spk_out_lif;
     wire [CROSSBAR_NEURONS-1:0] spk_in_lif;
 
+    assign led = spk_out_lif;
+
     wire synapse_array_done;
     wire synapse_array_en;
+    wire spk_rst;
 
     dual_port_bram #(
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -400,6 +405,7 @@ module top (
         .push1(mac_out_fifo_push1),
         .pop(mac_out_fifo_pop),
         .mac_out(mac_out),
+        .spk_rst(spk_rst),
         .full(mac_out_fifo_full),
         .empty(mac_out_fifo_empty),
         .pop_done(mac_out_fifo_pop_done),
@@ -447,6 +453,7 @@ module top (
         .clk(clk),
         .enable(lif_array_en),
         .bram_done(lif_bram_done),
+        .spk_rst(spk_rst),
         .spk_in(spk_in_lif),
         .u_mem_in(mem_in_lif),
         .u_mac_out(mac_out),

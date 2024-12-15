@@ -1,5 +1,5 @@
-`include "snn/lif.sv"
-//`include "lif.sv"
+//`include "snn/lif.sv"
+`include "lif.sv"
 
 /* TODO UNTESTED */
 
@@ -13,6 +13,7 @@ module lif_array #(
 
     input wire bram_done,
 
+    input wire spk_rst,
     input wire [CROSSBAR_NEURONS-1:0] spk_in,
     input wire [NETWORK_WIDTH-1:0] u_mem_in [CROSSBAR_NEURONS],
     input wire [NETWORK_WIDTH-1:0] u_mac_out [CROSSBAR_NEURONS],
@@ -65,6 +66,7 @@ module lif_array #(
             ) neuron (
                 .clk(clk),
                 .enable(lif_enable),
+                .spk_rst(spk_rst),
                 .spk_in(spk_in[i]),
                 .mac_out(mac_out[i]),
                 .mem_in(mem_in[i]),

@@ -1,6 +1,5 @@
-`timescale 1ns / 1ps
-`include "snn/synapse.sv"
-//`include "synapse.sv"
+//`include "snn/synapse.sv"
+`include "synapse.sv"
 
 /**
  * neuromorphic core 

@@ -13,6 +13,7 @@ module lif#(
     input wire clk,
     input wire enable,
 
+    input wire spk_rst, // want to reset spikes for next timestep? 
     input wire spk_in, // inhibit multiple spks in 1 timestep
     input wire signed [NETWORK_WIDTH-1:0] mac_out,
     input wire signed [NETWORK_WIDTH-1:0] mem_in,
@@ -35,7 +36,7 @@ module lif#(
             local_done <= 0;
         end else begin
             if(~local_done) begin
-                if(spk_in) begin
+                if(spk_in && ~spk_rst) begin
                     spk_out <= 1;
                     mem_out <= 0;
                 end else if(sum_clamp >= THRESH) begin
