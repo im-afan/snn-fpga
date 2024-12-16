@@ -19,6 +19,8 @@ module xbar_bram #(
     input wire clk, 
     input wire enable,
 
+    input wire buff_idx,
+
     input wire weight_fifo_full,
     input wire spk_in_fifo_full,
     input wire tile_idx_fifo_full,
@@ -55,8 +57,10 @@ module xbar_bram #(
     localparam integer TILE_IDX_BITS = ((2*TILE_IDX_WIDTH*MAX_TILES) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer WEIGHT_BITS = ((MAX_TILES*CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer NETWORK_INPUT_BITS = ((MAX_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-    localparam integer SPK_OUT_BITS = ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
+    localparam integer SPK_OUT_BITS = 2 * ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer FLAGS_BITS = 1024;
+    
+    localparam integer SPK_OUT_BITS_ONE = ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
 
     localparam integer TILE_IDX_OFFSET = 0;
     localparam integer WEIGHT_OFFSET = TILE_IDX_OFFSET + TILE_IDX_BITS / 8;
@@ -92,6 +96,11 @@ module xbar_bram #(
     wire [2*TILE_IDX_WIDTH-1:0] tile_idx_slices [BRAM_DATA_WIDTH / (2*TILE_IDX_WIDTH)];
     wire [CROSSBAR_NEURONS-1:0] spk_in_slices [BRAM_DATA_WIDTH / CROSSBAR_NEURONS];
 
+
+    wire [11:0] buff_offset_read;
+    assign buff_offset_read = buff_idx ? SPK_OUT_BITS_ONE / 8 : 0;
+
+
     generate 
         genvar i;
         for(i = 0; i < BRAM_DATA_WIDTH / (2*TILE_IDX_WIDTH); i++) begin
@@ -119,7 +128,7 @@ module xbar_bram #(
                     case(param_step)
                         READ_IDX: addr <= TILE_IDX_OFFSET + tile_idx * 2*TILE_IDX_WIDTH/8;
                         READ_WEIGHTS: addr <= WEIGHT_OFFSET + CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH/8*tile_idx + weight_idx;
-                        READ_SPK: addr <= SPK_OUT_OFFSET + tile_idx_x;
+                        READ_SPK: addr <= SPK_OUT_OFFSET + tile_idx_x + buff_offset_read;
                     endcase
                     bram_done <= 0;
                     bram_step <= WAIT;

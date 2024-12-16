@@ -18,6 +18,8 @@ module input_bram #(
     input wire clk, 
     input wire enable,
 
+    input wire buff_idx,
+
     input wire mac_out_fifo_full,
     input wire tile_idx_fifo_full,
     
@@ -46,8 +48,10 @@ module input_bram #(
     localparam integer TILE_IDX_BITS = ((2*TILE_IDX_WIDTH*MAX_TILES) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer WEIGHT_BITS = ((MAX_TILES*CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer NETWORK_INPUT_BITS = ((MAX_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-    localparam integer SPK_OUT_BITS = ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
+    localparam integer SPK_OUT_BITS = 2 * ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer FLAGS_BITS = 1024;
+    
+    localparam integer SPK_OUT_BITS_ONE = 2 * ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
 
     localparam integer TILE_IDX_OFFSET = 0;
     localparam integer WEIGHT_OFFSET = TILE_IDX_OFFSET + TILE_IDX_BITS / 8;

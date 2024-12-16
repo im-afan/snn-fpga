@@ -19,6 +19,8 @@ module lif_bram #(
     input wire clk, 
     input wire enable,
 
+    input wire buff_idx,
+
     input wire we,
 
     input wire [TILE_IDX_WIDTH-1:0] tile_idx_x,
@@ -53,8 +55,10 @@ module lif_bram #(
     localparam integer TILE_IDX_BITS = ((2*TILE_IDX_WIDTH*MAX_TILES) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer WEIGHT_BITS = ((MAX_TILES*CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
     localparam integer NETWORK_INPUT_BITS = ((MAX_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-    localparam integer SPK_OUT_BITS = ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
+    localparam integer SPK_OUT_BITS = 2 * ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH; // 2 buffers
     localparam integer FLAGS_BITS = 1024;
+
+    localparam integer SPK_OUT_BITS_ONE = ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH; // bits per buffer
 
     localparam integer TILE_IDX_OFFSET = 0;
     localparam integer WEIGHT_OFFSET = TILE_IDX_OFFSET + TILE_IDX_BITS / 8;
@@ -63,6 +67,10 @@ module lif_bram #(
     localparam integer FLAGS_OFFSET = SPK_OUT_OFFSET + SPK_OUT_BITS / 8;
     localparam integer MEM_OFFSET = FLAGS_OFFSET + FLAGS_BITS / 8;
 
+    wire [11:0] buff_offset_read;
+    assign buff_offset_read = buff_idx ? SPK_OUT_BITS_ONE / 8 : 0;
+    wire [11:0] buff_offset_write;
+    assign buff_offset_write = buff_idx ? 0 : SPK_OUT_BITS_ONE / 8;
 
     wire local_we;
     assign local_we = we;
@@ -131,7 +139,7 @@ module lif_bram #(
                             din <= (din_tile << mem_tile_idx_base);
                             we_tile <= (1 << mem_tile_idx_base);
                         end else if(param_step == SPK) begin
-                            addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8;
+                            addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
                             din <= (spk_out << spk_tile_idx_base);
                             spk_we_tile <= (1 << spk_tile_idx_base); // TODO thsi is wrong lmao
                         end
@@ -146,14 +154,16 @@ module lif_bram #(
                         else bram_done <= bram_active;
                     end else if(bram_step == INCREMENT) begin
                         if(param_step == MEM) param_step <= SPK;
-                        else if(param_step == SPK) done <= 1;
+                        else if(param_step == SPK) begin
+                            done <= 1;
+                        end
                         bram_step <= SEND;
                     end
 
                 end else begin
                     if(bram_step == SEND) begin
                         if(param_step == MEM) addr <= MEM_OFFSET + tile_idx_x * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
-                        else if(param_step == SPK) addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8;
+                        else if(param_step == SPK) addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
                         bram_step <= WAIT;
                         bram_done <= 0;
                         we_tile <= 0;
@@ -161,7 +171,6 @@ module lif_bram #(
                     end else if(bram_step == WAIT) begin
                         if(bram_done) begin
                             if(param_step == MEM) begin
-                                $display(mem_in_tiles[mem_tile_idx_base][0]);
                                 for(integer i = 0; i < CROSSBAR_NEURONS; i++) mem_in[i] <= mem_in_tiles[mem_tile_idx_base][i];
                             end else if(param_step == SPK) begin
                                 spk_in <= spk_tiles[spk_tile_idx_base];
@@ -173,7 +182,9 @@ module lif_bram #(
                         end
                     end else if(bram_step == INCREMENT) begin
                         if(param_step == MEM) param_step <= SPK;
-                        else if(param_step == SPK) done <= 1;
+                        else if(param_step == SPK) begin
+                            done <= 1;
+                        end
                         bram_step <= SEND;
                     end
                 end

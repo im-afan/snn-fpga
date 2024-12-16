@@ -17,6 +17,10 @@ module top_tb;
     end
 
     initial begin
+        forever #50000 sw = ~sw;
+    end
+
+    initial begin
         $dumpfile(".wave/top_dump.vcd");
         $dumpvars(100, top_tb);
 
@@ -25,7 +29,7 @@ module top_tb;
         sw = 0;
         #100
         sw = 1;
-        #100000
+        #400000
         $writememb(".wave/top_dump.mem", top_0.dual_port_bram_0.mem);
         $finish;
     end

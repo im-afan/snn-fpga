@@ -1,10 +1,3 @@
-`timescale 1ns / 1ps
-
-/**
- * SNN synapse
- * spk_in: spiking input, mac_in: multiply-accumulate input from above synapse
- * supports queuing spikes using a delay
- */
 
 module synapse#(
     parameter integer NETWORK_WIDTH = 32
@@ -29,7 +22,7 @@ module synapse#(
     assign overflow = (weight[NETWORK_WIDTH-1] == mac_in[NETWORK_WIDTH-1]) && (weight[NETWORK_WIDTH-1] != sum[NETWORK_WIDTH-1]);
     assign sum_clamp = overflow ? (weight[NETWORK_WIDTH-1] ? -INT_MAX : INT_MAX) : sum;
 
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if(~enable) begin
             done <= 0;
 			spk_below <= 0;
@@ -81,21 +74,14 @@ module synapse#(
     assign done = enable && spk_below;
     assign mac_out = spk_in ? yes_spk_mac_out : no_spk_mac_out;
 
-    reg spk_delay = 0;
-
     always_latch begin
-        if(enable && ~spk_in) begin
+        if(spk_above && ~spk_in) begin
             no_spk_done = 1;
-            //no_spk_mac_out = mac_in;
         end
     end
 
     always_ff @(posedge clk) begin
-        if(~enable) begin
-            //done <= 0;
-            spk_delay <= 0;
-		end else begin
-            spk_delay <= spk_in;
+        if(enable) begin
             if(spk_above) yes_spk_done <= 1;
 		end
     end

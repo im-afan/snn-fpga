@@ -9,6 +9,7 @@
 `include "bram/xbar_bram.sv"
 `include "bram/input_bram.sv"
 `include "bram/bram_switcher.sv"
+`include "bram/buff_idx_controller.sv"
 `include "scheduler/lif_scheduler.sv"
 `include "scheduler/xbar_scheduler.sv"
 
@@ -25,8 +26,11 @@ module top (
     localparam integer TILE_IDX_WIDTH = 16;
     localparam integer MAX_NEURONS = 1024;
     localparam integer CROSSBAR_NEURONS = 16;
-    localparam integer FIFO_LENGTH = 2;
+    localparam integer FIFO_LENGTH = 3;
     localparam integer THRESH = 32;
+
+    wire buff_idx; // switches between 0 and 1: which one you are currently WRITING TO
+    //assign buff_idx = 1;
 
     wire en;
     assign en = sw[0];
@@ -226,6 +230,12 @@ module top (
         .doutb(doutb)
     );
 
+    buff_idx_controller buff_idx_controller_0 (
+        .clk(clk),
+        .en(en),
+        .buff_idx(buff_idx)
+    );
+
     lif_bram #(
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
         .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
@@ -237,6 +247,7 @@ module top (
     ) lif_bram_0 (
         .clk(clk),
         .enable(lif_bram_en_local),
+        .buff_idx(buff_idx),
         .we(lif_we),
         .tile_idx_x(tile_idx_x),
         .tile_idx_y(tile_idx_y),
@@ -267,6 +278,7 @@ module top (
         .clk(clk),
         .enable(en),
 
+        .buff_idx(buff_idx),
         .weight_fifo_full(weight_fifo_full),
         .weight_fifo_push_done(weight_fifo_push_done),
         .weight_fifo_push(weight_fifo_push),
@@ -304,6 +316,7 @@ module top (
         .clk(clk),
         .enable(en),
 
+        .buff_idx(buff_idx),
         .mac_out_fifo_full(mac_out_fifo_full),
         .mac_out_fifo_push(mac_out_fifo_push0),
         .mac_out_fifo_push_done(mac_out_fifo_push_done),
