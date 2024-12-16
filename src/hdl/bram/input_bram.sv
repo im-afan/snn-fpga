@@ -85,7 +85,7 @@ module input_bram #(
         end
     endgenerate
 
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if(~enable) begin
             bram_step <= SEND;
             tile_idx <= 0; 

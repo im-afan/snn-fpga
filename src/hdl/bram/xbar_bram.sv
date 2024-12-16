@@ -102,7 +102,7 @@ module xbar_bram #(
         end
     endgenerate
 
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if(~enable) begin
             bram_step <= SEND;
             param_step <= READ_IDX;

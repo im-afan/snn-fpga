@@ -30,7 +30,7 @@ module lif#(
     assign overflow = (mem_in[NETWORK_WIDTH-1] == mac_out[NETWORK_WIDTH-1]) && (mem_in[NETWORK_WIDTH-1] != sum[NETWORK_WIDTH-1]);
     assign sum_clamp = overflow ? (mem_in[NETWORK_WIDTH-1] ? -THRESH : THRESH) : sum;
 
-    always @(posedge clk or negedge enable) begin
+    always_ff @(posedge clk) begin
         if(~enable) begin
             done <= 0;
             local_done <= 0;

@@ -29,7 +29,7 @@ module lif_scheduler (
     assign ready = ~(mac_out_fifo_empty || tile_idx_fifo_empty);
     assign pop_done = (mac_out_fifo_pop_done && tile_idx_fifo_pop_done) || ~(mac_out_fifo_pop || tile_idx_fifo_pop);
 
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if(~en) begin
             lif_en <= 0;
             mac_out_fifo_pop <= 0;

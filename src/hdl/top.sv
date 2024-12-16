@@ -25,7 +25,7 @@ module top (
     localparam integer TILE_IDX_WIDTH = 16;
     localparam integer MAX_NEURONS = 1024;
     localparam integer CROSSBAR_NEURONS = 16;
-    localparam integer FIFO_LENGTH = 3;
+    localparam integer FIFO_LENGTH = 2;
     localparam integer THRESH = 32;
 
     wire en;
@@ -183,13 +183,14 @@ module top (
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
         .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH)
     ) dual_port_bram_0 (
-        .clka(clka),
+        .clka(clk),
         .addra(addra),
         .dina(dina),
         .douta(douta),
         .wea(wea),
         .ena(ena),
-        .clkb(clkb),
+
+        .clkb(clk),
         .addrb(addrb),
         .dinb(dinb),
         .doutb(doutb),

@@ -36,22 +36,29 @@ module bram_switcher #(
 ); 
     reg a_used, b_used;
 
-    generate
-        genvar i;
-        for(i = 0; i < 4; i++) begin
-            assign active_debug = active[i];
-            assign en_debug = en[i];
-            assign we_debug = we[i];
-            assign clk_debug = clk[i];
-        end
-    endgenerate
-
-    always @(*) begin
+    always_comb begin
         a_used = 0;
-        b_used = 0; 
+        b_used = 0;
+
+        clka = 0;
+        ena = 0;
+        addra = 0;
+        wea = 0;
+
+        dina = 0;
+        clkb = 0;
+        enb = 0;
+        addrb = 0;
+        web = 0;
+        dinb = 0;
+
+        for(integer i = 0; i < 4; i++) begin
+            active[i] = 0;
+            dout[i] = 0;    
+        end
         for(integer i = 0; i < 4; i++) begin
             if(want_active[i]) begin
-                if(~a_used) begin
+                if(!a_used) begin
                     clka = clk[i];
                     ena = en[i];
                     addra = addr[i];
@@ -60,7 +67,7 @@ module bram_switcher #(
                     dout[i] = douta;
                     active[i] = 1;
                     a_used = 1;
-                end else if(~b_used) begin
+                end else if(!b_used) begin
                     clkb = clk[i];
                     enb = en[i];
                     addrb = addr[i];
@@ -69,11 +76,7 @@ module bram_switcher #(
                     dout[i] = doutb;
                     active[i] = 1;
                     b_used = 1;
-                end else begin
-                    active[i] = 0;
-                end
-            end else begin
-                active[i] = 0;
+                end 
             end
         end
     end

@@ -37,12 +37,6 @@ module lif_array #(
             assign mem_in[i] = u_mem_in[i];
             assign mac_out[i] = u_mac_out[i];
             assign u_mem_out[i] = mem_out[i];
-            wire [NETWORK_WIDTH-1:0] mac_out_debug;
-            wire [NETWORK_WIDTH-1:0] mem_in_debug;
-            wire [NETWORK_WIDTH-1:0] mem_out_debug;
-            assign mac_out_debug = mac_out[i];
-            assign mem_in_debug = mem_in[i];
-            assign mem_out_debug = mem_out[i];
         end
     endgenerate
 
@@ -77,7 +71,7 @@ module lif_array #(
         end
     endgenerate
 
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if(~enable) begin
             step <= READ;
             lif_enable <= 0;

@@ -43,9 +43,7 @@ module mac_out_fifo #(
 	generate
 		genvar i, j;
 		for(i = 0; i < CROSSBAR_NEURONS; i++) begin
-			wire [NETWORK_WIDTH-1:0] mac_out_debug ;
 			assign mac_out[i] = buffer[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i];
-			assign mac_out_debug = buffer[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i];
 		end
 	endgenerate
 
@@ -53,7 +51,7 @@ module mac_out_fifo #(
 	assign full = (cnt >= LENGTH);
 	assign empty = (cnt == 0);
 
-	always @(posedge clk) begin
+	always_ff @(posedge clk) begin
 		if(~en) begin
 			pop_done <= 1;
 			push_done <= 1;

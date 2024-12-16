@@ -1,4 +1,4 @@
-`timescale 1ns / 10ps;
+`timescale 1ns / 10ps
 `include "bram/xbar_bram.sv"
 `include "bram/dual_port_bram.sv"
 `include "fifo/weight_fifo.sv"

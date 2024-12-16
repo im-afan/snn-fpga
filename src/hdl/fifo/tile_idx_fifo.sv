@@ -48,7 +48,7 @@ module tile_idx_fifo #(
 	assign full = (cnt >= LENGTH);
 	assign empty = (cnt == 0);
 
-	always @(posedge clk) begin
+	always_ff @(posedge clk) begin
 		if(~en) begin
 			pop_done <= 1;
 			push_done <= 1;

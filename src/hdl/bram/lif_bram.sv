@@ -89,13 +89,6 @@ module lif_bram #(
 
     generate
         genvar i, j, k;
-        for(i = 0; i < CROSSBAR_NEURONS; i++) begin
-            wire [NETWORK_WIDTH-1:0] mem_in_debug;
-            wire [NETWORK_WIDTH-1:0] mem_out_debug;
-            assign mem_in_debug = mem_in[i];
-            assign mem_out_debug = mem_out[i];
-        end
-
         for(i = 0; i < BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS; i++) begin
             for(j = 0; j < CROSSBAR_NEURONS; j++) begin
                 assign bram_we_mem[i*CROSSBAR_NEURONS + j] = we_tile[i];
@@ -121,7 +114,7 @@ module lif_bram #(
         end
     endgenerate
 
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if(~enable) begin
             param_step <= MEM;
             bram_step <= SEND;

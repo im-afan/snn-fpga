@@ -1,6 +1,3 @@
-
-/* PASSED TESTS */
-
 module weight_fifo #(
 	parameter integer CROSSBAR_NEURONS,
 	parameter integer BRAM_DATA_WIDTH,
@@ -21,44 +18,49 @@ module weight_fifo #(
 	output reg push_done,
 	output reg pop_done
 );
-	localparam DIN_WIDTH = BRAM_DATA_WIDTH;
-	localparam WIDTH = CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH;
+    localparam DIN_WIDTH = BRAM_DATA_WIDTH;
+    localparam WIDTH = CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH;
+    localparam DIN_PER_WIDTH = WIDTH / DIN_WIDTH;
 
-	reg [7:0] cnt_all = 0;
-	reg cnt;
-	assign cnt = cnt_all / (WIDTH / DIN_WIDTH);
+    reg [7:0] read_ptr, write_ptr;
+    reg [7:0] diff;
+    assign full = (diff == LENGTH*DIN_PER_WIDTH);
+    assign empty = (diff == 0);
 
-	reg [LENGTH*WIDTH-1:0] buffer;
-	generate
-		genvar i, j;
-		genvar cur_idx;
-		for(i = 0; i < CROSSBAR_NEURONS; i++) begin
-			for(j = 0; j < CROSSBAR_NEURONS; j++) begin
-				//cur_idx = CROSSBAR_NEURONS*i+j;
-				assign weight[i][j] = buffer[NETWORK_WIDTH*(CROSSBAR_NEURONS*i+j+1)-1 : NETWORK_WIDTH*(CROSSBAR_NEURONS*i+j)];
-				//prev_idx = cur_idx;
-			end
-		end
-	endgenerate
+    reg [BRAM_DATA_WIDTH-1:0] buffer [LENGTH * DIN_PER_WIDTH];
 
-	assign full = (cnt >= LENGTH*WIDTH / DIN_WIDTH);
-	assign empty = (cnt == 0);
+    generate
+        genvar i, j;
+        for(i = 0; i < CROSSBAR_NEURONS; i++) begin
+            for(j = 0; j < CROSSBAR_NEURONS; j++) begin
+                localparam k = (NETWORK_WIDTH * (i*CROSSBAR_NEURONS+j)) / BRAM_DATA_WIDTH;
+                localparam l = (NETWORK_WIDTH * (i*CROSSBAR_NEURONS+j)) % BRAM_DATA_WIDTH;
+                assign weight[i][j] = buffer[read_ptr + k][l + NETWORK_WIDTH-1 : l];
+            end
+        end
+    endgenerate
 
-	always @(posedge clk) begin
+    always_ff @(posedge clk) begin
 		if(~en) begin
 			pop_done <= 1;
 			push_done <= 1;
-			buffer <= 0;
-			cnt_all <= 0;
+            read_ptr <= 0;
+            write_ptr <= 0;
+            diff <= 0;
+            for(integer i = 0; i < LENGTH*DIN_PER_WIDTH; i++)
+                buffer[i] <= 0;
 		end else begin
 			if(pop && ~pop_done) begin
-				buffer <= (buffer >> WIDTH);
+                if(~empty) begin
+                    read_ptr <= (read_ptr + DIN_PER_WIDTH) % (LENGTH*DIN_PER_WIDTH);
+                    diff <= diff - DIN_PER_WIDTH;
+                end
 				pop_done <= 1;
-				if(~empty) cnt_all <= cnt_all-(WIDTH / DIN_WIDTH);
 			end	else if(push && ~push_done) begin
 				if(~full) begin
-					buffer <= (buffer | (din << (cnt*DIN_WIDTH)));
-					cnt_all <= cnt_all+1;	
+                    buffer[write_ptr] <= din;
+                    write_ptr <= (write_ptr + 1) % (LENGTH*DIN_PER_WIDTH);
+                    diff <= diff + 1;
 				end
 				push_done <= 1;
 			end
@@ -71,5 +73,4 @@ module weight_fifo #(
 			end
 		end
 	end
-
 endmodule

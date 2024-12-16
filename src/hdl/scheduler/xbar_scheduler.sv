@@ -26,7 +26,7 @@ module xbar_scheduler (
 	assign pop_done = (weight_fifo_pop_done && spk_in_fifo_pop_done && mac_out_fifo_push) 
 					|| ~(weight_fifo_pop || spk_in_fifo_pop || mac_out_fifo_push);
 
-	always @(posedge clk) begin
+	always_ff @(posedge clk) begin
 		if(~en) begin
 			crossbar_en <= 0;
 			weight_fifo_pop <= 0;
