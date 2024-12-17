@@ -80,7 +80,7 @@ module lif_bram #(
     reg [4:0] param_step = MEM;
 
     wire [11:0] mem_tile_idx_base;
-    assign mem_tile_idx_base = tile_idx_x % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS / NETWORK_WIDTH);
+    assign mem_tile_idx_base = tile_idx_y % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS / NETWORK_WIDTH);
     wire [11:0] spk_tile_idx_base;
     assign spk_tile_idx_base = tile_idx_y % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS); 
 
@@ -135,12 +135,12 @@ module lif_bram #(
                 if(local_we) begin
                     if(bram_step == SEND) begin
                         if(param_step == MEM) begin
-                            addr <= MEM_OFFSET + tile_idx_x * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
+                            addr <= MEM_OFFSET + tile_idx_y * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
                             din <= (din_tile << mem_tile_idx_base);
                             we_tile <= (1 << mem_tile_idx_base);
                         end else if(param_step == SPK) begin
                             addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
-                            din <= (spk_out << spk_tile_idx_base);
+                            din <= (spk_out << spk_tile_idx_base * CROSSBAR_NEURONS);
                             spk_we_tile <= (1 << spk_tile_idx_base); // TODO thsi is wrong lmao
                         end
                         bram_step <= WAIT;
@@ -162,7 +162,7 @@ module lif_bram #(
 
                 end else begin
                     if(bram_step == SEND) begin
-                        if(param_step == MEM) addr <= MEM_OFFSET + tile_idx_x * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
+                        if(param_step == MEM) addr <= MEM_OFFSET + tile_idx_y * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
                         else if(param_step == SPK) addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
                         bram_step <= WAIT;
                         bram_done <= 0;

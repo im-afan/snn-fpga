@@ -4,7 +4,6 @@ module synapse#(
 )(
     input wire clk,
     input wire enable,
-    input wire debug,
     input wire signed [NETWORK_WIDTH-1:0] mac_in, // mac = vertical crossbars
     input wire spk_above,
     input wire spk_in, // spk = horizontal crossbars

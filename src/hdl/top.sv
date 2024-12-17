@@ -22,7 +22,7 @@ module top (
     localparam integer BRAM_ADDR_WIDTH = 16;
     localparam integer BRAM_DATA_WIDTH = 1024;
     localparam integer NETWORK_WIDTH = 8;
-    localparam integer MAX_TILES = 64;
+    localparam integer MAX_TILES = 128;
     localparam integer TILE_IDX_WIDTH = 16;
     localparam integer MAX_NEURONS = 1024;
     localparam integer CROSSBAR_NEURONS = 16;

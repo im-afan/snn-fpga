@@ -134,22 +134,33 @@ module xbar_bram #(
                     bram_step <= WAIT;
                     bram_en <= 1;
                     bram_we <= 0;
+
+                    tile_idx_fifo_push <= 0;
+                    weight_fifo_push <= 0;
+                    spk_in_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
                     if(bram_done) begin
                         case(param_step) 
                             READ_IDX: begin
                                 tile_idx_fifo_din <= tile_idx_slices[tile_idx_base];
-                                tile_idx_x <= tile_idx_slices[tile_idx_base][2*TILE_IDX_WIDTH-1 : TILE_IDX_WIDTH];
-                                tile_idx_y <= tile_idx_slices[tile_idx_base][TILE_IDX_WIDTH:0];
-                                tile_idx_fifo_push <= 1;
+                                tile_idx_y <= tile_idx_slices[tile_idx_base][2*TILE_IDX_WIDTH-1 : TILE_IDX_WIDTH];
+                                tile_idx_x <= tile_idx_slices[tile_idx_base][TILE_IDX_WIDTH:0];
+                                //tile_idx_fifo_push <= 1;
                             end
                             READ_WEIGHTS: begin
                                 weight_fifo_din <= dout;
                                 weight_fifo_push <= 1;
                             end
                             READ_SPK: begin
-                                spk_in_fifo_din <= spk_in_slices[spk_in_idx_base];
-                                spk_in_fifo_push <= 1;
+                                if(|spk_in_slices[spk_in_idx_base]) begin
+                                    spk_in_fifo_din <= spk_in_slices[spk_in_idx_base];
+                                    //spk_in_fifo_push <= 1;
+                                end else begin  // skip if there are no spikes
+                                    bram_step <= SEND;
+                                    tile_idx <= tile_idx+1;
+                                    param_step <= READ_IDX;
+                                    weight_idx <= 0;
+                                end
                             end 
                         endcase
                         bram_step <= INCREMENT;
@@ -159,26 +170,29 @@ module xbar_bram #(
                     end
                 end else if(bram_step == INCREMENT) begin
                     case(param_step)
-                        READ_IDX: param_step <= READ_WEIGHTS;
+                        READ_IDX: param_step <= READ_SPK;
                         READ_WEIGHTS: begin
                             if(weight_idx + BRAM_DATA_WIDTH / NETWORK_WIDTH < CROSSBAR_NEURONS*CROSSBAR_NEURONS) begin
                                 weight_idx <= weight_idx + BRAM_DATA_WIDTH / NETWORK_WIDTH;
                                 param_step <= READ_WEIGHTS;
                             end
                             else begin
-                                param_step <= READ_SPK;
+                                tile_idx <= tile_idx + 1;
+                                //param_step <= READ_SPK;
+                                param_step <= READ_IDX;
                                 weight_idx <= 0;
+
+                                tile_idx_fifo_push <= 1;
+                                spk_in_fifo_push <= 1;
                             end
                         end
                         READ_SPK: begin
-                            tile_idx <= tile_idx + 1;
-                            param_step <= READ_IDX;
+                            //tile_idx <= tile_idx + 1;
+                            //param_step <= READ_IDX;
+                            param_step <= READ_WEIGHTS;
                         end
                     endcase
                     bram_step <= SEND;
-                    tile_idx_fifo_push <= 0;
-                    weight_fifo_push <= 0;
-                    spk_in_fifo_push <= 0;
                 end
             end
         end

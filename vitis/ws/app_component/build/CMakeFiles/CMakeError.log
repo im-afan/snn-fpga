@@ -1,0 +1,26 @@
+Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+Compiler: C:/Xilinx/Vitis/2024.1/gnu/microblaze/nt/bin/mb-gcc.exe 
+Build flags: ;-O2;-mlittle-endian;-mxl-soft-mul;-mcpu=v11.0;-DSDT;;-MMD;-MP;-specs=C:/Users/andre/Desktop/snn-fpga/vitis/ws/platform/export/platform/sw/standalone_microblaze_0/Xilinx.spec;-IC:/Users/andre/Desktop/snn-fpga/vitis/ws/platform/export/platform/sw/standalone_microblaze_0/include
+Id flags:  
+
+The output was:
+1
+c:/xilinx/vitis/2024.1/gnu/microblaze/nt/x86_64-oesdk-mingw32/usr/bin/microblaze-xilinx-elf/../../libexec/microblaze-xilinx-elf/gcc/microblaze-xilinx-elf/12.2.0/ld.exe: cannot find -lxil: No such file or directory
+collect2.exe: error: ld returned 1 exit status
+
+
+The C compiler identification could not be found in "C:/Users/andre/Desktop/snn-fpga/vitis/ws/app_component/build/CMakeFiles/3.24.2/CompilerIdC/CMakeCCompilerId.d"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" failed.
+Compiler: C:/Xilinx/Vitis/2024.1/gnu/microblaze/nt/bin/mb-g++.exe 
+Build flags: ;-O2;-mlittle-endian;-mxl-soft-mul;-mcpu=v11.0;-DSDT;;-MMD;-MP;-specs=C:/Users/andre/Desktop/snn-fpga/vitis/ws/platform/export/platform/sw/standalone_microblaze_0/Xilinx.spec;-IC:/Users/andre/Desktop/snn-fpga/vitis/ws/platform/export/platform/sw/standalone_microblaze_0/include
+Id flags:  
+
+The output was:
+1
+c:/xilinx/vitis/2024.1/gnu/microblaze/nt/x86_64-oesdk-mingw32/usr/bin/microblaze-xilinx-elf/../../libexec/microblaze-xilinx-elf/gcc/microblaze-xilinx-elf/12.2.0/ld.exe: cannot find -lxil: No such file or directory
+collect2.exe: error: ld returned 1 exit status
+
+
+The CXX compiler identification could not be found in "C:/Users/andre/Desktop/snn-fpga/vitis/ws/app_component/build/CMakeFiles/3.24.2/CompilerIdCXX/CMakeCXXCompilerId.d"
+

@@ -1,0 +1,3 @@
+C:/Users/andre/Desktop/snn-fpga/vitis/ws/app_component/build/CMakeFiles/app_component.elf.dir
+C:/Users/andre/Desktop/snn-fpga/vitis/ws/app_component/build/CMakeFiles/edit_cache.dir
+C:/Users/andre/Desktop/snn-fpga/vitis/ws/app_component/build/CMakeFiles/rebuild_cache.dir

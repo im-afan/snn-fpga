@@ -1,0 +1,2 @@
+cflags: -mlittle-endian -mxl-soft-mul -mcpu=v11.0
+libpath: microblazeeb-xilinx-elf/usr/lib/le/

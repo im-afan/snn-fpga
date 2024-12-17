@@ -2,7 +2,7 @@ import sys
 
 sys.stdout = open("bram.mem", "w")
 
-MAX_TILES = 64
+MAX_TILES = 128
 MAX_NEURONS = 1024
 TILE_IDX_WIDTH = 16
 BRAM_DATA_WIDTH = 1024
@@ -52,15 +52,17 @@ tile[0][8][11] = -32;
 tile[0][9][10] = -32;
 tile[0][9][11] = 32;
 
-tile[1][10][0] = 32;
-tile[1][11][0] = 32;
+tile[0][10][12] = 32;
+tile[0][10][11] = 32;
 
-tile[1][0][10] = -32;
-tile[1][0][11] = 32;
+#tile[1][10][0] = 32;
+#tile[1][11][0] = 32;
+
+tile[1][0][15] = 32;
 
 
 for i in range(MAX_TILES):
-	tile_idx[i] = [i % 8, i // 8]
+	tile_idx[i] = [i // 8, i % 8]
 
 def bin_(num, bit_width=8):
     """Convert a signed decimal number to binary with a fixed bit width."""

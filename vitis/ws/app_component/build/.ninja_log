@@ -1,0 +1,7 @@
+# ninja log v5
+7	87	7556047921028920	CMakeFiles/app_component.elf.dir/platform.c.obj	17b1c4af0e726372
+4	122	7556047921377995	CMakeFiles/app_component.elf.dir/main.c.obj	f9929d4fae08aa24
+123	265	7556047922415208	app_component.elf	cf6f2a41fd6f5d43
+7	95	7556048904729941	CMakeFiles/app_component.elf.dir/platform.c.obj	17b1c4af0e726372
+4	132	7556048905098950	CMakeFiles/app_component.elf.dir/main.c.obj	f9929d4fae08aa24
+139	294	7556048906305718	app_component.elf	cf6f2a41fd6f5d43
