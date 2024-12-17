@@ -1,1 +1,0 @@
-{"generate.platform":[{"uri":"C:\\Users\\andre\\Desktop\\snn-fpga\\vitis\\ws\\platform\\vitis-comp.json","md5":"0b54644fd787a3d739cd6f42d761cebb"},{"uri":"C:\\Users\\andre\\Desktop\\snn-fpga\\vitis\\ws\\platform\\microblaze_0\\standalone_microblaze_0\\bsp\\bsp.yaml","md5":"de7cebc03a1b19750bce924b2c7bb2e1"}]}
