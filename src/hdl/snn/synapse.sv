@@ -9,8 +9,8 @@ module synapse#(
     input wire spk_in, // spk = horizontal crossbars
     input wire signed [NETWORK_WIDTH-1:0] weight,
     output reg signed [NETWORK_WIDTH-1:0] mac_out,
-    output reg spk_below,
-    output reg done
+    output reg spk_below
+    //output reg done
 );
     localparam INT_MAX = (1 << NETWORK_WIDTH) - 1;
 
@@ -23,12 +23,12 @@ module synapse#(
 
     always_ff @(posedge clk) begin
         if(~enable) begin
-            done <= 0;
+            //done <= 0;
 			spk_below <= 0;
 		end else begin
 			if(spk_above) begin
 				mac_out <= spk_in ? sum_clamp : mac_in;
-			    done <= 1;
+			    //done <= 1;
 				spk_below <= 1;
 			end
 		end

@@ -37,8 +37,10 @@ module synapse_array#(
     endgenerate
 
     
-    reg [CROSSBAR_NEURONS*CROSSBAR_NEURONS-1:0] synapse_done;
-    assign done = &synapse_done && enable;
+    //reg [CROSSBAR_NEURONS*CROSSBAR_NEURONS-1:0] synapse_done;
+    //assign done = &synapse_done && enable;
+    wire [CROSSBAR_NEURONS-1:0] col_done;
+    assign done = &col_done && enable;
 
     generate
         //genvar i;
@@ -54,7 +56,7 @@ module synapse_array#(
                     synapse #(.NETWORK_WIDTH(NETWORK_WIDTH)) syn(
                         .clk(clk),
                         .enable(enable),
-                        .done(synapse_done[j*CROSSBAR_NEURONS+i]),
+                        //.done(synapse_done[j*CROSSBAR_NEURONS+i]),
                         .mac_in(column[j]),
                         .spk_above(column_spike[j]),
                         .spk_in(spk_in[j]),
@@ -66,12 +68,13 @@ module synapse_array#(
                     synapse  #(.NETWORK_WIDTH(NETWORK_WIDTH)) syn(
                         .clk(clk),
                         .enable(enable),
-                        .done(synapse_done[j*CROSSBAR_NEURONS+i]),
+                        //.done(synapse_done[j*CROSSBAR_NEURONS+i]),
                         .mac_in(column[j]),
                         .spk_above(column_spike[j]),
                         .spk_in(spk_in[j]),
                         .weight(weight[j][i]),
-                        .mac_out(mac_out[i])
+                        .mac_out(mac_out[i]),
+                        .spk_below(col_done[i])
                     );
                 end
             end

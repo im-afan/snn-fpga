@@ -123,6 +123,15 @@ module top (
     assign input_bram_active = switcher_bram_active[0];
     assign switcher_bram_want_active[0] = input_bram_want_active;
 
+
+    assign switcher_bram_clk[3] = 0;
+    assign switcher_bram_addr[3] = 0;
+    assign switcher_bram_din[3] = 0;
+    assign switcher_bram_en[3] = 0;
+    assign switcher_bram_rst[3] = 0;
+    assign switcher_bram_we[3] = 0;
+    assign switcher_bram_want_active[3] = 0;
+
     wire [TILE_IDX_WIDTH-1:0] tile_idx_x;
     wire [TILE_IDX_WIDTH-1:0] tile_idx_y;
     wire [NETWORK_WIDTH-1:0] mem_out [CROSSBAR_NEURONS];

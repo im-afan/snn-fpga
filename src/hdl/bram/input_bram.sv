@@ -41,6 +41,8 @@ module input_bram #(
     output reg bram_want_active,
     input wire bram_active // if this port is active in switcher
 );
+    assign din = 0;
+
     localparam integer SEND = 0;
     localparam integer WAIT = 1;
     localparam integer INCREMENT = 2;
