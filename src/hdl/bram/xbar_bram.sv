@@ -69,7 +69,10 @@ module xbar_bram #(
     localparam integer FLAGS_OFFSET = SPK_OUT_OFFSET + SPK_OUT_BITS / 8;
     localparam integer MEM_OFFSET = FLAGS_OFFSET + FLAGS_BITS / 8;
 
-    reg bram_done;
+    assign din = 0;
+    assign bram_rst = 0;
+
+    reg [2:0] bram_done;
     reg [4:0] bram_step;
     reg [4:0] param_step;
     reg [15:0] tile_idx;
@@ -139,7 +142,7 @@ module xbar_bram #(
                     weight_fifo_push <= 0;
                     spk_in_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
-                    if(bram_done) begin
+                    if(bram_done > 0) begin
                         case(param_step) 
                             READ_IDX: begin
                                 tile_idx_fifo_din <= tile_idx_slices[tile_idx_base];
@@ -166,7 +169,7 @@ module xbar_bram #(
                         bram_step <= INCREMENT;
                         bram_en <= 0;
                     end else begin
-                        bram_done <= bram_active; // wait 1 clock cycle for bram to finish if it is active
+                        bram_done <= bram_done + bram_active; // wait 1 clock cycle for bram to finish if it is active
                     end
                 end else if(bram_step == INCREMENT) begin
                     case(param_step)

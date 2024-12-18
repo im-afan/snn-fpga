@@ -44,6 +44,7 @@ module lif_bram #(
     input wire bram_active
 );
     assign bram_want_active = 1;
+    assign bram_rst = 0;
 
     localparam integer SEND = 0;
     localparam integer WAIT = 1;
@@ -75,7 +76,7 @@ module lif_bram #(
     wire local_we;
     assign local_we = we;
 
-    reg bram_done;
+    reg [2:0] bram_done;
     reg [4:0] bram_step = SEND;
     reg [4:0] param_step = MEM;
 
@@ -147,11 +148,11 @@ module lif_bram #(
                         bram_done <= 0;
                         bram_en <= 1;
                     end else if(bram_step == WAIT) begin
-                        if(bram_done) begin
+                        if(bram_done > 0) begin
                             bram_en <= 0;
                             bram_step <= INCREMENT;
                         end
-                        else bram_done <= bram_active;
+                        else bram_done <= bram_done + bram_active;
                     end else if(bram_step == INCREMENT) begin
                         if(param_step == MEM) param_step <= SPK;
                         else if(param_step == SPK) begin
@@ -169,7 +170,7 @@ module lif_bram #(
                         we_tile <= 0;
                         bram_en <= 1;
                     end else if(bram_step == WAIT) begin
-                        if(bram_done) begin
+                        if(bram_done > 0) begin
                             if(param_step == MEM) begin
                                 for(integer i = 0; i < CROSSBAR_NEURONS; i++) mem_in[i] <= mem_in_tiles[mem_tile_idx_base][i];
                             end else if(param_step == SPK) begin
@@ -178,7 +179,7 @@ module lif_bram #(
                             bram_en <= 0;
                             bram_step <= INCREMENT;
                         end else begin
-                            bram_done <= bram_active;
+                            bram_done <= bram_done + bram_active;
                         end
                     end else if(bram_step == INCREMENT) begin
                         if(param_step == MEM) param_step <= SPK;

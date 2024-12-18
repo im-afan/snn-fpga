@@ -1,24 +1,24 @@
 #-----------------------------------------------------------
-# Vivado v2024.1 (64-bit)
-# SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
-# IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
-# SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Mon Dec 16 18:11:37 2024
-# Process ID: 14408
-# Current directory: C:/Users/andre/Desktop/snn-fpga/vivado
-# Command line: vivado.exe -mode tcl -source .\basys3_project.tcl
-# Log file: C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
-# Journal file: C:/Users/andre/Desktop/snn-fpga/vivado\vivado.jou
-# Running On        :DESKTOP-OVIC86T
-# Platform          :Windows Server 2016 or Windows 10
-# Operating System  :19045
-# Processor Detail  :Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
-# CPU Frequency     :2304 MHz
-# CPU Physical cores:8
-# CPU Logical cores :16
-# Host memory       :34248 MB
-# Swap memory       :5100 MB
-# Total Virtual     :39349 MB
-# Available Virtual :25340 MB
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Tue Dec 17 18:10:05 2024
+# Process ID         : 18996
+# Current directory  : C:/Users/andre/Desktop/snn-fpga/vivado
+# Command line       : vivado.exe -mode tcl -source .\basys3_project.tcl
+# Log file           : C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
+# Journal file       : C:/Users/andre/Desktop/snn-fpga/vivado\vivado.jou
+# Running On         : DESKTOP-OVIC86T
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 19045
+# Processor Detail   : Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+# CPU Frequency      : 2304 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 34248 MB
+# Swap memory        : 5100 MB
+# Total Virtual      : 39349 MB
+# Available Virtual  : 17542 MB
 #-----------------------------------------------------------
 source {.\basys3_project.tcl}

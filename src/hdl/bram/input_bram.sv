@@ -42,6 +42,7 @@ module input_bram #(
     input wire bram_active // if this port is active in switcher
 );
     assign din = 0;
+    assign bram_rst = 0;
 
     localparam integer SEND = 0;
     localparam integer WAIT = 1;
@@ -62,7 +63,7 @@ module input_bram #(
     localparam integer FLAGS_OFFSET = SPK_OUT_OFFSET + SPK_OUT_BITS / 8;
     localparam integer MEM_OFFSET = FLAGS_OFFSET + FLAGS_BITS / 8;
 
-    reg bram_done;
+    reg [2:0] bram_done;
     reg [4:0] bram_step = SEND;
 
     wire fifo_done;
@@ -110,14 +111,14 @@ module input_bram #(
                     bram_step <= WAIT;
                     tile_idx_fifo_din <= (tile_idx << TILE_IDX_WIDTH) + tile_idx;
                 end else if(bram_step == WAIT) begin
-                    if(bram_done) begin
+                    if(bram_done > 0) begin
                         bram_en <= 0;
                         mac_out_fifo_din <= mac_out_slices[tile_idx_base];
                         mac_out_fifo_push <= 1;
                         tile_idx_fifo_push <= 1;
                         bram_step <= INCREMENT;
                     end
-                    else bram_done <= bram_active;
+                    else bram_done <= bram_done + bram_active;
                 end else if(bram_step == INCREMENT) begin
                     tile_idx <= tile_idx+1;
                     bram_step <= SEND;

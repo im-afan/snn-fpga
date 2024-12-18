@@ -26,7 +26,7 @@ module top (
     localparam integer TILE_IDX_WIDTH = 16;
     localparam integer MAX_NEURONS = 1024;
     localparam integer CROSSBAR_NEURONS = 16;
-    localparam integer FIFO_LENGTH = 3;
+    localparam integer FIFO_LENGTH = 2;
     localparam integer THRESH = 32;
 
     wire buff_idx; // switches between 0 and 1: which one you are currently WRITING TO

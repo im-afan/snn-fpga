@@ -3,8 +3,8 @@
 # SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
 # IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
 # SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Sun Dec 15 00:26:03 2024
-# Process ID: 1084
+# Start of session at: Tue Dec 17 14:41:29 2024
+# Process ID: 21188
 # Current directory: C:/Users/andre/Desktop/snn-fpga/vivado
 # Command line: vivado.exe -mode tcl -source .\basys3_project.tcl
 # Log file: C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
@@ -19,27 +19,10 @@
 # Host memory       :34248 MB
 # Swap memory       :5100 MB
 # Total Virtual     :39349 MB
-# Available Virtual :31976 MB
+# Available Virtual :21562 MB
 #-----------------------------------------------------------
 source {.\basys3_project.tcl}
 # create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
-create_project: Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 511.082 ; gain = 201.625
-# add_files ../src/hdl/fifo/spk_in_fifo.sv
-# add_files ../src/hdl/fifo/tile_idx_fifo.sv
-# add_files ../src/hdl/fifo/weight_fifo.sv
-# add_files ../src/hdl/fifo/mac_out_fifo.sv
-# add_files ../src/hdl/snn/lif_array.sv
-# add_files ../src/hdl/snn/synapse_array.sv
-# add_files ../src/hdl/bram/dual_port_bram.sv
-# add_files ../src/hdl/bram/lif_bram.sv
-# add_files ../src/hdl/bram/xbar_bram.sv
-# add_files ../src/hdl/bram/input_bram.sv
-# add_files ../src/hdl/bram/bram_switcher.sv
-# add_files ../src/hdl/bram/bram.mem
-# add_files ../src/hdl/scheduler/lif_scheduler.sv
-# add_files ../src/hdl/scheduler/xbar_scheduler.sv
-# add_files ../src/hdl/top.sv
-# add_files ../src/hdl/basys3-constraints.xdc
-# set_property top top [current_fileset]
+ERROR: [Project 1-161] Failed to remove the directory 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs'. The directory might be in use by some other process.
 Vivado% exit
-INFO: [Common 17-206] Exiting Vivado at Sun Dec 15 21:47:37 2024...
+INFO: [Common 17-206] Exiting Vivado at Tue Dec 17 14:41:42 2024...

@@ -3,8 +3,8 @@
 # SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
 # IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
 # SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Sun Dec 15 00:25:38 2024
-# Process ID: 1520
+# Start of session at: Tue Dec 17 14:40:52 2024
+# Process ID: 20776
 # Current directory: C:/Users/andre/Desktop/snn-fpga/vivado
 # Command line: vivado.exe -mode tcl -source .\basys3_project.tcl
 # Log file: C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
@@ -19,10 +19,10 @@
 # Host memory       :34248 MB
 # Swap memory       :5100 MB
 # Total Virtual     :39349 MB
-# Available Virtual :30339 MB
+# Available Virtual :18949 MB
 #-----------------------------------------------------------
 source {.\basys3_project.tcl}
 # create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
 ERROR: [Project 1-161] Failed to remove the directory 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs'. The directory might be in use by some other process.
 Vivado% exit
-INFO: [Common 17-206] Exiting Vivado at Sun Dec 15 00:25:46 2024...
+INFO: [Common 17-206] Exiting Vivado at Tue Dec 17 14:41:26 2024...

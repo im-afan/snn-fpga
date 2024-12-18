@@ -6,7 +6,7 @@
  * Most priority to least priority:
  * 0 = highest 3 = lowest
 */
-
+(* keep_hierarchy = "yes" *)
 module bram_switcher #(
     parameter integer BRAM_ADDR_WIDTH,
     parameter integer BRAM_DATA_WIDTH

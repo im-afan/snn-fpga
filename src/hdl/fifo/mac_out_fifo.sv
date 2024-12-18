@@ -2,8 +2,6 @@
  * fifo for output spike accumulation 
  */
 
-/* TODO UNTESTED */
-
 module mac_out_fifo #(
 	parameter integer CROSSBAR_NEURONS,
 	parameter integer BRAM_DATA_WIDTH,
@@ -37,40 +35,46 @@ module mac_out_fifo #(
 
 	localparam WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
 
-	reg [7:0] cnt = 0;
-	reg [LENGTH*WIDTH-1:0] buffer = 0;
-	reg [LENGTH-1:0] buffer_spk_rst = 0;
+    reg [7:0] write_ptr, read_ptr;
+	reg [7:0] diff;
+
+    assign empty = (diff == 0);
+    assign full = (diff == LENGTH);
+
+	reg [WIDTH-1:0] buffer [LENGTH];
+	reg [LENGTH-1:0] buffer_spk_rst;
+
 	generate
 		genvar i, j;
 		for(i = 0; i < CROSSBAR_NEURONS; i++) begin
-			assign mac_out[i] = buffer[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i];
+			assign mac_out[i] = buffer[read_ptr][NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i];
 		end
 	endgenerate
 
-	assign spk_rst = buffer_spk_rst[0];
-	assign full = (cnt >= LENGTH);
-	assign empty = (cnt == 0);
+	assign spk_rst = buffer_spk_rst[read_ptr];
 
 	always_ff @(posedge clk) begin
 		if(~en) begin
 			pop_done <= 1;
 			push_done <= 1;
-			buffer <= 0;
+            for(integer k = 0; k < LENGTH; k++) buffer[k] <= 0;
 			buffer_spk_rst <= 0;
-			cnt <= 0;
+            read_ptr <= 0;
+            write_ptr <= 0;
+            diff <= 0;
 		end else begin
 			if(pop && ~pop_done) begin
-				buffer <= (buffer >> WIDTH);
-				buffer_spk_rst <= (buffer_spk_rst >> 1);
-				pop_done <= 1;
 				if(~empty) begin
-					cnt <= cnt-1;
+                    read_ptr <= (read_ptr + 1) % LENGTH;
+					diff <= diff-1;
 				end
+                pop_done <= 1;
 			end	else if(push && ~push_done) begin
 				if(~full) begin
-					buffer <= (buffer | (din << (cnt*WIDTH)));
-					buffer_spk_rst <= (buffer_spk_rst | (push0 << cnt));
-					cnt <= cnt+1;	
+                    buffer[write_ptr] <= din;
+                    buffer_spk_rst[write_ptr] <= push0;
+                    write_ptr <= (write_ptr + 1) % LENGTH;  // might be probematic race condition??? 
+                    diff <= diff+1;
 				end
 				push_done <= 1;
 			end
