@@ -36,6 +36,8 @@ module weight_fifo #(
                 localparam k = (NETWORK_WIDTH * (i*CROSSBAR_NEURONS+j)) / BRAM_DATA_WIDTH;
                 localparam l = (NETWORK_WIDTH * (i*CROSSBAR_NEURONS+j)) % BRAM_DATA_WIDTH;
                 assign weight[i][j] = buffer[read_ptr + k][l + NETWORK_WIDTH-1 : l];
+				wire [NETWORK_WIDTH-1:0] weight_debug;
+				assign weight_debug = buffer[read_ptr + k][l + NETWORK_WIDTH-1 : l];
             end
         end
     endgenerate

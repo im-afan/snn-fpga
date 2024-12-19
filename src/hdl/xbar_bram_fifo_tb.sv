@@ -190,12 +190,19 @@ module xbar_bram_fifo_tb;
         $dumpfile(".wave/top_dump.vcd");
         $dumpvars(100, xbar_bram_fifo_tb);
 
-        #10000 $finish;
+        #100000 $finish;
     end
 
     initial begin
-        #500 weight_fifo_pop = 1;
-        #0 spk_in_fifo_pop = 1;
-        #1000 tile_idx_fifo_pop = 1;
+        forever begin
+            #500 weight_fifo_pop = 1;
+            #0 spk_in_fifo_pop = 1;
+            #0 tile_idx_fifo_pop = 1;
+            #0 input_fifo_pop = 1;
+            #100 weight_fifo_pop = 0;
+            #0 spk_in_fifo_pop = 0;
+            #0 tile_idx_fifo_pop = 0;
+            #0 input_fifo_pop = 0;
+        end
     end
 endmodule
