@@ -16,6 +16,7 @@ module synapse_array#(
     input wire clk,
     input wire enable,
 
+    input wire [NETWORK_WIDTH-1:0] u_mac_in [CROSSBAR_NEURONS],
     input wire [NETWORK_WIDTH-1:0] u_weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS],
     input wire [CROSSBAR_NEURONS-1:0] spk_in,
     //output reg [NETWORK_WIDTH-1:0] u_mac_out [CROSSBAR_NEURONS],
@@ -25,6 +26,7 @@ module synapse_array#(
 
     wire signed [NETWORK_WIDTH-1:0] weight[CROSSBAR_NEURONS][CROSSBAR_NEURONS];
     wire signed [NETWORK_WIDTH-1:0] mac_out[CROSSBAR_NEURONS];
+    wire signed [NETWORK_WIDTH-1:0] mac_in[CROSSBAR_NEURONS];
 
     generate
         genvar i, j;
@@ -33,23 +35,18 @@ module synapse_array#(
                 assign weight[i][j] = u_weight[i][j];
             end
             assign u_mac_out[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = mac_out[i];
+            assign mac_in[i] = u_mac_in[i];
         end
     endgenerate
 
-    
-    //reg [CROSSBAR_NEURONS*CROSSBAR_NEURONS-1:0] synapse_done;
-    //assign done = &synapse_done && enable;
     wire [CROSSBAR_NEURONS-1:0] col_done;
     assign done = &col_done && enable;
 
     generate
-        //genvar i;
-        //genvar j;
-    
         for(i=0; i<CROSSBAR_NEURONS; i++) begin // west to east
             wire signed [NETWORK_WIDTH-1:0] column [CROSSBAR_NEURONS];
             wire column_spike [CROSSBAR_NEURONS];
-            assign column[0] = 0;
+            assign column[0] = mac_in[i];
             assign column_spike[0] = 1;
             for(j=0; j<CROSSBAR_NEURONS; j++) begin // north to south
                 if(j < CROSSBAR_NEURONS-1) begin
