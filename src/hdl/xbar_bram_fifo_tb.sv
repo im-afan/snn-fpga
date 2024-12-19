@@ -40,6 +40,7 @@ module xbar_bram_fifo_tb;
     wire [BRAM_DATA_WIDTH-1:0] weight_fifo_din;
     wire [CROSSBAR_NEURONS-1:0] spk_in_fifo_din;
     wire [2*TILE_IDX_WIDTH-1:0] tile_idx_fifo_din;
+    wire tile_use_input_fifo_din;
     wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] input_fifo_din;
     
     wire [BRAM_ADDR_WIDTH-1:0]  addr;
@@ -83,7 +84,8 @@ module xbar_bram_fifo_tb;
         .tile_idx_fifo_full(tile_idx_fifo_full),
         .tile_idx_fifo_push_done(tile_idx_fifo_push_done),
         .tile_idx_fifo_push(tile_idx_fifo_push),
-        .tile_idx_fifo_din(tile_idx_fifo_din)
+        .tile_idx_fifo_din(tile_idx_fifo_din),
+        .tile_use_input_fifo_din(tile_use_input_fifo_din)
     );
 
     weight_fifo #(
@@ -132,6 +134,7 @@ module xbar_bram_fifo_tb;
         .clk(clk),
         .en(enable),
         .din(tile_idx_fifo_din),
+        .use_input_din(tile_use_input_fifo_din),
         .push(tile_idx_fifo_push),
         .pop(tile_idx_fifo_pop),
         .tile_idx_x(tile_idx_x),

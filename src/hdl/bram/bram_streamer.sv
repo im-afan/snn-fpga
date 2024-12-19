@@ -78,6 +78,8 @@ module bram_streamer #(
     wire [TILE_IDX_WIDTH-1:0] tile_idx_x;
     wire [TILE_IDX_WIDTH-1:0] tile_idx_y;
 
+    wire use_input;
+
     wire next_ready;
     assign next_ready = weight_fifo_push_done && input_fifo_push_done
                     && spk_in_fifo_push_done && tile_idx_fifo_push_done;
@@ -227,6 +229,7 @@ module bram_streamer #(
         .clk(clk),
         .enable(enable),
         .new_tile(tile_idx_fifo_push),
+        .tile_use_input(tile_use_input_fifo_din),
         .tile_idx(tile_idx),
         .tile_idx_x(tile_idx_x),
         .tile_idx_y(tile_idx_y),

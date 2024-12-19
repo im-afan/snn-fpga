@@ -55,7 +55,7 @@ module input_bram #(
     reg [4:0] bram_step;
 
     wire fifo_done;
-    assign fifo_done = (input_fifo_full || ~input_fifo_push);
+    assign fifo_done = (input_fifo_push_done || ~input_fifo_push);
     wire fifo_full;
     assign fifo_full = input_fifo_full;
     reg go;
