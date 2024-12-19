@@ -14,35 +14,30 @@ module tile_idx_fifo #(
 	input wire clk,
 	input wire en,
 
-	input wire [2*TILE_IDX_WIDTH-1:0] din0,
-	input wire push0,
-
-	input wire [2*TILE_IDX_WIDTH-1:0] din1,
-	input wire push1,
+	input wire use_input_din,	
+	input wire [2*TILE_IDX_WIDTH-1:0] din,
+	input wire push,
 
 	input wire pop,
 
 	output wire [TILE_IDX_WIDTH-1:0] tile_idx_x,
 	output wire [TILE_IDX_WIDTH-1:0] tile_idx_y,
+	output wire use_input,
 	output wire full,
 	output wire empty,
 
 	output reg push_done, // TODO maybe need 2 done signals? theoretically only 1 will have push on at a time though
 	output reg pop_done
 );
-	wire [2*TILE_IDX_WIDTH-1:0] din;
-	wire push;
-
-	assign din = push0 ? din0 : din1;
-	assign push = push0 || push1;
-
 	localparam WIDTH = 2*TILE_IDX_WIDTH;
 
 	reg [7:0] cnt = 0;
 	reg [LENGTH*WIDTH-1:0] buffer;
+	reg [LENGTH-1:0] use_input_buffer;
 	generate
 		assign tile_idx_x = buffer[TILE_IDX_WIDTH-1:0];
 		assign tile_idx_y = buffer[TILE_IDX_WIDTH*2-1:TILE_IDX_WIDTH];
+		assign use_input = use_input_buffer[0];
 	endgenerate
 
 	assign full = (cnt >= LENGTH);
@@ -57,11 +52,13 @@ module tile_idx_fifo #(
 		end else begin
 			if(pop && ~pop_done) begin
 				buffer <= (buffer >> WIDTH);
+				use_input_buffer <= (use_input_buffer >> 1);
 				if(~empty) cnt <= cnt-1;
 				pop_done <= 1;
 			end	else if(push && ~push_done) begin
 				if(~full) begin
 					buffer <= (buffer | (din << (cnt*WIDTH)));
+					use_input_buffer <= (use_input_buffer | (use_input_din << cnt));
 					cnt <= cnt+1;	
 				end
 				push_done <= 1;

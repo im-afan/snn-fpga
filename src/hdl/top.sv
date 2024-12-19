@@ -19,7 +19,9 @@ module top (
     output wire [15:0] led
     //input wire en
 );
-    localparam integer BRAM_ADDR_WIDTH = 16;
+    localparam MEM_PATH = "bram/bram.mem";
+
+    localparam integer BRAM_ADDR_WIDTH = 10;
     localparam integer BRAM_DATA_WIDTH = 1024;
     localparam integer NETWORK_WIDTH = 8;
     localparam integer MAX_TILES = 128;
@@ -194,8 +196,9 @@ module top (
 
     dual_port_bram #(
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
-        .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH)
-    ) dual_port_bram_0 (
+        .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
+        .MEM_PATH(MEM_PATH)
+    ) dual_port_bram_weight (
         .clka(clk),
         .addra(addra),
         .dina(dina),
@@ -211,7 +214,14 @@ module top (
         .enb(enb) 
     );
 
-    bram_switcher #(
+    dual_port_bram #(
+        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+        .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
+        .MEM_PATH(MEM_PATH)
+    ) dual_port_bram_mem (
+    );
+
+    /*bram_switcher #(
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
         .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH)
     ) bram_switcher_0 (
@@ -237,7 +247,7 @@ module top (
         .web(web),
         .dinb(dinb),
         .doutb(doutb)
-    );
+    );*/
 
     buff_idx_controller buff_idx_controller_0 (
         .clk(clk),

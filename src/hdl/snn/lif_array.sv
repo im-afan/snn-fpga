@@ -1,5 +1,5 @@
-//`include "snn/lif.sv"
-`include "lif.sv"
+`include "snn/lif.sv"
+//`include "lif.sv"
 
 /* TODO UNTESTED */
 

@@ -3,7 +3,7 @@
 /*
  * Synchronous BRAM
  * Reads and writes neccessary values for LIF
- * writes: mem_out, spk_out, reads: mem_in, mem_out
+ * writes: mem_out, spk_out, reads: mem_in, spk_in 
  * tile_idx_x, tile_idx_y are FIFO inputs
 */
 

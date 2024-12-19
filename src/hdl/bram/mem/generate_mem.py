@@ -1,0 +1,121 @@
+import sys
+
+sys.stdout = open("bram.mem", "w")
+
+MAX_TILES = 128
+MAX_NEURONS = 1024
+TILE_IDX_WIDTH = 16
+CROSSBAR_NEURONS = 16
+NETWORK_WIDTH = 8
+
+tile_idx = [[0, 0] for i in range(MAX_TILES)]
+tile = [[[0 for i in range(CROSSBAR_NEURONS)] for i in range(CROSSBAR_NEURONS)] for i in range(MAX_TILES)]
+mem = [0 for i in range(MAX_NEURONS)]
+snn_in = [0 for i in range(MAX_NEURONS)]
+
+snn_in[0] = 32;
+snn_in[1] = 32;
+snn_in[3] = 32;
+
+tile[0][0][4] = 32;
+tile[0][0][5] = -32;
+tile[0][1][4] = -32;
+tile[0][1][5] = 32;
+tile[0][2][6] = 32;
+tile[0][2][7] = -32;
+tile[0][3][6] = -32;
+tile[0][3][7] = 32;
+
+tile[0][4][8] = 32;
+tile[0][5][8] = 32;
+tile[0][6][9] = 32;
+tile[0][7][9] = 32;
+
+tile[0][8][10] = 32;
+tile[0][8][11] = -32;
+tile[0][9][10] = -32;
+tile[0][9][11] = 32;
+
+tile[0][10][12] = 32;
+tile[0][10][11] = 32;
+
+#tile[1][10][0] = 32;
+#tile[1][11][0] = 32;
+
+tile[1][0][15] = 32;
+
+
+for i in range(MAX_TILES):
+	tile_idx[i] = [i // 8, i % 8]
+
+def bin_(num, bit_width=8):
+    """Convert a signed decimal number to binary with a fixed bit width."""
+    if num < 0:
+        # Convert to two's complement binary
+        num = (1 << bit_width) + num  # Add 2^bit_width to the negative number
+    # Format as binary with the specified width
+    return format(num, f'0{bit_width}b')
+
+def endian(binary_string, width=8):
+    if len(binary_string) % width != 0:
+        raise ValueError("Binary string length must be a multiple of width")
+    
+    byte_chunks = [binary_string[i:i+width] for i in range(0, len(binary_string), width)]
+    reversed_chunks = byte_chunks[::-1]
+    big_endian_string = ''.join(reversed_chunks)
+    
+    return big_endian_string
+
+def printmem(memory, path, width, depth, rev=False):
+    with open(path, "w+") as sys.stdout:
+        for i in range(0, depth):
+            s = ''.join(memory[i*width : (i+1)*width])
+            if(rev):
+                s = endian(s, 8)
+            print(s)
+
+
+def write_tile_idx():
+    memory = ["0" for i in range(32*1024)] 
+    for i in range(0, MAX_TILES):
+        memory[TILE_IDX_WIDTH*2*i : TILE_IDX_WIDTH*2*(i+1)] = bin_(tile_idx[i][0], 16) + bin_(tile_idx[i][1], 16)
+    printmem(memory, "./tile_idx_bram.mem", 32, 1024)
+
+def write_weight():
+    memory = ["0" for i in range(1024*1024)] 
+    for i in range(0, MAX_TILES):
+        for j in range(CROSSBAR_NEURONS):
+            for k in range(CROSSBAR_NEURONS):
+                base = (i*CROSSBAR_NEURONS*CROSSBAR_NEURONS + j*CROSSBAR_NEURONS + k) * NETWORK_WIDTH
+                #print(base, bin_(tile[i][j][k], 8))
+                memory[base:base+NETWORK_WIDTH] = bin_(tile[i][j][k], NETWORK_WIDTH)
+    printmem(memory, "./weight_bram.mem", 1024, 1024, rev=True);
+
+def write_input():
+    memory = ["0" for i in range(8*1024)]
+    for i in range(0, MAX_NEURONS):
+        base = i*NETWORK_WIDTH
+        memory[base:base+NETWORK_WIDTH] = bin_(snn_in[i], NETWORK_WIDTH)
+    printmem(memory, "./input_bram.mem", 128, 1024, rev=True)
+    
+
+def write_mem():
+    memory = ["0" for i in range(8*1024)]
+    for i in range(0, MAX_NEURONS):
+        base = i*NETWORK_WIDTH
+        #print(bin_(mem[i], 8))
+        memory[base:base+NETWORK_WIDTH] = bin_(mem[i], NETWORK_WIDTH)
+    printmem(memory, "./mem_bram.mem", 128, 1024, rev=True)
+
+def write_spk_in():
+    memory = ["0" for i in range(1024)]
+    for i in range(0, MAX_NEURONS):
+        base = i
+        memory[base] = '0'
+    printmem(memory, "./spk_in_bram.mem", 16, 1024)
+
+write_tile_idx()
+write_weight()
+write_input()
+write_mem()
+write_spk_in()

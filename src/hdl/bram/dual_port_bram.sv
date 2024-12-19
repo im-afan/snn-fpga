@@ -8,7 +8,8 @@
 
 module dual_port_bram #(
     parameter BRAM_DATA_WIDTH,
-    parameter BRAM_ADDR_WIDTH
+    parameter BRAM_ADDR_WIDTH,
+    parameter MEM_PATH
 )(
     input wire clka,
     // Port A signals
@@ -29,13 +30,13 @@ module dual_port_bram #(
 
     localparam LOG_WORD_WIDTH = $clog2(BRAM_DATA_WIDTH / 8);
     // BRAM memory declaration
-    reg [BRAM_DATA_WIDTH-1:0] mem [1023:0];
+    reg [BRAM_DATA_WIDTH-1:0] mem [(1 << BRAM_ADDR_WIDTH):0];
 
     initial begin
         for(integer asdf = 0; asdf < 1024; asdf++) begin
             mem[asdf] = 0;
         end
-        $readmemb("bram.mem", mem);
+        $readmemb(MEM_PATH, mem);
     end
 
     integer i;

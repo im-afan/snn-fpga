@@ -1,5 +1,5 @@
-//`include "snn/synapse.sv"
-`include "synapse.sv"
+`include "snn/synapse.sv"
+//`include "synapse.sv"
 
 /**
  * neuromorphic core 

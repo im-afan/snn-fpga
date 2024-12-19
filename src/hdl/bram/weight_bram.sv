@@ -4,12 +4,10 @@
  * Asynchronous streaming BRAM
  * Streams BRAM and pushes to FIFOs neccessary for spike accumulation
  * in synaptic array
- * reads: network_input 
+ * reads: weight
  */
 
- // NEED: BRAM_DATA_WIDTH = CROSSBAR_NEURONS * NETWORK_WIDTH
-
-module input_bram #(
+module weight_bram #(
     parameter integer BRAM_ADDR_WIDTH,
     parameter integer BRAM_DATA_WIDTH,
     parameter integer NETWORK_WIDTH,
@@ -21,16 +19,15 @@ module input_bram #(
     input wire clk, 
     input wire enable,
 
-    input wire tile_use_input,
-    input wire new_tile, 
+    input wire new_tile,
     input wire [TILE_IDX_WIDTH-1:0] tile_idx,
     input wire [TILE_IDX_WIDTH-1:0] tile_idx_x,
     input wire [TILE_IDX_WIDTH-1:0] tile_idx_y,
 
-    input wire input_fifo_full,
-    input wire input_fifo_push_done,
-    output reg input_fifo_push,
-    output reg [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] input_fifo_din,
+    input wire weight_fifo_full,
+    input wire weight_fifo_push_done,
+    output reg weight_fifo_push,
+    output reg [BRAM_DATA_WIDTH-1:0] weight_fifo_din,
 
     output reg tile_done,
     
@@ -41,12 +38,11 @@ module input_bram #(
     output reg bram_rst,
     output reg [BRAM_DATA_WIDTH/8-1:0] bram_we
 );
-
     localparam integer SEND = 0; // send addr to bram
     localparam integer WAIT = 1; // wait for bram
     localparam integer INCREMENT = 2; // increment idx 
 
-    localparam integer NETWORK_INPUT_OFFSET = 0; 
+    localparam integer WEIGHT_OFFSET = 0;
 
     assign din = 0;
     assign bram_rst = 0;
@@ -54,48 +50,56 @@ module input_bram #(
     reg [2:0] bram_done;
     reg [4:0] bram_step;
 
-    wire fifo_done;
-    assign fifo_done = (input_fifo_full || ~input_fifo_push);
-    wire fifo_full;
-    assign fifo_full = input_fifo_full;
-    reg go;
+    reg [15:0] weight_idx; // takes multiple steps to read weight
+    assign local_tile_done = (weight_idx == CROSSBAR_NEURONS*CROSSBAR_NEURONS);
 
+    wire fifo_done;
+    assign fifo_done = (weight_fifo_push_done || ~weight_fifo_push);
+    wire fifo_full;
+    assign fifo_full = weight_fifo_full;
+    reg go;
+ 
     always_ff @(posedge clk) begin
         if(~enable) begin
             bram_step <= SEND;
+            weight_idx <= 0;
             bram_en <= 0;
-            input_fifo_push <= 0;
-            tile_done <= 1;
+            weight_fifo_push <= 0;
             go <= 0;
+            tile_done <= 1;
         end else begin
-            if(new_tile && ~go) begin
+            if(local_tile_done) begin
+                tile_done <= 1;
+                go <= 0;
+            end
+            else if(new_tile && ~go) begin
                 go <= 1;
                 tile_done <= 0;
+                weight_idx <= 0;
                 bram_step <= SEND;
                 bram_en <= 0;
-                input_fifo_push <= 0;
+                weight_fifo_push <= 0;
             end
             else if(fifo_done && ~fifo_full && go) begin
                 if(bram_step == SEND) begin
-                    addr <= NETWORK_INPUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS * NETWORK_WIDTH / 8;
+                    addr <= WEIGHT_OFFSET + CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH/8*tile_idx + weight_idx;
                     bram_done <= 0;
                     bram_step <= WAIT;
                     bram_en <= 1;
                     bram_we <= 0;
-                    input_fifo_push <= 0;
+                    weight_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
                     if(bram_done > 0) begin
-                        if(tile_use_input) input_fifo_din <= dout;
-                        else input_fifo_din <= 0;
-                        input_fifo_push <= 1;
+                        weight_fifo_din <= dout;
+                        weight_fifo_push <= 1;
                         bram_step <= INCREMENT;
                         bram_en <= 0;
                     end else begin
                         bram_done <= bram_done + 1; // wait 1 clock cycle for bram to finish if it is active
                     end
                 end else if(bram_step == INCREMENT) begin
-                    tile_done <= 1;
-                    go <= 0;
+                    weight_idx <= weight_idx + BRAM_DATA_WIDTH / NETWORK_WIDTH;
+                    bram_step <= SEND;
                 end
             end
         end
