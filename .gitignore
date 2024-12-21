@@ -6,3 +6,5 @@ vitis/logs
 vitis/platform
 vitis/.gitignore
 vitis/.lock
+*.out
+*.vcd
