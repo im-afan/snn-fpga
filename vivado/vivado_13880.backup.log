@@ -3,8 +3,8 @@
 # SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
 # IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
 # SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
-# Start of session at: Fri Dec 20 23:50:31 2024
-# Process ID         : 7704
+# Start of session at: Sat Dec 21 11:35:49 2024
+# Process ID         : 13880
 # Current directory  : C:/Users/andre/Desktop/snn-fpga/vivado
 # Command line       : vivado.exe -mode tcl -source .\basys3_project.tcl
 # Log file           : C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
@@ -19,11 +19,18 @@
 # Host memory        : 34248 MB
 # Swap memory        : 5100 MB
 # Total Virtual      : 39349 MB
-# Available Virtual  : 20573 MB
+# Available Virtual  : 33587 MB
 #-----------------------------------------------------------
 source {.\basys3_project.tcl}
-start_gui
-update_compile_order -fileset sources_1
-launch_runs synth_1 -jobs 8
-wait_on_run synth_1
-reset_run synth_1
+# create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
+# add_files ../src/hdl/bram/mem/input_bram.mem
+# add_files ../src/hdl/bram/mem/mem_bram.mem
+# add_files ../src/hdl/bram/mem/spk_in_bram.mem
+# add_files ../src/hdl/bram/mem/weight_bram.mem
+# add_files ../src/hdl/bram/mem/tile_idx_bram.mem
+# add_files ../src/hdl/top.sv
+# add_files ../src/hdl/basys3-constraints.xdc
+# set_property include_dirs {../src/hdl/ ../src/hdl/bram ../src/hdl/snn ../src/hdl/fifo ../src/hdl/bram/mem} [current_fileset]
+# set_property top top [current_fileset]
+Vivado% exit
+INFO: [Common 17-206] Exiting Vivado at Sat Dec 21 11:36:41 2024...

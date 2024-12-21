@@ -3,8 +3,8 @@
 # SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
 # IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
 # SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
-# Start of session at: Fri Dec 20 23:15:49 2024
-# Process ID         : 16344
+# Start of session at: Sat Dec 21 11:35:49 2024
+# Process ID         : 13880
 # Current directory  : C:/Users/andre/Desktop/snn-fpga/vivado
 # Command line       : vivado.exe -mode tcl -source .\basys3_project.tcl
 # Log file           : C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
@@ -19,17 +19,6 @@
 # Host memory        : 34248 MB
 # Swap memory        : 5100 MB
 # Total Virtual      : 39349 MB
-# Available Virtual  : 16774 MB
+# Available Virtual  : 33587 MB
 #-----------------------------------------------------------
 source {.\basys3_project.tcl}
-start_gui
-update_compile_order -fileset sources_1
-launch_simulation
-source top.tcl
-close_sim
-launch_simulation
-source top.tcl
-close_sim
-launch_simulation
-source top.tcl
-close_sim

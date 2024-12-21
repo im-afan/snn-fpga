@@ -154,6 +154,7 @@ module bram_streamer #(
     assign next_ready = weight_bram_done && input_bram_done 
                     && spk_in_bram_done && tile_idx_fifo_push_done;
 
+    wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] doutb0;
     dual_port_bram #(
         .BRAM_DATA_WIDTH(TILE_IDX_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -164,9 +165,16 @@ module bram_streamer #(
         .dina(din_tile_idx),
         .douta(dout_tile_idx),
         .wea(bram_we_tile_idx),
-        .ena(bram_en_tile_idx)
+        .ena(bram_en_tile_idx),
+        .clkb(0),
+        .addrb(0),
+        .dinb(0),
+        .doutb(doutb0),
+        .web(0),
+        .enb(0)
     );
     
+    wire [SPK_IN_BRAM_DATA_WIDTH-1:0] doutb1;
     dual_port_bram #(
         .BRAM_DATA_WIDTH(SPK_IN_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -187,6 +195,7 @@ module bram_streamer #(
         .enb(lif_spk_out_bram_en)
     );
 
+    wire [WEIGHT_BRAM_DATA_WIDTH-1:0] doutb2;
     dual_port_bram #(
         .BRAM_DATA_WIDTH(WEIGHT_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -197,9 +206,16 @@ module bram_streamer #(
         .dina(din_weight),
         .douta(dout_weight),
         .wea(bram_we_weight),
-        .ena(bram_en_weight)
+        .ena(bram_en_weight),
+        .clkb(0),
+        .addrb(0),
+        .dinb(0),
+        .doutb(doutb2),
+        .web(0),
+        .enb(0)
     );
 
+    wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb3;
     dual_port_bram #(
         .BRAM_DATA_WIDTH(INPUT_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -210,9 +226,16 @@ module bram_streamer #(
         .dina(din_input),
         .douta(dout_input),
         .wea(bram_we_input),
-        .ena(bram_en_input)
+        .ena(bram_en_input),
+        .clkb(0),
+        .addrb(0),
+        .dinb(0),
+        .doutb(doutb3),
+        .web(0),
+        .enb(0)
     );
-    
+
+    wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb4;
     dual_port_bram #(
         .BRAM_DATA_WIDTH(MEM_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -223,7 +246,13 @@ module bram_streamer #(
         .dina(lif_mem_din),
         .douta(lif_mem_dout),
         .wea(lif_mem_bram_we),
-        .ena(lif_mem_bram_en)
+        .ena(lif_mem_bram_en),
+        .clkb(0),
+        .addrb(0),
+        .dinb(0),
+        .doutb(doutb4),
+        .web(0),
+        .enb(0)
     );
 
     tile_idx_bram #(

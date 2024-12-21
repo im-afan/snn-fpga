@@ -34,11 +34,11 @@ module tile_idx_fifo #(
 	reg [7:0] cnt = 0;
 	reg [LENGTH*WIDTH-1:0] buffer;
 	reg [LENGTH-1:0] use_input_buffer;
-	generate
+	//generate
 		assign tile_idx_x = buffer[TILE_IDX_WIDTH-1:0];
 		assign tile_idx_y = buffer[TILE_IDX_WIDTH*2-1:TILE_IDX_WIDTH];
 		assign use_input = use_input_buffer[0];
-	endgenerate
+	//endgenerate
 
 	assign full = (cnt >= LENGTH);
 	assign empty = (cnt == 0);

@@ -18,7 +18,7 @@ module top(
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam NETWORK_WIDTH = 8;
-    localparam MAX_TILES = 256;
+    localparam MAX_TILES = 64;
     localparam TILE_IDX_WIDTH = 16;
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
@@ -61,12 +61,12 @@ module top(
     wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] input_fifo_din;
     wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] mac_out_fifo_din;
     
-    wire [BRAM_ADDR_WIDTH-1:0]  addr;
+    /*wire [BRAM_ADDR_WIDTH-1:0]  addr;
     wire [BRAM_DATA_WIDTH-1:0] dout;
     wire [BRAM_DATA_WIDTH-1:0] din;
     wire bram_en;
     wire bram_rst;
-    wire [BRAM_DATA_WIDTH/8-1:0] bram_we;
+    wire [BRAM_DATA_WIDTH/8-1:0] bram_we;*/
 
     wire [NETWORK_WIDTH-1:0] network_input[CROSSBAR_NEURONS];
     wire [NETWORK_WIDTH-1:0] mac_out[CROSSBAR_NEURONS];
