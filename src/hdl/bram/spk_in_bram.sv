@@ -65,6 +65,8 @@ module spk_in_bram #(
     wire [BRAM_ADDR_WIDTH-1:0] buff_offset_read;
     assign buff_offset_read = buff_idx * MAX_TILES * CROSSBAR_NEURONS / 8;
 
+    reg prev_new_tile;
+
     always_ff @(posedge clk) begin
         if(~enable) begin
             bram_step <= SEND;
@@ -73,7 +75,7 @@ module spk_in_bram #(
             tile_done <= 1;
             go <= 0;
         end else begin
-            if(new_tile && ~go) begin
+            if(new_tile && ~prev_new_tile && ~go) begin
                 go <= 1;
                 bram_step <= SEND;
                 bram_en <= 0;
@@ -103,6 +105,7 @@ module spk_in_bram #(
                 end
             end
         end
+        prev_new_tile <= new_tile;
     end
 
 endmodule

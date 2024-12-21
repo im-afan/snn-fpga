@@ -60,6 +60,8 @@ module input_bram #(
     assign fifo_full = input_fifo_full;
     reg go;
 
+    reg prev_new_tile;
+
     always_ff @(posedge clk) begin
         if(~enable) begin
             bram_step <= SEND;
@@ -68,7 +70,7 @@ module input_bram #(
             tile_done <= 1;
             go <= 0;
         end else begin
-            if(new_tile && ~go) begin
+            if(new_tile && ~prev_new_tile && ~go) begin
                 go <= 1;
                 bram_step <= SEND;
                 bram_en <= 0;
@@ -99,6 +101,7 @@ module input_bram #(
                 end
             end
         end
+        prev_new_tile <= new_tile;
     end
 
 endmodule

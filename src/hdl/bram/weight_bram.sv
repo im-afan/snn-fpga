@@ -58,6 +58,7 @@ module weight_bram #(
     wire fifo_full;
     assign fifo_full = weight_fifo_full;
     reg go;
+    reg prev_new_tile;
  
     always_ff @(posedge clk) begin
         if(~enable) begin
@@ -73,7 +74,7 @@ module weight_bram #(
                 go <= 0;
                 weight_idx <= 0;
             end
-            else if(new_tile && ~go) begin
+            else if(new_tile && ~prev_new_tile && ~go) begin
                 go <= 1;
                 weight_idx <= 0;
                 bram_step <= SEND;
@@ -104,6 +105,7 @@ module weight_bram #(
                 end
             end
         end
+        prev_new_tile <= new_tile;
     end
 
 endmodule

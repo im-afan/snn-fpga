@@ -39,6 +39,11 @@ module dual_port_bram #(
         $readmemb(MEM_PATH, mem);
     end
 
+    wire [BRAM_DATA_WIDTH-1:0] debug0;
+    wire [BRAM_DATA_WIDTH-1:0] debug1;
+    assign debug0 = mem[0];
+    assign debug1 = mem[1];
+
     integer i;
 
     // Port A: Read and Masked Write
