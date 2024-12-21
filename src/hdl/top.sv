@@ -1,11 +1,14 @@
 `timescale 1ns / 10ps
 `include "bram/bram_streamer.sv"
+`include "bram/buff_idx_controller.sv"
 `include "fifo/weight_fifo.sv"
 `include "fifo/spk_in_fifo.sv"
 `include "fifo/tile_idx_fifo.sv"
 `include "fifo/mem_fifo.sv"
 `include "scheduler/lif_scheduler.sv"
 `include "scheduler/xbar_scheduler.sv"
+`include "snn/synapse_array.sv"
+`include "snn/lif_array.sv"
 
 module top(
     input wire clk,
@@ -19,6 +22,8 @@ module top(
     localparam TILE_IDX_WIDTH = 16;
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
+    localparam THRESH = 32;
+    localparam FIFO_LENGTH = 1;
 
     reg enable;
     assign enable = sw[0];
@@ -63,15 +68,33 @@ module top(
     wire [BRAM_DATA_WIDTH/8-1:0] bram_we;
 
     wire [NETWORK_WIDTH-1:0] network_input[CROSSBAR_NEURONS];
+    wire [NETWORK_WIDTH-1:0] mac_out[CROSSBAR_NEURONS];
     wire [NETWORK_WIDTH-1:0] weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS];
     wire [CROSSBAR_NEURONS-1:0] spk_in;
     wire [TILE_IDX_WIDTH-1:0] tile_idx_x;
     wire [TILE_IDX_WIDTH-1:0] tile_idx_y;
 
     wire buff_idx;
-    assign buff_idx = 0;
+
+    wire synapse_array_done;
+
+    wire [NETWORK_WIDTH-1:0] lif_mem_out [CROSSBAR_NEURONS];
+    wire [CROSSBAR_NEURONS-1:0] lif_spk_out;
+    wire [NETWORK_WIDTH-1:0] lif_mem_in [CROSSBAR_NEURONS];
+    wire [CROSSBAR_NEURONS-1:0] lif_spk_in;
+    wire lif_use_input;
+    wire lif_bram_done;
+    wire lif_bram_enable;
+    wire lif_bram_we;
+
+    buff_idx_controller buff_idx_controller_0 (
+        .clk(clk),
+        .en(enable),
+        .buff_idx(buff_idx)
+    );
 
     bram_streamer #(
+        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
         .NETWORK_WIDTH(NETWORK_WIDTH),
         .MAX_TILES(MAX_TILES),
         .TILE_IDX_WIDTH(TILE_IDX_WIDTH),
@@ -97,14 +120,23 @@ module top(
         .tile_idx_fifo_push_done(tile_idx_fifo_push_done),
         .tile_idx_fifo_push(tile_idx_fifo_push),
         .tile_idx_fifo_din(tile_idx_fifo_din),
-        .tile_use_input_fifo_din(tile_use_input_fifo_din)
+        .tile_use_input_fifo_din(tile_use_input_fifo_din),
+        .lif_mem_out(lif_mem_out),
+        .lif_spk_out(lif_spk_out),
+        .lif_mem_in(lif_mem_in),
+        .lif_spk_in(lif_spk_in),
+        .lif_bram_done(lif_bram_done),
+        .lif_bram_enable(lif_bram_enable),
+        .lif_bram_we(lif_bram_we),
+        .lif_tile_idx_x(tile_idx_x),
+        .lif_tile_idx_y(tile_idx_y)
     );
 
     weight_fifo #(
         .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
         .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
         .NETWORK_WIDTH(NETWORK_WIDTH),
-        .LENGTH(2)
+        .LENGTH(FIFO_LENGTH)
     ) fifo_weight (
         .clk(clk),
         .en(enable),
@@ -122,7 +154,7 @@ module top(
         .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
         .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
         .NETWORK_WIDTH(NETWORK_WIDTH),
-        .LENGTH(2)
+        .LENGTH(FIFO_LENGTH)
     ) fifo_spk_in (
         .clk(clk),
         .en(enable),
@@ -141,7 +173,7 @@ module top(
         .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
         .NETWORK_WIDTH(NETWORK_WIDTH),
         .TILE_IDX_WIDTH(TILE_IDX_WIDTH),
-        .LENGTH(2)
+        .LENGTH(FIFO_LENGTH)
     ) fifo_tile_idx (
         .clk(clk),
         .en(enable),
@@ -151,6 +183,7 @@ module top(
         .pop(tile_idx_fifo_pop),
         .tile_idx_x(tile_idx_x),
         .tile_idx_y(tile_idx_y),
+        .use_input(lif_use_input),
         .full(tile_idx_fifo_full),
         .empty(tile_idx_fifo_empty),
         .push_done(tile_idx_fifo_push_done),
@@ -161,7 +194,7 @@ module top(
         .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
         .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
         .NETWORK_WIDTH(NETWORK_WIDTH),
-        .LENGTH(2)
+        .LENGTH(FIFO_LENGTH)
     ) fifo_input (
         .clk(clk),
         .en(enable),
@@ -179,14 +212,14 @@ module top(
         .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
         .BRAM_DATA_WIDTH(BRAM_DATA_WIDTH),
         .NETWORK_WIDTH(NETWORK_WIDTH),
-        .LENGTH(2)       
+        .LENGTH(FIFO_LENGTH)       
     ) fifo_mac_out (
         .clk(clk),
-        .en(en),
+        .en(enable),
         .din(mac_out_fifo_din),
         .push(mac_out_fifo_push),
         .pop(mac_out_fifo_pop),
-        .mac_out(mac_out),
+        .mem(mac_out),
         .full(mac_out_fifo_full),
         .empty(mac_out_fifo_empty),
         .pop_done(mac_out_fifo_pop_done),
@@ -195,7 +228,7 @@ module top(
 
     lif_scheduler lif_scheduler_0 (
         .clk(clk),
-        .en(en),
+        .en(enable),
         .lif_done(lif_array_done),
         .mac_out_fifo_empty(mac_out_fifo_empty),
         .mac_out_fifo_pop(mac_out_fifo_pop),
@@ -208,7 +241,7 @@ module top(
 
     xbar_scheduler xbar_scheduler_0 (
         .clk(clk),
-        .en(en),
+        .en(enable),
         .crossbar_done(synapse_array_done),
 
         .weight_fifo_empty(weight_fifo_empty),
@@ -219,11 +252,47 @@ module top(
         .spk_in_fifo_pop(spk_in_fifo_pop),
         .spk_in_fifo_pop_done(spk_in_fifo_pop_done),
 
+        .input_fifo_empty(input_fifo_empty),
+        .input_fifo_pop(input_fifo_pop),
+        .input_fifo_pop_done(input_fifo_pop_done),
+
         .mac_out_fifo_full(mac_out_fifo_full),
-        .mac_out_fifo_push(mac_out_fifo_push1),
+        .mac_out_fifo_push(mac_out_fifo_push),
         .mac_out_fifo_push_done(mac_out_fifo_push_done),
 
         .crossbar_en(synapse_array_en)
     );    
+
+    synapse_array #(
+        .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
+        .NETWORK_WIDTH(NETWORK_WIDTH)
+    ) synapse_array_0 (
+        .clk(clk),
+        .enable(synapse_array_en),
+        .u_mac_in(network_input),
+        .u_weight(weight),
+        .spk_in(spk_in),
+        .u_mac_out(mac_out_fifo_din),
+        .done(synapse_array_done)
+    );
+
+    lif_array #(
+        .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
+        .THRESH(THRESH),
+        .NETWORK_WIDTH(NETWORK_WIDTH)
+    ) lif_array_0 (
+        .clk(clk),
+        .enable(lif_array_en),
+        .bram_done(lif_bram_done),
+        .spk_rst(lif_use_input),
+        .spk_in(lif_spk_in),
+        .u_mac_out(mac_out),
+        .u_mem_in(lif_mem_in),
+        .spk_out(lif_spk_out),
+        .u_mem_out(lif_mem_out),
+        .done(lif_array_done),
+        .bram_we(lif_bram_we),
+        .bram_enable(lif_bram_enable)
+    );
 
 endmodule

@@ -6,7 +6,7 @@
 `include "fifo/tile_idx_fifo.sv"
 `include "fifo/mem_fifo.sv"
 
-module xbar_bram_fifo_tb;
+module bram_streamer_fifo_tb;
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam NETWORK_WIDTH = 8;
@@ -191,7 +191,7 @@ module xbar_bram_fifo_tb;
         //#500 spk_in_fifo_pop = 1;
 
         $dumpfile(".wave/top_dump.vcd");
-        $dumpvars(100, xbar_bram_fifo_tb);
+        $dumpvars(100, bram_streamer_fifo_tb);
 
         #100000 $finish;
     end

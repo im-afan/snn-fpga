@@ -62,7 +62,8 @@ module spk_in_bram #(
     assign fifo_full = spk_in_fifo_full;
     reg go;
 
-    assign buff_offset_read = buff_idx * MAX_TILES;
+    wire [BRAM_ADDR_WIDTH-1:0] buff_offset_read;
+    assign buff_offset_read = buff_idx * MAX_TILES * CROSSBAR_NEURONS / 8;
 
     always_ff @(posedge clk) begin
         if(~enable) begin
@@ -74,13 +75,13 @@ module spk_in_bram #(
         end else begin
             if(new_tile && ~go) begin
                 go <= 1;
-                tile_done <= 0;
                 bram_step <= SEND;
                 bram_en <= 0;
                 spk_in_fifo_push <= 0;
             end
             else if(fifo_done && ~fifo_full && go) begin
                 if(bram_step == SEND) begin
+                    tile_done <= 0;
                     addr <= SPK_OUT_OFFSET + tile_idx_x * CROSSBAR_NEURONS / 8 + buff_offset_read;
                     bram_done <= 0;
                     bram_step <= WAIT;

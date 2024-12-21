@@ -71,10 +71,10 @@ module weight_bram #(
             if(local_tile_done) begin
                 tile_done <= 1;
                 go <= 0;
+                weight_idx <= 0;
             end
             else if(new_tile && ~go) begin
                 go <= 1;
-                tile_done <= 0;
                 weight_idx <= 0;
                 bram_step <= SEND;
                 bram_en <= 0;
@@ -82,6 +82,7 @@ module weight_bram #(
             end
             else if(fifo_done && ~fifo_full && go) begin
                 if(bram_step == SEND) begin
+                    tile_done <= 0;
                     addr <= WEIGHT_OFFSET + CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH/8*tile_idx + weight_idx;
                     bram_done <= 0;
                     bram_step <= WAIT;

@@ -47,6 +47,8 @@ module lif_scheduler (
                 end
             end else begin
                 lif_en <= 0;
+                mac_out_fifo_pop <= 0;
+                tile_idx_fifo_pop <= 0;
             end
         end
     end

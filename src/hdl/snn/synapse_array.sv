@@ -36,6 +36,8 @@ module synapse_array#(
             end
             assign u_mac_out[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = mac_out[i];
             assign mac_in[i] = u_mac_in[i];
+            wire [NETWORK_WIDTH-1:0] mac_in_debug;
+            assign mac_in_debug = mac_in[i];
         end
     endgenerate
 

@@ -31,9 +31,6 @@ module lif_array #(
     generate
         genvar i;
         for(i = 0 ; i < CROSSBAR_NEURONS; i++) begin
-            //assign mem_in[i] = signed'(u_mem_in[i]);
-            //assign mac_out[i] = signed'(u_mac_out[i]);
-            //assign u_mem_out[i] = unsigned'(mem_out[i]);
             assign mem_in[i] = u_mem_in[i];
             assign mac_out[i] = u_mac_out[i];
             assign u_mem_out[i] = mem_out[i];

@@ -3,48 +3,91 @@
 `include "bram/tile_idx_bram.sv"
 `include "bram/weight_bram.sv"
 `include "bram/input_bram.sv"
+`include "bram/lif_bram.sv"
 
 module bram_streamer #(
     parameter MAX_BRAM_DATA_WIDTH = 1024,
+    parameter integer BRAM_ADDR_WIDTH,
     parameter integer NETWORK_WIDTH,
     parameter integer MAX_TILES,
     parameter integer TILE_IDX_WIDTH,
     parameter integer MAX_NEURONS,
     parameter integer CROSSBAR_NEURONS
 ) (
-    input wire clk,
-    input wire enable,
+    clk,
+    enable,
 
-    input wire buff_idx,
+    buff_idx,
 
-    input wire weight_fifo_full,
-    input wire weight_fifo_push_done,
-    output reg weight_fifo_push,
-    output reg [WEIGHT_BRAM_DATA_WIDTH-1:0] weight_fifo_din,
+    weight_fifo_full,
+    weight_fifo_push_done,
+    weight_fifo_push,
+    weight_fifo_din,
 
-    input wire input_fifo_full,
-    input wire input_fifo_push_done,
-    output reg input_fifo_push,
-    output reg [INPUT_BRAM_DATA_WIDTH-1:0] input_fifo_din,
+    input_fifo_full,
+    input_fifo_push_done,
+    input_fifo_push,
+    input_fifo_din,
 
-    input wire spk_in_fifo_full,
-    input wire spk_in_fifo_push_done,
-    output reg spk_in_fifo_push,
-    output reg [SPK_IN_BRAM_DATA_WIDTH-1:0] spk_in_fifo_din,
+    spk_in_fifo_full,
+    spk_in_fifo_push_done,
+    spk_in_fifo_push,
+    spk_in_fifo_din,
 
-    input wire tile_idx_fifo_full,
-    input wire tile_idx_fifo_push_done,
-    output reg tile_idx_fifo_push,
-    output reg [TILE_IDX_BRAM_DATA_WIDTH-1:0] tile_idx_fifo_din,
-    output reg tile_use_input_fifo_din
+    tile_idx_fifo_full,
+    tile_idx_fifo_push_done,
+    tile_idx_fifo_push,
+    tile_idx_fifo_din,
+    tile_use_input_fifo_din,
+
+    lif_mem_out, lif_spk_out,
+    lif_mem_in, lif_spk_in,
+    lif_bram_done, lif_bram_enable, lif_bram_we,
+    lif_tile_idx_x, lif_tile_idx_y
 );
-    localparam BRAM_ADDR_WIDTH = 10;
 
     localparam WEIGHT_BRAM_DATA_WIDTH = MAX_BRAM_DATA_WIDTH;
     localparam INPUT_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
     localparam SPK_IN_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
     localparam MEM_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
     localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
+
+    input wire clk;
+    input wire enable;
+
+    input wire buff_idx;
+
+    input wire weight_fifo_full;
+    input wire weight_fifo_push_done;
+    output reg weight_fifo_push;
+    output reg [WEIGHT_BRAM_DATA_WIDTH-1:0] weight_fifo_din;
+
+    input wire input_fifo_full;
+    input wire input_fifo_push_done;
+    output reg input_fifo_push;
+    output reg [INPUT_BRAM_DATA_WIDTH-1:0] input_fifo_din;
+
+    input wire spk_in_fifo_full;
+    input wire spk_in_fifo_push_done;
+    output reg spk_in_fifo_push;
+    output reg [SPK_IN_BRAM_DATA_WIDTH-1:0] spk_in_fifo_din;
+
+    input wire tile_idx_fifo_full;
+    input wire tile_idx_fifo_push_done;
+    output reg tile_idx_fifo_push;
+    output reg [TILE_IDX_BRAM_DATA_WIDTH-1:0] tile_idx_fifo_din;
+    output reg tile_use_input_fifo_din;
+
+    input wire [CROSSBAR_NEURONS-1:0] lif_spk_out;
+    input wire [NETWORK_WIDTH-1:0] lif_mem_out [CROSSBAR_NEURONS];
+    output wire [NETWORK_WIDTH-1:0] lif_mem_in [CROSSBAR_NEURONS];
+    output wire [CROSSBAR_NEURONS-1:0] lif_spk_in;
+    output wire lif_bram_done;
+    output wire lif_bram_enable;
+    output wire lif_bram_we;
+    input wire [TILE_IDX_WIDTH-1:0] lif_tile_idx_x;
+    input wire [TILE_IDX_WIDTH-1:0] lif_tile_idx_y;
+
 
     wire [BRAM_ADDR_WIDTH-1:0]  addr_tile_idx;
     wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] dout_tile_idx;
@@ -74,15 +117,42 @@ module bram_streamer #(
     wire bram_rst_input;
     wire [INPUT_BRAM_DATA_WIDTH/8-1:0] bram_we_input;
 
+    wire [BRAM_ADDR_WIDTH-1:0] mem_addr;
+    wire [INPUT_BRAM_DATA_WIDTH-1:0] mem_dout;
+    wire [INPUT_BRAM_DATA_WIDTH-1:0] mem_din;
+    wire mem_bram_en;
+    wire mem_bram_rst;
+    wire [INPUT_BRAM_DATA_WIDTH/8-1:0] mem_bram_we;
+
+    wire [BRAM_ADDR_WIDTH-1:0] lif_spk_out_addr;
+    wire [CROSSBAR_NEURONS-1:0] lif_spk_out_dout;
+    wire [CROSSBAR_NEURONS-1:0] lif_spk_out_din;
+    wire lif_spk_out_bram_en;
+    wire lif_spk_out_bram_rst;
+    wire [CROSSBAR_NEURONS/8-1:0] lif_spk_out_bram_we;
+
+
+    wire [BRAM_ADDR_WIDTH-1:0] lif_mem_addr;
+    wire [MEM_BRAM_DATA_WIDTH-1:0] lif_mem_dout;
+    wire [MEM_BRAM_DATA_WIDTH-1:0] lif_mem_din;
+    wire lif_mem_bram_en;
+    wire lif_mem_bram_rst;
+    wire [MEM_BRAM_DATA_WIDTH/8-1:0] lif_mem_bram_we;
+
+
     wire [TILE_IDX_WIDTH-1:0] tile_idx;
     wire [TILE_IDX_WIDTH-1:0] tile_idx_x;
     wire [TILE_IDX_WIDTH-1:0] tile_idx_y;
 
     wire use_input;
 
+    wire weight_bram_done;
+    wire input_bram_done;
+    wire spk_in_bram_done;
+
     wire next_ready;
-    assign next_ready = weight_fifo_push_done && input_fifo_push_done
-                    && spk_in_fifo_push_done && tile_idx_fifo_push_done;
+    assign next_ready = weight_bram_done && input_bram_done 
+                    && spk_in_bram_done && tile_idx_fifo_push_done;
 
     dual_port_bram #(
         .BRAM_DATA_WIDTH(TILE_IDX_BRAM_DATA_WIDTH),
@@ -107,7 +177,14 @@ module bram_streamer #(
         .dina(din_spk_in),
         .douta(dout_spk_in),
         .wea(bram_we_spk_in),
-        .ena(bram_en_spk_in)
+        .ena(bram_en_spk_in),
+
+        .clkb(clk),
+        .addrb(lif_spk_out_addr),
+        .dinb(lif_spk_out_din),
+        .doutb(lif_spk_out_dout),
+        .web(lif_spk_out_bram_we),
+        .enb(lif_spk_out_bram_en)
     );
 
     dual_port_bram #(
@@ -135,6 +212,19 @@ module bram_streamer #(
         .wea(bram_we_input),
         .ena(bram_en_input)
     );
+    
+    dual_port_bram #(
+        .BRAM_DATA_WIDTH(MEM_BRAM_DATA_WIDTH),
+        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+        .MEM_PATH("bram/mem/mem_bram.mem")
+    ) bram4 (
+        .clka(clk),
+        .addra(lif_mem_addr),
+        .dina(lif_mem_din),
+        .douta(lif_mem_dout),
+        .wea(lif_mem_bram_we),
+        .ena(lif_mem_bram_en)
+    );
 
     tile_idx_bram #(
         .BRAM_DATA_WIDTH(TILE_IDX_BRAM_DATA_WIDTH),
@@ -150,6 +240,7 @@ module bram_streamer #(
         .tile_idx_fifo_full(tile_idx_fifo_full),
         .tile_idx_fifo_push_done(next_ready),
         .tile_idx_fifo_push(tile_idx_fifo_push),
+        .tile_idx_fifo_din(tile_idx_fifo_din),
         .tile_use_input_fifo_din(tile_use_input_fifo_din),
         .tile_idx(tile_idx),
         .tile_idx_x(tile_idx_x),
@@ -181,6 +272,7 @@ module bram_streamer #(
         .weight_fifo_push(weight_fifo_push),
         .weight_fifo_push_done(weight_fifo_push_done),
         .weight_fifo_din(weight_fifo_din),
+        .tile_done(weight_bram_done),
         .addr(addr_weight),
         .dout(dout_weight),
         .din(din_weight),
@@ -212,6 +304,7 @@ module bram_streamer #(
         .addr(addr_spk_in),
         .dout(dout_spk_in),
         .din(din_spk_in),
+        .tile_done(spk_in_bram_done),
         .bram_en(bram_en_spk_in),
         .bram_rst(bram_rst_spk_in),
         .bram_we(bram_we_spk_in)
@@ -237,11 +330,45 @@ module bram_streamer #(
         .input_fifo_push(input_fifo_push),
         .input_fifo_push_done(input_fifo_push_done),
         .input_fifo_din(input_fifo_din),
+        .tile_done(input_bram_done),
         .addr(addr_input),
         .dout(dout_input),
         .din(din_input),
         .bram_en(bram_en_input),
         .bram_rst(bram_rst_input),
         .bram_we(bram_we_input)
+    );
+
+    lif_bram #(
+        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+        .NETWORK_WIDTH(NETWORK_WIDTH),
+        .MAX_TILES(MAX_TILES),
+        .TILE_IDX_WIDTH(TILE_IDX_WIDTH),
+        .MAX_NEURONS(MAX_NEURONS),
+        .CROSSBAR_NEURONS(CROSSBAR_NEURONS)
+    ) lif_bram_0 (
+        .clk(clk),
+        .enable(lif_bram_enable),
+        .buff_idx(buff_idx),
+        .we(lif_bram_we),
+        .tile_idx_x(lif_tile_idx_x),
+        .tile_idx_y(lif_tile_idx_y),
+        .mem_out(lif_mem_out),
+        .spk_out(lif_spk_out),
+        .mem_in(lif_mem_in),
+        .spk_in(lif_spk_in),
+        .done(lif_bram_done),
+        .mem_addr(lif_mem_addr),
+        .mem_dout(lif_mem_dout),
+        .mem_din(lif_mem_din),
+        .mem_bram_en(lif_mem_bram_en),
+        .mem_bram_rst(lif_mem_bram_rst),
+        .mem_bram_we(lif_mem_bram_we),
+        .spk_out_addr(lif_spk_out_addr),
+        .spk_out_dout(lif_spk_out_dout),
+        .spk_out_din(lif_spk_out_din),
+        .spk_out_bram_en(lif_spk_out_bram_en),
+        .spk_out_bram_rst(lif_spk_out_bram_rst),
+        .spk_out_bram_we(lif_spk_out_bram_we)
     );
 endmodule

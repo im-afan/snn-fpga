@@ -48,6 +48,7 @@ module tile_idx_fifo #(
 			pop_done <= 1;
 			push_done <= 1;
 			buffer <= 0;
+			use_input_buffer <= 0;
 			cnt <= 0;
 		end else begin
 			if(pop && ~pop_done) begin

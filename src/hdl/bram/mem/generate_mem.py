@@ -66,20 +66,20 @@ def endian(binary_string, width=8):
     
     return big_endian_string
 
-def printmem(memory, path, width, depth, rev=False):
+def printmem(memory, path, width, depth, rev=False, bytewidth=8):
     with open(path, "w+") as sys.stdout:
         for i in range(0, depth):
             s = ''.join(memory[i*width : (i+1)*width])
             if(rev):
-                s = endian(s, 8)
+                s = endian(s, bytewidth)
             print(s)
 
 
 def write_tile_idx():
     memory = ["0" for i in range(32*1024)] 
     for i in range(0, MAX_TILES):
-        memory[TILE_IDX_WIDTH*2*i : TILE_IDX_WIDTH*2*(i+1)] = bin_(tile_idx[i][0], 16) + bin_(tile_idx[i][1], 16)
-    printmem(memory, "./tile_idx_bram.mem", 32, 1024)
+        memory[TILE_IDX_WIDTH*2*i : TILE_IDX_WIDTH*2*(i+1)] = bin_(tile_idx[i][1], 16) + bin_(tile_idx[i][0], 16)
+    printmem(memory, "./tile_idx_bram.mem", 32, 1024, bytewidth=16)
 
 def write_weight():
     memory = ["0" for i in range(1024*1024)] 

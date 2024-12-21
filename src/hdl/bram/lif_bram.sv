@@ -9,191 +9,210 @@
 
 module lif_bram #(
     parameter integer BRAM_ADDR_WIDTH,
-    parameter integer BRAM_DATA_WIDTH,
     parameter integer NETWORK_WIDTH,
     parameter integer MAX_TILES,
     parameter integer TILE_IDX_WIDTH,
     parameter integer MAX_NEURONS,
     parameter integer CROSSBAR_NEURONS
 ) (
-    input wire clk, 
-    input wire enable,
-
-    input wire buff_idx,
-
-    input wire we,
-
-    input wire [TILE_IDX_WIDTH-1:0] tile_idx_x,
-    input wire [TILE_IDX_WIDTH-1:0] tile_idx_y,
-
-    input wire [NETWORK_WIDTH-1:0] mem_out [CROSSBAR_NEURONS], 
-    input wire [CROSSBAR_NEURONS-1:0] spk_out,
-
-    output reg [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS],
-    output reg [CROSSBAR_NEURONS-1:0] spk_in, // to inhibit multiple spikes in one timestep
-
-    output reg done,
-
-    output reg [BRAM_ADDR_WIDTH-1:0] addr,
-    input wire [BRAM_DATA_WIDTH-1:0] dout,
-    output reg [BRAM_DATA_WIDTH-1:0] din,
-    output reg bram_en,
-    output reg bram_rst,
-    output wire [BRAM_DATA_WIDTH/8-1:0] bram_we,
-    output reg bram_want_active,
-    input wire bram_active
+    clk, enable, buff_idx, we,
+    tile_idx_x, tile_idx_y,
+    mem_out, spk_out,
+    mem_in, spk_in,
+    done,
+    mem_addr, mem_dout, mem_din, mem_bram_en, mem_bram_rst, mem_bram_we,
+    spk_out_addr, spk_out_dout, spk_out_din, spk_out_bram_en, spk_out_bram_rst, spk_out_bram_we
 );
-    assign bram_want_active = 1;
-    assign bram_rst = 0;
+    localparam integer MEM_BRAM_DATA_WIDTH = CROSSBAR_NEURONS * NETWORK_WIDTH;
+    localparam integer SPK_IN_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
+
+    input wire clk; 
+    input wire enable;
+
+    input wire buff_idx;
+
+    input wire we;
+
+    input wire [TILE_IDX_WIDTH-1:0] tile_idx_x;
+    input wire [TILE_IDX_WIDTH-1:0] tile_idx_y;
+
+    input wire [NETWORK_WIDTH-1:0] mem_out [CROSSBAR_NEURONS]; 
+    input wire [CROSSBAR_NEURONS-1:0] spk_out;
+
+    output reg [NETWORK_WIDTH-1:0] mem_in [CROSSBAR_NEURONS];
+    output reg [CROSSBAR_NEURONS-1:0] spk_in; // to inhibit multiple spikes in one timestep
+
+    output reg done;
+
+    output reg [BRAM_ADDR_WIDTH-1:0] mem_addr;
+    input wire [MEM_BRAM_DATA_WIDTH-1:0] mem_dout;
+    output reg [MEM_BRAM_DATA_WIDTH-1:0] mem_din;
+    output reg mem_bram_en;
+    output reg mem_bram_rst;
+    output wire [MEM_BRAM_DATA_WIDTH/8-1:0] mem_bram_we;
+
+    output reg [BRAM_ADDR_WIDTH-1:0] spk_out_addr;
+    input wire [SPK_IN_BRAM_DATA_WIDTH-1:0] spk_out_dout;
+    output reg [SPK_IN_BRAM_DATA_WIDTH-1:0] spk_out_din;
+    output reg spk_out_bram_en;
+    output reg spk_out_bram_rst;
+    output wire [SPK_IN_BRAM_DATA_WIDTH/8-1:0] spk_out_bram_we;
+
+
 
     localparam integer SEND = 0;
     localparam integer WAIT = 1;
     localparam integer INCREMENT = 2;
 
-    localparam integer MEM = 0;
-    localparam integer SPK = 1;
-
-    localparam integer TILE_IDX_BITS = ((2*TILE_IDX_WIDTH*MAX_TILES) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-    localparam integer WEIGHT_BITS = ((MAX_TILES*CROSSBAR_NEURONS*CROSSBAR_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-    localparam integer NETWORK_INPUT_BITS = ((MAX_NEURONS*NETWORK_WIDTH) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH;
-    localparam integer SPK_OUT_BITS = 2 * ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH; // 2 buffers
-    localparam integer FLAGS_BITS = 1024;
-
-    localparam integer SPK_OUT_BITS_ONE = ((MAX_NEURONS) / BRAM_DATA_WIDTH + 1) * BRAM_DATA_WIDTH; // bits per buffer
-
-    localparam integer TILE_IDX_OFFSET = 0;
-    localparam integer WEIGHT_OFFSET = TILE_IDX_OFFSET + TILE_IDX_BITS / 8;
-    localparam integer NETWORK_INPUT_OFFSET = WEIGHT_OFFSET + WEIGHT_BITS / 8;
-    localparam integer SPK_OUT_OFFSET = NETWORK_INPUT_OFFSET + NETWORK_INPUT_BITS / 8;
-    localparam integer FLAGS_OFFSET = SPK_OUT_OFFSET + SPK_OUT_BITS / 8;
-    localparam integer MEM_OFFSET = FLAGS_OFFSET + FLAGS_BITS / 8;
+    localparam integer SPK_OUT_OFFSET = 0;
+    localparam integer MEM_OFFSET = 0;
 
     wire [11:0] buff_offset_read;
-    assign buff_offset_read = buff_idx ? SPK_OUT_BITS_ONE / 8 : 0;
+    assign buff_offset_read = (!buff_idx) * MAX_TILES * CROSSBAR_NEURONS / 8;
     wire [11:0] buff_offset_write;
-    assign buff_offset_write = buff_idx ? 0 : SPK_OUT_BITS_ONE / 8;
+    assign buff_offset_write = (!buff_idx) * MAX_TILES * CROSSBAR_NEURONS / 8;
 
-    wire local_we;
-    assign local_we = we;
+    reg [3:0] mem_bram_step;
+    reg [3:0] spk_out_bram_step;
 
-    reg [2:0] bram_done;
-    reg [4:0] bram_step = SEND;
-    reg [4:0] param_step = MEM;
+    reg mem_done;
+    reg spk_out_done;
+    assign done = spk_out_done && mem_done;
 
-    wire [11:0] mem_tile_idx_base;
-    assign mem_tile_idx_base = tile_idx_y % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS / NETWORK_WIDTH);
-    wire [11:0] spk_tile_idx_base;
-    assign spk_tile_idx_base = tile_idx_y % (BRAM_DATA_WIDTH / CROSSBAR_NEURONS); 
+    reg [2:0] mem_bram_done;
+    reg [2:0] spk_out_bram_done;
 
-    reg [BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS-1 : 0] we_tile;
-    reg [BRAM_DATA_WIDTH / CROSSBAR_NEURONS-1 : 0] spk_we_tile;
-    reg [NETWORK_WIDTH*CROSSBAR_NEURONS-1:0] din_tile;
+    reg mem_we_local;
+    reg spk_out_bram_we_local;
 
-    wire [NETWORK_WIDTH-1:0] mem_in_tiles [BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS][CROSSBAR_NEURONS];
-    wire [CROSSBAR_NEURONS-1:0] spk_tiles [BRAM_DATA_WIDTH / CROSSBAR_NEURONS];
-
-    wire [BRAM_DATA_WIDTH/8-1:0] bram_we_mem;
-    wire [BRAM_DATA_WIDTH/8-1:0] bram_we_spk;
-    assign bram_we = we ? ((param_step == MEM) ? bram_we_mem : bram_we_spk) : 0;
+    wire [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] mem_out_flattened;
+    reg [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] mem_in_flattened;
 
     generate
-        genvar i, j, k;
-        for(i = 0; i < BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS; i++) begin
-            for(j = 0; j < CROSSBAR_NEURONS; j++) begin
-                assign bram_we_mem[i*CROSSBAR_NEURONS + j] = we_tile[i];
-            end
+        genvar i;
+        for(i = 0; i < CROSSBAR_NEURONS/8; i++) begin
+            assign spk_out_bram_we[i] = spk_out_bram_we_local;
         end
-        for(i = 0; i < BRAM_DATA_WIDTH / CROSSBAR_NEURONS; i++) begin
-            for(j = 0; j < CROSSBAR_NEURONS/8; j++) begin
-                assign bram_we_spk[i*CROSSBAR_NEURONS/8+j] = spk_we_tile[i];
-            end
-            //assign bram_we_spk[(i+1)*CROSSBAR_NEURONS/8-1 : i*CROSSBAR_NEURONS/8] = we_tile[i];
+        for(i = 0; i < NETWORK_WIDTH * CROSSBAR_NEURONS / 8; i++) begin
+            assign mem_bram_we[i] = mem_we_local;
         end
+
         for(i = 0; i < CROSSBAR_NEURONS; i++) begin
-            assign din_tile[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = mem_out[i];
-        end
-        for(i = 0; i < BRAM_DATA_WIDTH / NETWORK_WIDTH / CROSSBAR_NEURONS; i++) begin
-            for(j = 0; j < CROSSBAR_NEURONS; j++) begin
-                //initial $display("%d %d = %d:%d", i, j, i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH+NETWORK_WIDTH-1 , i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH);
-                assign mem_in_tiles[i][j] = dout[i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH+NETWORK_WIDTH-1 : i*CROSSBAR_NEURONS*NETWORK_WIDTH+j*NETWORK_WIDTH];
-            end
-        end
-        for(i = 0; i < BRAM_DATA_WIDTH / CROSSBAR_NEURONS; i++) begin
-            assign spk_tiles[i] = dout[(i+1)*CROSSBAR_NEURONS-1 : i*CROSSBAR_NEURONS];
+            assign mem_out_flattened[(i+1)*NETWORK_WIDTH-1 : i*NETWORK_WIDTH] = mem_out[i];
+            assign mem_in[i] = mem_in_flattened[(i+1)*NETWORK_WIDTH-1 : i*NETWORK_WIDTH]; 
         end
     endgenerate
 
+    // todo fix spaghetti code LOL
+
+    // membrane potential
     always_ff @(posedge clk) begin
         if(~enable) begin
-            param_step <= MEM;
-            bram_step <= SEND;
-            bram_en <= 0;
-            done <= 0;
-            we_tile <= 0;
-            spk_we_tile <= 0;
+            mem_bram_step <= SEND;
+            mem_bram_en <= 0;
+            mem_done <= 0;
         end else begin
-            if(~done) begin
-                if(local_we) begin
-                    if(bram_step == SEND) begin
-                        if(param_step == MEM) begin
-                            addr <= MEM_OFFSET + tile_idx_y * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
-                            din <= (din_tile << mem_tile_idx_base);
-                            we_tile <= (1 << mem_tile_idx_base);
-                        end else if(param_step == SPK) begin
-                            addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
-                            din <= (spk_out << spk_tile_idx_base * CROSSBAR_NEURONS);
-                            spk_we_tile <= (1 << spk_tile_idx_base); // TODO thsi is wrong lmao
+            if(~mem_done) begin
+                if(we) begin
+                    if(mem_bram_step == SEND) begin
+                        mem_addr <= MEM_OFFSET + tile_idx_y * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
+                        mem_din <= mem_out_flattened;
+                        mem_we_local <= 1;
+                        mem_bram_step <= WAIT;
+                        mem_bram_done <= 0;
+                        mem_bram_en <= 1;
+                    end else if(mem_bram_step == WAIT) begin
+                        if(mem_bram_done > 0) begin
+                            mem_bram_en <= 0;
+                            mem_bram_step <= INCREMENT;
                         end
-                        bram_step <= WAIT;
-                        bram_done <= 0;
-                        bram_en <= 1;
-                    end else if(bram_step == WAIT) begin
-                        if(bram_done > 0) begin
-                            bram_en <= 0;
-                            bram_step <= INCREMENT;
-                        end
-                        else bram_done <= bram_done + bram_active;
-                    end else if(bram_step == INCREMENT) begin
-                        if(param_step == MEM) param_step <= SPK;
-                        else if(param_step == SPK) begin
-                            done <= 1;
-                        end
-                        bram_step <= SEND;
+                        else mem_bram_done <= mem_bram_done + 1;
+                    end else if(mem_bram_step == INCREMENT) begin
+                        mem_done <= 1;
+                        mem_bram_step <= SEND;
                     end
 
                 end else begin
-                    if(bram_step == SEND) begin
-                        if(param_step == MEM) addr <= MEM_OFFSET + tile_idx_y * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
-                        else if(param_step == SPK) addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
-                        bram_step <= WAIT;
-                        bram_done <= 0;
-                        we_tile <= 0;
-                        bram_en <= 1;
-                    end else if(bram_step == WAIT) begin
-                        if(bram_done > 0) begin
-                            if(param_step == MEM) begin
-                                for(integer i = 0; i < CROSSBAR_NEURONS; i++) mem_in[i] <= mem_in_tiles[mem_tile_idx_base][i];
-                            end else if(param_step == SPK) begin
-                                spk_in <= spk_tiles[spk_tile_idx_base];
-                            end
-                            bram_en <= 0;
-                            bram_step <= INCREMENT;
+                    if(mem_bram_step == SEND) begin
+                        mem_addr <= MEM_OFFSET + tile_idx_y * NETWORK_WIDTH * CROSSBAR_NEURONS / 8;
+                        mem_bram_step <= WAIT;
+                        mem_bram_done <= 0;
+                        mem_we_local <= 0;
+                        mem_bram_en <= 1;
+                    end else if(mem_bram_step == WAIT) begin
+                        if(mem_bram_done > 0) begin
+                            mem_in_flattened <= mem_dout;
+                            mem_bram_en <= 0;
+                            mem_bram_step <= INCREMENT;
                         end else begin
-                            bram_done <= bram_done + bram_active;
+                            mem_bram_done <= mem_bram_done + 1;
                         end
-                    end else if(bram_step == INCREMENT) begin
-                        if(param_step == MEM) param_step <= SPK;
-                        else if(param_step == SPK) begin
-                            done <= 1;
-                        end
-                        bram_step <= SEND;
+                    end else if(mem_bram_step == INCREMENT) begin
+                        mem_done <= 1;
+                        mem_bram_step <= SEND;
                     end
                 end
             end else begin
-                bram_step <= SEND;
-                param_step <= MEM;
+                mem_bram_step <= SEND;
+            end
+        end
+    end
+
+
+ 
+    // spk out
+    always_ff @(posedge clk) begin
+        if(~enable) begin
+            spk_out_bram_step <= SEND;
+            spk_out_bram_en <= 0;
+            spk_out_done <= 0;
+            spk_out_bram_we_local <= 0;
+        end else begin
+            if(~spk_out_done) begin
+                if(we) begin
+                    if(spk_out_bram_step == SEND) begin
+                        spk_out_addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
+                        spk_out_din <= spk_out;
+                        spk_out_bram_we_local <= 1;
+                        spk_out_bram_step <= WAIT;
+                        spk_out_bram_done <= 0;
+                        spk_out_bram_en <= 1;
+                    end else if(spk_out_bram_step == WAIT) begin
+                        if(spk_out_bram_done > 0) begin
+                            spk_out_bram_en <= 0;
+                            spk_out_bram_step <= INCREMENT;
+                        end
+                        else spk_out_bram_done <= spk_out_bram_done + 1;
+                    end else if(spk_out_bram_step == INCREMENT) begin
+                        spk_out_done <= 1;
+                        spk_out_bram_step <= SEND;
+                    end
+                end 
+                else begin
+                    if(spk_out_bram_step == SEND) begin
+                        spk_out_addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
+                        spk_out_bram_done <= 0;
+                        spk_out_bram_we_local <= 0;
+                        spk_out_bram_step <= WAIT;
+                        spk_out_bram_en <= 1;
+                    end else if(spk_out_bram_step == WAIT) begin
+                        if(spk_out_bram_done > 0) begin
+                            spk_in <= spk_out_dout;
+                            spk_out_bram_en <= 0;
+                            spk_out_bram_step <= INCREMENT;
+                        end else begin
+                            spk_out_bram_done <= spk_out_bram_done + 1;
+                        end
+                    end else if(spk_out_bram_step == INCREMENT) begin
+                        spk_out_done <= 1;
+                        spk_out_bram_step <= SEND;
+                    end
+                end
+            end else begin
+                spk_out_bram_step <= SEND;
                 //local_we <= we;
             end
         end
     end
+
 endmodule

@@ -59,8 +59,12 @@ module tile_idx_bram #(
     wire fifo_full;
     assign fifo_full = tile_idx_fifo_full;
 
-    assign tile_idx_x = dout[TILE_IDX_WIDTH-1:0];
-    assign tile_idx_y = dout[2*TILE_IDX_WIDTH-1:TILE_IDX_WIDTH];
+    wire [TILE_IDX_WIDTH-1:0] tile_idx_x_local;
+    wire [TILE_IDX_WIDTH-1:0] tile_idx_y_local;
+    assign tile_idx_x_local = dout[TILE_IDX_WIDTH-1:0];
+    assign tile_idx_y_local = dout[2*TILE_IDX_WIDTH-1:TILE_IDX_WIDTH];
+    //assign tile_idx_x = tile_idx_x_local;
+    //assign tile_idx_y = tile_idx_y_local;
     reg [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] used_input;  // only use network input for the 1st cycle with that tile
 
     always_ff @(posedge clk) begin
@@ -81,13 +85,15 @@ module tile_idx_bram #(
                     tile_idx_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
                     if(bram_done > 0) begin
-                        if(~used_input[tile_idx_y]) begin
-                            used_input[tile_idx_y] <= 1;
+                        if(~used_input[tile_idx_y_local]) begin
+                            used_input[tile_idx_y_local] <= 1;
                             tile_use_input_fifo_din <= 1;
                         end else begin
                             tile_use_input_fifo_din <= 0;
                         end
                         tile_idx_fifo_din <= dout; 
+                        tile_idx_x <= tile_idx_x_local;
+                        tile_idx_y <= tile_idx_y_local;
                         tile_idx_fifo_push <= 1;
                         bram_step <= INCREMENT;
                         bram_en <= 0;
@@ -95,6 +101,7 @@ module tile_idx_bram #(
                         bram_done <= bram_done + 1; // wait 1 clock cycle for bram to finish if it is active
                     end
                 end else if(bram_step == INCREMENT) begin
+                    tile_idx_fifo_push <= 0;
                     tile_idx <= tile_idx + 1;
                     bram_step <= SEND;
                 end

@@ -70,13 +70,13 @@ module input_bram #(
         end else begin
             if(new_tile && ~go) begin
                 go <= 1;
-                tile_done <= 0;
                 bram_step <= SEND;
                 bram_en <= 0;
                 input_fifo_push <= 0;
             end
             else if(fifo_done && ~fifo_full && go) begin
                 if(bram_step == SEND) begin
+                    tile_done <= 0;
                     addr <= NETWORK_INPUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS * NETWORK_WIDTH / 8;
                     bram_done <= 0;
                     bram_step <= WAIT;
