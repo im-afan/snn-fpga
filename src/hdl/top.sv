@@ -25,6 +25,7 @@ module top(
     localparam THRESH = 32;
     localparam FIFO_LENGTH = 1;
 
+
     reg enable;
     assign enable = sw[0];
 
@@ -86,6 +87,8 @@ module top(
     wire lif_bram_done;
     wire lif_bram_enable;
     wire lif_bram_we;
+
+    assign led = lif_spk_out;
 
     buff_idx_controller buff_idx_controller_0 (
         .clk(clk),

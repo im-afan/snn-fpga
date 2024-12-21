@@ -1,0 +1,330 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Fri Dec 20 23:31:09 2024
+# Process ID         : 12540
+# Current directory  : C:/Users/andre/Desktop/snn-fpga/vivado
+# Command line       : vivado.exe -mode tcl -source .\basys3_project.tcl
+# Log file           : C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
+# Journal file       : C:/Users/andre/Desktop/snn-fpga/vivado\vivado.jou
+# Running On         : DESKTOP-OVIC86T
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 19045
+# Processor Detail   : Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+# CPU Frequency      : 2304 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 34248 MB
+# Swap memory        : 5100 MB
+# Total Virtual      : 39349 MB
+# Available Virtual  : 14180 MB
+#-----------------------------------------------------------
+source {.\basys3_project.tcl}
+# create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
+# add_files ../src/hdl/bram/mem/input_bram.mem
+# add_files ../src/hdl/bram/mem/mem_bram.mem
+# add_files ../src/hdl/bram/mem/spk_in_bram.mem
+# add_files ../src/hdl/bram/mem/weight_bram.mem
+# add_files ../src/hdl/top.sv
+# add_files ../src/hdl/basys3-constraints.xdc
+# set_property include_dirs {../src/hdl/ ../src/hdl/bram ../src/hdl/snn ../src/hdl/fifo ../src/hdl/bram/mem} [current_fileset]
+# set_property top top [current_fileset]
+Vivado% start_gui
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2024.2/data/ip'.
+update_compile_order -fileset sources_1
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-12493] Simulation top is 'top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/Vivado/2024.2/tps/boost_1_72_0'
+INFO: [SIM-utils-54] Inspecting design source files for 'top' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/input_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/mem_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/spk_in_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/weight_bram.mem'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -L uvm -prj top_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/src/hdl/top.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dual_port_bram
+INFO: [VRFC 10-311] analyzing module spk_in_bram
+INFO: [VRFC 10-311] analyzing module tile_idx_bram
+INFO: [VRFC 10-311] analyzing module weight_bram
+INFO: [VRFC 10-311] analyzing module input_bram
+INFO: [VRFC 10-311] analyzing module lif_bram
+INFO: [VRFC 10-311] analyzing module bram_streamer
+INFO: [VRFC 10-311] analyzing module buff_idx_controller
+INFO: [VRFC 10-311] analyzing module weight_fifo
+INFO: [VRFC 10-311] analyzing module spk_in_fifo
+INFO: [VRFC 10-311] analyzing module tile_idx_fifo
+INFO: [VRFC 10-311] analyzing module mem_fifo
+INFO: [VRFC 10-311] analyzing module lif_scheduler
+INFO: [VRFC 10-311] analyzing module xbar_scheduler
+INFO: [VRFC 10-311] analyzing module synapse
+INFO: [VRFC 10-311] analyzing module synapse_array
+INFO: [VRFC 10-311] analyzing module lif
+INFO: [VRFC 10-311] analyzing module lif_array
+INFO: [VRFC 10-311] analyzing module top
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot top_behav xil_defaultlib.top xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator v2024.2.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2024.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot top_behav xil_defaultlib.top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:157]
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:190]
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:203]
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:216]
+WARNING: [VRFC 10-5021] port 'tile_use_input' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:285]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.buff_idx_controller
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=3...
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=1...
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=1...
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=1...
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=1...
+Compiling module xil_defaultlib.tile_idx_bram(BRAM_ADDR_WIDTH=16...
+Compiling module xil_defaultlib.weight_bram(BRAM_ADDR_WIDTH=16,B...
+Compiling module xil_defaultlib.spk_in_bram(BRAM_ADDR_WIDTH=16,B...
+Compiling module xil_defaultlib.input_bram(BRAM_ADDR_WIDTH=16,BR...
+Compiling module xil_defaultlib.lif_bram(BRAM_ADDR_WIDTH=16,NETW...
+Compiling module xil_defaultlib.bram_streamer(BRAM_ADDR_WIDTH=16...
+Compiling module xil_defaultlib.weight_fifo(CROSSBAR_NEURONS=16,...
+Compiling module xil_defaultlib.spk_in_fifo(CROSSBAR_NEURONS=16,...
+Compiling module xil_defaultlib.tile_idx_fifo(CROSSBAR_NEURONS=1...
+Compiling module xil_defaultlib.mem_fifo(CROSSBAR_NEURONS=16,BRA...
+Compiling module xil_defaultlib.lif_scheduler
+Compiling module xil_defaultlib.xbar_scheduler
+Compiling module xil_defaultlib.synapse(NETWORK_WIDTH=8)
+Compiling module xil_defaultlib.synapse_array(CROSSBAR_NEURONS=1...
+Compiling module xil_defaultlib.lif(THRESH=32,NETWORK_WIDTH=8)
+Compiling module xil_defaultlib.lif_array(CROSSBAR_NEURONS=16,TH...
+Compiling module xil_defaultlib.top
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot top_behav
+run_program: Time (s): cpu = 00:00:00 ; elapsed = 00:00:08 . Memory (MB): peak = 1141.121 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '8' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "top_behav -key {Behavioral:sim_1:Functional:top} -tclbatch {top.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source top.tcl
+WARNING: File tile_idx_bram.mem referenced on C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/tile_idx_bram.sv at line 64 cannot be opened for reading. Please ensure that this file is available in the current working directory or parent directory of xsim.dir location specified via -xsimdir switch.
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'top_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:07 ; elapsed = 00:00:14 . Memory (MB): peak = 1153.383 ; gain = 12.262
+restart
+INFO: [Wavedata 42-604] Simulation restarted
+add_files ../src/hdl/bram/mem/tile_idx_bram.mem
+C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/tile_idx_bram.mem
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-12493] Simulation top is 'top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/Vivado/2024.2/tps/boost_1_72_0'
+INFO: [SIM-utils-54] Inspecting design source files for 'top' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/input_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/mem_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/spk_in_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/weight_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/tile_idx_bram.mem'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -L uvm -prj top_vlog.prj"
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot top_behav xil_defaultlib.top xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator v2024.2.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2024.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot top_behav xil_defaultlib.top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:157]
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:190]
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:203]
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:216]
+WARNING: [VRFC 10-5021] port 'tile_use_input' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:285]
+Completed static elaboration
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+INFO: [USF-XSim-69] 'elaborate' step finished in '2' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "top_behav -key {Behavioral:sim_1:Functional:top} -tclbatch {top.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source top.tcl
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'top_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:03 ; elapsed = 00:00:08 . Memory (MB): peak = 1164.926 ; gain = 0.000
+restart
+INFO: [Wavedata 42-604] Simulation restarted
+add_force {/top/sw} -radix hex {0 0ns}
+add_force {/top/clk} -radix hex {0 0ns} {1 5000ps} -repeat_every 10000ps
+run 100 us
+add_force {/top/sw} -radix hex {1 0ns}
+run 100 us
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-12493] Simulation top is 'top'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/Vivado/2024.2/tps/boost_1_72_0'
+INFO: [SIM-utils-54] Inspecting design source files for 'top' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/input_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/mem_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/spk_in_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/weight_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/tile_idx_bram.mem'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -L uvm -prj top_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/src/hdl/top.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dual_port_bram
+INFO: [VRFC 10-311] analyzing module spk_in_bram
+INFO: [VRFC 10-311] analyzing module tile_idx_bram
+INFO: [VRFC 10-311] analyzing module weight_bram
+INFO: [VRFC 10-311] analyzing module input_bram
+INFO: [VRFC 10-311] analyzing module lif_bram
+INFO: [VRFC 10-311] analyzing module bram_streamer
+INFO: [VRFC 10-311] analyzing module buff_idx_controller
+INFO: [VRFC 10-311] analyzing module weight_fifo
+INFO: [VRFC 10-311] analyzing module spk_in_fifo
+INFO: [VRFC 10-311] analyzing module tile_idx_fifo
+INFO: [VRFC 10-311] analyzing module mem_fifo
+INFO: [VRFC 10-311] analyzing module lif_scheduler
+INFO: [VRFC 10-311] analyzing module xbar_scheduler
+INFO: [VRFC 10-311] analyzing module synapse
+INFO: [VRFC 10-311] analyzing module synapse_array
+INFO: [VRFC 10-311] analyzing module lif
+INFO: [VRFC 10-311] analyzing module lif_array
+INFO: [VRFC 10-311] analyzing module top
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot top_behav xil_defaultlib.top xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator v2024.2.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2024.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L uvm -L unisims_ver -L unimacro_ver -L secureip --snapshot top_behav xil_defaultlib.top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:157]
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:190]
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:203]
+WARNING: [VRFC 10-5021] port 'clkb' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:216]
+WARNING: [VRFC 10-5021] port 'tile_use_input' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:285]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.buff_idx_controller
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=3...
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=1...
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=1...
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=1...
+Compiling module xil_defaultlib.dual_port_bram(BRAM_DATA_WIDTH=1...
+Compiling module xil_defaultlib.tile_idx_bram(BRAM_ADDR_WIDTH=16...
+Compiling module xil_defaultlib.weight_bram(BRAM_ADDR_WIDTH=16,B...
+Compiling module xil_defaultlib.spk_in_bram(BRAM_ADDR_WIDTH=16,B...
+Compiling module xil_defaultlib.input_bram(BRAM_ADDR_WIDTH=16,BR...
+Compiling module xil_defaultlib.lif_bram(BRAM_ADDR_WIDTH=16,NETW...
+Compiling module xil_defaultlib.bram_streamer(BRAM_ADDR_WIDTH=16...
+Compiling module xil_defaultlib.weight_fifo(CROSSBAR_NEURONS=16,...
+Compiling module xil_defaultlib.spk_in_fifo(CROSSBAR_NEURONS=16,...
+Compiling module xil_defaultlib.tile_idx_fifo(CROSSBAR_NEURONS=1...
+Compiling module xil_defaultlib.mem_fifo(CROSSBAR_NEURONS=16,BRA...
+Compiling module xil_defaultlib.lif_scheduler
+Compiling module xil_defaultlib.xbar_scheduler
+Compiling module xil_defaultlib.synapse(NETWORK_WIDTH=8)
+Compiling module xil_defaultlib.synapse_array(CROSSBAR_NEURONS=1...
+Compiling module xil_defaultlib.lif(THRESH=32,NETWORK_WIDTH=8)
+Compiling module xil_defaultlib.lif_array(CROSSBAR_NEURONS=16,TH...
+Compiling module xil_defaultlib.top
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot top_behav
+run_program: Time (s): cpu = 00:00:00 ; elapsed = 00:00:07 . Memory (MB): peak = 1264.598 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '6' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "top_behav -key {Behavioral:sim_1:Functional:top} -tclbatch {top.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Time resolution is 1 ps
+source top.tcl
+WARNING: Too many words specified in data file tile_idx_bram.mem
+WARNING: Too many words specified in data file weight_bram.mem
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'top_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:02 ; elapsed = 00:00:11 . Memory (MB): peak = 1264.598 ; gain = 0.000
+restart
+INFO: [Wavedata 42-604] Simulation restarted
+add_force {/top/clk} -radix hex {0 0ns} {1 5000ps} -repeat_every 10000ps
+add_force {/top/sw} -radix hex {0 0ns}
+run 100 us
+WARNING: Too many words specified in data file tile_idx_bram.mem
+WARNING: Too many words specified in data file weight_bram.mem
+add_force {/top/sw} -radix hex {1 0ns}
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+add_force {/top/sw} -radix hex {0 0ns}
+run 100 us
+add_force {/top/sw} -radix hex {1 0ns}
+run 100 us
+run 100 us
+run 100 us
+run 100 us
+launch_runs synth_1 -jobs 12
+WARNING: [Vivado 12-7122] Auto Incremental Compile:: No reference checkpoint was found in run synth_1. Auto-incremental flow will not be run, the standard flow will be run instead.
+[Fri Dec 20 23:42:51 2024] Launched synth_1...
+Run output will be captured here: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/runme.log
+reset_run synth_1
+WARNING: [Vivado 12-1017] Problems encountered:
+1. Failed to delete one or more files in run directory C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1
+
+launch_runs synth_1 -jobs 8
+WARNING: [Vivado 12-7122] Auto Incremental Compile:: No reference checkpoint was found in run synth_1. Auto-incremental flow will not be run, the standard flow will be run instead.
+[Fri Dec 20 23:45:22 2024] Launched synth_1...
+Run output will be captured here: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/runme.log
+reset_run synth_1
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+exit
+INFO: [Common 17-206] Exiting Vivado at Fri Dec 20 23:50:22 2024...

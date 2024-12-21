@@ -30,10 +30,10 @@ module dual_port_bram #(
 
     localparam LOG_WORD_WIDTH = $clog2(BRAM_DATA_WIDTH / 8);
     // BRAM memory declaration
-    reg [BRAM_DATA_WIDTH-1:0] mem [1024:0];
+    reg [BRAM_DATA_WIDTH-1:0] mem [511:0];
 
     initial begin
-        for(integer asdf = 0; asdf < 1024; asdf++) begin
+        for(integer asdf = 0; asdf < 512; asdf++) begin
             mem[asdf] = 0;
         end
         $readmemb(MEM_PATH, mem);

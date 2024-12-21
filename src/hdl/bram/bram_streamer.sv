@@ -157,7 +157,7 @@ module bram_streamer #(
     dual_port_bram #(
         .BRAM_DATA_WIDTH(TILE_IDX_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
-        .MEM_PATH("bram/mem/tile_idx_bram.mem")
+        .MEM_PATH("tile_idx_bram.mem")
     ) bram0 (
         .clka(clk),
         .addra(addr_tile_idx),
@@ -170,7 +170,7 @@ module bram_streamer #(
     dual_port_bram #(
         .BRAM_DATA_WIDTH(SPK_IN_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
-        .MEM_PATH("bram/mem/spk_in_bram.mem")
+        .MEM_PATH("spk_in_bram.mem")
     ) bram1 (
         .clka(clk),
         .addra(addr_spk_in),
@@ -190,7 +190,7 @@ module bram_streamer #(
     dual_port_bram #(
         .BRAM_DATA_WIDTH(WEIGHT_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
-        .MEM_PATH("bram/mem/weight_bram.mem")
+        .MEM_PATH("weight_bram.mem")
     ) bram2 (
         .clka(clk),
         .addra(addr_weight),
@@ -203,7 +203,7 @@ module bram_streamer #(
     dual_port_bram #(
         .BRAM_DATA_WIDTH(INPUT_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
-        .MEM_PATH("bram/mem/input_bram.mem")
+        .MEM_PATH("input_bram.mem")
     ) bram3 (
         .clka(clk),
         .addra(addr_input),
@@ -216,7 +216,7 @@ module bram_streamer #(
     dual_port_bram #(
         .BRAM_DATA_WIDTH(MEM_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
-        .MEM_PATH("bram/mem/mem_bram.mem")
+        .MEM_PATH("mem_bram.mem")
     ) bram4 (
         .clka(clk),
         .addra(lif_mem_addr),
