@@ -93,7 +93,7 @@ module tile_idx_bram #(
                 end else if(bram_step == WAIT) begin
                     if(bram_done > 0) begin
                         //if(has_spk[buff_idx][tile_idx_y_local] || ~used_input[tile_idx_y_local]) begin
-                        if(1) begin
+                        //if(1) begin
                             if(~used_input[tile_idx_y_local]) begin
                                 used_input[tile_idx_y_local] <= 1;
                                 tile_use_input_fifo_din <= 1;
@@ -104,9 +104,9 @@ module tile_idx_bram #(
                             tile_idx_x <= tile_idx_x_local;
                             tile_idx_y <= tile_idx_y_local;
                             tile_idx_fifo_push <= 1; 
-                        end else begin
-                            tile_idx_fifo_push <= 0;
-                        end
+                        //end else begin
+                        //    tile_idx_fifo_push <= 0;
+                        //end
                         bram_step <= INCREMENT;
                         bram_en <= 0;
                     end else begin

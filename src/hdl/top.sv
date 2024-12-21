@@ -23,7 +23,7 @@ module top(
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
     localparam THRESH = 32;
-    localparam FIFO_LENGTH = 3;
+    localparam FIFO_LENGTH = 1;
 
     reg enable;
     assign enable = sw[0];
