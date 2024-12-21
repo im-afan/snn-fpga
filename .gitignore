@@ -8,3 +8,4 @@ vitis/.gitignore
 vitis/.lock
 *.out
 *.vcd
+.wave/*
