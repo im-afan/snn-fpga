@@ -18,12 +18,12 @@ module top(
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam NETWORK_WIDTH = 8;
-    localparam MAX_TILES = 64;
+    localparam MAX_TILES = 256;
     localparam TILE_IDX_WIDTH = 16;
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
     localparam THRESH = 32;
-    localparam FIFO_LENGTH = 1;
+    localparam FIFO_LENGTH = 3;
 
     reg enable;
     assign enable = sw[0];

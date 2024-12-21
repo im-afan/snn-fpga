@@ -2,7 +2,7 @@ import sys
 
 sys.stdout = open("bram.mem", "w")
 
-MAX_TILES = 128
+MAX_TILES = 256
 MAX_NEURONS = 1024
 TILE_IDX_WIDTH = 16
 CROSSBAR_NEURONS = 16

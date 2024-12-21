@@ -237,6 +237,7 @@ module bram_streamer #(
     ) tile_idx_bram_0 (
         .clk(clk),
         .enable(enable),
+        .buff_idx(buff_idx),
         .tile_idx_fifo_full(tile_idx_fifo_full),
         .tile_idx_fifo_push_done(next_ready),
         .tile_idx_fifo_push(tile_idx_fifo_push),

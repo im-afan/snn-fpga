@@ -17,7 +17,7 @@ module top_tb;
     end
 
     initial begin
-        forever #15000 sw = ~sw;
+        forever #150000 sw = ~sw;
     end
 
     initial begin
@@ -29,7 +29,7 @@ module top_tb;
         sw = 0;
         #1000
         sw = 1;
-        #40000
+        #1000000
         //#15000
         $writememb(".wave/spk_mem_dump.mem", top_0.bram_streamer_0.bram1.mem);
         $finish;
