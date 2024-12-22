@@ -61,7 +61,7 @@ module lif_bram #(
 
     output reg [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk_nxt;
 
-    initial has_spk_nxt = 0;
+    //initial has_spk_nxt = 0;
 
     localparam integer SEND = 0;
     localparam integer WAIT = 1;

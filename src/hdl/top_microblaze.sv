@@ -5,8 +5,8 @@ module top_microblaze(
     input wire [15:0] sw,
     output wire [15:0] led,
 
-    input wire uart_rxd,
-    output wire uart_txd
+    input wire usb_uart_rxd,
+    output wire usb_uart_txd
 );
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
@@ -77,5 +77,36 @@ module top_microblaze(
         .cpu_spk_out_dout(cpu_spk_out_dout),
         .cpu_spk_out_en(cpu_spk_out_en),
         .cpu_spk_out_we(cpu_spk_out_we)
-    ) 
+    );
+
+    microblaze_wrapper microblaze (
+        .clk(clk),
+        .rst(1),
+        .uart_rxd(usb_uart_rxd),
+        .uart_txd(usb_uart_txd),
+
+        .BRAM_TILE_IDX_addr(cpu_tile_idx_addr),
+        .BRAM_TILE_IDX_din(cpu_tile_idx_din),
+        .BRAM_TILE_IDX_dout(cpu_tile_idx_dout),
+        .BRAM_TILE_IDX_en(cpu_tile_idx_en),
+        .BRAM_TILE_IDX_we(cpu_tile_idx_we),
+
+        .BRAM_WEIGHT_addr(cpu_weight_addr),
+        .BRAM_WEIGHT_din(cpu_weight_din),
+        .BRAM_WEIGHT_dout(cpu_weight_dout),
+        .BRAM_WEIGHT_en(cpu_weight_en),
+        .BRAM_WEIGHT_we(cpu_weight_we),
+
+        .BRAM_INPUT_addr(cpu_input_addr),
+        .BRAM_INPUT_din(cpu_input_din),
+        .BRAM_INPUT_dout(cpu_input_dout),
+        .BRAM_INPUT_en(cpu_input_en),
+        .BRAM_INPUT_we(cpu_input_we),
+
+        .BRAM_SPK_addr(cpu_spk_out_addr),
+        .BRAM_SPK_din(cpu_spk_out_din),
+        .BRAM_SPK_dout(cpu_spk_out_dout),
+        .BRAM_SPK_en(cpu_spk_out_en),
+        .BRAM_SPK_we(cpu_spk_out_we)       
+    );
 endmodule
