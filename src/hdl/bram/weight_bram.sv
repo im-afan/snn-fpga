@@ -91,7 +91,7 @@ module weight_bram #(
                     bram_we <= 0;
                     weight_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
-                    if(bram_done > 0) begin
+                    if(bram_done > 1) begin
                         weight_fifo_din <= dout;
                         weight_fifo_push <= 1;
                         bram_step <= INCREMENT;

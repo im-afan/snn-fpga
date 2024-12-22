@@ -91,7 +91,7 @@ module tile_idx_bram #(
                     bram_we <= 0;
                     tile_idx_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
-                    if(bram_done > 0) begin
+                    if(bram_done > 1) begin
                         //if(has_spk[buff_idx][tile_idx_y_local] || ~used_input[tile_idx_y_local]) begin
                         //if(1) begin
                             if(~used_input[tile_idx_y_local]) begin

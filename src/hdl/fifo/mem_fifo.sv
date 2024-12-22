@@ -58,7 +58,7 @@ module mem_fifo #(
 				end
                 pop_done <= 1;
 			end	
-			else if(push && ~push_done) begin
+			if(push && ~push_done) begin
 				if(~full) begin
                     buffer[write_ptr] <= din;
                     write_ptr <= (write_ptr + 1) % LENGTH;  // might be probematic race condition??? 

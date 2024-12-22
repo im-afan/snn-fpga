@@ -9,6 +9,7 @@
 `include "scheduler/xbar_scheduler.sv"
 `include "snn/synapse_array.sv"
 `include "snn/lif_array.sv"
+`include "led_controller.sv"
 
 module top(
     input wire clk,
@@ -88,7 +89,13 @@ module top(
     wire lif_bram_enable;
     wire lif_bram_we;
 
-    assign led = lif_spk_out;
+    //assign led = lif_spk_out;
+    led_controller led_controller_0 (
+        .clk(clk),
+        .en(enable),
+        .spk_out(lif_spk_out),
+        .led(led)
+    );
 
     buff_idx_controller buff_idx_controller_0 (
         .clk(clk),

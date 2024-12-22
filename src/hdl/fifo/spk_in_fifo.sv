@@ -48,7 +48,8 @@ module spk_in_fifo #(
 				buffer <= (buffer >> WIDTH);
 				if(~empty) cnt <= cnt-1;
 				pop_done <= 1;
-			end	else if(push && ~push_done) begin
+			end	
+			if(push && ~push_done) begin
 				if(~full) begin
 					buffer <= (buffer | (din << (cnt*WIDTH)));
 					cnt <= cnt+1;	

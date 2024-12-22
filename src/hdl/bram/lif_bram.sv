@@ -122,7 +122,7 @@ module lif_bram #(
                         mem_bram_done <= 0;
                         mem_bram_en <= 1;
                     end else if(mem_bram_step == WAIT) begin
-                        if(mem_bram_done > 0) begin
+                        if(mem_bram_done > 1) begin
                             mem_bram_en <= 0;
                             mem_bram_step <= INCREMENT;
                         end
@@ -140,7 +140,7 @@ module lif_bram #(
                         mem_we_local <= 0;
                         mem_bram_en <= 1;
                     end else if(mem_bram_step == WAIT) begin
-                        if(mem_bram_done > 0) begin
+                        if(mem_bram_done > 1) begin
                             mem_in_flattened <= mem_dout;
                             mem_bram_en <= 0;
                             mem_bram_step <= INCREMENT;
@@ -178,7 +178,7 @@ module lif_bram #(
                         spk_out_bram_done <= 0;
                         spk_out_bram_en <= 1;
                     end else if(spk_out_bram_step == WAIT) begin
-                        if(spk_out_bram_done > 0) begin
+                        if(spk_out_bram_done > 1) begin
                             spk_out_bram_en <= 0;
                             spk_out_bram_step <= INCREMENT;
                         end
@@ -196,7 +196,7 @@ module lif_bram #(
                         spk_out_bram_step <= WAIT;
                         spk_out_bram_en <= 1;
                     end else if(spk_out_bram_step == WAIT) begin
-                        if(spk_out_bram_done > 0) begin
+                        if(spk_out_bram_done > 1) begin
                             spk_in <= spk_out_dout;
                             spk_out_bram_en <= 0;
                             spk_out_bram_step <= INCREMENT;

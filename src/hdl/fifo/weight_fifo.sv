@@ -58,7 +58,8 @@ module weight_fifo #(
                     diff <= diff - DIN_PER_WIDTH;
                 end
 				pop_done <= 1;
-			end	else if(push && ~push_done) begin
+			end
+			if(push && ~push_done) begin
 				if(~full) begin
                     buffer[write_ptr] <= din;
                     write_ptr <= (write_ptr + 1) % (LENGTH*DIN_PER_WIDTH);

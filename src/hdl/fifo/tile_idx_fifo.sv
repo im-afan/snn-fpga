@@ -56,7 +56,8 @@ module tile_idx_fifo #(
 				use_input_buffer <= (use_input_buffer >> 1);
 				if(~empty) cnt <= cnt-1;
 				pop_done <= 1;
-			end	else if(push && ~push_done) begin
+			end	
+			if(push && ~push_done) begin
 				if(~full) begin
 					buffer <= (buffer | (din << (cnt*WIDTH)));
 					use_input_buffer <= (use_input_buffer | (use_input_din << cnt));
