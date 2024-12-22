@@ -12,20 +12,58 @@
 `include "led_controller.sv"
 
 module top(
-    input wire clk,
-    input wire [15:0] sw,
-    output wire [15:0] led
+    clk,
+    sw,
+    led,
+    cpu_tile_idx_addr, cpu_tile_idx_din, cpu_tile_idx_dout, cpu_tile_idx_en, cpu_tile_idx_we,
+    cpu_weight_addr, cpu_weight_din, cpu_weight_dout, cpu_weight_en, cpu_weight_we,
+    cpu_spk_out_addr, cpu_spk_out_din, cpu_spk_out_dout, cpu_spk_out_en, cpu_spk_out_we,
+    cpu_input_addr, cpu_input_din, cpu_input_dout, cpu_input_en, cpu_input_we
 );
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam NETWORK_WIDTH = 8;
-    localparam MAX_TILES = 64;
+    localparam MAX_TILES = 256;
     localparam TILE_IDX_WIDTH = 16;
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
     localparam THRESH = 32;
     localparam FIFO_LENGTH = 1;
 
+    localparam WEIGHT_BRAM_DATA_WIDTH = BRAM_DATA_WIDTH;
+    localparam INPUT_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
+    localparam SPK_IN_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
+    localparam SPK_OUT_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
+    localparam MEM_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
+    localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
+
+    input wire clk;
+    input wire [15:0] sw;
+    output wire [15:0] led;
+
+    input wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
+    input wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
+    output wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_dout;
+    input wire [TILE_IDX_BRAM_DATA_WIDTH/8-1:0] cpu_tile_idx_we;
+    input wire cpu_tile_idx_en;
+
+    input wire [BRAM_ADDR_WIDTH-1:0] cpu_weight_addr;
+    input wire [WEIGHT_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
+    output wire [WEIGHT_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
+    input wire [WEIGHT_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
+    input wire cpu_weight_en;
+
+    input wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_out_addr;
+    input wire [SPK_OUT_BRAM_DATA_WIDTH-1:0] cpu_spk_out_din;
+    output wire [SPK_OUT_BRAM_DATA_WIDTH-1:0] cpu_spk_out_dout;
+    input wire [SPK_OUT_BRAM_DATA_WIDTH/8-1:0] cpu_spk_out_we;
+    input wire cpu_spk_out_en;
+
+    input wire [BRAM_ADDR_WIDTH-1:0] cpu_input_addr;
+    input wire [INPUT_BRAM_DATA_WIDTH-1:0] cpu_input_din;
+    output wire [INPUT_BRAM_DATA_WIDTH-1:0] cpu_input_dout;
+    input wire [INPUT_BRAM_DATA_WIDTH/8-1:0] cpu_input_we;
+    input wire cpu_input_en;
 
     reg enable;
     assign enable = sw[0];
@@ -97,11 +135,11 @@ module top(
         .led(led)
     );
 
-    buff_idx_controller buff_idx_controller_0 (
+    /*buff_idx_controller buff_idx_controller_0 (
         .clk(clk),
         .en(enable),
         .buff_idx(buff_idx)
-    );
+    );*/
 
     bram_streamer #(
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -113,7 +151,7 @@ module top(
     ) bram_streamer_0 (
         .clk(clk),
         .enable(enable),
-        .buff_idx(buff_idx),
+        //.buff_idx(buff_idx),
         .weight_fifo_full(weight_fifo_full),
         .weight_fifo_push_done(weight_fifo_push_done),
         .weight_fifo_push(weight_fifo_push),
@@ -139,7 +177,31 @@ module top(
         .lif_bram_enable(lif_bram_enable),
         .lif_bram_we(lif_bram_we),
         .lif_tile_idx_x(tile_idx_x),
-        .lif_tile_idx_y(tile_idx_y)
+        .lif_tile_idx_y(tile_idx_y),
+
+        .cpu_tile_idx_addr(cpu_tile_idx_addr),
+        .cpu_tile_idx_din(cpu_tile_idx_din),
+        .cpu_tile_idx_dout(cpu_tile_idx_dout),
+        .cpu_tile_idx_en(cpu_tile_idx_en),
+        .cpu_tile_idx_we(cpu_tile_idx_we),
+
+        .cpu_weight_addr(cpu_weight_addr),
+        .cpu_weight_din(cpu_weight_din),
+        .cpu_weight_dout(cpu_weight_dout),
+        .cpu_weight_en(cpu_weight_en),
+        .cpu_weight_we(cpu_weight_we),
+
+        .cpu_input_addr(cpu_input_addr),
+        .cpu_input_din(cpu_input_din),
+        .cpu_input_dout(cpu_input_dout),
+        .cpu_input_en(cpu_input_en),
+        .cpu_input_we(cpu_input_we),
+
+        .cpu_spk_out_addr(cpu_spk_out_addr),
+        .cpu_spk_out_din(cpu_spk_out_din),
+        .cpu_spk_out_dout(cpu_spk_out_dout),
+        .cpu_spk_out_en(cpu_spk_out_en),
+        .cpu_spk_out_we(cpu_spk_out_we)
     );
 
     weight_fifo #(

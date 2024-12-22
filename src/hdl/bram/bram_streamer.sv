@@ -17,7 +17,7 @@ module bram_streamer #(
     clk,
     enable,
 
-    buff_idx,
+    //buff_idx,
 
     weight_fifo_full,
     weight_fifo_push_done,
@@ -43,19 +43,25 @@ module bram_streamer #(
     lif_mem_out, lif_spk_out,
     lif_mem_in, lif_spk_in,
     lif_bram_done, lif_bram_enable, lif_bram_we,
-    lif_tile_idx_x, lif_tile_idx_y
+    lif_tile_idx_x, lif_tile_idx_y,
+
+    cpu_tile_idx_addr, cpu_tile_idx_din, cpu_tile_idx_dout, cpu_tile_idx_en, cpu_tile_idx_we,
+    cpu_weight_addr, cpu_weight_din, cpu_weight_dout, cpu_weight_en, cpu_weight_we,
+    cpu_spk_out_addr, cpu_spk_out_din, cpu_spk_out_dout, cpu_spk_out_en, cpu_spk_out_we,
+    cpu_input_addr, cpu_input_din, cpu_input_dout, cpu_input_en, cpu_input_we,
 );
 
     localparam WEIGHT_BRAM_DATA_WIDTH = MAX_BRAM_DATA_WIDTH;
     localparam INPUT_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
     localparam SPK_IN_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
+    localparam SPK_OUT_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
     localparam MEM_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
     localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
 
     input wire clk;
     input wire enable;
 
-    input wire buff_idx;
+    //input wire buff_idx;
 
     input wire weight_fifo_full;
     input wire weight_fifo_push_done;
@@ -88,6 +94,32 @@ module bram_streamer #(
     input wire [TILE_IDX_WIDTH-1:0] lif_tile_idx_x;
     input wire [TILE_IDX_WIDTH-1:0] lif_tile_idx_y;
 
+
+    input wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
+    input wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
+    output wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_dout;
+    input wire [TILE_IDX_BRAM_DATA_WIDTH/8-1:0] cpu_tile_idx_we;
+    input wire cpu_tile_idx_en;
+
+    input wire [BRAM_ADDR_WIDTH-1:0] cpu_weight_addr;
+    input wire [WEIGHT_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
+    output wire [WEIGHT_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
+    input wire [WEIGHT_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
+    input wire cpu_weight_en;
+
+    input wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_out_addr;
+    input wire [SPK_OUT_BRAM_DATA_WIDTH-1:0] cpu_spk_out_din;
+    output wire [SPK_OUT_BRAM_DATA_WIDTH-1:0] cpu_spk_out_dout;
+    input wire [SPK_OUT_BRAM_DATA_WIDTH/8-1:0] cpu_spk_out_we;
+    input wire cpu_spk_out_en;
+
+    input wire [BRAM_ADDR_WIDTH-1:0] cpu_input_addr;
+    input wire [INPUT_BRAM_DATA_WIDTH-1:0] cpu_input_din;
+    output wire [INPUT_BRAM_DATA_WIDTH-1:0] cpu_input_dout;
+    input wire [INPUT_BRAM_DATA_WIDTH/8-1:0] cpu_input_we;
+    input wire cpu_input_en;
+
+    wire buff_idx;
 
     wire [BRAM_ADDR_WIDTH-1:0]  addr_tile_idx;
     wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] dout_tile_idx;
@@ -131,14 +163,12 @@ module bram_streamer #(
     wire lif_spk_out_bram_rst;
     wire [CROSSBAR_NEURONS/8-1:0] lif_spk_out_bram_we;
 
-
     wire [BRAM_ADDR_WIDTH-1:0] lif_mem_addr;
     wire [MEM_BRAM_DATA_WIDTH-1:0] lif_mem_dout;
     wire [MEM_BRAM_DATA_WIDTH-1:0] lif_mem_din;
     wire lif_mem_bram_en;
     wire lif_mem_bram_rst;
     wire [MEM_BRAM_DATA_WIDTH/8-1:0] lif_mem_bram_we;
-
 
     wire [TILE_IDX_WIDTH-1:0] tile_idx;
     wire [TILE_IDX_WIDTH-1:0] tile_idx_x;
@@ -154,7 +184,21 @@ module bram_streamer #(
     assign next_ready = weight_bram_done && input_bram_done 
                     && spk_in_bram_done && tile_idx_fifo_push_done;
 
-    wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] doutb0;
+    wire [MAX_NEURONS/CROSSBAR_NEURONS-1 : 0] has_spk;
+    wire [MAX_NEURONS/CROSSBAR_NEURONS-1 : 0] has_spk_nxt;
+
+    buff_idx_controller #(
+        .MAX_NEURONS(MAX_NEURONS),
+        .CROSSBAR_NEURONS(CROSSBAR_NEURONS)   
+    ) buff_idx_controller_0 (
+        .clk(clk),
+        .en(enable),
+        .has_spk(has_spk),
+        .buff_idx(buff_idx),
+        .has_spk_nxt(has_spk_nxt)
+    );
+
+    //wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] doutb0;
     dual_port_bram #(
         .BRAM_DATA_WIDTH(TILE_IDX_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -166,12 +210,12 @@ module bram_streamer #(
         .douta(dout_tile_idx),
         .wea(bram_we_tile_idx),
         .ena(bram_en_tile_idx),
-        .clkb(0),
-        .addrb(0),
-        .dinb(0),
-        .doutb(doutb0),
-        .web(0),
-        .enb(0)
+        .clkb(clk),
+        .addrb(cpu_tile_idx_addr),
+        .dinb(cpu_tile_idx_din),
+        .doutb(cpu_tile_idx_dout),
+        .web(cpu_tile_idx_we),
+        .enb(cpu_tile_idx_en)
     );
     
     wire [SPK_IN_BRAM_DATA_WIDTH-1:0] doutb1;
@@ -195,7 +239,7 @@ module bram_streamer #(
         .enb(lif_spk_out_bram_en)
     );
 
-    wire [WEIGHT_BRAM_DATA_WIDTH-1:0] doutb2;
+    //wire [WEIGHT_BRAM_DATA_WIDTH-1:0] doutb2;
     dual_port_bram #(
         .BRAM_DATA_WIDTH(WEIGHT_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -207,15 +251,15 @@ module bram_streamer #(
         .douta(dout_weight),
         .wea(bram_we_weight),
         .ena(bram_en_weight),
-        .clkb(0),
-        .addrb(0),
-        .dinb(0),
-        .doutb(doutb2),
-        .web(0),
-        .enb(0)
+        .clkb(clk),
+        .addrb(cpu_weight_addr),
+        .dinb(cpu_weight_din),
+        .doutb(cpu_weight_dout),
+        .web(cpu_weight_we),
+        .enb(cpu_weight_en)
     );
 
-    wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb3;
+    //wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb3;
     dual_port_bram #(
         .BRAM_DATA_WIDTH(INPUT_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -227,15 +271,15 @@ module bram_streamer #(
         .douta(dout_input),
         .wea(bram_we_input),
         .ena(bram_en_input),
-        .clkb(0),
-        .addrb(0),
-        .dinb(0),
-        .doutb(doutb3),
-        .web(0),
-        .enb(0)
+        .clkb(clk),
+        .addrb(cpu_input_addr),
+        .dinb(cpu_input_din),
+        .doutb(cpu_input_dout),
+        .web(cpu_input_we),
+        .enb(cpu_input_en)
     );
 
-    wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb4;
+    //wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb4;
     dual_port_bram #(
         .BRAM_DATA_WIDTH(MEM_BRAM_DATA_WIDTH),
         .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
@@ -250,9 +294,31 @@ module bram_streamer #(
         .clkb(0),
         .addrb(0),
         .dinb(0),
-        .doutb(doutb4),
+        .doutb(),
         .web(0),
         .enb(0)
+    );
+
+    wire [SPK_IN_BRAM_DATA_WIDTH-1:0] doutb5; // FOR SPK_OUT FOR CPU READING
+    wire [SPK_IN_BRAM_DATA_WIDTH-1:0] lif_spk_out_addr_mod;
+    assign lif_spk_out_addr_mod = lif_spk_out_addr % (MAX_NEURONS / CROSSBAR_NEURONS); // get rid of buff_idx addressing
+    dual_port_bram #(
+        .BRAM_DATA_WIDTH(SPK_IN_BRAM_DATA_WIDTH),
+        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+        .MEM_PATH("spk_in_bram.mem")
+    ) bram5 (
+        .clka(clk),
+        .addra(lif_spk_out_addr_mod),
+        .dina(lif_spk_out_din),
+        .douta(lif_spk_out_dout),
+        .wea(lif_spk_out_bram_we),
+        .ena(lif_spk_out_bram_en),
+        .clkb(clk),
+        .addrb(cpu_spk_out_addr),
+        .dinb(cpu_spk_out_din),
+        .doutb(cpu_spk_out_dout),
+        .web(cpu_spk_out_we),
+        .enb(cpu_spk_out_en)
     );
 
     tile_idx_bram #(
@@ -267,6 +333,7 @@ module bram_streamer #(
         .clk(clk),
         .enable(enable),
         .buff_idx(buff_idx),
+        .has_spk(has_spk),
         .tile_idx_fifo_full(tile_idx_fifo_full),
         .tile_idx_fifo_push_done(next_ready),
         .tile_idx_fifo_push(tile_idx_fifo_push),
@@ -379,6 +446,7 @@ module bram_streamer #(
     ) lif_bram_0 (
         .clk(clk),
         .enable(lif_bram_enable),
+        .has_spk_nxt(has_spk_nxt),
         .buff_idx(buff_idx),
         .we(lif_bram_we),
         .tile_idx_x(lif_tile_idx_x),

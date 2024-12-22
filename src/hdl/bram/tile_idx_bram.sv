@@ -23,8 +23,7 @@ module tile_idx_bram #(
 
     input wire buff_idx,
     
-    //input wire [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk [2], // for skipping nonspikes
-    //input wire [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk [2], // for skipping nonspikes
+    input wire [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk, // for skipping nonspikes
 
     input wire tile_idx_fifo_full,
     input wire tile_idx_fifo_push_done,
@@ -69,10 +68,11 @@ module tile_idx_bram #(
     assign tile_idx_y_local = dout[2*TILE_IDX_WIDTH-1:TILE_IDX_WIDTH];
     //assign tile_idx_x = tile_idx_x_local;
     //assign tile_idx_y = tile_idx_y_local;
+    //reg [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk [2]; // for skipping nonspike tiles
+    //assign has_spk[0] = ~0;
+    //assign has_spk[1] = ~0;
+    
     reg [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] used_input;  // only use network input for the 1st cycle with that tile
-    reg [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk [2]; // for skipping nonspike tiles
-    assign has_spk[0] = ~0;
-    assign has_spk[1] = ~0;
 
     always_ff @(posedge clk) begin
         if(~enable) begin
@@ -92,8 +92,7 @@ module tile_idx_bram #(
                     tile_idx_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
                     if(bram_done > 1) begin
-                        //if(has_spk[buff_idx][tile_idx_y_local] || ~used_input[tile_idx_y_local]) begin
-                        //if(1) begin
+                        if(has_spk[tile_idx_y_local] || ~used_input[tile_idx_y_local]) begin
                             if(~used_input[tile_idx_y_local]) begin
                                 used_input[tile_idx_y_local] <= 1;
                                 tile_use_input_fifo_din <= 1;
@@ -104,9 +103,9 @@ module tile_idx_bram #(
                             tile_idx_x <= tile_idx_x_local;
                             tile_idx_y <= tile_idx_y_local;
                             tile_idx_fifo_push <= 1; 
-                        //end else begin
-                        //    tile_idx_fifo_push <= 0;
-                        //end
+                        end else begin
+                            tile_idx_fifo_push <= 0;
+                        end
                         bram_step <= INCREMENT;
                         bram_en <= 0;
                     end else begin

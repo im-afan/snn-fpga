@@ -14,7 +14,7 @@ mem = [0 for i in range(MAX_NEURONS)]
 snn_in = [0 for i in range(MAX_NEURONS)]
 
 snn_in[0] = 32;
-snn_in[1] = 32;
+snn_in[1] = 0;
 snn_in[3] = 32;
 
 tile[0][0][4] = 32;

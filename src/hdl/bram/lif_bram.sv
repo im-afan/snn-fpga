@@ -21,7 +21,8 @@ module lif_bram #(
     mem_in, spk_in,
     done,
     mem_addr, mem_dout, mem_din, mem_bram_en, mem_bram_rst, mem_bram_we,
-    spk_out_addr, spk_out_dout, spk_out_din, spk_out_bram_en, spk_out_bram_rst, spk_out_bram_we
+    spk_out_addr, spk_out_dout, spk_out_din, spk_out_bram_en, spk_out_bram_rst, spk_out_bram_we,
+    has_spk_nxt
 );
     localparam integer MEM_BRAM_DATA_WIDTH = CROSSBAR_NEURONS * NETWORK_WIDTH;
     localparam integer SPK_IN_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
@@ -58,7 +59,9 @@ module lif_bram #(
     output reg spk_out_bram_rst;
     output wire [SPK_IN_BRAM_DATA_WIDTH/8-1:0] spk_out_bram_we;
 
+    output reg [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk_nxt;
 
+    initial has_spk_nxt = 0;
 
     localparam integer SEND = 0;
     localparam integer WAIT = 1;
@@ -177,6 +180,7 @@ module lif_bram #(
                         spk_out_bram_step <= WAIT;
                         spk_out_bram_done <= 0;
                         spk_out_bram_en <= 1;
+                        has_spk_nxt[tile_idx_y] <= (|spk_out);
                     end else if(spk_out_bram_step == WAIT) begin
                         if(spk_out_bram_done > 1) begin
                             spk_out_bram_en <= 0;
@@ -188,6 +192,7 @@ module lif_bram #(
                         spk_out_bram_step <= SEND;
                     end
                 end 
+
                 else begin
                     if(spk_out_bram_step == SEND) begin
                         spk_out_addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
