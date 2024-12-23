@@ -4,6 +4,8 @@
 `include "bram/weight_bram.sv"
 `include "bram/input_bram.sv"
 `include "bram/lif_bram.sv"
+`include "bram/simple_dual_port_bram.sv"
+`include "bram/asymmetric_dual_port_bram.sv"
 
 module bram_streamer #(
     parameter MAX_BRAM_DATA_WIDTH = 1024,
@@ -48,7 +50,7 @@ module bram_streamer #(
     cpu_tile_idx_addr, cpu_tile_idx_din, cpu_tile_idx_dout, cpu_tile_idx_en, cpu_tile_idx_we,
     cpu_weight_addr, cpu_weight_din, cpu_weight_dout, cpu_weight_en, cpu_weight_we,
     cpu_spk_out_addr, cpu_spk_out_din, cpu_spk_out_dout, cpu_spk_out_en, cpu_spk_out_we,
-    cpu_input_addr, cpu_input_din, cpu_input_dout, cpu_input_en, cpu_input_we,
+    cpu_input_addr, cpu_input_din, cpu_input_dout, cpu_input_en, cpu_input_we
 );
 
     localparam WEIGHT_BRAM_DATA_WIDTH = MAX_BRAM_DATA_WIDTH;
@@ -94,29 +96,30 @@ module bram_streamer #(
     input wire [TILE_IDX_WIDTH-1:0] lif_tile_idx_x;
     input wire [TILE_IDX_WIDTH-1:0] lif_tile_idx_y;
 
+    localparam integer CPU_BRAM_DATA_WIDTH = 32;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
-    input wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
-    output wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_dout;
-    input wire [TILE_IDX_BRAM_DATA_WIDTH/8-1:0] cpu_tile_idx_we;
+    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
+    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_dout;
+    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_tile_idx_we;
     input wire cpu_tile_idx_en;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_weight_addr;
-    input wire [WEIGHT_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
-    output wire [WEIGHT_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
-    input wire [WEIGHT_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
+    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
+    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
+    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
     input wire cpu_weight_en;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_out_addr;
-    input wire [SPK_OUT_BRAM_DATA_WIDTH-1:0] cpu_spk_out_din;
-    output wire [SPK_OUT_BRAM_DATA_WIDTH-1:0] cpu_spk_out_dout;
-    input wire [SPK_OUT_BRAM_DATA_WIDTH/8-1:0] cpu_spk_out_we;
+    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_out_din;
+    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_out_dout;
+    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_spk_out_we;
     input wire cpu_spk_out_en;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_input_addr;
-    input wire [INPUT_BRAM_DATA_WIDTH-1:0] cpu_input_din;
-    output wire [INPUT_BRAM_DATA_WIDTH-1:0] cpu_input_dout;
-    input wire [INPUT_BRAM_DATA_WIDTH/8-1:0] cpu_input_we;
+    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_din;
+    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_dout;
+    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_input_we;
     input wire cpu_input_en;
 
     wire buff_idx;
@@ -198,10 +201,11 @@ module bram_streamer #(
         .has_spk_nxt(has_spk_nxt)
     );
 
-    //wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] doutb0;
-    dual_port_bram #(
-        .BRAM_DATA_WIDTH(TILE_IDX_BRAM_DATA_WIDTH),
-        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+    asymmetric_dual_port_bram #(
+        .DATA_WIDTH_A(TILE_IDX_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
+        .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
         .MEM_PATH("tile_idx_bram.mem")
     ) bram0 (
         .clka(clk),
@@ -210,18 +214,20 @@ module bram_streamer #(
         .douta(dout_tile_idx),
         .wea(bram_we_tile_idx),
         .ena(bram_en_tile_idx),
+
         .clkb(clk),
         .addrb(cpu_tile_idx_addr),
-        .dinb(cpu_tile_idx_din),
         .doutb(cpu_tile_idx_dout),
+        .dinb(cpu_tile_idx_din),
         .web(cpu_tile_idx_we),
         .enb(cpu_tile_idx_en)
     );
     
-    wire [SPK_IN_BRAM_DATA_WIDTH-1:0] doutb1;
-    dual_port_bram #(
-        .BRAM_DATA_WIDTH(SPK_IN_BRAM_DATA_WIDTH),
-        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+    asymmetric_dual_port_bram #(
+        .DATA_WIDTH_A(SPK_IN_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
+        .DATA_WIDTH_B(SPK_IN_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
         .MEM_PATH("spk_in_bram.mem")
     ) bram1 (
         .clka(clk),
@@ -240,49 +246,57 @@ module bram_streamer #(
     );
 
     //wire [WEIGHT_BRAM_DATA_WIDTH-1:0] doutb2;
-    dual_port_bram #(
-        .BRAM_DATA_WIDTH(WEIGHT_BRAM_DATA_WIDTH),
-        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+    asymmetric_dual_port_bram #(
+        .DATA_WIDTH_A(WEIGHT_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
+        .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
         .MEM_PATH("weight_bram.mem")
     ) bram2 (
         .clka(clk),
         .addra(addr_weight),
-        .dina(din_weight),
         .douta(dout_weight),
+        .dina(din_weight),
         .wea(bram_we_weight),
         .ena(bram_en_weight),
+
         .clkb(clk),
         .addrb(cpu_weight_addr),
-        .dinb(cpu_weight_din),
         .doutb(cpu_weight_dout),
+        .dinb(cpu_weight_din),
         .web(cpu_weight_we),
         .enb(cpu_weight_en)
     );
 
     //wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb3;
-    dual_port_bram #(
-        .BRAM_DATA_WIDTH(INPUT_BRAM_DATA_WIDTH),
-        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+    asymmetric_dual_port_bram #(
+        .DATA_WIDTH_A(INPUT_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
+        .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
         .MEM_PATH("input_bram.mem")
     ) bram3 (
         .clka(clk),
         .addra(addr_input),
-        .dina(din_input),
         .douta(dout_input),
+        .dina(din_input),
         .wea(bram_we_input),
         .ena(bram_en_input),
+
         .clkb(clk),
         .addrb(cpu_input_addr),
-        .dinb(cpu_input_din),
         .doutb(cpu_input_dout),
+        .dinb(cpu_input_din),
         .web(cpu_input_we),
         .enb(cpu_input_en)
     );
 
     //wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb4;
-    dual_port_bram #(
-        .BRAM_DATA_WIDTH(MEM_BRAM_DATA_WIDTH),
-        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+    asymmetric_dual_port_bram #(
+        .DATA_WIDTH_A(MEM_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
+        .DATA_WIDTH_B(MEM_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
         .MEM_PATH("mem_bram.mem")
     ) bram4 (
         .clka(clk),
@@ -299,26 +313,29 @@ module bram_streamer #(
         .enb(0)
     );
 
-    wire [SPK_IN_BRAM_DATA_WIDTH-1:0] doutb5; // FOR SPK_OUT FOR CPU READING
     wire [SPK_IN_BRAM_DATA_WIDTH-1:0] lif_spk_out_addr_mod;
     assign lif_spk_out_addr_mod = lif_spk_out_addr % (MAX_NEURONS / CROSSBAR_NEURONS); // get rid of buff_idx addressing
-    dual_port_bram #(
-        .BRAM_DATA_WIDTH(SPK_IN_BRAM_DATA_WIDTH),
-        .BRAM_ADDR_WIDTH(BRAM_ADDR_WIDTH),
+    asymmetric_dual_port_bram #(
+        .DATA_WIDTH_B(SPK_IN_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
+        .DATA_WIDTH_A(CPU_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
         .MEM_PATH("spk_in_bram.mem")
     ) bram5 (
         .clka(clk),
-        .addra(lif_spk_out_addr_mod),
-        .dina(lif_spk_out_din),
-        .douta(lif_spk_out_dout),
-        .wea(lif_spk_out_bram_we),
-        .ena(lif_spk_out_bram_en),
+        .addra(cpu_spk_out_addr),
+        .dina(cpu_spk_out_din),
+        .douta(cpu_spk_out_dout),
+        .wea(cpu_spk_out_we),
+        .ena(cpu_spk_out_en),
+
         .clkb(clk),
-        .addrb(cpu_spk_out_addr),
-        .dinb(cpu_spk_out_din),
-        .doutb(cpu_spk_out_dout),
-        .web(cpu_spk_out_we),
-        .enb(cpu_spk_out_en)
+        .addrb(lif_spk_out_addr_mod),
+        //.doutb(lif_spk_out_dout),
+        .doutb(),
+        .dinb(lif_spk_out_din),
+        .web(lif_spk_out_bram_we),
+        .enb(lif_spk_out_bram_en)
     );
 
     tile_idx_bram #(

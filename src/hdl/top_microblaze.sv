@@ -11,7 +11,7 @@ module top_microblaze(
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam NETWORK_WIDTH = 8;
-    localparam MAX_TILES = 256;
+    localparam MAX_TILES = 64;
     localparam TILE_IDX_WIDTH = 16;
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
@@ -25,28 +25,30 @@ module top_microblaze(
     localparam MEM_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
     localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
 
+    localparam CPU_BRAM_DATA_WIDTH = 32;
+
     wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
-    wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
-    wire [TILE_IDX_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_dout;
-    wire [TILE_IDX_BRAM_DATA_WIDTH/8-1:0] cpu_tile_idx_we;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_dout;
+    wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_tile_idx_we;
     wire cpu_tile_idx_en;
 
     wire [BRAM_ADDR_WIDTH-1:0] cpu_weight_addr;
-    wire [WEIGHT_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
-    wire [WEIGHT_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
-    wire [WEIGHT_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
+    wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
     wire cpu_weight_en;
 
     wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_out_addr;
-    wire [SPK_OUT_BRAM_DATA_WIDTH-1:0] cpu_spk_out_din;
-    wire [SPK_OUT_BRAM_DATA_WIDTH-1:0] cpu_spk_out_dout;
-    wire [SPK_OUT_BRAM_DATA_WIDTH/8-1:0] cpu_spk_out_we;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_out_din;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_out_dout;
+    wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_spk_out_we;
     wire cpu_spk_out_en;
 
     wire [BRAM_ADDR_WIDTH-1:0] cpu_input_addr;
-    wire [INPUT_BRAM_DATA_WIDTH-1:0] cpu_input_din;
-    wire [INPUT_BRAM_DATA_WIDTH-1:0] cpu_input_dout;
-    wire [INPUT_BRAM_DATA_WIDTH/8-1:0] cpu_input_we;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_din;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_dout;
+    wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_input_we;
     wire cpu_input_en;
 
     top top_0 (

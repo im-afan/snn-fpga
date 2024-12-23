@@ -11,14 +11,10 @@
 `include "snn/lif_array.sv"
 `include "led_controller.sv"
 
-module top(
+module top_standalone(
     clk,
     sw,
-    led,
-    cpu_tile_idx_addr, cpu_tile_idx_din, cpu_tile_idx_dout, cpu_tile_idx_en, cpu_tile_idx_we,
-    cpu_weight_addr, cpu_weight_din, cpu_weight_dout, cpu_weight_en, cpu_weight_we,
-    cpu_spk_out_addr, cpu_spk_out_din, cpu_spk_out_dout, cpu_spk_out_en, cpu_spk_out_we,
-    cpu_input_addr, cpu_input_din, cpu_input_dout, cpu_input_en, cpu_input_we
+    led
 );
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
@@ -43,29 +39,29 @@ module top(
     input wire [15:0] sw;
     output wire [15:0] led;
 
-    input wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
-    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
-    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_dout;
-    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_tile_idx_we;
-    input wire cpu_tile_idx_en;
+    wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_dout;
+    wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_tile_idx_we;
+    wire cpu_tile_idx_en;
 
-    input wire [BRAM_ADDR_WIDTH-1:0] cpu_weight_addr;
-    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
-    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
-    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
-    input wire cpu_weight_en;
+    wire [BRAM_ADDR_WIDTH-1:0] cpu_weight_addr;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
+    wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
+    wire cpu_weight_en;
 
-    input wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_out_addr;
-    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_out_din;
-    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_out_dout;
-    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_spk_out_we;
-    input wire cpu_spk_out_en;
+    wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_out_addr;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_out_din;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_out_dout;
+    wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_spk_out_we;
+    wire cpu_spk_out_en;
 
-    input wire [BRAM_ADDR_WIDTH-1:0] cpu_input_addr;
-    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_din;
-    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_dout;
-    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_input_we;
-    input wire cpu_input_en;
+    wire [BRAM_ADDR_WIDTH-1:0] cpu_input_addr;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_din;
+    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_dout;
+    wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_input_we;
+    wire cpu_input_en;
 
     reg enable;
     assign enable = sw[0];

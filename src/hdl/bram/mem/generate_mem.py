@@ -17,6 +17,8 @@ snn_in[0] = 32;
 snn_in[1] = 0;
 snn_in[3] = 32;
 
+snn_in[47] = 32;
+
 tile[0][0][4] = 32;
 tile[0][0][5] = -32;
 tile[0][1][4] = -32;
@@ -44,10 +46,20 @@ tile[0][10][11] = 32;
 
 tile[1][0][15] = 32;
 
-
 for i in range(MAX_TILES):
 	tile_idx[i] = [i // 8, i % 8]
 
+#DEBUGGING
+"""
+for i in range(MAX_TILES):
+    tile_idx[i] = [1, 1]
+
+for i in range(MAX_NEURONS):
+    snn_in[i] = 0;
+
+for i in range(CROSSBAR_NEURONS):
+    snn_in[i+CROSSBAR_NEURONS] = 32
+"""
 def bin_(num, bit_width=8):
     """Convert a signed decimal number to binary with a fixed bit width."""
     if num < 0:
@@ -67,8 +79,10 @@ def endian(binary_string, width=8):
     return big_endian_string
 
 def printmem(memory, path, width, depth, rev=False, bytewidth=8):
+    #width1 = 32
+    #depth = 256
     with open(path, "w+") as sys.stdout:
-        for i in range(0, depth):
+        for i in range(0, depth * width):
             s = ''.join(memory[i*width : (i+1)*width])
             if(rev):
                 s = endian(s, bytewidth)

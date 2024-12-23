@@ -13,7 +13,7 @@
 int main()
 {
     init_platform();
-    //write_model();
+    write_model();
 	read_model();
 
     print("\n\r--------BEGINNING SNN INFERENCE--------------\n\r");

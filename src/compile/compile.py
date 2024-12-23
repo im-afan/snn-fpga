@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 MAX_NEURONS = 1024
 MAX_TILES = 64
 NEURONS_PER_TILE = 16
-THRESH = 127 # for weight quantization
+THRESH = 32 # for weight quantization
 
 # compile MLP from snntorch
 # only supports 1 membrane potential across all neurons
@@ -34,7 +34,7 @@ def compile(model): # compile MLP
 
         in_neurons = weight.shape[1]
         out_neurons = weight.shape[0]
-        
+
         in_idx = neuron_idx
         out_idx = neuron_idx + round_up(in_neurons) 
 
@@ -88,19 +88,19 @@ def compile_to_c(model, img=None, spk=None, mem=None):
     print("}")
 
 def compile_to_uart(model, img=None, spk_out=None, mem=None):
-	ser = serial.Serial("/dev/USB0", baudrate=115200)		
+    ser = serial.Serial("/dev/USB0", baudrate=115200)		
 
-	for i in range(len(tiles)):
-			ser.write(f"0 {i} {tile_idx[i][0]} {tile_idx[i][1]}\n")
-			for x in range(NEURONS_PER_TILE):
-				for y in range(NEURONS_PER_TILE):
-					ser.write(f"1 {i} {x} {y} {int(tiles[i][y][x])}\n")
+    for i in range(len(tiles)):
+        ser.write(f"0 {i} {tile_idx[i][0]} {tile_idx[i][1]}\n")
+        for x in range(NEURONS_PER_TILE):
+            for y in range(NEURONS_PER_TILE):
+                ser.write(f"1 {i} {x} {y} {int(tiles[i][y][x])}\n")
 
     if(img is not None):
         for i in range(64):
             ser.write(f"2 {i} {int(round(img[i].item() * THRESH))}\n")
 
-	ser.write("end\n")
+    ser.write("end\n")
 
 
 if __name__ == "__main__":
@@ -110,11 +110,11 @@ if __name__ == "__main__":
     except Exception:
         pass
 
-	try:
-		mode = sys.argv[1]
-	except Exception:
-		mode = "c"	
-    
+    try:
+        mode = sys.argv[1]
+    except Exception:
+        mode = "c"	
+
     model = Net()
     state_dict = torch.load("./mnist_16x16_spk.h5", weights_only=True)
     model.load_state_dict(state_dict)
@@ -125,7 +125,7 @@ if __name__ == "__main__":
         transforms.Grayscale(),
         transforms.ToTensor(),
         multiply
-    ])
+        ])
 
     data_path='/tmp/data/mnist'
     mnist_test = datasets.MNIST(data_path, train=False, download=True, transform=transform)
@@ -135,8 +135,8 @@ if __name__ == "__main__":
     model.quantize(torch.tensor(THRESH))
     spk0, spk1, spk2, mem1 = model((img.view(1, -1) * THRESH).round(), debug=True)
 
-	if(mode == "c"):
-		#tile_idx, tiles = compile(model)
-		compile_to_c(model, img=img.view(8*8), spk=[spk0, spk1, spk2], mem=[None, mem1, None])
-	elif(mode == "uart"):
-		compile_to_uart(model, img=img.view(8*8))
+    if(mode == "c"):
+        #tile_idx, tiles = compile(model)
+        compile_to_c(model, img=img.view(8*8), spk=[spk0, spk1, spk2], mem=[None, mem1, None])
+    elif(mode == "uart"):
+        compile_to_uart(model, img=img.view(8*8))

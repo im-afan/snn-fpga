@@ -6,27 +6,37 @@
  * True dual-port RAM
  */
 
+`ifndef DUAL_PORT_BRAM
+`define DUAL_PORT_BRAM
+
 module dual_port_bram #(
-    parameter BRAM_DATA_WIDTH,
-    parameter BRAM_ADDR_WIDTH,
+    parameter DATA_WIDTH_A,
+    parameter DATA_WIDTH_B,
+    parameter ADDR_WIDTH_A,
+    parameter ADDR_WIDTH_B,
     parameter MEM_PATH
 )(
-    input wire clka,
+    clka, addra, dina, douta, wea, ena,
+    clkb, addrb, dinb, doutb, web, enb 
+);
+    localparam BRAM_DATA_WIDTH = DATA_WIDTH_A;
+    localparam BRAM_ADDR_WIDTH = ADDR_WIDTH_A;
+
+    input wire clka;
     // Port A signals
-    input wire [BRAM_ADDR_WIDTH-1:0] addra,
-    input wire [BRAM_DATA_WIDTH-1:0] dina,
-    output reg [BRAM_DATA_WIDTH-1:0] douta,
-    input wire [BRAM_DATA_WIDTH/8-1:0] wea, // Byte-enable for write
-    input wire ena,
+    input wire [BRAM_ADDR_WIDTH-1:0] addra;
+    input wire [BRAM_DATA_WIDTH-1:0] dina;
+    output reg [BRAM_DATA_WIDTH-1:0] douta;
+    input wire [BRAM_DATA_WIDTH/8-1:0] wea; // Byte-enable for write
+    input wire ena;
     
     // Port B signals
-    input wire clkb,
-    input wire [BRAM_ADDR_WIDTH-1:0] addrb,
-    input wire [BRAM_DATA_WIDTH-1:0] dinb,
-    output reg [BRAM_DATA_WIDTH-1:0] doutb,
-    input wire [BRAM_DATA_WIDTH/8-1:0] web, // Byte-enable for write
-    input wire enb
-);
+    input wire clkb;
+    input wire [BRAM_ADDR_WIDTH-1:0] addrb;
+    input wire [BRAM_DATA_WIDTH-1:0] dinb;
+    output reg [BRAM_DATA_WIDTH-1:0] doutb;
+    input wire [BRAM_DATA_WIDTH/8-1:0] web; // Byte-enable for write
+    input wire enb;
 
     localparam BASE_PATH = "C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/";
 
@@ -69,3 +79,5 @@ module dual_port_bram #(
     end
 
 endmodule
+
+`endif
