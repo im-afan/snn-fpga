@@ -1,12 +1,12 @@
 `timescale 1ns / 10ps
-`include "top.sv"
+`include "top_standalone.sv"
 
 module top_tb;
     reg clk;
     wire [15:0] led;
     reg [15:0] sw;
 
-    top top_0 (
+    top_standalone top_0 (
         .clk(clk),
         .led(led),
         .sw(sw)

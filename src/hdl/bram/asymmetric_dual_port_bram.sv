@@ -24,16 +24,17 @@ module asymmetric_dual_port_bram #(
     localparam BASE_PATH = "C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/";
     localparam MEM_SIZE = DATA_WIDTH_A * 256;
 
-    wire [$clog2(DATA_WIDTH_A)-1:0] offset;
+    wire [15:0] offset;
     wire [DATA_WIDTH_A/8-1:0] web_local;
     wire [ADDR_WIDTH_A-1:0] addrb_local;
     wire [DATA_WIDTH_A-1:0] dinb_local;
    	wire [DATA_WIDTH_A-1:0] doutb_local; 
 
-   	assign offset = addrb % (DATA_WIDTH_A / DATA_WIDTH_B);
+   	assign offset = (addrb % (DATA_WIDTH_A / 8)) / (DATA_WIDTH_A / DATA_WIDTH_B) * (DATA_WIDTH_A / DATA_WIDTH_B);
    	assign web_local = web << offset;
    	assign dinb_local = dinb << (offset*8);
-   	assign addrb_local = addrb / (DATA_WIDTH_A / DATA_WIDTH_B);
+   	//assign addrb_local = addrb / (DATA_WIDTH_A / DATA_WIDTH_B);
+   	assign addrb_local = addrb;
    	assign doutb = doutb_local >> (offset*8);
    	/*
    	assign web_local = web;

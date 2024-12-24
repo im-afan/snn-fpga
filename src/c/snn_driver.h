@@ -8,6 +8,8 @@
 #define SNN_DRIVER
 
 const u32 CROSSBAR_NEURONS = 16;
+const u32 MAX_NEURONS = 1024;
+const u32 MAX_TILES = 256;
 
 const u32 BASE_ADDR_WEIGHT = XPAR_AXI_BRAM_CTRL_0_BASEADDR;
 const u32 BASE_ADDR_SPK = XPAR_AXI_BRAM_CTRL_1_BASEADDR;
@@ -16,8 +18,8 @@ const u32 BASE_ADDR_TILE_IDX = XPAR_AXI_BRAM_CTRL_3_BASEADDR;
 
 void write_tile(u32 tile_idx, u16 x, u16 y) {
     xil_printf("write_tile idx %d = %d %d\n\r", tile_idx, x, y);
-	Xil_Out16(BASE_ADDR_TILE_IDX + 2*tile_idx, x);
-    Xil_Out16(BASE_ADDR_TILE_IDX + 2*tile_idx + 1, y);
+	Xil_Out16(BASE_ADDR_TILE_IDX + 2*2*tile_idx, x);
+    Xil_Out16(BASE_ADDR_TILE_IDX + 2*2*tile_idx + 2, y);
 }
 
 void write_weight(u32 tile_idx, u32 x, u32 y, u8 val) {
@@ -30,6 +32,22 @@ void write_network_input(u32 x, u8 val) {
 
 u16 read_spk_out(u32 x) {
 	return Xil_In16(BASE_ADDR_SPK + x);
+}
+
+u16 read_tile_idx_x(u32 tile_idx) {
+    return Xil_In16(BASE_ADDR_TILE_IDX + 4*tile_idx);
+}
+
+u16 read_tile_idx_y(u32 tile_idx) {
+    return Xil_In16(BASE_ADDR_TILE_IDX + 4*tile_idx + 2);
+}
+
+u8 read_weight(u32 tile_idx, u32 x, u32 y) {
+    return Xil_In8(BASE_ADDR_WEIGHT + CROSSBAR_NEURONS*CROSSBAR_NEURONS * tile_idx + x*CROSSBAR_NEURONS + y);
+}
+
+u8 read_network_input(u32 x) {
+    return Xil_In8(BASE_ADDR_INPUT + x);
 }
 
 /*
