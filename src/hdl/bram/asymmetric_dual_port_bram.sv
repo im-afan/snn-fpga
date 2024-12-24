@@ -30,7 +30,7 @@ module asymmetric_dual_port_bram #(
     wire [DATA_WIDTH_A-1:0] dinb_local;
    	wire [DATA_WIDTH_A-1:0] doutb_local; 
 
-   	assign offset = (addrb % (DATA_WIDTH_A / 8)) / (DATA_WIDTH_A / DATA_WIDTH_B) * (DATA_WIDTH_A / DATA_WIDTH_B);
+   	assign offset = (addrb % (DATA_WIDTH_A / 8)) / (DATA_WIDTH_B / 8) * (DATA_WIDTH_B / 8);
    	assign web_local = web << offset;
    	assign dinb_local = dinb << (offset*8);
    	//assign addrb_local = addrb / (DATA_WIDTH_A / DATA_WIDTH_B);

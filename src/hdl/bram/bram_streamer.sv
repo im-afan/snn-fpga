@@ -4,7 +4,6 @@
 `include "bram/weight_bram.sv"
 `include "bram/input_bram.sv"
 `include "bram/lif_bram.sv"
-`include "bram/simple_dual_port_bram.sv"
 `include "bram/asymmetric_dual_port_bram.sv"
 
 module bram_streamer #(
