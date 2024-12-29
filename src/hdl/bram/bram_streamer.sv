@@ -17,6 +17,7 @@ module bram_streamer #(
 ) (
     clk,
     enable,
+    is_last_tile,
 
     //buff_idx,
 
@@ -61,6 +62,7 @@ module bram_streamer #(
 
     input wire clk;
     input wire enable;
+    output wire is_last_tile;
 
     //input wire buff_idx;
 
@@ -185,6 +187,8 @@ module bram_streamer #(
     wire next_ready;
     assign next_ready = weight_bram_done && input_bram_done 
                     && spk_in_bram_done && tile_idx_fifo_push_done;
+
+    assign is_last_tile = (tile_idx == MAX_TILES);
 
     wire [MAX_NEURONS/CROSSBAR_NEURONS-1 : 0] has_spk;
     wire [MAX_NEURONS/CROSSBAR_NEURONS-1 : 0] has_spk_nxt;
@@ -483,6 +487,7 @@ module bram_streamer #(
         .spk_out_din(lif_spk_out_din),
         .spk_out_bram_en(lif_spk_out_bram_en),
         .spk_out_bram_rst(lif_spk_out_bram_rst),
-        .spk_out_bram_we(lif_spk_out_bram_we)
+        .spk_out_bram_we(lif_spk_out_bram_we),
+        .is_last_tile(is_last_tile)
     );
 endmodule

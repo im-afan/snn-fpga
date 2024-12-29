@@ -1,0 +1,4 @@
+domain_path: C:\Users\andre\Desktop\snn-fpga\vitis\ws\platform\export\platform\sw\standalone_microblaze_0
+app_src_dir: C:\Xilinx\Vitis\2024.2\data\embeddedsw\lib\sw_apps\peripheral_tests
+template: peripheral_tests
+lang: c

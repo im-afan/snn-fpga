@@ -9,11 +9,14 @@
 `include "scheduler/xbar_scheduler.sv"
 `include "snn/synapse_array.sv"
 `include "snn/lif_array.sv"
+`include "snn/synapse_array_adder_tree.sv"
 `include "led_controller.sv"
 
 module top(
     clk,
-    sw,
+    //sw,
+    snn_en,
+    snn_done,
     led,
     cpu_tile_idx_addr, cpu_tile_idx_din, cpu_tile_idx_dout, cpu_tile_idx_en, cpu_tile_idx_we,
     cpu_weight_addr, cpu_weight_din, cpu_weight_dout, cpu_weight_en, cpu_weight_we,
@@ -23,11 +26,11 @@ module top(
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam NETWORK_WIDTH = 8;
-    localparam MAX_TILES = 64;
+    localparam MAX_TILES = 256;
     localparam TILE_IDX_WIDTH = 16;
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
-    localparam THRESH = 32;
+    localparam THRESH = 127;
     localparam FIFO_LENGTH = 1;
 
     localparam WEIGHT_BRAM_DATA_WIDTH = BRAM_DATA_WIDTH;
@@ -40,7 +43,9 @@ module top(
     localparam CPU_BRAM_DATA_WIDTH = 32;
 
     input wire clk;
-    input wire [15:0] sw;
+    //input wire [15:0] sw;
+    input wire snn_en;
+    output wire snn_done;
     output wire [15:0] led;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
@@ -68,7 +73,8 @@ module top(
     input wire cpu_input_en;
 
     reg enable;
-    assign enable = sw[0];
+    //assign enable = sw[0];
+    assign enable = snn_en;
 
     wire weight_fifo_full;
     wire spk_in_fifo_full;
@@ -93,7 +99,6 @@ module top(
     wire tile_idx_fifo_pop;
     wire input_fifo_pop;
     wire mac_out_fifo_pop;
-
 
     wire [BRAM_DATA_WIDTH-1:0] weight_fifo_din;
     wire [CROSSBAR_NEURONS-1:0] spk_in_fifo_din;
@@ -129,6 +134,10 @@ module top(
     wire lif_bram_enable;
     wire lif_bram_we;
 
+    wire is_last_tile;
+
+    assign snn_done = is_last_tile && ~synapse_array_en && ~lif_array_en;
+
     //assign led = lif_spk_out;
     led_controller led_controller_0 (
         .clk(clk),
@@ -153,6 +162,7 @@ module top(
     ) bram_streamer_0 (
         .clk(clk),
         .enable(enable),
+        .is_last_tile(is_last_tile),
         //.buff_idx(buff_idx),
         .weight_fifo_full(weight_fifo_full),
         .weight_fifo_push_done(weight_fifo_push_done),
@@ -337,7 +347,7 @@ module top(
         .crossbar_en(synapse_array_en)
     );    
 
-    synapse_array #(
+    synapse_array_adder_tree #(
         .CROSSBAR_NEURONS(CROSSBAR_NEURONS),
         .NETWORK_WIDTH(NETWORK_WIDTH)
     ) synapse_array_0 (

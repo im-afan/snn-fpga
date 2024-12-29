@@ -1,0 +1,815 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Sun Dec 22 18:16:23 2024
+# Process ID         : 21156
+# Current directory  : C:/Users/andre/Desktop/snn-fpga/vivado
+# Command line       : vivado.exe -mode tcl -source .\basys3_project.tcl
+# Log file           : C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
+# Journal file       : C:/Users/andre/Desktop/snn-fpga/vivado\vivado.jou
+# Running On         : DESKTOP-OVIC86T
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 19045
+# Processor Detail   : Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+# CPU Frequency      : 2304 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 34248 MB
+# Swap memory        : 5100 MB
+# Total Virtual      : 39349 MB
+# Available Virtual  : 18623 MB
+#-----------------------------------------------------------
+source {.\basys3_project.tcl}
+# create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
+# add_files ../src/hdl/fifo/spk_in_fifo.sv
+# add_files ../src/hdl/fifo/tile_idx_fifo.sv
+# add_files ../src/hdl/fifo/weight_fifo.sv
+# add_files ../src/hdl/fifo/mem_fifo.sv
+# add_files ../src/hdl/snn/lif_array.sv
+# add_files ../src/hdl/snn/lif.sv
+# add_files ../src/hdl/snn/synapse_array.sv
+# add_files ../src/hdl/snn/synapse.sv
+# add_files ../src/hdl/bram/dual_port_bram.sv
+# add_files ../src/hdl/bram/tile_idx_bram.sv
+# add_files ../src/hdl/bram/input_bram.sv
+# add_files ../src/hdl/bram/lif_bram.sv
+# add_files ../src/hdl/bram/spk_in_bram.sv
+# add_files ../src/hdl/bram/weight_bram.sv
+# add_files ../src/hdl/bram/mem/input_bram.mem
+# add_files ../src/hdl/bram/mem/mem_bram.mem
+# add_files ../src/hdl/bram/mem/spk_in_bram.mem
+# add_files ../src/hdl/bram/mem/weight_bram.mem
+# add_files ../src/hdl/bram/mem/tile_idx_bram.mem
+# add_files ../src/hdl/scheduler/lif_scheduler.sv
+# add_files ../src/hdl/scheduler/xbar_scheduler.sv
+# add_files ../src/hdl/top.sv
+# add_files ../src/hdl/top_microblaze.sv
+# add_files ../src/hdl/basys3-constraints.xdc
+# source ../src/hdl/microblaze.tcl
+## namespace eval _tcl {
+## proc get_script_folder {} {
+##    set script_path [file normalize [info script]]
+##    set script_folder [file dirname $script_path]
+##    return $script_folder
+## }
+## }
+## variable script_folder
+## set script_folder [_tcl::get_script_folder]
+## set scripts_vivado_version 2024.2
+## set current_vivado_version [version -short]
+## if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
+##    puts ""
+##    if { [string compare $scripts_vivado_version $current_vivado_version] > 0 } {
+##       catch {common::send_gid_msg -ssname BD::TCL -id 2042 -severity "ERROR" " This script was generated using Vivado <$scripts_vivado_version> and is being run in <$current_vivado_version> of Vivado. Sourcing the script failed since it was created with a future version of Vivado."}
+## 
+##    } else {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2041 -severity "ERROR" "This script was generated using Vivado <$scripts_vivado_version> and is being run in <$current_vivado_version> of Vivado. Please run the script in Vivado <$scripts_vivado_version> then open the design in Vivado <$current_vivado_version>. Upgrade the design by running \"Tools => Report => Report IP Status...\", then run write_bd_tcl to create an updated script."}
+## 
+##    }
+## 
+##    return 1
+## }
+## set list_projs [get_projects -quiet]
+## if { $list_projs eq "" } {
+##    create_project project_1 myproj -part xc7a35tcpg236-1
+## }
+## variable design_name
+## set design_name microblaze
+## set errMsg ""
+## set nRet 0
+## set cur_design [current_bd_design -quiet]
+## set list_cells [get_bd_cells -quiet]
+## if { ${design_name} eq "" } {
+##    # USE CASES:
+##    #    1) Design_name not set
+## 
+##    set errMsg "Please set the variable <design_name> to a non-empty value."
+##    set nRet 1
+## 
+## } elseif { ${cur_design} ne "" && ${list_cells} eq "" } {
+##    # USE CASES:
+##    #    2): Current design opened AND is empty AND names same.
+##    #    3): Current design opened AND is empty AND names diff; design_name NOT in project.
+##    #    4): Current design opened AND is empty AND names diff; design_name exists in project.
+## 
+##    if { $cur_design ne $design_name } {
+##       common::send_gid_msg -ssname BD::TCL -id 2001 -severity "INFO" "Changing value of <design_name> from <$design_name> to <$cur_design> since current design is empty."
+##       set design_name [get_property NAME $cur_design]
+##    }
+##    common::send_gid_msg -ssname BD::TCL -id 2002 -severity "INFO" "Constructing design in IPI design <$cur_design>..."
+## 
+## } elseif { ${cur_design} ne "" && $list_cells ne "" && $cur_design eq $design_name } {
+##    # USE CASES:
+##    #    5) Current design opened AND has components AND same names.
+## 
+##    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+##    set nRet 1
+## } elseif { [get_files -quiet ${design_name}.bd] ne "" } {
+##    # USE CASES: 
+##    #    6) Current opened design, has components, but diff names, design_name exists in project.
+##    #    7) No opened design, design_name exists in project.
+## 
+##    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+##    set nRet 2
+## 
+## } else {
+##    # USE CASES:
+##    #    8) No opened design, design_name not in project.
+##    #    9) Current opened design, has components, but diff names, design_name not in project.
+## 
+##    common::send_gid_msg -ssname BD::TCL -id 2003 -severity "INFO" "Currently there is no design <$design_name> in project, so creating one..."
+## 
+##    create_bd_design $design_name
+## 
+##    common::send_gid_msg -ssname BD::TCL -id 2004 -severity "INFO" "Making design <$design_name> as current_bd_design."
+##    current_bd_design $design_name
+## 
+## }
+INFO: [BD::TCL 103-2003] Currently there is no design <microblaze> in project, so creating one...
+Wrote  : <C:\Users\andre\Desktop\snn-fpga\vivado\snn_fpga\snn_fpga.srcs\sources_1\bd\microblaze\microblaze.bd> 
+INFO: [BD::TCL 103-2004] Making design <microblaze> as current_bd_design.
+## common::send_gid_msg -ssname BD::TCL -id 2005 -severity "INFO" "Currently the variable <design_name> is equal to \"$design_name\"."
+INFO: [BD::TCL 103-2005] Currently the variable <design_name> is equal to "microblaze".
+## if { $nRet != 0 } {
+##    catch {common::send_gid_msg -ssname BD::TCL -id 2006 -severity "ERROR" $errMsg}
+##    return $nRet
+## }
+## set bCheckIPsPassed 1
+## set bCheckIPs 1
+## if { $bCheckIPs == 1 } {
+##    set list_check_ips "\ 
+## xilinx.com:ip:clk_wiz:6.0\
+## xilinx.com:ip:axi_uartlite:2.0\
+## xilinx.com:ip:microblaze:11.0\
+## xilinx.com:ip:mdm:3.2\
+## xilinx.com:ip:proc_sys_reset:5.0\
+## xilinx.com:ip:axi_bram_ctrl:4.1\
+## xilinx.com:ip:smartconnect:1.0\
+## xilinx.com:ip:lmb_v10:3.0\
+## xilinx.com:ip:lmb_bram_if_cntlr:4.0\
+## xilinx.com:ip:blk_mem_gen:8.4\
+## "
+## 
+##    set list_ips_missing ""
+##    common::send_gid_msg -ssname BD::TCL -id 2011 -severity "INFO" "Checking if the following IPs exist in the project's IP catalog: $list_check_ips ."
+## 
+##    foreach ip_vlnv $list_check_ips {
+##       set ip_obj [get_ipdefs -all $ip_vlnv]
+##       if { $ip_obj eq "" } {
+##          lappend list_ips_missing $ip_vlnv
+##       }
+##    }
+## 
+##    if { $list_ips_missing ne "" } {
+##       catch {common::send_gid_msg -ssname BD::TCL -id 2012 -severity "ERROR" "The following IPs are not found in the IP Catalog:\n  $list_ips_missing\n\nResolution: Please add the repository containing the IP(s) to the project." }
+##       set bCheckIPsPassed 0
+##    }
+## 
+## }
+INFO: [BD::TCL 103-2011] Checking if the following IPs exist in the project's IP catalog:  
+xilinx.com:ip:clk_wiz:6.0 xilinx.com:ip:axi_uartlite:2.0 xilinx.com:ip:microblaze:11.0 xilinx.com:ip:mdm:3.2 xilinx.com:ip:proc_sys_reset:5.0 xilinx.com:ip:axi_bram_ctrl:4.1 xilinx.com:ip:smartconnect:1.0 xilinx.com:ip:lmb_v10:3.0 xilinx.com:ip:lmb_bram_if_cntlr:4.0 xilinx.com:ip:blk_mem_gen:8.4  .
+## if { $bCheckIPsPassed != 1 } {
+##   common::send_gid_msg -ssname BD::TCL -id 2023 -severity "WARNING" "Will not continue with creation of design due to the error(s) above."
+##   return 3
+## }
+## proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
+## 
+##   variable script_folder
+## 
+##   if { $parentCell eq "" || $nameHier eq "" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2092 -severity "ERROR" "create_hier_cell_microblaze_0_local_memory() - Empty argument(s)!"}
+##      return
+##   }
+## 
+##   # Get object for parentCell
+##   set parentObj [get_bd_cells $parentCell]
+##   if { $parentObj == "" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2090 -severity "ERROR" "Unable to find parent cell <$parentCell>!"}
+##      return
+##   }
+## 
+##   # Make sure parentObj is hier blk
+##   set parentType [get_property TYPE $parentObj]
+##   if { $parentType ne "hier" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2091 -severity "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+##      return
+##   }
+## 
+##   # Save current instance; Restore later
+##   set oldCurInst [current_bd_instance .]
+## 
+##   # Set parent object as current
+##   current_bd_instance $parentObj
+## 
+##   # Create cell and set as current instance
+##   set hier_obj [create_bd_cell -type hier $nameHier]
+##   current_bd_instance $hier_obj
+## 
+##   # Create interface pins
+##   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 DLMB
+## 
+##   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 ILMB
+## 
+## 
+##   # Create pins
+##   create_bd_pin -dir I -type clk LMB_Clk
+##   create_bd_pin -dir I -type rst SYS_Rst
+## 
+##   # Create instance: dlmb_v10, and set properties
+##   set dlmb_v10 [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_v10:3.0 dlmb_v10 ]
+## 
+##   # Create instance: ilmb_v10, and set properties
+##   set ilmb_v10 [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_v10:3.0 ilmb_v10 ]
+## 
+##   # Create instance: dlmb_bram_if_cntlr, and set properties
+##   set dlmb_bram_if_cntlr [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 dlmb_bram_if_cntlr ]
+##   set_property CONFIG.C_ECC {0} $dlmb_bram_if_cntlr
+## 
+## 
+##   # Create instance: ilmb_bram_if_cntlr, and set properties
+##   set ilmb_bram_if_cntlr [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 ilmb_bram_if_cntlr ]
+##   set_property CONFIG.C_ECC {0} $ilmb_bram_if_cntlr
+## 
+## 
+##   # Create instance: lmb_bram, and set properties
+##   set lmb_bram [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.4 lmb_bram ]
+##   set_property -dict [list \
+##     CONFIG.Memory_Type {True_Dual_Port_RAM} \
+##     CONFIG.use_bram_block {BRAM_Controller} \
+##   ] $lmb_bram
+## 
+## 
+##   # Create interface connections
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb [get_bd_intf_pins dlmb_v10/LMB_M] [get_bd_intf_pins DLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb_bus [get_bd_intf_pins dlmb_v10/LMB_Sl_0] [get_bd_intf_pins dlmb_bram_if_cntlr/SLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb_cntlr [get_bd_intf_pins dlmb_bram_if_cntlr/BRAM_PORT] [get_bd_intf_pins lmb_bram/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb [get_bd_intf_pins ilmb_v10/LMB_M] [get_bd_intf_pins ILMB]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb_bus [get_bd_intf_pins ilmb_v10/LMB_Sl_0] [get_bd_intf_pins ilmb_bram_if_cntlr/SLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb_cntlr [get_bd_intf_pins ilmb_bram_if_cntlr/BRAM_PORT] [get_bd_intf_pins lmb_bram/BRAM_PORTB]
+## 
+##   # Create port connections
+##   connect_bd_net -net SYS_Rst_1  [get_bd_pins SYS_Rst] \
+##   [get_bd_pins dlmb_v10/SYS_Rst] \
+##   [get_bd_pins dlmb_bram_if_cntlr/LMB_Rst] \
+##   [get_bd_pins ilmb_v10/SYS_Rst] \
+##   [get_bd_pins ilmb_bram_if_cntlr/LMB_Rst]
+##   connect_bd_net -net microblaze_0_Clk  [get_bd_pins LMB_Clk] \
+##   [get_bd_pins dlmb_v10/LMB_Clk] \
+##   [get_bd_pins dlmb_bram_if_cntlr/LMB_Clk] \
+##   [get_bd_pins ilmb_v10/LMB_Clk] \
+##   [get_bd_pins ilmb_bram_if_cntlr/LMB_Clk]
+## 
+##   # Restore current instance
+##   current_bd_instance $oldCurInst
+## }
+## proc create_root_design { parentCell } {
+## 
+##   variable script_folder
+##   variable design_name
+## 
+##   if { $parentCell eq "" } {
+##      set parentCell [get_bd_cells /]
+##   }
+## 
+##   # Get object for parentCell
+##   set parentObj [get_bd_cells $parentCell]
+##   if { $parentObj == "" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2090 -severity "ERROR" "Unable to find parent cell <$parentCell>!"}
+##      return
+##   }
+## 
+##   # Make sure parentObj is hier blk
+##   set parentType [get_property TYPE $parentObj]
+##   if { $parentType ne "hier" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2091 -severity "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+##      return
+##   }
+## 
+##   # Save current instance; Restore later
+##   set oldCurInst [current_bd_instance .]
+## 
+##   # Set parent object as current
+##   current_bd_instance $parentObj
+## 
+## 
+##   # Create interface ports
+##   set uart [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 uart ]
+## 
+##   set BRAM_WEIGHT [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:bram_rtl:1.0 BRAM_WEIGHT ]
+##   set_property -dict [ list \
+##    CONFIG.MASTER_TYPE {BRAM_CTRL} \
+##    CONFIG.READ_WRITE_MODE {READ_WRITE} \
+##    ] $BRAM_WEIGHT
+## 
+##   set BRAM_SPK [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:bram_rtl:1.0 BRAM_SPK ]
+##   set_property -dict [ list \
+##    CONFIG.MASTER_TYPE {BRAM_CTRL} \
+##    CONFIG.READ_WRITE_MODE {READ_WRITE} \
+##    ] $BRAM_SPK
+## 
+##   set BRAM_INPUT [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:bram_rtl:1.0 BRAM_INPUT ]
+##   set_property -dict [ list \
+##    CONFIG.MASTER_TYPE {BRAM_CTRL} \
+##    CONFIG.READ_WRITE_MODE {READ_WRITE} \
+##    ] $BRAM_INPUT
+## 
+##   set BRAM_TILE_IDX [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:bram_rtl:1.0 BRAM_TILE_IDX ]
+##   set_property -dict [ list \
+##    CONFIG.MASTER_TYPE {BRAM_CTRL} \
+##    CONFIG.READ_WRITE_MODE {READ_WRITE} \
+##    ] $BRAM_TILE_IDX
+## 
+## 
+##   # Create ports
+##   set clk [ create_bd_port -dir I -type clk -freq_hz 100000000 clk ]
+##   set rst [ create_bd_port -dir I -type rst rst ]
+##   set_property -dict [ list \
+##    CONFIG.POLARITY {ACTIVE_LOW} \
+##  ] $rst
+## 
+##   # Create instance: clk_wiz_0, and set properties
+##   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
+## 
+##   # Create instance: axi_uartlite_0, and set properties
+##   set axi_uartlite_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0 ]
+## 
+##   # Create instance: microblaze_0, and set properties
+##   set microblaze_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:11.0 microblaze_0 ]
+##   set_property -dict [list \
+##     CONFIG.C_DEBUG_ENABLED {1} \
+##     CONFIG.C_D_AXI {1} \
+##     CONFIG.C_D_LMB {1} \
+##     CONFIG.C_I_LMB {1} \
+##   ] $microblaze_0
+## 
+## 
+##   # Create instance: microblaze_0_local_memory
+##   create_hier_cell_microblaze_0_local_memory [current_bd_instance .] microblaze_0_local_memory
+## 
+##   # Create instance: mdm_1, and set properties
+##   set mdm_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.2 mdm_1 ]
+## 
+##   # Create instance: rst_clk_wiz_0_100M, and set properties
+##   set rst_clk_wiz_0_100M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_clk_wiz_0_100M ]
+## 
+##   # Create instance: axi_bram_ctrl_0, and set properties
+##   set axi_bram_ctrl_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_0 ]
+##   set_property -dict [list \
+##     CONFIG.DATA_WIDTH {1024} \
+##     CONFIG.PROTOCOL {AXI4} \
+##     CONFIG.READ_LATENCY {2} \
+##     CONFIG.SINGLE_PORT_BRAM {1} \
+##   ] $axi_bram_ctrl_0
+## 
+## 
+##   # Create instance: axi_bram_ctrl_1, and set properties
+##   set axi_bram_ctrl_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_1 ]
+##   set_property -dict [list \
+##     CONFIG.READ_LATENCY {2} \
+##     CONFIG.SINGLE_PORT_BRAM {1} \
+##   ] $axi_bram_ctrl_1
+## 
+## 
+##   # Create instance: axi_bram_ctrl_2, and set properties
+##   set axi_bram_ctrl_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_2 ]
+##   set_property -dict [list \
+##     CONFIG.DATA_WIDTH {128} \
+##     CONFIG.READ_LATENCY {2} \
+##     CONFIG.SINGLE_PORT_BRAM {1} \
+##   ] $axi_bram_ctrl_2
+## 
+## 
+##   # Create instance: axi_bram_ctrl_3, and set properties
+##   set axi_bram_ctrl_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_3 ]
+##   set_property -dict [list \
+##     CONFIG.READ_LATENCY {2} \
+##     CONFIG.SINGLE_PORT_BRAM {1} \
+##   ] $axi_bram_ctrl_3
+## 
+## 
+##   # Create instance: axi_smc, and set properties
+##   set axi_smc [ create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 axi_smc ]
+##   set_property -dict [list \
+##     CONFIG.NUM_MI {5} \
+##     CONFIG.NUM_SI {1} \
+##   ] $axi_smc
+## 
+## 
+##   # Create interface connections
+##   connect_bd_intf_net -intf_net axi_bram_ctrl_0_BRAM_PORTA [get_bd_intf_ports BRAM_WEIGHT] [get_bd_intf_pins axi_bram_ctrl_0/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net axi_bram_ctrl_1_BRAM_PORTA [get_bd_intf_ports BRAM_SPK] [get_bd_intf_pins axi_bram_ctrl_1/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net axi_bram_ctrl_2_BRAM_PORTA [get_bd_intf_ports BRAM_INPUT] [get_bd_intf_pins axi_bram_ctrl_2/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net axi_bram_ctrl_3_BRAM_PORTA [get_bd_intf_ports BRAM_TILE_IDX] [get_bd_intf_pins axi_bram_ctrl_3/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net axi_smc_M00_AXI [get_bd_intf_pins axi_smc/M00_AXI] [get_bd_intf_pins axi_bram_ctrl_0/S_AXI]
+##   connect_bd_intf_net -intf_net axi_smc_M01_AXI [get_bd_intf_pins axi_smc/M01_AXI] [get_bd_intf_pins axi_bram_ctrl_1/S_AXI]
+##   connect_bd_intf_net -intf_net axi_smc_M02_AXI [get_bd_intf_pins axi_smc/M02_AXI] [get_bd_intf_pins axi_bram_ctrl_2/S_AXI]
+##   connect_bd_intf_net -intf_net axi_smc_M03_AXI [get_bd_intf_pins axi_smc/M03_AXI] [get_bd_intf_pins axi_bram_ctrl_3/S_AXI]
+##   connect_bd_intf_net -intf_net axi_smc_M04_AXI [get_bd_intf_pins axi_smc/M04_AXI] [get_bd_intf_pins axi_uartlite_0/S_AXI]
+##   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports uart] [get_bd_intf_pins axi_uartlite_0/UART]
+##   connect_bd_intf_net -intf_net microblaze_0_M_AXI_DP [get_bd_intf_pins microblaze_0/M_AXI_DP] [get_bd_intf_pins axi_smc/S00_AXI]
+##   connect_bd_intf_net -intf_net microblaze_0_debug [get_bd_intf_pins mdm_1/MBDEBUG_0] [get_bd_intf_pins microblaze_0/DEBUG]
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb_1 [get_bd_intf_pins microblaze_0/DLMB] [get_bd_intf_pins microblaze_0_local_memory/DLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb_1 [get_bd_intf_pins microblaze_0/ILMB] [get_bd_intf_pins microblaze_0_local_memory/ILMB]
+## 
+##   # Create port connections
+##   connect_bd_net -net clk_100MHz_1  [get_bd_ports clk] \
+##   [get_bd_pins clk_wiz_0/clk_in1]
+##   connect_bd_net -net clk_wiz_0_locked  [get_bd_pins clk_wiz_0/locked] \
+##   [get_bd_pins rst_clk_wiz_0_100M/dcm_locked]
+##   connect_bd_net -net mdm_1_debug_sys_rst  [get_bd_pins mdm_1/Debug_SYS_Rst] \
+##   [get_bd_pins rst_clk_wiz_0_100M/mb_debug_sys_rst] \
+##   [get_bd_pins clk_wiz_0/reset]
+##   connect_bd_net -net microblaze_0_Clk  [get_bd_pins clk_wiz_0/clk_out1] \
+##   [get_bd_pins microblaze_0/Clk] \
+##   [get_bd_pins microblaze_0_local_memory/LMB_Clk] \
+##   [get_bd_pins rst_clk_wiz_0_100M/slowest_sync_clk] \
+##   [get_bd_pins axi_uartlite_0/s_axi_aclk] \
+##   [get_bd_pins axi_bram_ctrl_0/s_axi_aclk] \
+##   [get_bd_pins axi_bram_ctrl_1/s_axi_aclk] \
+##   [get_bd_pins axi_bram_ctrl_2/s_axi_aclk] \
+##   [get_bd_pins axi_bram_ctrl_3/s_axi_aclk] \
+##   [get_bd_pins axi_smc/aclk]
+##   connect_bd_net -net reset_rtl_0_1  [get_bd_ports rst] \
+##   [get_bd_pins rst_clk_wiz_0_100M/ext_reset_in]
+##   connect_bd_net -net rst_clk_wiz_0_100M_bus_struct_reset  [get_bd_pins rst_clk_wiz_0_100M/bus_struct_reset] \
+##   [get_bd_pins microblaze_0_local_memory/SYS_Rst]
+##   connect_bd_net -net rst_clk_wiz_0_100M_mb_reset  [get_bd_pins rst_clk_wiz_0_100M/mb_reset] \
+##   [get_bd_pins microblaze_0/Reset]
+##   connect_bd_net -net rst_clk_wiz_0_100M_peripheral_aresetn  [get_bd_pins rst_clk_wiz_0_100M/peripheral_aresetn] \
+##   [get_bd_pins axi_uartlite_0/s_axi_aresetn] \
+##   [get_bd_pins axi_bram_ctrl_0/s_axi_aresetn] \
+##   [get_bd_pins axi_bram_ctrl_1/s_axi_aresetn] \
+##   [get_bd_pins axi_bram_ctrl_2/s_axi_aresetn] \
+##   [get_bd_pins axi_bram_ctrl_3/s_axi_aresetn] \
+##   [get_bd_pins axi_smc/aresetn]
+## 
+##   # Create address segments
+##   assign_bd_address -offset 0xC0000000 -range 0x00020000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_bram_ctrl_0/S_AXI/Mem0] -force
+##   assign_bd_address -offset 0xC2000000 -range 0x00002000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_bram_ctrl_1/S_AXI/Mem0] -force
+##   assign_bd_address -offset 0xC4000000 -range 0x00004000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_bram_ctrl_2/S_AXI/Mem0] -force
+##   assign_bd_address -offset 0xC6000000 -range 0x00002000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_bram_ctrl_3/S_AXI/Mem0] -force
+##   assign_bd_address -offset 0x40600000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] -force
+##   assign_bd_address -offset 0x00000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem] -force
+##   assign_bd_address -offset 0x00000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Instruction] [get_bd_addr_segs microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] -force
+## 
+## 
+##   # Restore current instance
+##   current_bd_instance $oldCurInst
+## 
+##   validate_bd_design
+##   save_bd_design
+## }
+## create_root_design ""
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_0_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_0_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_0_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_0_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_1_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_1_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_2_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_2_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_2_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_2_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_3_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_3_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+Slave segment '/axi_bram_ctrl_0/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC000_0000 [ 128K ]>.
+Slave segment '/axi_bram_ctrl_1/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC200_0000 [ 8K ]>.
+Slave segment '/axi_bram_ctrl_2/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC400_0000 [ 16K ]>.
+Slave segment '/axi_bram_ctrl_3/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC600_0000 [ 8K ]>.
+Slave segment '/axi_uartlite_0/S_AXI/Reg' is being assigned into address space '/microblaze_0/Data' at <0x4060_0000 [ 64K ]>.
+Slave segment '/microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem' is being assigned into address space '/microblaze_0/Data' at <0x0000_0000 [ 64K ]>.
+Slave segment '/microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem' is being assigned into address space '/microblaze_0/Instruction' at <0x0000_0000 [ 64K ]>.
+INFO: [BD 5-943] Reserving offset range <0xC000_0000 [ 128K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0xC200_0000 [ 8K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M01_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0xC400_0000 [ 16K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M02_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0xC600_0000 [ 8K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M03_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0x4060_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M04_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] microblaze_axi_smc_0: SmartConnect microblaze_axi_smc_0 is in High-performance Mode.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
+INFO: [xilinx.com:ip:microblaze:11.0-9] /microblaze_0: Setting C_BASE_VECTORS to 0x00000000.
+validate_bd_design: Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 735.617 ; gain = 105.637
+Wrote  : <C:\Users\andre\Desktop\snn-fpga\vivado\snn_fpga\snn_fpga.srcs\sources_1\bd\microblaze\microblaze.bd> 
+# make_wrapper -files [get_files microblaze.bd] -top
+INFO: [BD 41-1662] The design 'microblaze.bd' is already validated. Therefore parameter propagation will not be re-run.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/synth/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/sim/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hdl/microblaze_wrapper.v
+# add_files -norecurse ./snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hdl/microblaze_wrapper.v
+# set_property include_dirs {../src/hdl/ ../src/hdl/bram ../src/hdl/snn ../src/hdl/fifo ../src/hdl/bram/mem} [current_fileset]
+# set_property top top_microblaze [current_fileset]
+Vivado% start_gui
+update_compile_order -fileset sources_1
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+INFO: [BD 41-1662] The design 'microblaze.bd' is already validated. Therefore parameter propagation will not be re-run.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+Wrote  : <C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/sources_1/bd/microblaze/ui/bd_65fc89de.ui> 
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/synth/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/sim/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hdl/microblaze_wrapper.v
+INFO: [BD 41-1029] Generation completed for the IP Integrator block clk_wiz_0 .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0_ooc.xdc'
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_uartlite_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/lmb_bram .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block mdm_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block rst_clk_wiz_0_100M .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_bram_ctrl_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_bram_ctrl_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_bram_ctrl_2 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_bram_ctrl_3 .
+Exporting to file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/hw_handoff/microblaze_axi_smc_0.hwh
+Generated Hardware Definition File c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/synth/microblaze_axi_smc_0.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+Exporting to file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hw_handoff/microblaze.hwh
+Generated Hardware Definition File C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/synth/microblaze.hwdef
+INFO: [IP_Flow 19-6930] IPCACHE: runCacheChecks() number of threads = 8
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_bram_ctrl_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_bram_ctrl_1_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_bram_ctrl_2_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_bram_ctrl_3_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_smc_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_uartlite_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_clk_wiz_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_dlmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_dlmb_v10_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_ilmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_ilmb_v10_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_lmb_bram_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_mdm_1_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_microblaze_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_rst_clk_wiz_0_100M_0
+INFO: [IP_Flow 19-8020] IPCACHE: runCacheChecks() calling threadPool finishWork()
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_bram_ctrl_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_bram_ctrl_1_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_bram_ctrl_2_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_bram_ctrl_3_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_smc_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_uartlite_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_clk_wiz_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_dlmb_v10_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_ilmb_v10_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_mdm_1_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_dlmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_ilmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_lmb_bram_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_microblaze_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_rst_clk_wiz_0_100M_0
+[Sun Dec 22 18:17:58 2024] Launched microblaze_mdm_1_0_synth_1, microblaze_axi_bram_ctrl_3_0_synth_1, microblaze_ilmb_bram_if_cntlr_0_synth_1, microblaze_axi_bram_ctrl_1_0_synth_1, microblaze_axi_uartlite_0_0_synth_1, microblaze_dlmb_v10_0_synth_1, microblaze_axi_smc_0_synth_1, microblaze_microblaze_0_0_synth_1, microblaze_axi_bram_ctrl_2_0_synth_1, microblaze_ilmb_v10_0_synth_1, microblaze_lmb_bram_0_synth_1, microblaze_rst_clk_wiz_0_100M_0_synth_1, microblaze_dlmb_bram_if_cntlr_0_synth_1, microblaze_axi_bram_ctrl_0_0_synth_1, microblaze_clk_wiz_0_0_synth_1, synth_1...
+Run output will be captured here:
+microblaze_mdm_1_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_mdm_1_0_synth_1/runme.log
+microblaze_axi_bram_ctrl_3_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_bram_ctrl_3_0_synth_1/runme.log
+microblaze_ilmb_bram_if_cntlr_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_ilmb_bram_if_cntlr_0_synth_1/runme.log
+microblaze_axi_bram_ctrl_1_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_bram_ctrl_1_0_synth_1/runme.log
+microblaze_axi_uartlite_0_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_uartlite_0_0_synth_1/runme.log
+microblaze_dlmb_v10_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_dlmb_v10_0_synth_1/runme.log
+microblaze_axi_smc_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_smc_0_synth_1/runme.log
+microblaze_microblaze_0_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_microblaze_0_0_synth_1/runme.log
+microblaze_axi_bram_ctrl_2_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_bram_ctrl_2_0_synth_1/runme.log
+microblaze_ilmb_v10_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_ilmb_v10_0_synth_1/runme.log
+microblaze_lmb_bram_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_lmb_bram_0_synth_1/runme.log
+microblaze_rst_clk_wiz_0_100M_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_rst_clk_wiz_0_100M_0_synth_1/runme.log
+microblaze_dlmb_bram_if_cntlr_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_dlmb_bram_if_cntlr_0_synth_1/runme.log
+microblaze_axi_bram_ctrl_0_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_bram_ctrl_0_0_synth_1/runme.log
+microblaze_clk_wiz_0_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_clk_wiz_0_0_synth_1/runme.log
+synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/runme.log
+[Sun Dec 22 18:18:00 2024] Launched impl_1...
+Run output will be captured here: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:00:34 ; elapsed = 00:00:37 . Memory (MB): peak = 1638.156 ; gain = 52.797
+reset_run synth_1
+INFO: [Project 1-1160] Copying file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/top_microblaze.dcp to C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/utils_1/imports/synth_1 and adding it to utils fileset
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+[Sun Dec 22 18:31:16 2024] Launched synth_1...
+Run output will be captured here: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/runme.log
+[Sun Dec 22 18:31:16 2024] Launched impl_1...
+Run output will be captured here: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/runme.log
+open_bd_design {C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/sources_1/bd/microblaze/microblaze.bd}
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+startgroup
+delete_bd_objs [get_bd_intf_nets microblaze_0_dlmb_1] [get_bd_intf_nets microblaze_0_ilmb_1] [get_bd_nets rst_clk_wiz_0_100M_bus_struct_reset] [get_bd_cells microblaze_0_local_memory]
+delete_bd_objs [get_bd_intf_nets microblaze_0_M_AXI_DP] [get_bd_intf_nets microblaze_0_debug] [get_bd_nets rst_clk_wiz_0_100M_mb_reset] [get_bd_cells microblaze_0] [get_bd_cells mdm_1]
+endgroup
+startgroup
+create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:11.0 microblaze_0
+endgroup
+apply_bd_automation -rule xilinx.com:bd_rule:microblaze -config { all {1} axi_intc {0} axi_periph {Enabled} cache {None} clk {/clk_wiz_0/clk_out1 (100 MHz)} compress {1} cores {1} debug_module {Debug Only} disable {1} ecc {None} local_mem {16KB} preset {None}}  [get_bd_cells microblaze_0]
+regenerate_bd_layout
+regenerate_bd_layout
+apply_bd_automation -rule xilinx.com:bd_rule:axi4 -config { Clk_master {/clk_wiz_0/clk_out1 (100 MHz)} Clk_slave {/clk_wiz_0/clk_out1 (100 MHz)} Clk_xbar {/clk_wiz_0/clk_out1 (100 MHz)} Master {/microblaze_0/M_AXI_DP} Slave {/axi_uartlite_0/S_AXI} ddr_seg {Auto} intc_ip {/axi_smc} master_apm {0}}  [get_bd_intf_pins microblaze_0/M_AXI_DP]
+INFO: [BD 41-3093] Triggering Legacy Auto Assign Algorithm
+Slave segment '/axi_bram_ctrl_0/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC000_0000 [ 128K ]>.
+Slave segment '/axi_bram_ctrl_1/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC200_0000 [ 8K ]>.
+Slave segment '/axi_bram_ctrl_2/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC400_0000 [ 16K ]>.
+Slave segment '/axi_bram_ctrl_3/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC600_0000 [ 8K ]>.
+Slave segment '/axi_uartlite_0/S_AXI/Reg' is being assigned into address space '/microblaze_0/Data' at <0x4060_0000 [ 64K ]>.
+regenerate_bd_layout
+save_bd_design
+Wrote  : <C:\Users\andre\Desktop\snn-fpga\vivado\snn_fpga\snn_fpga.srcs\sources_1\bd\microblaze\microblaze.bd> 
+Wrote  : <C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/sources_1/bd/microblaze/ui/bd_65fc89de.ui> 
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/utils_1/imports/synth_1/top_microblaze.dcp with file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/top_microblaze.dcp
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+INFO: [BD 5-943] Reserving offset range <0xC000_0000 [ 128K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0xC200_0000 [ 8K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M01_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0xC400_0000 [ 16K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M02_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0xC600_0000 [ 8K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M03_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0x4060_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M04_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] microblaze_axi_smc_0: SmartConnect microblaze_axi_smc_0 is in High-performance Mode.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
+INFO: [xilinx.com:ip:microblaze:11.0-9] /microblaze_0: Setting C_BASE_VECTORS to 0x00000000.
+Wrote  : <C:\Users\andre\Desktop\snn-fpga\vivado\snn_fpga\snn_fpga.srcs\sources_1\bd\microblaze\microblaze.bd> 
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/synth/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/sim/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hdl/microblaze_wrapper.v
+Exporting to file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/hw_handoff/microblaze_axi_smc_0.hwh
+Generated Hardware Definition File c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/synth/microblaze_axi_smc_0.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/lmb_bram .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block mdm_1 .
+Exporting to file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hw_handoff/microblaze.hwh
+Generated Hardware Definition File C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/synth/microblaze.hwdef
+INFO: [IP_Flow 19-6930] IPCACHE: runCacheChecks() number of threads = 8
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_smc_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_dlmb_bram_if_cntlr_1
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_dlmb_v10_1
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_ilmb_bram_if_cntlr_1
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_ilmb_v10_1
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_lmb_bram_1
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_mdm_1_1
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_microblaze_0_1
+INFO: [IP_Flow 19-8020] IPCACHE: runCacheChecks() calling threadPool finishWork()
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_smc_0
+INFO: [IP_Flow 19-6922] IPCACHE: Exporting cached entry 4de943d94b94e42c to dir: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4de943d94b94e42c/microblaze_axi_smc_0.dcp to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0.dcp.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0.dcp
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4de943d94b94e42c/microblaze_axi_smc_0_sim_netlist.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0_sim_netlist.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0_sim_netlist.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4de943d94b94e42c/microblaze_axi_smc_0_sim_netlist.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0_sim_netlist.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0_sim_netlist.vhdl
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4de943d94b94e42c/microblaze_axi_smc_0_stub.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0_stub.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0_stub.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4de943d94b94e42c/microblaze_axi_smc_0_stub.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0_stub.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0_stub.vhdl
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP microblaze_axi_smc_0, cache-ID = 4de943d94b94e42c; cache size = 97.960 MB.
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_dlmb_bram_if_cntlr_1
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_dlmb_v10_1
+INFO: [IP_Flow 19-6922] IPCACHE: Exporting cached entry 84ccb783a79ef44b to dir: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0.dcp to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1.dcp.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1.dcp
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0_sim_netlist.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1_sim_netlist.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1_sim_netlist.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0_sim_netlist.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1_sim_netlist.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1_sim_netlist.vhdl
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0_stub.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1_stub.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1_stub.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0_stub.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1_stub.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1_stub.vhdl
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP microblaze_dlmb_v10_1, cache-ID = 84ccb783a79ef44b; cache size = 97.960 MB.
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_ilmb_bram_if_cntlr_1
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_ilmb_v10_1
+INFO: [IP_Flow 19-6922] IPCACHE: Exporting cached entry 84ccb783a79ef44b to dir: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0.dcp to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1.dcp.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1.dcp
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0_sim_netlist.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1_sim_netlist.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1_sim_netlist.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0_sim_netlist.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1_sim_netlist.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1_sim_netlist.vhdl
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0_stub.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1_stub.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1_stub.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/8/4/84ccb783a79ef44b/microblaze_dlmb_v10_0_stub.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1_stub.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1_stub.vhdl
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP microblaze_ilmb_v10_1, cache-ID = 84ccb783a79ef44b; cache size = 97.960 MB.
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_lmb_bram_1
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_mdm_1_1
+INFO: [IP_Flow 19-6922] IPCACHE: Exporting cached entry 4dbc29c909178a64 to dir: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4dbc29c909178a64/microblaze_mdm_1_0.dcp to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1.dcp.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1.dcp
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4dbc29c909178a64/microblaze_mdm_1_0_sim_netlist.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1_sim_netlist.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1_sim_netlist.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4dbc29c909178a64/microblaze_mdm_1_0_sim_netlist.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1_sim_netlist.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1_sim_netlist.vhdl
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4dbc29c909178a64/microblaze_mdm_1_0_stub.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1_stub.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1_stub.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/4/d/4dbc29c909178a64/microblaze_mdm_1_0_stub.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1_stub.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1_stub.vhdl
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP microblaze_mdm_1_1, cache-ID = 4dbc29c909178a64; cache size = 97.960 MB.
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_microblaze_0_1
+INFO: [IP_Flow 19-6922] IPCACHE: Exporting cached entry 61f7f437bb581a07 to dir: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/6/1/61f7f437bb581a07/microblaze_microblaze_0_0.dcp to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1.dcp.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1.dcp
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/6/1/61f7f437bb581a07/microblaze_microblaze_0_0_sim_netlist.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1_sim_netlist.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1_sim_netlist.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/6/1/61f7f437bb581a07/microblaze_microblaze_0_0_sim_netlist.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1_sim_netlist.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1_sim_netlist.vhdl
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/6/1/61f7f437bb581a07/microblaze_microblaze_0_0_stub.v to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1_stub.v.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1_stub.v
+INFO: [IP_Flow 19-6928] IPCACHE: copied cached file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.cache/ip/2024.2/6/1/61f7f437bb581a07/microblaze_microblaze_0_0_stub.vhdl to c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1_stub.vhdl.
+INFO: [IP_Flow 19-6926] IPCACHE: added file to list for BOM: c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1_stub.vhdl
+INFO: [IP_Flow 19-4993] Using cached IP synthesis design for IP microblaze_microblaze_0_1, cache-ID = 61f7f437bb581a07; cache size = 97.960 MB.
+config_ip_cache: Time (s): cpu = 00:00:21 ; elapsed = 00:00:21 . Memory (MB): peak = 1869.293 ; gain = 54.410
+[Sun Dec 22 18:41:25 2024] Launched microblaze_ilmb_bram_if_cntlr_1_synth_1, microblaze_dlmb_bram_if_cntlr_1_synth_1, microblaze_lmb_bram_1_synth_1, synth_1...
+Run output will be captured here:
+microblaze_ilmb_bram_if_cntlr_1_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_ilmb_bram_if_cntlr_1_synth_1/runme.log
+microblaze_dlmb_bram_if_cntlr_1_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_dlmb_bram_if_cntlr_1_synth_1/runme.log
+microblaze_lmb_bram_1_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_lmb_bram_1_synth_1/runme.log
+synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/runme.log
+[Sun Dec 22 18:41:26 2024] Launched impl_1...
+Run output will be captured here: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:01:07 ; elapsed = 00:01:10 . Memory (MB): peak = 1869.293 ; gain = 113.504
+open_run synth_1 -name synth_1
+Design is defaulting to impl run constrset: constrs_1
+Design is defaulting to synth run part: xc7a35tcpg236-1
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_bram_ctrl_0_0/microblaze_axi_bram_ctrl_0_0.dcp' for cell 'microblaze/microblaze_i/axi_bram_ctrl_0'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_bram_ctrl_1_0/microblaze_axi_bram_ctrl_1_0.dcp' for cell 'microblaze/microblaze_i/axi_bram_ctrl_1'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_bram_ctrl_2_0/microblaze_axi_bram_ctrl_2_0.dcp' for cell 'microblaze/microblaze_i/axi_bram_ctrl_2'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_bram_ctrl_3_0/microblaze_axi_bram_ctrl_3_0.dcp' for cell 'microblaze/microblaze_i/axi_bram_ctrl_3'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0.dcp' for cell 'microblaze/microblaze_i/axi_smc'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0.dcp' for cell 'microblaze/microblaze_i/axi_uartlite_0'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.dcp' for cell 'microblaze/microblaze_i/clk_wiz_0'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1.dcp' for cell 'microblaze/microblaze_i/mdm_1'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1.dcp' for cell 'microblaze/microblaze_i/microblaze_0'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0.dcp' for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_bram_if_cntlr_1/microblaze_dlmb_bram_if_cntlr_1.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/dlmb_bram_if_cntlr'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_1/microblaze_dlmb_v10_1.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/dlmb_v10'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_bram_if_cntlr_1/microblaze_ilmb_bram_if_cntlr_1.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/ilmb_bram_if_cntlr'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_1/microblaze_ilmb_v10_1.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/ilmb_v10'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_lmb_bram_1/microblaze_lmb_bram_1.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/lmb_bram'
+Netlist sorting complete. Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 2015.926 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 7173 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 5 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2024.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+WARNING: [Opt 31-35] Removing redundant IBUF, microblaze/microblaze_i/clk_wiz_0/inst/clkin1_ibufg, from the path connected to top-level port: clk 
+Resolution: The tool has removed redundant IBUF. To resolve this warning, check for redundant IBUF in the input design.
+WARNING: [Constraints 18-550] Could not create 'IBUF_LOW_PWR' constraint because net 'microblaze/microblaze_i/clk_wiz_0/clk_in1' is not directly connected to top level port. 'IBUF_LOW_PWR' is ignored for synthesis but preserved for implementation.
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0_board.xdc] for cell 'microblaze/microblaze_i/clk_wiz_0/inst'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0_board.xdc] for cell 'microblaze/microblaze_i/clk_wiz_0/inst'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.xdc] for cell 'microblaze/microblaze_i/clk_wiz_0/inst'
+INFO: [Timing 38-35] Done setting XDC timing constraints. [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.xdc:54]
+INFO: [Timing 38-2] Deriving generated clocks [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.xdc:54]
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.xdc] for cell 'microblaze/microblaze_i/clk_wiz_0/inst'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0_board.xdc] for cell 'microblaze/microblaze_i/axi_uartlite_0/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0_board.xdc] for cell 'microblaze/microblaze_i/axi_uartlite_0/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0.xdc] for cell 'microblaze/microblaze_i/axi_uartlite_0/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0.xdc] for cell 'microblaze/microblaze_i/axi_uartlite_0/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0_board.xdc] for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0_board.xdc] for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0.xdc] for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0.xdc] for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_1/bd_87ec_psr_aclk_0_board.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_1/bd_87ec_psr_aclk_0_board.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_1/bd_87ec_psr_aclk_0.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_1/bd_87ec_psr_aclk_0.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/smartconnect.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/smartconnect.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1.xdc] for cell 'microblaze/microblaze_i/microblaze_0/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_1/microblaze_microblaze_0_1.xdc] for cell 'microblaze/microblaze_i/microblaze_0/U0'
+Parsing XDC File [C:/Users/andre/Desktop/snn-fpga/src/hdl/basys3-constraints.xdc]
+Finished Parsing XDC File [C:/Users/andre/Desktop/snn-fpga/src/hdl/basys3-constraints.xdc]
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1.xdc] for cell 'microblaze/microblaze_i/mdm_1/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_1/microblaze_mdm_1_1.xdc] for cell 'microblaze/microblaze_i/mdm_1/U0'
+INFO: [Project 1-1714] 161 XPM XDC files have been applied to the design.
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Generating merged BMM file for the design top 'top_microblaze'...
+CRITICAL WARNING: [Memdata 28-122] data2mem failed with a parsing error. Check the bmm file or the bmm_info_* properties on the BRAM components. The design BRAM components initialization strings have not been updated.
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.053 . Memory (MB): peak = 3020.504 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 4514 instances were transformed.
+  LUT6_2 => LUT6_2 (LUT5, LUT6): 80 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 2374 instances
+  RAM32X1D => RAM32X1D (RAMD32(x2)): 25 instances
+  RAM64M => RAM64M (RAMD64E(x4)): 2030 instances
+  RAM64X1D => RAM64X1D (RAMD64E(x2)): 5 instances
+
+open_run: Time (s): cpu = 00:01:28 ; elapsed = 00:01:06 . Memory (MB): peak = 3207.973 ; gain = 1338.680
+report_utilization -name utilization_1
+report_utilization: Time (s): cpu = 00:00:18 ; elapsed = 00:00:09 . Memory (MB): peak = 3430.184 ; gain = 213.723
+reset_run synth_1
+INFO: [Project 1-1161] Replacing file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/utils_1/imports/synth_1/top_microblaze.dcp with file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/top_microblaze.dcp
+launch_runs synth_1 -jobs 8
+[Sun Dec 22 20:19:51 2024] Launched synth_1...
+Run output will be captured here: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/runme.log
+reset_run synth_1
+launch_runs synth_1 -jobs 8
+[Sun Dec 22 20:21:40 2024] Launched synth_1...
+Run output will be captured here: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/runme.log
+exit
+INFO: [Common 17-206] Exiting Vivado at Sun Dec 22 20:25:26 2024...

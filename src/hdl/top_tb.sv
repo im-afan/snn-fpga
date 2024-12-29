@@ -27,11 +27,9 @@ module top_tb;
         #0 
         clk = 0;
         sw = 0;
-        #1000
-        sw = 1;
         #1000000
         //#15000
-        $writememb(".wave/spk_mem_dump.mem", top_0.bram_streamer_0.bram5.mem.mem);
+        $writememb(".wave/spk_mem_dump.mem", top_0.top_0.bram_streamer_0.bram5.mem.mem);
         $finish;
     end
 endmodule

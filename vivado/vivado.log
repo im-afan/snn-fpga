@@ -3,8 +3,8 @@
 # SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
 # IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
 # SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
-# Start of session at: Sat Dec 21 15:36:21 2024
-# Process ID         : 11064
+# Start of session at: Sat Dec 28 21:56:12 2024
+# Process ID         : 7864
 # Current directory  : C:/Users/andre/Desktop/snn-fpga/vivado
 # Command line       : vivado.exe -mode tcl -source .\basys3_project.tcl
 # Log file           : C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
@@ -19,7 +19,7 @@
 # Host memory        : 34248 MB
 # Swap memory        : 5100 MB
 # Total Virtual      : 39349 MB
-# Available Virtual  : 26363 MB
+# Available Virtual  : 29789 MB
 #-----------------------------------------------------------
 source {.\basys3_project.tcl}
 # create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
@@ -28,11 +28,2374 @@ source {.\basys3_project.tcl}
 # add_files ../src/hdl/bram/mem/spk_in_bram.mem
 # add_files ../src/hdl/bram/mem/weight_bram.mem
 # add_files ../src/hdl/bram/mem/tile_idx_bram.mem
-# add_files ../src/hdl/top.sv
+# add_files ../src/hdl/top_microblaze.sv
 # add_files ../src/hdl/basys3-constraints.xdc
+# source ../src/hdl/microblaze.tcl
+## namespace eval _tcl {
+## proc get_script_folder {} {
+##    set script_path [file normalize [info script]]
+##    set script_folder [file dirname $script_path]
+##    return $script_folder
+## }
+## }
+## variable script_folder
+## set script_folder [_tcl::get_script_folder]
+## set scripts_vivado_version 2024.2
+## set current_vivado_version [version -short]
+## if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
+##    puts ""
+##    if { [string compare $scripts_vivado_version $current_vivado_version] > 0 } {
+##       catch {common::send_gid_msg -ssname BD::TCL -id 2042 -severity "ERROR" " This script was generated using Vivado <$scripts_vivado_version> and is being run in <$current_vivado_version> of Vivado. Sourcing the script failed since it was created with a future version of Vivado."}
+## 
+##    } else {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2041 -severity "ERROR" "This script was generated using Vivado <$scripts_vivado_version> and is being run in <$current_vivado_version> of Vivado. Please run the script in Vivado <$scripts_vivado_version> then open the design in Vivado <$current_vivado_version>. Upgrade the design by running \"Tools => Report => Report IP Status...\", then run write_bd_tcl to create an updated script."}
+## 
+##    }
+## 
+##    return 1
+## }
+## set list_projs [get_projects -quiet]
+## if { $list_projs eq "" } {
+##    create_project project_1 myproj -part xc7a35tcpg236-1
+## }
+## variable design_name
+## set design_name microblaze
+## set errMsg ""
+## set nRet 0
+## set cur_design [current_bd_design -quiet]
+## set list_cells [get_bd_cells -quiet]
+## if { ${design_name} eq "" } {
+##    # USE CASES:
+##    #    1) Design_name not set
+## 
+##    set errMsg "Please set the variable <design_name> to a non-empty value."
+##    set nRet 1
+## 
+## } elseif { ${cur_design} ne "" && ${list_cells} eq "" } {
+##    # USE CASES:
+##    #    2): Current design opened AND is empty AND names same.
+##    #    3): Current design opened AND is empty AND names diff; design_name NOT in project.
+##    #    4): Current design opened AND is empty AND names diff; design_name exists in project.
+## 
+##    if { $cur_design ne $design_name } {
+##       common::send_gid_msg -ssname BD::TCL -id 2001 -severity "INFO" "Changing value of <design_name> from <$design_name> to <$cur_design> since current design is empty."
+##       set design_name [get_property NAME $cur_design]
+##    }
+##    common::send_gid_msg -ssname BD::TCL -id 2002 -severity "INFO" "Constructing design in IPI design <$cur_design>..."
+## 
+## } elseif { ${cur_design} ne "" && $list_cells ne "" && $cur_design eq $design_name } {
+##    # USE CASES:
+##    #    5) Current design opened AND has components AND same names.
+## 
+##    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+##    set nRet 1
+## } elseif { [get_files -quiet ${design_name}.bd] ne "" } {
+##    # USE CASES: 
+##    #    6) Current opened design, has components, but diff names, design_name exists in project.
+##    #    7) No opened design, design_name exists in project.
+## 
+##    set errMsg "Design <$design_name> already exists in your project, please set the variable <design_name> to another value."
+##    set nRet 2
+## 
+## } else {
+##    # USE CASES:
+##    #    8) No opened design, design_name not in project.
+##    #    9) Current opened design, has components, but diff names, design_name not in project.
+## 
+##    common::send_gid_msg -ssname BD::TCL -id 2003 -severity "INFO" "Currently there is no design <$design_name> in project, so creating one..."
+## 
+##    create_bd_design $design_name
+## 
+##    common::send_gid_msg -ssname BD::TCL -id 2004 -severity "INFO" "Making design <$design_name> as current_bd_design."
+##    current_bd_design $design_name
+## 
+## }
+INFO: [BD::TCL 103-2003] Currently there is no design <microblaze> in project, so creating one...
+Wrote  : <C:\Users\andre\Desktop\snn-fpga\vivado\snn_fpga\snn_fpga.srcs\sources_1\bd\microblaze\microblaze.bd> 
+INFO: [BD::TCL 103-2004] Making design <microblaze> as current_bd_design.
+## common::send_gid_msg -ssname BD::TCL -id 2005 -severity "INFO" "Currently the variable <design_name> is equal to \"$design_name\"."
+INFO: [BD::TCL 103-2005] Currently the variable <design_name> is equal to "microblaze".
+## if { $nRet != 0 } {
+##    catch {common::send_gid_msg -ssname BD::TCL -id 2006 -severity "ERROR" $errMsg}
+##    return $nRet
+## }
+## set bCheckIPsPassed 1
+## set bCheckIPs 1
+## if { $bCheckIPs == 1 } {
+##    set list_check_ips "\ 
+## xilinx.com:ip:clk_wiz:6.0\
+## xilinx.com:ip:axi_uartlite:2.0\
+## xilinx.com:ip:proc_sys_reset:5.0\
+## xilinx.com:ip:axi_bram_ctrl:4.1\
+## xilinx.com:ip:smartconnect:1.0\
+## xilinx.com:ip:microblaze:11.0\
+## xilinx.com:ip:mdm:3.2\
+## xilinx.com:ip:axi_gpio:2.0\
+## xilinx.com:ip:lmb_v10:3.0\
+## xilinx.com:ip:lmb_bram_if_cntlr:4.0\
+## xilinx.com:ip:blk_mem_gen:8.4\
+## "
+## 
+##    set list_ips_missing ""
+##    common::send_gid_msg -ssname BD::TCL -id 2011 -severity "INFO" "Checking if the following IPs exist in the project's IP catalog: $list_check_ips ."
+## 
+##    foreach ip_vlnv $list_check_ips {
+##       set ip_obj [get_ipdefs -all $ip_vlnv]
+##       if { $ip_obj eq "" } {
+##          lappend list_ips_missing $ip_vlnv
+##       }
+##    }
+## 
+##    if { $list_ips_missing ne "" } {
+##       catch {common::send_gid_msg -ssname BD::TCL -id 2012 -severity "ERROR" "The following IPs are not found in the IP Catalog:\n  $list_ips_missing\n\nResolution: Please add the repository containing the IP(s) to the project." }
+##       set bCheckIPsPassed 0
+##    }
+## 
+## }
+INFO: [BD::TCL 103-2011] Checking if the following IPs exist in the project's IP catalog:  
+xilinx.com:ip:clk_wiz:6.0 xilinx.com:ip:axi_uartlite:2.0 xilinx.com:ip:proc_sys_reset:5.0 xilinx.com:ip:axi_bram_ctrl:4.1 xilinx.com:ip:smartconnect:1.0 xilinx.com:ip:microblaze:11.0 xilinx.com:ip:mdm:3.2 xilinx.com:ip:axi_gpio:2.0 xilinx.com:ip:lmb_v10:3.0 xilinx.com:ip:lmb_bram_if_cntlr:4.0 xilinx.com:ip:blk_mem_gen:8.4  .
+## if { $bCheckIPsPassed != 1 } {
+##   common::send_gid_msg -ssname BD::TCL -id 2023 -severity "WARNING" "Will not continue with creation of design due to the error(s) above."
+##   return 3
+## }
+## proc create_hier_cell_microblaze_0_local_memory { parentCell nameHier } {
+## 
+##   variable script_folder
+## 
+##   if { $parentCell eq "" || $nameHier eq "" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2092 -severity "ERROR" "create_hier_cell_microblaze_0_local_memory() - Empty argument(s)!"}
+##      return
+##   }
+## 
+##   # Get object for parentCell
+##   set parentObj [get_bd_cells $parentCell]
+##   if { $parentObj == "" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2090 -severity "ERROR" "Unable to find parent cell <$parentCell>!"}
+##      return
+##   }
+## 
+##   # Make sure parentObj is hier blk
+##   set parentType [get_property TYPE $parentObj]
+##   if { $parentType ne "hier" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2091 -severity "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+##      return
+##   }
+## 
+##   # Save current instance; Restore later
+##   set oldCurInst [current_bd_instance .]
+## 
+##   # Set parent object as current
+##   current_bd_instance $parentObj
+## 
+##   # Create cell and set as current instance
+##   set hier_obj [create_bd_cell -type hier $nameHier]
+##   current_bd_instance $hier_obj
+## 
+##   # Create interface pins
+##   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 DLMB
+## 
+##   create_bd_intf_pin -mode MirroredMaster -vlnv xilinx.com:interface:lmb_rtl:1.0 ILMB
+## 
+## 
+##   # Create pins
+##   create_bd_pin -dir I -type clk LMB_Clk
+##   create_bd_pin -dir I -type rst SYS_Rst
+## 
+##   # Create instance: dlmb_v10, and set properties
+##   set dlmb_v10 [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_v10:3.0 dlmb_v10 ]
+## 
+##   # Create instance: ilmb_v10, and set properties
+##   set ilmb_v10 [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_v10:3.0 ilmb_v10 ]
+## 
+##   # Create instance: dlmb_bram_if_cntlr, and set properties
+##   set dlmb_bram_if_cntlr [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 dlmb_bram_if_cntlr ]
+##   set_property CONFIG.C_ECC {0} $dlmb_bram_if_cntlr
+## 
+## 
+##   # Create instance: ilmb_bram_if_cntlr, and set properties
+##   set ilmb_bram_if_cntlr [ create_bd_cell -type ip -vlnv xilinx.com:ip:lmb_bram_if_cntlr:4.0 ilmb_bram_if_cntlr ]
+##   set_property CONFIG.C_ECC {0} $ilmb_bram_if_cntlr
+## 
+## 
+##   # Create instance: lmb_bram, and set properties
+##   set lmb_bram [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.4 lmb_bram ]
+##   set_property -dict [list \
+##     CONFIG.Memory_Type {True_Dual_Port_RAM} \
+##     CONFIG.use_bram_block {BRAM_Controller} \
+##   ] $lmb_bram
+## 
+## 
+##   # Create interface connections
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb [get_bd_intf_pins dlmb_v10/LMB_M] [get_bd_intf_pins DLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb_bus [get_bd_intf_pins dlmb_v10/LMB_Sl_0] [get_bd_intf_pins dlmb_bram_if_cntlr/SLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb_cntlr [get_bd_intf_pins dlmb_bram_if_cntlr/BRAM_PORT] [get_bd_intf_pins lmb_bram/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb [get_bd_intf_pins ilmb_v10/LMB_M] [get_bd_intf_pins ILMB]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb_bus [get_bd_intf_pins ilmb_v10/LMB_Sl_0] [get_bd_intf_pins ilmb_bram_if_cntlr/SLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb_cntlr [get_bd_intf_pins ilmb_bram_if_cntlr/BRAM_PORT] [get_bd_intf_pins lmb_bram/BRAM_PORTB]
+## 
+##   # Create port connections
+##   connect_bd_net -net SYS_Rst_1  [get_bd_pins SYS_Rst] \
+##   [get_bd_pins dlmb_v10/SYS_Rst] \
+##   [get_bd_pins dlmb_bram_if_cntlr/LMB_Rst] \
+##   [get_bd_pins ilmb_v10/SYS_Rst] \
+##   [get_bd_pins ilmb_bram_if_cntlr/LMB_Rst]
+##   connect_bd_net -net microblaze_0_Clk  [get_bd_pins LMB_Clk] \
+##   [get_bd_pins dlmb_v10/LMB_Clk] \
+##   [get_bd_pins dlmb_bram_if_cntlr/LMB_Clk] \
+##   [get_bd_pins ilmb_v10/LMB_Clk] \
+##   [get_bd_pins ilmb_bram_if_cntlr/LMB_Clk]
+## 
+##   # Restore current instance
+##   current_bd_instance $oldCurInst
+## }
+## proc create_root_design { parentCell } {
+## 
+##   variable script_folder
+##   variable design_name
+## 
+##   if { $parentCell eq "" } {
+##      set parentCell [get_bd_cells /]
+##   }
+## 
+##   # Get object for parentCell
+##   set parentObj [get_bd_cells $parentCell]
+##   if { $parentObj == "" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2090 -severity "ERROR" "Unable to find parent cell <$parentCell>!"}
+##      return
+##   }
+## 
+##   # Make sure parentObj is hier blk
+##   set parentType [get_property TYPE $parentObj]
+##   if { $parentType ne "hier" } {
+##      catch {common::send_gid_msg -ssname BD::TCL -id 2091 -severity "ERROR" "Parent <$parentObj> has TYPE = <$parentType>. Expected to be <hier>."}
+##      return
+##   }
+## 
+##   # Save current instance; Restore later
+##   set oldCurInst [current_bd_instance .]
+## 
+##   # Set parent object as current
+##   current_bd_instance $parentObj
+## 
+## 
+##   # Create interface ports
+##   set uart [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 uart ]
+## 
+##   set BRAM_WEIGHT [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:bram_rtl:1.0 BRAM_WEIGHT ]
+##   set_property -dict [ list \
+##    CONFIG.MASTER_TYPE {BRAM_CTRL} \
+##    CONFIG.READ_WRITE_MODE {READ_WRITE} \
+##    ] $BRAM_WEIGHT
+## 
+##   set BRAM_SPK [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:bram_rtl:1.0 BRAM_SPK ]
+##   set_property -dict [ list \
+##    CONFIG.MASTER_TYPE {BRAM_CTRL} \
+##    CONFIG.READ_WRITE_MODE {READ_WRITE} \
+##    ] $BRAM_SPK
+## 
+##   set BRAM_INPUT [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:bram_rtl:1.0 BRAM_INPUT ]
+##   set_property -dict [ list \
+##    CONFIG.MASTER_TYPE {BRAM_CTRL} \
+##    CONFIG.READ_WRITE_MODE {READ_WRITE} \
+##    ] $BRAM_INPUT
+## 
+##   set BRAM_TILE_IDX [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:bram_rtl:1.0 BRAM_TILE_IDX ]
+##   set_property -dict [ list \
+##    CONFIG.MASTER_TYPE {BRAM_CTRL} \
+##    CONFIG.READ_WRITE_MODE {READ_WRITE} \
+##    ] $BRAM_TILE_IDX
+## 
+##   set snn_in [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 snn_in ]
+## 
+##   set snn_en [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 snn_en ]
+## 
+## 
+##   # Create ports
+##   set clk [ create_bd_port -dir I -type clk -freq_hz 100000000 clk ]
+##   set rst [ create_bd_port -dir I -type rst rst ]
+##   set_property -dict [ list \
+##    CONFIG.POLARITY {ACTIVE_LOW} \
+##  ] $rst
+## 
+##   # Create instance: clk_wiz_0, and set properties
+##   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
+## 
+##   # Create instance: axi_uartlite_0, and set properties
+##   set axi_uartlite_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0 ]
+##   set_property CONFIG.C_BAUDRATE {115200} $axi_uartlite_0
+## 
+## 
+##   # Create instance: rst_clk_wiz_0_100M, and set properties
+##   set rst_clk_wiz_0_100M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_clk_wiz_0_100M ]
+## 
+##   # Create instance: axi_bram_ctrl_0, and set properties
+##   set axi_bram_ctrl_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_0 ]
+##   set_property -dict [list \
+##     CONFIG.DATA_WIDTH {32} \
+##     CONFIG.PROTOCOL {AXI4} \
+##     CONFIG.READ_LATENCY {2} \
+##     CONFIG.SINGLE_PORT_BRAM {1} \
+##   ] $axi_bram_ctrl_0
+## 
+## 
+##   # Create instance: axi_bram_ctrl_1, and set properties
+##   set axi_bram_ctrl_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_1 ]
+##   set_property -dict [list \
+##     CONFIG.READ_LATENCY {2} \
+##     CONFIG.SINGLE_PORT_BRAM {1} \
+##   ] $axi_bram_ctrl_1
+## 
+## 
+##   # Create instance: axi_bram_ctrl_2, and set properties
+##   set axi_bram_ctrl_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_2 ]
+##   set_property -dict [list \
+##     CONFIG.DATA_WIDTH {32} \
+##     CONFIG.READ_LATENCY {2} \
+##     CONFIG.SINGLE_PORT_BRAM {1} \
+##   ] $axi_bram_ctrl_2
+## 
+## 
+##   # Create instance: axi_bram_ctrl_3, and set properties
+##   set axi_bram_ctrl_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_3 ]
+##   set_property -dict [list \
+##     CONFIG.READ_LATENCY {2} \
+##     CONFIG.SINGLE_PORT_BRAM {1} \
+##   ] $axi_bram_ctrl_3
+## 
+## 
+##   # Create instance: axi_smc, and set properties
+##   set axi_smc [ create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 axi_smc ]
+##   set_property -dict [list \
+##     CONFIG.NUM_MI {6} \
+##     CONFIG.NUM_SI {1} \
+##   ] $axi_smc
+## 
+## 
+##   # Create instance: microblaze_0, and set properties
+##   set microblaze_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:microblaze:11.0 microblaze_0 ]
+##   set_property -dict [list \
+##     CONFIG.C_DEBUG_ENABLED {1} \
+##     CONFIG.C_D_AXI {1} \
+##     CONFIG.C_D_LMB {1} \
+##     CONFIG.C_I_LMB {1} \
+##   ] $microblaze_0
+## 
+## 
+##   # Create instance: microblaze_0_local_memory
+##   create_hier_cell_microblaze_0_local_memory [current_bd_instance .] microblaze_0_local_memory
+## 
+##   # Create instance: mdm_1, and set properties
+##   set mdm_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:mdm:3.2 mdm_1 ]
+## 
+##   # Create instance: axi_gpio_0, and set properties
+##   set axi_gpio_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0 ]
+##   set_property -dict [list \
+##     CONFIG.C_ALL_INPUTS {1} \
+##     CONFIG.C_ALL_OUTPUTS_2 {1} \
+##     CONFIG.C_GPIO2_WIDTH {1} \
+##     CONFIG.C_GPIO_WIDTH {2} \
+##     CONFIG.C_IS_DUAL {1} \
+##   ] $axi_gpio_0
+## 
+## 
+##   # Create interface connections
+##   connect_bd_intf_net -intf_net axi_bram_ctrl_0_BRAM_PORTA [get_bd_intf_ports BRAM_WEIGHT] [get_bd_intf_pins axi_bram_ctrl_0/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net axi_bram_ctrl_1_BRAM_PORTA [get_bd_intf_ports BRAM_SPK] [get_bd_intf_pins axi_bram_ctrl_1/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net axi_bram_ctrl_2_BRAM_PORTA [get_bd_intf_ports BRAM_INPUT] [get_bd_intf_pins axi_bram_ctrl_2/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net axi_bram_ctrl_3_BRAM_PORTA [get_bd_intf_ports BRAM_TILE_IDX] [get_bd_intf_pins axi_bram_ctrl_3/BRAM_PORTA]
+##   connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports snn_in] [get_bd_intf_pins axi_gpio_0/GPIO]
+##   connect_bd_intf_net -intf_net axi_gpio_0_GPIO2 [get_bd_intf_ports snn_en] [get_bd_intf_pins axi_gpio_0/GPIO2]
+##   connect_bd_intf_net -intf_net axi_smc_M00_AXI [get_bd_intf_pins axi_smc/M00_AXI] [get_bd_intf_pins axi_bram_ctrl_0/S_AXI]
+##   connect_bd_intf_net -intf_net axi_smc_M01_AXI [get_bd_intf_pins axi_smc/M01_AXI] [get_bd_intf_pins axi_bram_ctrl_1/S_AXI]
+##   connect_bd_intf_net -intf_net axi_smc_M02_AXI [get_bd_intf_pins axi_smc/M02_AXI] [get_bd_intf_pins axi_bram_ctrl_2/S_AXI]
+##   connect_bd_intf_net -intf_net axi_smc_M03_AXI [get_bd_intf_pins axi_smc/M03_AXI] [get_bd_intf_pins axi_bram_ctrl_3/S_AXI]
+##   connect_bd_intf_net -intf_net axi_smc_M04_AXI [get_bd_intf_pins axi_smc/M04_AXI] [get_bd_intf_pins axi_uartlite_0/S_AXI]
+##   connect_bd_intf_net -intf_net axi_smc_M05_AXI [get_bd_intf_pins axi_smc/M05_AXI] [get_bd_intf_pins axi_gpio_0/S_AXI]
+##   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports uart] [get_bd_intf_pins axi_uartlite_0/UART]
+##   connect_bd_intf_net -intf_net microblaze_0_M_AXI_DP [get_bd_intf_pins microblaze_0/M_AXI_DP] [get_bd_intf_pins axi_smc/S00_AXI]
+##   connect_bd_intf_net -intf_net microblaze_0_debug [get_bd_intf_pins mdm_1/MBDEBUG_0] [get_bd_intf_pins microblaze_0/DEBUG]
+##   connect_bd_intf_net -intf_net microblaze_0_dlmb_1 [get_bd_intf_pins microblaze_0/DLMB] [get_bd_intf_pins microblaze_0_local_memory/DLMB]
+##   connect_bd_intf_net -intf_net microblaze_0_ilmb_1 [get_bd_intf_pins microblaze_0/ILMB] [get_bd_intf_pins microblaze_0_local_memory/ILMB]
+## 
+##   # Create port connections
+##   connect_bd_net -net clk_100MHz_1  [get_bd_ports clk] \
+##   [get_bd_pins clk_wiz_0/clk_in1]
+##   connect_bd_net -net clk_wiz_0_locked  [get_bd_pins clk_wiz_0/locked] \
+##   [get_bd_pins rst_clk_wiz_0_100M/dcm_locked]
+##   connect_bd_net -net mdm_1_debug_sys_rst  [get_bd_pins mdm_1/Debug_SYS_Rst] \
+##   [get_bd_pins rst_clk_wiz_0_100M/mb_debug_sys_rst] \
+##   [get_bd_pins clk_wiz_0/reset]
+##   connect_bd_net -net microblaze_0_Clk  [get_bd_pins clk_wiz_0/clk_out1] \
+##   [get_bd_pins rst_clk_wiz_0_100M/slowest_sync_clk] \
+##   [get_bd_pins axi_uartlite_0/s_axi_aclk] \
+##   [get_bd_pins axi_bram_ctrl_0/s_axi_aclk] \
+##   [get_bd_pins axi_bram_ctrl_1/s_axi_aclk] \
+##   [get_bd_pins axi_bram_ctrl_2/s_axi_aclk] \
+##   [get_bd_pins axi_bram_ctrl_3/s_axi_aclk] \
+##   [get_bd_pins axi_smc/aclk] \
+##   [get_bd_pins microblaze_0/Clk] \
+##   [get_bd_pins microblaze_0_local_memory/LMB_Clk] \
+##   [get_bd_pins axi_gpio_0/s_axi_aclk]
+##   connect_bd_net -net reset_rtl_0_1  [get_bd_ports rst] \
+##   [get_bd_pins rst_clk_wiz_0_100M/ext_reset_in]
+##   connect_bd_net -net rst_clk_wiz_0_100M_bus_struct_reset  [get_bd_pins rst_clk_wiz_0_100M/bus_struct_reset] \
+##   [get_bd_pins microblaze_0_local_memory/SYS_Rst]
+##   connect_bd_net -net rst_clk_wiz_0_100M_mb_reset  [get_bd_pins rst_clk_wiz_0_100M/mb_reset] \
+##   [get_bd_pins microblaze_0/Reset]
+##   connect_bd_net -net rst_clk_wiz_0_100M_peripheral_aresetn  [get_bd_pins rst_clk_wiz_0_100M/peripheral_aresetn] \
+##   [get_bd_pins axi_uartlite_0/s_axi_aresetn] \
+##   [get_bd_pins axi_bram_ctrl_0/s_axi_aresetn] \
+##   [get_bd_pins axi_bram_ctrl_1/s_axi_aresetn] \
+##   [get_bd_pins axi_bram_ctrl_2/s_axi_aresetn] \
+##   [get_bd_pins axi_bram_ctrl_3/s_axi_aresetn] \
+##   [get_bd_pins axi_smc/aresetn] \
+##   [get_bd_pins axi_gpio_0/s_axi_aresetn]
+## 
+##   # Create address segments
+##   assign_bd_address -offset 0xC0000000 -range 0x00002000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_bram_ctrl_0/S_AXI/Mem0] -force
+##   assign_bd_address -offset 0xC2000000 -range 0x00002000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_bram_ctrl_1/S_AXI/Mem0] -force
+##   assign_bd_address -offset 0xC4000000 -range 0x00002000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_bram_ctrl_2/S_AXI/Mem0] -force
+##   assign_bd_address -offset 0xC6000000 -range 0x00002000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_bram_ctrl_3/S_AXI/Mem0] -force
+##   assign_bd_address -offset 0x40000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_gpio_0/S_AXI/Reg] -force
+##   assign_bd_address -offset 0x40600000 -range 0x00010000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs axi_uartlite_0/S_AXI/Reg] -force
+##   assign_bd_address -offset 0x00000000 -range 0x00004000 -target_address_space [get_bd_addr_spaces microblaze_0/Data] [get_bd_addr_segs microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem] -force
+##   assign_bd_address -offset 0x00000000 -range 0x00004000 -target_address_space [get_bd_addr_spaces microblaze_0/Instruction] [get_bd_addr_segs microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem] -force
+## 
+## 
+##   # Restore current instance
+##   current_bd_instance $oldCurInst
+## 
+##   validate_bd_design
+##   save_bd_design
+## }
+## create_root_design ""
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_0_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_0_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_1_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_1_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_2_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_2_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-2] microblaze_axi_bram_ctrl_3_0: In IP Integrator, please note that memory depth value gets calculated based on the Data Width of the IP and Address range selected in the Address Editor.Incase a validation error occured on the range of this parameter, please check if the selected Data width and the Address Range are valid. For valid Data width and memory depth values, please refer to the AXI BRAM Controller Product Guide.
+INFO: [xilinx.com:ip:axi_bram_ctrl:4.1-1] microblaze_axi_bram_ctrl_3_0: In IP Integrator, The Maximum address range supported is 2G. Selecting the address range more than 2G in the address editor may resets the value of Memory depth to default value (1024). please refer to the AXI BRAM Controller Product Guide.
+Slave segment '/axi_bram_ctrl_0/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC000_0000 [ 8K ]>.
+Slave segment '/axi_bram_ctrl_1/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC200_0000 [ 8K ]>.
+Slave segment '/axi_bram_ctrl_2/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC400_0000 [ 8K ]>.
+Slave segment '/axi_bram_ctrl_3/S_AXI/Mem0' is being assigned into address space '/microblaze_0/Data' at <0xC600_0000 [ 8K ]>.
+Slave segment '/axi_gpio_0/S_AXI/Reg' is being assigned into address space '/microblaze_0/Data' at <0x4000_0000 [ 64K ]>.
+Slave segment '/axi_uartlite_0/S_AXI/Reg' is being assigned into address space '/microblaze_0/Data' at <0x4060_0000 [ 64K ]>.
+Slave segment '/microblaze_0_local_memory/dlmb_bram_if_cntlr/SLMB/Mem' is being assigned into address space '/microblaze_0/Data' at <0x0000_0000 [ 16K ]>.
+Slave segment '/microblaze_0_local_memory/ilmb_bram_if_cntlr/SLMB/Mem' is being assigned into address space '/microblaze_0/Instruction' at <0x0000_0000 [ 16K ]>.
+INFO: [BD 5-943] Reserving offset range <0xC000_0000 [ 8K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M00_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0xC200_0000 [ 8K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M01_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0xC400_0000 [ 8K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M02_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0xC600_0000 [ 8K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M03_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0x4060_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M04_AXI'. This will be used by smartconnect on path for routing.
+INFO: [BD 5-943] Reserving offset range <0x4000_0000 [ 64K ]> from slave interface '/axi_smc/S00_AXI' to master interface '/axi_smc/M05_AXI'. This will be used by smartconnect on path for routing.
+INFO: [xilinx.com:ip:smartconnect:1.0-1] microblaze_axi_smc_0: SmartConnect microblaze_axi_smc_0 is in Low-Area Mode.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+INFO: [xilinx.com:ip:clk_wiz:6.0-1] /clk_wiz_0 clk_wiz propagate
+INFO: [xilinx.com:ip:microblaze:11.0-9] /microblaze_0: Setting C_BASE_VECTORS to 0x00000000.
+validate_bd_design: Time (s): cpu = 00:00:07 ; elapsed = 00:00:09 . Memory (MB): peak = 755.402 ; gain = 121.691
+Wrote  : <C:\Users\andre\Desktop\snn-fpga\vivado\snn_fpga\snn_fpga.srcs\sources_1\bd\microblaze\microblaze.bd> 
+# make_wrapper -files [get_files microblaze.bd] -top
+INFO: [BD 41-1662] The design 'microblaze.bd' is already validated. Therefore parameter propagation will not be re-run.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/synth/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/sim/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hdl/microblaze_wrapper.v
+# add_files -norecurse ./snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hdl/microblaze_wrapper.v
 # set_property include_dirs {../src/hdl/ ../src/hdl/bram ../src/hdl/snn ../src/hdl/fifo ../src/hdl/bram/mem} [current_fileset]
-# set_property top top [current_fileset]
-Vivado% start_gui
+# set_property top top_microblaze [current_fileset]
+# launch_runs impl_1 -to_step write_bitstream -jobs 12
+INFO: [BD 41-1662] The design 'microblaze.bd' is already validated. Therefore parameter propagation will not be re-run.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+WARNING: [filemgmt 56-443] The ECC Algorithm string is empty. Setting the Memory Map to default ECC value to ECC_NONE.
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/synth/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/sim/microblaze.v
+Verilog Output written to : C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hdl/microblaze_wrapper.v
+INFO: [BD 41-1029] Generation completed for the IP Integrator block clk_wiz_0 .
+WARNING: [IP_Flow 19-4994] Overwriting existing constraint file 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0_ooc.xdc'
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_uartlite_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block rst_clk_wiz_0_100M .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_bram_ctrl_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_bram_ctrl_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_bram_ctrl_2 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_bram_ctrl_3 .
+Exporting to file c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/hw_handoff/microblaze_axi_smc_0.hwh
+Generated Hardware Definition File c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/synth/microblaze_axi_smc_0.hwdef
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_smc .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_v10 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/dlmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/ilmb_bram_if_cntlr .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block microblaze_0_local_memory/lmb_bram .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block mdm_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block axi_gpio_0 .
+Exporting to file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hw_handoff/microblaze.hwh
+Generated Hardware Definition File C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/synth/microblaze.hwdef
+INFO: [IP_Flow 19-6930] IPCACHE: runCacheChecks() number of threads = 8
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_bram_ctrl_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_bram_ctrl_1_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_bram_ctrl_2_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_bram_ctrl_3_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_gpio_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_smc_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_axi_uartlite_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_clk_wiz_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_dlmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_dlmb_v10_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_ilmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_ilmb_v10_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_lmb_bram_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_mdm_1_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_microblaze_0_0
+INFO: [IP_Flow 19-6921] IPCACHE: Adding cache check func to thread queue for IP microblaze_rst_clk_wiz_0_100M_0
+INFO: [IP_Flow 19-8020] IPCACHE: runCacheChecks() calling threadPool finishWork()
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_bram_ctrl_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_bram_ctrl_1_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_bram_ctrl_2_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_bram_ctrl_3_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_gpio_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_rst_clk_wiz_0_100M_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_smc_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_axi_uartlite_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_clk_wiz_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_dlmb_v10_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_ilmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_microblaze_0_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_dlmb_bram_if_cntlr_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_ilmb_v10_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_mdm_1_0
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: microblaze_lmb_bram_0
+[Sat Dec 28 21:57:06 2024] Launched microblaze_axi_smc_0_synth_1, microblaze_clk_wiz_0_0_synth_1, microblaze_rst_clk_wiz_0_100M_0_synth_1, microblaze_axi_bram_ctrl_0_0_synth_1, microblaze_axi_uartlite_0_0_synth_1, microblaze_axi_bram_ctrl_3_0_synth_1, microblaze_axi_bram_ctrl_1_0_synth_1, microblaze_axi_bram_ctrl_2_0_synth_1, microblaze_microblaze_0_0_synth_1, microblaze_ilmb_bram_if_cntlr_0_synth_1, microblaze_dlmb_bram_if_cntlr_0_synth_1, microblaze_mdm_1_0_synth_1, microblaze_ilmb_v10_0_synth_1, microblaze_lmb_bram_0_synth_1, microblaze_dlmb_v10_0_synth_1, microblaze_axi_gpio_0_0_synth_1, synth_1...
+Run output will be captured here:
+microblaze_axi_smc_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_smc_0_synth_1/runme.log
+microblaze_clk_wiz_0_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_clk_wiz_0_0_synth_1/runme.log
+microblaze_rst_clk_wiz_0_100M_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_rst_clk_wiz_0_100M_0_synth_1/runme.log
+microblaze_axi_bram_ctrl_0_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_bram_ctrl_0_0_synth_1/runme.log
+microblaze_axi_uartlite_0_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_uartlite_0_0_synth_1/runme.log
+microblaze_axi_bram_ctrl_3_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_bram_ctrl_3_0_synth_1/runme.log
+microblaze_axi_bram_ctrl_1_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_bram_ctrl_1_0_synth_1/runme.log
+microblaze_axi_bram_ctrl_2_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_bram_ctrl_2_0_synth_1/runme.log
+microblaze_microblaze_0_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_microblaze_0_0_synth_1/runme.log
+microblaze_ilmb_bram_if_cntlr_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_ilmb_bram_if_cntlr_0_synth_1/runme.log
+microblaze_dlmb_bram_if_cntlr_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_dlmb_bram_if_cntlr_0_synth_1/runme.log
+microblaze_mdm_1_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_mdm_1_0_synth_1/runme.log
+microblaze_ilmb_v10_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_ilmb_v10_0_synth_1/runme.log
+microblaze_lmb_bram_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_lmb_bram_0_synth_1/runme.log
+microblaze_dlmb_v10_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_dlmb_v10_0_synth_1/runme.log
+microblaze_axi_gpio_0_0_synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/microblaze_axi_gpio_0_0_synth_1/runme.log
+synth_1: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/synth_1/runme.log
+[Sat Dec 28 21:57:06 2024] Launched impl_1...
+Run output will be captured here: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/runme.log
+launch_runs: Time (s): cpu = 00:00:14 ; elapsed = 00:00:29 . Memory (MB): peak = 822.578 ; gain = 51.586
+# wait_on_run impl_1
+[Sat Dec 28 21:57:06 2024] Waiting for impl_1 to finish...
+
+*** Running vivado
+    with args -log top_microblaze.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source top_microblaze.tcl -notrace
+
+
+
+****** Vivado v2024.2 (64-bit)
+  **** SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+  **** IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+  **** SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+  **** Start of session at: Sat Dec 28 22:03:24 2024
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source top_microblaze.tcl -notrace
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2024.2/data/ip'.
+add_files: Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 380.203 ; gain = 74.445
+Command: link_design -top top_microblaze -part xc7a35tcpg236-1
+Design is defaulting to srcset: sources_1
+Design is defaulting to constrset: constrs_1
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_bram_ctrl_0_0/microblaze_axi_bram_ctrl_0_0.dcp' for cell 'microblaze/microblaze_i/axi_bram_ctrl_0'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_bram_ctrl_1_0/microblaze_axi_bram_ctrl_1_0.dcp' for cell 'microblaze/microblaze_i/axi_bram_ctrl_1'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_bram_ctrl_2_0/microblaze_axi_bram_ctrl_2_0.dcp' for cell 'microblaze/microblaze_i/axi_bram_ctrl_2'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_bram_ctrl_3_0/microblaze_axi_bram_ctrl_3_0.dcp' for cell 'microblaze/microblaze_i/axi_bram_ctrl_3'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_gpio_0_0/microblaze_axi_gpio_0_0.dcp' for cell 'microblaze/microblaze_i/axi_gpio_0'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/microblaze_axi_smc_0.dcp' for cell 'microblaze/microblaze_i/axi_smc'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0.dcp' for cell 'microblaze/microblaze_i/axi_uartlite_0'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.dcp' for cell 'microblaze/microblaze_i/clk_wiz_0'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_0/microblaze_mdm_1_0.dcp' for cell 'microblaze/microblaze_i/mdm_1'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_0/microblaze_microblaze_0_0.dcp' for cell 'microblaze/microblaze_i/microblaze_0'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0.dcp' for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_bram_if_cntlr_0/microblaze_dlmb_bram_if_cntlr_0.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/dlmb_bram_if_cntlr'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_dlmb_v10_0/microblaze_dlmb_v10_0.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/dlmb_v10'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_bram_if_cntlr_0/microblaze_ilmb_bram_if_cntlr_0.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/ilmb_bram_if_cntlr'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_ilmb_v10_0/microblaze_ilmb_v10_0.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/ilmb_v10'
+INFO: [Project 1-454] Reading design checkpoint 'c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_lmb_bram_0/microblaze_lmb_bram_0.dcp' for cell 'microblaze/microblaze_i/microblaze_0_local_memory/lmb_bram'
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 673.238 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 1711 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2024.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+WARNING: [Opt 31-35] Removing redundant IBUF, microblaze/microblaze_i/clk_wiz_0/inst/clkin1_ibufg, from the path connected to top-level port: clk 
+Resolution: The tool has removed redundant IBUF. To resolve this warning, check for redundant IBUF in the input design.
+WARNING: [Constraints 18-550] Could not create 'IBUF_LOW_PWR' constraint because net 'microblaze/microblaze_i/clk_wiz_0/clk_in1' is not directly connected to top level port. 'IBUF_LOW_PWR' is ignored for synthesis but preserved for implementation.
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0_board.xdc] for cell 'microblaze/microblaze_i/clk_wiz_0/inst'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0_board.xdc] for cell 'microblaze/microblaze_i/clk_wiz_0/inst'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.xdc] for cell 'microblaze/microblaze_i/clk_wiz_0/inst'
+INFO: [Timing 38-35] Done setting XDC timing constraints. [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.xdc:54]
+INFO: [Timing 38-2] Deriving generated clocks [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.xdc:54]
+get_clocks: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 1438.984 ; gain = 584.008
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.xdc] for cell 'microblaze/microblaze_i/clk_wiz_0/inst'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0_board.xdc] for cell 'microblaze/microblaze_i/axi_uartlite_0/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0_board.xdc] for cell 'microblaze/microblaze_i/axi_uartlite_0/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0.xdc] for cell 'microblaze/microblaze_i/axi_uartlite_0/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_uartlite_0_0/microblaze_axi_uartlite_0_0.xdc] for cell 'microblaze/microblaze_i/axi_uartlite_0/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0_board.xdc] for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0_board.xdc] for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0.xdc] for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/microblaze_rst_clk_wiz_0_100M_0.xdc] for cell 'microblaze/microblaze_i/rst_clk_wiz_0_100M/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_1/bd_87ec_psr_aclk_0_board.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_1/bd_87ec_psr_aclk_0_board.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_1/bd_87ec_psr_aclk_0.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_1/bd_87ec_psr_aclk_0.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst/clk_map/psr_aclk/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/smartconnect.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_smc_0/smartconnect.xdc] for cell 'microblaze/microblaze_i/axi_smc/inst'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_0/microblaze_microblaze_0_0.xdc] for cell 'microblaze/microblaze_i/microblaze_0/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_microblaze_0_0/microblaze_microblaze_0_0.xdc] for cell 'microblaze/microblaze_i/microblaze_0/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_gpio_0_0/microblaze_axi_gpio_0_0_board.xdc] for cell 'microblaze/microblaze_i/axi_gpio_0/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_gpio_0_0/microblaze_axi_gpio_0_0_board.xdc] for cell 'microblaze/microblaze_i/axi_gpio_0/U0'
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_gpio_0_0/microblaze_axi_gpio_0_0.xdc] for cell 'microblaze/microblaze_i/axi_gpio_0/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_axi_gpio_0_0/microblaze_axi_gpio_0_0.xdc] for cell 'microblaze/microblaze_i/axi_gpio_0/U0'
+Parsing XDC File [C:/Users/andre/Desktop/snn-fpga/src/hdl/basys3-constraints.xdc]
+Finished Parsing XDC File [C:/Users/andre/Desktop/snn-fpga/src/hdl/basys3-constraints.xdc]
+Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_0/microblaze_mdm_1_0.xdc] for cell 'microblaze/microblaze_i/mdm_1/U0'
+Finished Parsing XDC File [c:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/ip/microblaze_mdm_1_0/microblaze_mdm_1_0.xdc] for cell 'microblaze/microblaze_i/mdm_1/U0'
+INFO: [Project 1-1714] 89 XPM XDC files have been applied to the design.
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Generating merged BMM file for the design top 'top_microblaze'...
+
+ERROR::14 - Missing keyword. 'MICROBLAZE' found, 'END_ADDRESS_MAP' expected.
+ADDRESS_MAP  microblaze_microblaze_i_microblaze_0 microblaze-le 100 microblaze/microblaze_i/microblaze_0
+                                                                    ^
+
+CRITICAL WARNING: [Memdata 28-122] data2mem failed with a parsing error. Check the bmm file or the bmm_info_* properties on the BRAM components. The design BRAM components initialization strings have not been updated.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 1438.984 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 316 instances were transformed.
+  LUT6_2 => LUT6_2 (LUT5, LUT6): 80 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 16 instances
+  RAM64M => RAM64M (RAMD64E(x4)): 220 instances
+
+29 Infos, 2 Warnings, 1 Critical Warnings and 0 Errors encountered.
+link_design completed successfully
+link_design: Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 1438.984 ; gain = 1058.781
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a35t'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 1438.984 ; gain = 0.000
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Cache Timing Information Task | Checksum: 1abf74c43
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 1463.570 ; gain = 24.586
+
+Starting Logic Optimization Task
+
+Phase 1 Initialization
+
+Phase 1.1 Core Generation And Design Setup
+Phase 1.1 Core Generation And Design Setup | Checksum: 1abf74c43
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.056 . Memory (MB): peak = 1865.031 ; gain = 0.000
+
+Phase 1.2 Setup Constraints And Sort Netlist
+Phase 1.2 Setup Constraints And Sort Netlist | Checksum: 1abf74c43
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.081 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Phase 1 Initialization | Checksum: 1abf74c43
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.083 . Memory (MB): peak = 1865.031 ; gain = 0.000
+
+Phase 2 Timer Update And Timing Data Collection
+
+Phase 2.1 Timer Update
+Phase 2.1 Timer Update | Checksum: 1abf74c43
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.593 . Memory (MB): peak = 1865.031 ; gain = 0.000
+
+Phase 2.2 Timing Data Collection
+Phase 2.2 Timing Data Collection | Checksum: 1abf74c43
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.661 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Phase 2 Timer Update And Timing Data Collection | Checksum: 1abf74c43
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.664 . Memory (MB): peak = 1865.031 ; gain = 0.000
+
+Phase 3 Retarget
+INFO: [Opt 31-1851] Number of loadless carry chains removed were: 0
+INFO: [Opt 31-1834] Total Chains To Be Transformed Were: 0 AND Number of Transformed insts Created are: 0
+INFO: [Opt 31-1566] Pulled 3 inverters resulting in an inversion of 27 pins
+INFO: [Opt 31-138] Pushed 10 inverter(s) to 26 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 3 Retarget | Checksum: 268f6bb05
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Retarget | Checksum: 268f6bb05
+INFO: [Opt 31-389] Phase Retarget created 132 cells and removed 169 cells
+INFO: [Opt 31-1021] In phase Retarget, 164 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 4 Constant propagation
+INFO: [Opt 31-138] Pushed 4 inverter(s) to 8 load pin(s).
+Phase 4 Constant propagation | Checksum: 2c222d37f
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Constant propagation | Checksum: 2c222d37f
+INFO: [Opt 31-389] Phase Constant propagation created 116 cells and removed 601 cells
+INFO: [Opt 31-1021] In phase Constant propagation, 161 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 5 Sweep
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 1865.031 ; gain = 0.000
+INFO: [Constraints 18-11670] Building netlist checker database with flags, 0x8
+Done building netlist checker database: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.013 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Phase 5 Sweep | Checksum: 238dd77ba
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Sweep | Checksum: 238dd77ba
+INFO: [Opt 31-389] Phase Sweep created 0 cells and removed 406 cells
+INFO: [Opt 31-1021] In phase Sweep, 202 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 6 BUFG optimization
+INFO: [Opt 31-194] Inserted BUFG clk_IBUF_BUFG_inst to drive 7136 load(s) on clock net clk_IBUF_BUFG
+INFO: [Opt 31-194] Inserted BUFG microblaze/microblaze_i/mdm_1/U0/Use_E2.BSCAN_I/Dbg_Update_0_BUFG_inst to drive 39 load(s) on clock net microblaze/microblaze_i/mdm_1/U0/Use_E2.BSCAN_I/Dbg_Update_0_BUFG
+INFO: [Opt 31-193] Inserted 2 BUFG(s) on clock nets
+Phase 6 BUFG optimization | Checksum: 28aea7c08
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1865.031 ; gain = 0.000
+BUFG optimization | Checksum: 28aea7c08
+INFO: [Opt 31-662] Phase BUFG optimization created 2 cells of which 2 are BUFGs and removed 0 cells.
+
+Phase 7 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 7 Shift Register Optimization | Checksum: 28aea7c08
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:03 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Shift Register Optimization | Checksum: 28aea7c08
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 8 Post Processing Netlist
+Phase 8 Post Processing Netlist | Checksum: 2f1343c34
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Post Processing Netlist | Checksum: 2f1343c34
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+INFO: [Opt 31-1021] In phase Post Processing Netlist, 196 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 9 Finalization
+
+Phase 9.1 Finalizing Design Cores and Updating Shapes
+Phase 9.1 Finalizing Design Cores and Updating Shapes | Checksum: 27b4b3e25
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:05 . Memory (MB): peak = 1865.031 ; gain = 0.000
+
+Phase 9.2 Verifying Netlist Connectivity
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.040 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Phase 9.2 Verifying Netlist Connectivity | Checksum: 27b4b3e25
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:05 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Phase 9 Finalization | Checksum: 27b4b3e25
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:05 . Memory (MB): peak = 1865.031 ; gain = 0.000
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |             132  |             169  |                                            164  |
+|  Constant propagation         |             116  |             601  |                                            161  |
+|  Sweep                        |               0  |             406  |                                            202  |
+|  BUFG optimization            |               2  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                            196  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+Ending Logic Optimization Task | Checksum: 27b4b3e25
+
+Time (s): cpu = 00:00:06 ; elapsed = 00:00:05 . Memory (MB): peak = 1865.031 ; gain = 0.000
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Running Vector-less Activity Propagation...
+INFO: [Pwropt 34-9] Applying IDT optimizations ...
+INFO: [Pwropt 34-10] Applying ODC optimizations ...
+
+Finished Running Vector-less Activity Propagation
+
+
+Starting PowerOpt Patch Enables Task
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 47 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+INFO: [Pwropt 34-201] Structural ODC has moved 0 WE to EN ports
+Number of BRAM Ports augmented: 4 newly gated: 0 Total Ports: 94
+Ending PowerOpt Patch Enables Task | Checksum: 241b08194
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.282 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Ending Power Optimization Task | Checksum: 241b08194
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:07 . Memory (MB): peak = 2037.777 ; gain = 172.746
+
+Starting Final Cleanup Task
+
+Starting Logic Optimization Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+Ending Logic Optimization Task | Checksum: 2b857d578
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Ending Final Cleanup Task | Checksum: 2b857d578
+
+Time (s): cpu = 00:00:07 ; elapsed = 00:00:06 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Ending Netlist Obfuscation Task | Checksum: 2b857d578
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.018 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+64 Infos, 2 Warnings, 1 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:00:33 ; elapsed = 00:00:25 . Memory (MB): peak = 2037.777 ; gain = 598.793
+INFO: [Vivado 12-24828] Executing command : report_drc -file top_microblaze_drc_opted.rpt -pb top_microblaze_drc_opted.pb -rpx top_microblaze_drc_opted.rpx
+Command: report_drc -file top_microblaze_drc_opted.rpt -pb top_microblaze_drc_opted.pb -rpx top_microblaze_drc_opted.rpx
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/top_microblaze_drc_opted.rpt.
+report_drc completed successfully
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Wrote PlaceDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.040 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.056 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.061 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/top_microblaze_opt.dcp' has been generated.
+Command: place_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a35t'
+INFO: [Common 17-83] Releasing license: Implementation
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+Running DRC as a precondition to command place_design
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 4-198] DRC finished with 0 Errors
+INFO: [Vivado_Tcl 4-199] Please refer to the DRC report (report_drc) for more information.
+INFO: [Place 30-611] Multithreading enabled for place_design using a maximum of 2 CPUs
+
+Starting Placer Task
+
+Phase 1 Placer Initialization
+
+Phase 1.1 Placer Initialization Netlist Sorting
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 1.1 Placer Initialization Netlist Sorting | Checksum: 1db7ec129
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.024 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.017 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device
+Phase 1.2 IO Placement/ Clock Placement/ Build Placer Device | Checksum: 17c64f27e
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 1.3 Build Placer Netlist Model
+Phase 1.3 Build Placer Netlist Model | Checksum: 17ef1fb4f
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:05 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 1.4 Constrain Clocks/Macros
+Phase 1.4 Constrain Clocks/Macros | Checksum: 17ef1fb4f
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:05 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 1 Placer Initialization | Checksum: 17ef1fb4f
+
+Time (s): cpu = 00:00:08 ; elapsed = 00:00:06 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 2 Global Placement
+
+Phase 2.1 Floorplanning
+Phase 2.1 Floorplanning | Checksum: 198fdaa0a
+
+Time (s): cpu = 00:00:11 ; elapsed = 00:00:07 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 2.2 Update Timing before SLR Path Opt
+Phase 2.2 Update Timing before SLR Path Opt | Checksum: 22fb2f67c
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:08 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 2.3 Post-Processing in Floorplanning
+Phase 2.3 Post-Processing in Floorplanning | Checksum: 22fb2f67c
+
+Time (s): cpu = 00:00:12 ; elapsed = 00:00:08 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 2.4 Global Place Phase1
+Phase 2.4 Global Place Phase1 | Checksum: 1ca7018e6
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:18 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 2.5 Global Place Phase2
+
+Phase 2.5.1 UpdateTiming Before Physical Synthesis
+Phase 2.5.1 UpdateTiming Before Physical Synthesis | Checksum: 1cee65bef
+
+Time (s): cpu = 00:00:32 ; elapsed = 00:00:19 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 2.5.2 Physical Synthesis In Placer
+INFO: [Physopt 32-1035] Found 0 LUTNM shape to break, 580 LUT instances to create LUTNM shape
+INFO: [Physopt 32-1044] Break lutnm for timing: one critical 0, two critical 0, total 0, new lutff created 0
+INFO: [Physopt 32-1138] End 1 Pass. Optimized 262 nets or LUTs. Breaked 0 LUT, combined 262 existing LUTs and moved 0 existing LUT
+INFO: [Physopt 32-65] No nets found for high-fanout optimization.
+INFO: [Physopt 32-232] Optimized 0 net. Created 0 new instance.
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-456] No candidate cells for DSP register optimization found in the design.
+INFO: [Physopt 32-775] End 2 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-1123] No candidate cells found for Shift Register to Pipeline optimization
+INFO: [Physopt 32-775] End 2 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-1401] No candidate cells found for Shift Register optimization.
+INFO: [Physopt 32-677] No candidate cells for Shift Register optimization found in the design
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-526] No candidate cells for BRAM register optimization found in the design
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-846] No candidate cells for URAM register optimization found in the design
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-846] No candidate cells for URAM register optimization found in the design
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+INFO: [Physopt 32-949] No candidate nets found for dynamic/static region interface net replication
+INFO: [Physopt 32-775] End 1 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.018 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization                                     |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+|  LUT Combining                                    |            0  |            262  |                   262  |           0  |           1  |  00:00:00  |
+|  Retime                                           |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Very High Fanout                                 |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  DSP Register                                     |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Shift Register to Pipeline                       |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Shift Register                                   |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  BRAM Register                                    |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  URAM Register                                    |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Dynamic/Static Region Interface Net Replication  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Total                                            |            0  |            262  |                   262  |           0  |           9  |  00:00:01  |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Phase 2.5.2 Physical Synthesis In Placer | Checksum: 178eb4faf
+
+Time (s): cpu = 00:00:36 ; elapsed = 00:00:21 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 2.5 Global Place Phase2 | Checksum: 203f95882
+
+Time (s): cpu = 00:00:37 ; elapsed = 00:00:22 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 2 Global Placement | Checksum: 203f95882
+
+Time (s): cpu = 00:00:37 ; elapsed = 00:00:22 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3 Detail Placement
+
+Phase 3.1 Commit Multi Column Macros
+Phase 3.1 Commit Multi Column Macros | Checksum: 22fd6714e
+
+Time (s): cpu = 00:00:39 ; elapsed = 00:00:23 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3.2 Commit Most Macros & LUTRAMs
+Phase 3.2 Commit Most Macros & LUTRAMs | Checksum: 136717d47
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:26 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3.3 Area Swap Optimization
+Phase 3.3 Area Swap Optimization | Checksum: 1cf540961
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:27 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3.4 Pipeline Register Optimization
+Phase 3.4 Pipeline Register Optimization | Checksum: 14bf7ce62
+
+Time (s): cpu = 00:00:44 ; elapsed = 00:00:27 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3.5 Fast Optimization
+Phase 3.5 Fast Optimization | Checksum: 18bfc0064
+
+Time (s): cpu = 00:00:51 ; elapsed = 00:00:31 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3.6 Small Shape Detail Placement
+Phase 3.6 Small Shape Detail Placement | Checksum: 264069575
+
+Time (s): cpu = 00:00:57 ; elapsed = 00:00:36 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3.7 Re-assign LUT pins
+Phase 3.7 Re-assign LUT pins | Checksum: 1dfd4f1b9
+
+Time (s): cpu = 00:00:58 ; elapsed = 00:00:37 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3.8 Pipeline Register Optimization
+Phase 3.8 Pipeline Register Optimization | Checksum: 1d9a99a85
+
+Time (s): cpu = 00:00:58 ; elapsed = 00:00:37 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3.9 Fast Optimization
+Phase 3.9 Fast Optimization | Checksum: 210edd019
+
+Time (s): cpu = 00:01:07 ; elapsed = 00:00:42 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 3 Detail Placement | Checksum: 210edd019
+
+Time (s): cpu = 00:01:07 ; elapsed = 00:00:42 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 4 Post Placement Optimization and Clean-Up
+
+Phase 4.1 Post Commit Optimization
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 4.1.1 Post Placement Optimization
+Post Placement Optimization Initialization | Checksum: 2993ec2db
+
+Phase 4.1.1.1 BUFG Insertion
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 2 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=-1.220 | TNS=-121.584 |
+Phase 1 Physical Synthesis Initialization | Checksum: 1eeaaf391
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.846 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Place 46-33] Processed net top_0/synapse_array_0/adder_tree_en, BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-33] Processed net en_done_controller_0/SR[0], BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-33] Processed net top_0/fifo_weight/buffer, BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-33] Processed net top_0/fifo_weight/buffer[1][1023]_i_1_n_0, BUFG insertion was skipped due to placement/routing conflicts.
+INFO: [Place 46-56] BUFG insertion identified 4 candidate nets. Inserted BUFG: 0, Replicated BUFG Driver: 0, Skipped due to Placement/Routing Conflicts: 4, Skipped due to Timing Degradation: 0, Skipped due to netlist editing failed: 0.
+Ending Physical Synthesis Task | Checksum: 31fed1e67
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:01 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 4.1.1.1 BUFG Insertion | Checksum: 2993ec2db
+
+Time (s): cpu = 00:01:16 ; elapsed = 00:00:49 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 4.1.1.2 Post Placement Timing Optimization
+INFO: [Place 30-746] Post Placement Timing Summary WNS=-0.747. For the most accurate timing information please run report_timing.
+Phase 4.1.1.2 Post Placement Timing Optimization | Checksum: 23789eb22
+
+Time (s): cpu = 00:01:36 ; elapsed = 00:01:10 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Time (s): cpu = 00:01:36 ; elapsed = 00:01:10 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 4.1 Post Commit Optimization | Checksum: 23789eb22
+
+Time (s): cpu = 00:01:36 ; elapsed = 00:01:10 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 4.2 Post Placement Cleanup
+Phase 4.2 Post Placement Cleanup | Checksum: 23789eb22
+
+Time (s): cpu = 00:01:37 ; elapsed = 00:01:10 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 4.3 Placer Reporting
+
+Phase 4.3.1 Print Estimated Congestion
+INFO: [Place 30-612] Post-Placement Estimated Congestion 
+ ____________________________________________________
+|           | Global Congestion | Short Congestion  |
+| Direction | Region Size       | Region Size       |
+|___________|___________________|___________________|
+|      North|                1x1|                2x2|
+|___________|___________________|___________________|
+|      South|                1x1|                2x2|
+|___________|___________________|___________________|
+|       East|                1x1|                1x1|
+|___________|___________________|___________________|
+|       West|                1x1|                4x4|
+|___________|___________________|___________________|
+
+Phase 4.3.1 Print Estimated Congestion | Checksum: 23789eb22
+
+Time (s): cpu = 00:01:37 ; elapsed = 00:01:10 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 4.3 Placer Reporting | Checksum: 23789eb22
+
+Time (s): cpu = 00:01:37 ; elapsed = 00:01:10 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 4.4 Final Placement Cleanup
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.021 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Time (s): cpu = 00:01:37 ; elapsed = 00:01:10 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 4 Post Placement Optimization and Clean-Up | Checksum: 2033ca2e2
+
+Time (s): cpu = 00:01:37 ; elapsed = 00:01:10 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Ending Placer Task | Checksum: 1cc9b7d2a
+
+Time (s): cpu = 00:01:37 ; elapsed = 00:01:11 . Memory (MB): peak = 2037.777 ; gain = 0.000
+111 Infos, 2 Warnings, 1 Critical Warnings and 0 Errors encountered.
+place_design completed successfully
+place_design: Time (s): cpu = 00:01:41 ; elapsed = 00:01:13 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Vivado 12-24838] Running report commands "report_control_sets, report_io, report_utilization" in parallel.
+Running report generation with 2 threads.
+INFO: [Vivado 12-24828] Executing command : report_io -file top_microblaze_io_placed.rpt
+report_io: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.048 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Vivado 12-24828] Executing command : report_control_sets -verbose -file top_microblaze_control_sets_placed.rpt
+report_control_sets: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.064 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Vivado 12-24828] Executing command : report_utilization -file top_microblaze_utilization_placed.rpt -pb top_microblaze_utilization_placed.pb
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.065 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote PlaceDB: Time (s): cpu = 00:00:04 ; elapsed = 00:00:02 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.039 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.036 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:04 ; elapsed = 00:00:02 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/top_microblaze_placed.dcp' has been generated.
+Command: phys_opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a35t'
+
+Starting Initial Update Timing Task
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:03 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Vivado_Tcl 4-1435] PhysOpt_Tcl_Interface Runtime Before Starting Physical Synthesis Task | CPU: 5.00s |  WALL: 3.19s
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Starting Physical Synthesis Task
+
+Phase 1 Physical Synthesis Initialization
+INFO: [Physopt 32-721] Multithreading enabled for phys_opt_design using a maximum of 2 CPUs
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=-0.747 | TNS=-82.015 |
+Phase 1 Physical Synthesis Initialization | Checksum: 1f2519ca6
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=-0.747 | TNS=-82.015 |
+
+Phase 2 DSP Register Optimization
+INFO: [Physopt 32-456] No candidate cells for DSP register optimization found in the design.
+INFO: [Physopt 32-775] End 2 Pass. Optimized 0 net or cell. Created 0 new cell, deleted 0 existing cell and moved 0 existing cell
+Phase 2 DSP Register Optimization | Checksum: 1f2519ca6
+
+Time (s): cpu = 00:00:03 ; elapsed = 00:00:02 . Memory (MB): peak = 2037.777 ; gain = 0.000
+
+Phase 3 Critical Path Optimization
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=-0.747 | TNS=-82.015 |
+INFO: [Physopt 32-702] Processed net microblaze/microblaze_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/GEN_NO_RD_CMD_OPT.GEN_RDATA_NO_ECC.GEN_RDATA_RL_NO_ECC.rl_rd_buf_reg_0_63_24_26/DOA. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net top_0/bram_streamer_0/bram2/mem/doutb_local[56]. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net top_0/bram_streamer_0/bram2/mem/microblaze_i_i_95_n_0. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net top_0/bram_streamer_0/bram2/mem/microblaze_i_i_252_n_0. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net top_0/bram_streamer_0/bram2/mem/BRAM_WEIGHT_dout[24]. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net clk_IBUF. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net clk. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net microblaze/microblaze_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/GEN_NO_RD_CMD_OPT.GEN_RDATA_NO_ECC.GEN_RDATA_RL_NO_ECC.rl_rd_buf_reg_0_63_24_26/DOA. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net top_0/bram_streamer_0/bram2/mem/doutb_local[56]. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net top_0/bram_streamer_0/bram2/mem/microblaze_i_i_95_n_0. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net top_0/bram_streamer_0/bram2/mem/microblaze_i_i_252_n_0. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net top_0/bram_streamer_0/bram2/mem/BRAM_WEIGHT_dout[24]. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net clk_IBUF. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-702] Processed net clk. Optimizations did not improve timing on the net.
+INFO: [Physopt 32-619] Estimated Timing Summary | WNS=-0.747 | TNS=-82.015 |
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.028 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Phase 3 Critical Path Optimization | Checksum: 1f2519ca6
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:03 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Physopt 32-603] Post Physical Optimization Timing Summary | WNS=-0.747 | TNS=-82.015 |
+
+Summary of Physical Synthesis Optimizations
+============================================
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Optimization   |  WNS Gain (ns)  |  TNS Gain (ns)  |  Added Cells  |  Removed Cells  |  Optimized Cells/Nets  |  Dont Touch  |  Iterations  |  Elapsed   |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+|  DSP Register   |          0.000  |          0.000  |            0  |              0  |                     0  |           0  |           1  |  00:00:00  |
+|  Critical Path  |          0.000  |          0.000  |            0  |              0  |                     0  |           0  |           1  |  00:00:01  |
+|  Total          |          0.000  |          0.000  |            0  |              0  |                     0  |           0  |           2  |  00:00:01  |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Ending Physical Synthesis Task | Checksum: 224a43a5d
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:03 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+142 Infos, 2 Warnings, 1 Critical Warnings and 0 Errors encountered.
+phys_opt_design completed successfully
+phys_opt_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:06 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Write ShapeDB Complete: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.032 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote PlaceDB: Time (s): cpu = 00:00:05 ; elapsed = 00:00:02 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.034 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.035 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 2037.777 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:05 ; elapsed = 00:00:02 . Memory (MB): peak = 2037.777 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/top_microblaze_physopt.dcp' has been generated.
+Command: route_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a35t'
+
+
+Starting Routing Task
+INFO: [Route 35-254] Multithreading enabled for route_design using a maximum of 2 CPUs
+
+Phase 1 Build RT Design
+Checksum: PlaceDB: a4c04294 ConstDB: 0 ShapeSum: 2898723 RouteDB: a0815c57
+Post Restoration Checksum: NetGraph: f8467727 | NumContArr: 7591493d | Constraints: c2a8fa9d | Timing: c2a8fa9d
+Phase 1 Build RT Design | Checksum: 2f329b59e
+
+Time (s): cpu = 00:00:30 ; elapsed = 00:00:25 . Memory (MB): peak = 2065.430 ; gain = 27.652
+
+Phase 2 Router Initialization
+
+Phase 2.1 Fix Topology Constraints
+Phase 2.1 Fix Topology Constraints | Checksum: 2f329b59e
+
+Time (s): cpu = 00:00:31 ; elapsed = 00:00:25 . Memory (MB): peak = 2065.430 ; gain = 27.652
+
+Phase 2.2 Pre Route Cleanup
+Phase 2.2 Pre Route Cleanup | Checksum: 2f329b59e
+
+Time (s): cpu = 00:00:31 ; elapsed = 00:00:25 . Memory (MB): peak = 2065.430 ; gain = 27.652
+ Number of Nodes with overlaps = 0
+
+Phase 2.3 Update Timing
+Phase 2.3 Update Timing | Checksum: 2159e1fa5
+
+Time (s): cpu = 00:00:40 ; elapsed = 00:00:31 . Memory (MB): peak = 2116.527 ; gain = 78.750
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=-0.718 | TNS=-77.558| WHS=-1.517 | THS=-1688.863|
+
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 0.00948736 %
+  Global Horizontal Routing Utilization  = 0.00169183 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 17693
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 17692
+  Number of Partially Routed Nets     = 1
+  Number of Node Overlaps             = 0
+
+Phase 2 Router Initialization | Checksum: 1b411e5c9
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2116.527 ; gain = 78.750
+
+Phase 3 Global Routing
+Phase 3 Global Routing | Checksum: 1b411e5c9
+
+Time (s): cpu = 00:00:43 ; elapsed = 00:00:33 . Memory (MB): peak = 2116.527 ; gain = 78.750
+
+Phase 4 Initial Routing
+
+Phase 4.1 Initial Net Routing Pass
+Phase 4.1 Initial Net Routing Pass | Checksum: 2aa90891c
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:39 . Memory (MB): peak = 2157.031 ; gain = 119.254
+Phase 4 Initial Routing | Checksum: 2aa90891c
+
+Time (s): cpu = 00:00:54 ; elapsed = 00:00:39 . Memory (MB): peak = 2157.031 ; gain = 119.254
+
+Phase 5 Rip-up And Reroute
+
+Phase 5.1 Global Iteration 0
+ Number of Nodes with overlaps = 2581
+ Number of Nodes with overlaps = 276
+ Number of Nodes with overlaps = 63
+ Number of Nodes with overlaps = 13
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=-0.934 | TNS=-89.141| WHS=N/A    | THS=N/A    |
+
+Phase 5.1 Global Iteration 0 | Checksum: 3085184ca
+
+Time (s): cpu = 00:01:44 ; elapsed = 00:01:18 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 5.2 Global Iteration 1
+ Number of Nodes with overlaps = 764
+ Number of Nodes with overlaps = 408
+ Number of Nodes with overlaps = 198
+ Number of Nodes with overlaps = 32
+ Number of Nodes with overlaps = 6
+ Number of Nodes with overlaps = 1
+ Number of Nodes with overlaps = 0
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=-1.340 | TNS=-112.992| WHS=N/A    | THS=N/A    |
+
+Phase 5.2 Global Iteration 1 | Checksum: 27670b260
+
+Time (s): cpu = 00:02:58 ; elapsed = 00:02:05 . Memory (MB): peak = 2609.324 ; gain = 571.547
+Phase 5 Rip-up And Reroute | Checksum: 27670b260
+
+Time (s): cpu = 00:02:58 ; elapsed = 00:02:05 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 6 Delay and Skew Optimization
+
+Phase 6.1 Delay CleanUp
+
+Phase 6.1.1 Update Timing
+Phase 6.1.1 Update Timing | Checksum: 2d7f874cf
+
+Time (s): cpu = 00:03:00 ; elapsed = 00:02:06 . Memory (MB): peak = 2609.324 ; gain = 571.547
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=-0.934 | TNS=-89.131| WHS=N/A    | THS=N/A    |
+
+ Number of Nodes with overlaps = 0
+Phase 6.1 Delay CleanUp | Checksum: 1f167cd6e
+
+Time (s): cpu = 00:03:00 ; elapsed = 00:02:06 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 6.2 Clock Skew Optimization
+Phase 6.2 Clock Skew Optimization | Checksum: 1f167cd6e
+
+Time (s): cpu = 00:03:01 ; elapsed = 00:02:06 . Memory (MB): peak = 2609.324 ; gain = 571.547
+Phase 6 Delay and Skew Optimization | Checksum: 1f167cd6e
+
+Time (s): cpu = 00:03:01 ; elapsed = 00:02:06 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 7 Post Hold Fix
+
+Phase 7.1 Hold Fix Iter
+INFO: [Route 35-416] Intermediate Timing Summary | WNS=-0.934 | TNS=-88.399| WHS=-0.763 | THS=-17.572|
+
+
+Phase 7.1.1 Lut RouteThru Assignment for hold
+Phase 7.1.1 Lut RouteThru Assignment for hold | Checksum: 31c796615
+
+Time (s): cpu = 00:03:04 ; elapsed = 00:02:09 . Memory (MB): peak = 2609.324 ; gain = 571.547
+Phase 7.1 Hold Fix Iter | Checksum: 31c796615
+
+Time (s): cpu = 00:03:04 ; elapsed = 00:02:09 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 7.2 Non Free Resource Hold Fix Iter
+Phase 7.2 Non Free Resource Hold Fix Iter | Checksum: 35af89dff
+
+Time (s): cpu = 00:03:05 ; elapsed = 00:02:09 . Memory (MB): peak = 2609.324 ; gain = 571.547
+Phase 7 Post Hold Fix | Checksum: 35af89dff
+
+Time (s): cpu = 00:03:05 ; elapsed = 00:02:09 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 8 Route finalize
+
+Router Utilization Summary
+  Global Vertical Routing Utilization    = 13.1432 %
+  Global Horizontal Routing Utilization  = 13.2823 %
+  Routable Net Status*
+  *Does not include unroutable nets such as driverless and loadless.
+  Run report_route_status for detailed report.
+  Number of Failed Nets               = 0
+    (Failed Nets is the sum of unrouted and partially routed nets)
+  Number of Unrouted Nets             = 0
+  Number of Partially Routed Nets     = 0
+  Number of Node Overlaps             = 0
+
+
+--GLOBAL Congestion:
+Utilization threshold used for congestion level computation: 0.85
+Congestion Report
+North Dir 1x1 Area, Max Cong = 82.8829%, No Congested Regions.
+South Dir 1x1 Area, Max Cong = 87.3874%, Congestion bounded by tiles (Lower Left Tile -> Upper Right Tile):
+   INT_L_X32Y35 -> INT_L_X32Y35
+East Dir 1x1 Area, Max Cong = 88.2353%, Congestion bounded by tiles (Lower Left Tile -> Upper Right Tile):
+   INT_L_X6Y39 -> INT_L_X6Y39
+   INT_R_X31Y33 -> INT_R_X31Y33
+West Dir 1x1 Area, Max Cong = 92.6471%, Congestion bounded by tiles (Lower Left Tile -> Upper Right Tile):
+   INT_L_X30Y53 -> INT_L_X30Y53
+   INT_L_X30Y49 -> INT_L_X30Y49
+   INT_L_X30Y33 -> INT_L_X30Y33
+   INT_R_X31Y31 -> INT_R_X31Y31
+   INT_L_X30Y30 -> INT_L_X30Y30
+
+------------------------------
+Reporting congestion hotspots
+------------------------------
+Direction: North
+----------------
+Congested clusters found at Level 0
+Effective congestion level: 0 Aspect Ratio: 1 Sparse Ratio: 0
+Direction: South
+----------------
+Congested clusters found at Level 0
+Effective congestion level: 0 Aspect Ratio: 1 Sparse Ratio: 1
+Direction: East
+----------------
+Congested clusters found at Level 0
+Effective congestion level: 0 Aspect Ratio: 1 Sparse Ratio: 1
+Direction: West
+----------------
+Congested clusters found at Level 0
+Effective congestion level: 1 Aspect Ratio: 0.5 Sparse Ratio: 0.5
+
+Phase 8 Route finalize | Checksum: 35af89dff
+
+Time (s): cpu = 00:03:05 ; elapsed = 00:02:09 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 9 Verifying routed nets
+
+ Verification completed successfully
+Phase 9 Verifying routed nets | Checksum: 35af89dff
+
+Time (s): cpu = 00:03:05 ; elapsed = 00:02:09 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 10 Depositing Routes
+Phase 10 Depositing Routes | Checksum: 29ed28f1f
+
+Time (s): cpu = 00:03:07 ; elapsed = 00:02:10 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 11 Post Process Routing
+Phase 11 Post Process Routing | Checksum: 29ed28f1f
+
+Time (s): cpu = 00:03:07 ; elapsed = 00:02:11 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Phase 12 Post Router Timing
+
+Phase 12.1 Update Timing
+Phase 12.1 Update Timing | Checksum: 29ed28f1f
+
+Time (s): cpu = 00:03:08 ; elapsed = 00:02:12 . Memory (MB): peak = 2609.324 ; gain = 571.547
+INFO: [Route 35-57] Estimated Timing Summary | WNS=-0.934 | TNS=-88.399| WHS=0.050  | THS=0.000  |
+
+WARNING: [Route 35-328] Router estimated timing not met.
+Resolution: For a complete and accurate timing signoff, report_timing_summary must be run after route_design. Alternatively, route_design can be run with the -timing_summary option to enable a complete timing signoff at the end of route_design.
+Phase 12 Post Router Timing | Checksum: 29ed28f1f
+
+Time (s): cpu = 00:03:09 ; elapsed = 00:02:12 . Memory (MB): peak = 2609.324 ; gain = 571.547
+Total Elapsed time in route_design: 131.667 secs
+
+Phase 13 Post-Route Event Processing
+Phase 13 Post-Route Event Processing | Checksum: 8590e81b
+
+Time (s): cpu = 00:03:09 ; elapsed = 00:02:12 . Memory (MB): peak = 2609.324 ; gain = 571.547
+INFO: [Route 35-16] Router Completed Successfully
+Ending Routing Task | Checksum: 8590e81b
+
+Time (s): cpu = 00:03:09 ; elapsed = 00:02:12 . Memory (MB): peak = 2609.324 ; gain = 571.547
+
+Routing Is Done.
+INFO: [Common 17-83] Releasing license: Implementation
+154 Infos, 3 Warnings, 1 Critical Warnings and 0 Errors encountered.
+route_design completed successfully
+route_design: Time (s): cpu = 00:03:09 ; elapsed = 00:02:12 . Memory (MB): peak = 2609.324 ; gain = 571.547
+INFO: [Vivado 12-24828] Executing command : report_drc -file top_microblaze_drc_routed.rpt -pb top_microblaze_drc_routed.pb -rpx top_microblaze_drc_routed.rpx
+Command: report_drc -file top_microblaze_drc_routed.rpt -pb top_microblaze_drc_routed.pb -rpx top_microblaze_drc_routed.rpx
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/top_microblaze_drc_routed.rpt.
+report_drc completed successfully
+report_drc: Time (s): cpu = 00:00:10 ; elapsed = 00:00:05 . Memory (MB): peak = 2609.324 ; gain = 0.000
+INFO: [Vivado 12-24828] Executing command : report_methodology -file top_microblaze_methodology_drc_routed.rpt -pb top_microblaze_methodology_drc_routed.pb -rpx top_microblaze_methodology_drc_routed.rpx
+Command: report_methodology -file top_microblaze_methodology_drc_routed.rpt -pb top_microblaze_methodology_drc_routed.pb -rpx top_microblaze_methodology_drc_routed.rpx
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [DRC 23-133] Running Methodology with 2 threads
+INFO: [Vivado_Tcl 2-1520] The results of Report Methodology are in file C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/top_microblaze_methodology_drc_routed.rpt.
+report_methodology completed successfully
+report_drc: Time (s): cpu = 00:00:18 ; elapsed = 00:00:10 . Memory (MB): peak = 2609.324 ; gain = 0.000
+INFO: [Vivado 12-24828] Executing command : report_timing_summary -max_paths 10 -report_unconstrained -file top_microblaze_timing_summary_routed.rpt -pb top_microblaze_timing_summary_routed.pb -rpx top_microblaze_timing_summary_routed.rpx -warn_on_violation 
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+CRITICAL WARNING: [Timing 38-282] The design failed to meet the timing requirements. Please see the timing summary report for details on the timing violations.
+report_timing_summary: Time (s): cpu = 00:00:07 ; elapsed = 00:00:05 . Memory (MB): peak = 2609.324 ; gain = 0.000
+INFO: [Vivado 12-24838] Running report commands "report_incremental_reuse, report_route_status" in parallel.
+Running report generation with 2 threads.
+INFO: [Vivado 12-24828] Executing command : report_incremental_reuse -file top_microblaze_incremental_reuse_routed.rpt
+INFO: [Vivado_Tcl 4-1062] Incremental flow is disabled. No incremental reuse Info to report.
+INFO: [Vivado 12-24828] Executing command : report_route_status -file top_microblaze_route_status.rpt -pb top_microblaze_route_status.pb
+INFO: [Vivado 12-24828] Executing command : report_power -file top_microblaze_power_routed.rpt -pb top_microblaze_power_summary_routed.pb -rpx top_microblaze_power_routed.rpx
+Command: report_power -file top_microblaze_power_routed.rpt -pb top_microblaze_power_summary_routed.pb -rpx top_microblaze_power_routed.rpx
+Running Vector-less Activity Propagation...
+
+Finished Running Vector-less Activity Propagation
+WARNING: [Power 33-332] Found switching activity that implies high-fanout reset nets being asserted for excessive periods of time which may result in inaccurate power analysis.
+Resolution: To review and fix problems, please run Power Constraints Advisor in the GUI from Tools > Power Constraints Advisor or run report_power with the -advisory option to generate a text report.
+171 Infos, 4 Warnings, 2 Critical Warnings and 0 Errors encountered.
+report_power completed successfully
+INFO: [Vivado 12-24828] Executing command : report_clock_utilization -file top_microblaze_clock_utilization_routed.rpt
+INFO: [Vivado 12-24828] Executing command : report_bus_skew -warn_on_violation -file top_microblaze_bus_skew_routed.rpt -pb top_microblaze_bus_skew_routed.pb -rpx top_microblaze_bus_skew_routed.rpx
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+generate_parallel_reports: Time (s): cpu = 00:00:44 ; elapsed = 00:00:26 . Memory (MB): peak = 2609.324 ; gain = 0.000
+INFO: [Timing 38-480] Writing timing data to binary archive.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.034 . Memory (MB): peak = 2609.324 ; gain = 0.000
+Wrote PlaceDB: Time (s): cpu = 00:00:04 ; elapsed = 00:00:02 . Memory (MB): peak = 2609.324 ; gain = 0.000
+Wrote PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2609.324 ; gain = 0.000
+Writing XDEF routing.
+Writing XDEF routing logical nets.
+Writing XDEF routing special nets.
+Wrote RouteStorage: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.221 . Memory (MB): peak = 2609.324 ; gain = 0.000
+Wrote Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.035 . Memory (MB): peak = 2609.324 ; gain = 0.000
+Wrote Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2609.324 ; gain = 0.000
+Write Physdb Complete: Time (s): cpu = 00:00:05 ; elapsed = 00:00:02 . Memory (MB): peak = 2609.324 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/top_microblaze_routed.dcp' has been generated.
+
+ERROR::14 - Missing keyword. 'MICROBLAZE' found, 'END_ADDRESS_MAP' expected.
+ADDRESS_MAP  microblaze_microblaze_i_microblaze_0 microblaze-le 100 microblaze/microblaze_i/microblaze_0
+                                                                    ^
+
+CRITICAL WARNING: [Memdata 28-122] data2mem failed with a parsing error. Check the bmm file or the bmm_info_* properties on the BRAM components. The design BRAM components initialization strings have not been updated.
+CRITICAL WARNING: [Memdata 28-147] Could not complete BRAM data initialization for processor.  Please check to ensure any BMM and ELF files in the design have correct proper scoping specified. Design will proceed but BRAM initialization strings will not be populated with contents of the ELF file.
+CRITICAL WARNING: [Memdata 28-96] Could not find a BMM_INFO_DESIGN property in the design. Could not generate the merged BMM file: C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.runs/impl_1/top_microblaze_bd.bmm
+Command: write_bitstream -force top_microblaze.bit
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a35t'
+Running DRC as a precondition to command write_bitstream
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado 12-3199] DRC finished with 0 Errors
+INFO: [Vivado 12-3200] Please refer to the DRC report (report_drc) for more information.
+INFO: [Designutils 20-2272] Running write_bitstream with 2 threads.
+Loading data files...
+Loading site data...
+Loading route data...
+Processing options...
+Creating bitmap...
+Creating bitstream...
+Writing bitstream ./top_microblaze.bit...
+INFO: [Vivado 12-1842] Bitgen Completed Successfully.
+INFO: [Project 1-1876] WebTalk data collection is mandatory when using a ULT device. To see the specific WebTalk data collected for your design, open the usage_statistics_webtalk.html or usage_statistics_webtalk.xml file in the implementation directory.
+INFO: [Common 17-83] Releasing license: Implementation
+186 Infos, 4 Warnings, 5 Critical Warnings and 0 Errors encountered.
+write_bitstream completed successfully
+write_bitstream: Time (s): cpu = 00:00:34 ; elapsed = 00:00:23 . Memory (MB): peak = 2752.547 ; gain = 143.223
+INFO: [Common 17-206] Exiting Vivado at Sat Dec 28 22:09:02 2024...
+[Sat Dec 28 22:09:03 2024] impl_1 finished
+wait_on_runs: Time (s): cpu = 00:00:04 ; elapsed = 00:11:57 . Memory (MB): peak = 822.578 ; gain = 0.000
+# write_hw_platform -fixed -include_bit -force -file ../vitis/top_microblaze.xsa
+INFO: [Project 1-1918] Creating Hardware Platform: c:/Users/andre/Desktop/snn-fpga/vitis/top_microblaze.xsa ...
+INFO: [Project 1-1943] The Hardware Platform can be used for Hardware
+INFO: [Project 1-1941] Successfully created Hardware Platform: c:/Users/andre/Desktop/snn-fpga/vitis/top_microblaze.xsa
+INFO: [Hsi 55-2053] elapsed time for repository (C:/Xilinx/Vivado/2024.2/data/embeddedsw) loading 1 seconds
+Vivado% start_gui
+update_compile_order -fileset sources_1
+open_run impl_1
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 1748.703 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 1700 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2024.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+WARNING: [Constraints 18-550] Could not create 'IBUF_LOW_PWR' constraint because net 'microblaze/microblaze_i/clk_wiz_0/clk_in1' is not directly connected to top level port. 'IBUF_LOW_PWR' is ignored for synthesis but preserved for implementation.
+Read ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.046 . Memory (MB): peak = 1898.160 ; gain = 1.965
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+INFO: [Designutils 20-5722] Start Reading Physical Databases.
+Reading placement.
+Read Netlist Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.026 . Memory (MB): peak = 2538.996 ; gain = 0.000
+Reading placer database...
+Read Device Cache: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.008 . Memory (MB): peak = 2538.996 ; gain = 0.000
+Read PlaceDB: Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.819 . Memory (MB): peak = 2538.996 ; gain = 0.000
+Read PulsedLatchDB: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2538.996 ; gain = 0.000
+Reading routing.
+Read RouteStorage: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.260 . Memory (MB): peak = 2538.996 ; gain = 0.000
+Read Physdb Files: Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2538.996 ; gain = 0.000
+Restored from archive | CPU: 2.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:01 ; elapsed = 00:00:01 . Memory (MB): peak = 2538.996 ; gain = 0.000
+Generating merged BMM file for the design top 'top_microblaze'...
+CRITICAL WARNING: [Memdata 28-122] data2mem failed with a parsing error. Check the bmm file or the bmm_info_* properties on the BRAM components. The design BRAM components initialization strings have not been updated.
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 2538.996 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 316 instances were transformed.
+  LUT6_2 => LUT6_2 (LUT5, LUT6): 79 instances
+  RAM32M => RAM32M (RAMD32(x6), RAMS32(x2)): 16 instances
+  RAM64M => RAM64M (RAMD64E(x4)): 220 instances
+  SRLC16E => SRL16E: 1 instance 
+
+open_run: Time (s): cpu = 00:00:36 ; elapsed = 00:00:30 . Memory (MB): peak = 2894.090 ; gain = 1197.598
+open_report: Time (s): cpu = 00:00:10 ; elapsed = 00:00:08 . Memory (MB): peak = 2966.492 ; gain = 58.938
+CRITICAL WARNING: [Timing 38-282] The design failed to meet the timing requirements. Please see the timing summary report for details on the timing violations.
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+INFO: [Timing 38-91] UpdateTimingParams: Speed grade: -1, Delay Type: min_max.
+INFO: [Timing 38-191] Multithreading enabled for timing update using a maximum of 2 CPUs
+report_timing_summary: Time (s): cpu = 00:00:14 ; elapsed = 00:00:07 . Memory (MB): peak = 3618.949 ; gain = 18.738
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-12493] Simulation top is 'top_microblaze'
+WARNING: [Vivado 12-13340] Unable to auto find GCC executables from simulator install path! (path not set)
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+Generating merged BMM file for the design top 'top_microblaze'...
+INFO: [Vivado 12-5682] Launching behavioral simulation in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-13660] Precompiled IP simulation library mode is enabled (default). The design IP libraries will be referenced from the compiled library path. Please note that if the precompiled version of the library is not found from the path or the IP is in locked state, then the library source files for these IPs will be compiled locally as part of the compile order.
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [SIM-utils-72] Using boost library from 'C:/Xilinx/Vivado/2024.2/tps/boost_1_72_0'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File 'C:/Xilinx/Vivado/2024.2/data/xsim/xsim.ini' copied to run dir:'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-50] Design contains embedded sources, generating MEM files for simulation...
+Generating merged BMM file for the design top 'top_microblaze'...
+Generating merged BMM file for the design top 'top_microblaze'...
+INFO: [SIM-utils-54] Inspecting design source files for 'top_microblaze' in fileset 'sim_1'...
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/sc_xtlm_microblaze_axi_smc_0.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/input_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/mem_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/spk_in_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/weight_bram.mem'
+INFO: [SIM-utils-43] Exported 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/tile_idx_bram.mem'
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+"xvlog --incr --relax -L uvm -L axi_vip_v1_1_19 -L smartconnect_v1_0 -L xilinx_vip -prj top_microblaze_vlog.prj"
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module microblaze_clk_wiz_0_0_clk_wiz
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_clk_wiz_0_0/microblaze_clk_wiz_0_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module microblaze_clk_wiz_0_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_0/sim/bd_87ec_one_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_one_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_2/sim/bd_87ec_arinsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_arinsw_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_3/sim/bd_87ec_rinsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_rinsw_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_4/sim/bd_87ec_awinsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_awinsw_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_5/sim/bd_87ec_winsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_winsw_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_6/sim/bd_87ec_binsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_binsw_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_7/sim/bd_87ec_aroutsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_aroutsw_0
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_7/sim/bd_87ec_aroutsw_0.sv:93]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_7/sim/bd_87ec_aroutsw_0.sv:94]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_7/sim/bd_87ec_aroutsw_0.sv:95]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_7/sim/bd_87ec_aroutsw_0.sv:96]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_7/sim/bd_87ec_aroutsw_0.sv:97]
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_routsw_0
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:82]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:83]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:84]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:85]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:86]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:87]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:88]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:89]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:90]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_8/sim/bd_87ec_routsw_0.sv:91]
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_9/sim/bd_87ec_awoutsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_awoutsw_0
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_9/sim/bd_87ec_awoutsw_0.sv:93]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_9/sim/bd_87ec_awoutsw_0.sv:94]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_9/sim/bd_87ec_awoutsw_0.sv:95]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_9/sim/bd_87ec_awoutsw_0.sv:96]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_9/sim/bd_87ec_awoutsw_0.sv:97]
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_10/sim/bd_87ec_woutsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_woutsw_0
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_10/sim/bd_87ec_woutsw_0.sv:93]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_10/sim/bd_87ec_woutsw_0.sv:94]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_10/sim/bd_87ec_woutsw_0.sv:95]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_10/sim/bd_87ec_woutsw_0.sv:96]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_10/sim/bd_87ec_woutsw_0.sv:97]
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_boutsw_0
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:82]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:83]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:84]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:85]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:86]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:87]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:88]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:89]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_MODE' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:90]
+WARNING: [VRFC 10-8772] attribute 'X_INTERFACE_PARAMETER' is already specified; last one will take precedence [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_11/sim/bd_87ec_boutsw_0.sv:91]
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_12/sim/bd_87ec_arni_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_arni_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_13/sim/bd_87ec_rni_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_rni_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_14/sim/bd_87ec_awni_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_awni_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_15/sim/bd_87ec_wni_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_wni_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_16/sim/bd_87ec_bni_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_bni_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_17/sim/bd_87ec_s00mmu_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_s00mmu_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_18/sim/bd_87ec_s00tr_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_s00tr_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_19/sim/bd_87ec_s00sic_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_s00sic_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_20/sim/bd_87ec_s00a2s_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_s00a2s_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_21/sim/bd_87ec_sarn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_sarn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_22/sim/bd_87ec_srn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_srn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_23/sim/bd_87ec_sawn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_sawn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_24/sim/bd_87ec_swn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_swn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_25/sim/bd_87ec_sbn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_sbn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_26/sim/bd_87ec_m00s2a_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m00s2a_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_27/sim/bd_87ec_m00arn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m00arn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_28/sim/bd_87ec_m00rn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m00rn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_29/sim/bd_87ec_m00awn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m00awn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_30/sim/bd_87ec_m00wn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m00wn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_31/sim/bd_87ec_m00bn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m00bn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_32/sim/bd_87ec_m00e_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m00e_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_33/sim/bd_87ec_m01s2a_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m01s2a_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_34/sim/bd_87ec_m01arn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m01arn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_35/sim/bd_87ec_m01rn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m01rn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_36/sim/bd_87ec_m01awn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m01awn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_37/sim/bd_87ec_m01wn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m01wn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_38/sim/bd_87ec_m01bn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m01bn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_39/sim/bd_87ec_m01e_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m01e_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_40/sim/bd_87ec_m02s2a_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m02s2a_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_41/sim/bd_87ec_m02arn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m02arn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_42/sim/bd_87ec_m02rn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m02rn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_43/sim/bd_87ec_m02awn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m02awn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_44/sim/bd_87ec_m02wn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m02wn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_45/sim/bd_87ec_m02bn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m02bn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_46/sim/bd_87ec_m02e_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m02e_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_47/sim/bd_87ec_m03s2a_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m03s2a_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_48/sim/bd_87ec_m03arn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m03arn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_49/sim/bd_87ec_m03rn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m03rn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_50/sim/bd_87ec_m03awn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m03awn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_51/sim/bd_87ec_m03wn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m03wn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_52/sim/bd_87ec_m03bn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m03bn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_53/sim/bd_87ec_m03e_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m03e_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_54/sim/bd_87ec_m04s2a_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m04s2a_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_55/sim/bd_87ec_m04arn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m04arn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_56/sim/bd_87ec_m04rn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m04rn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_57/sim/bd_87ec_m04awn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m04awn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_58/sim/bd_87ec_m04wn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m04wn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_59/sim/bd_87ec_m04bn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m04bn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_60/sim/bd_87ec_m04e_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m04e_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_61/sim/bd_87ec_m05s2a_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m05s2a_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_62/sim/bd_87ec_m05arn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m05arn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_63/sim/bd_87ec_m05rn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m05rn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_64/sim/bd_87ec_m05awn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m05awn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_65/sim/bd_87ec_m05wn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m05wn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_66/sim/bd_87ec_m05bn_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m05bn_0
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_67/sim/bd_87ec_m05e_0.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec_m05e_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/sim/bd_87ec.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bd_87ec
+INFO: [VRFC 10-311] analyzing module clk_map_imp_1VHI8M9
+INFO: [VRFC 10-311] analyzing module i_nodes_imp_E3TYVJ
+INFO: [VRFC 10-311] analyzing module m00_exit_pipeline_imp_37R7QY
+INFO: [VRFC 10-311] analyzing module m00_nodes_imp_PFD712
+INFO: [VRFC 10-311] analyzing module m01_exit_pipeline_imp_7Z4OXM
+INFO: [VRFC 10-311] analyzing module m01_nodes_imp_1J4HI8W
+INFO: [VRFC 10-311] analyzing module m02_exit_pipeline_imp_AHBRZU
+INFO: [VRFC 10-311] analyzing module m02_nodes_imp_1FTWJGB
+INFO: [VRFC 10-311] analyzing module m03_exit_pipeline_imp_E4Q6KA
+INFO: [VRFC 10-311] analyzing module m03_nodes_imp_B15ZWT
+INFO: [VRFC 10-311] analyzing module m04_exit_pipeline_imp_O7648Q
+INFO: [VRFC 10-311] analyzing module m04_nodes_imp_IBURBH
+INFO: [VRFC 10-311] analyzing module m05_exit_pipeline_imp_HSHXRU
+INFO: [VRFC 10-311] analyzing module m05_nodes_imp_1PVIH17
+INFO: [VRFC 10-311] analyzing module s00_entry_pipeline_imp_11XXIWP
+INFO: [VRFC 10-311] analyzing module s00_nodes_imp_17KGUSJ
+INFO: [VRFC 10-311] analyzing module switchboards_imp_1WING1J
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/sim/microblaze_axi_smc_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module microblaze_axi_smc_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_lmb_bram_0/sim/microblaze_lmb_bram_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module microblaze_lmb_bram_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/sim/microblaze.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module microblaze
+INFO: [VRFC 10-311] analyzing module microblaze_0_local_memory_imp_HPR3PZ
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.gen/sources_1/bd/microblaze/hdl/microblaze_wrapper.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module microblaze_wrapper
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/andre/Desktop/snn-fpga/src/hdl/top_microblaze.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module dual_port_bram
+INFO: [VRFC 10-311] analyzing module spk_in_bram
+INFO: [VRFC 10-311] analyzing module tile_idx_bram
+INFO: [VRFC 10-311] analyzing module weight_bram
+INFO: [VRFC 10-311] analyzing module input_bram
+INFO: [VRFC 10-311] analyzing module lif_bram
+INFO: [VRFC 10-311] analyzing module asymmetric_dual_port_bram
+INFO: [VRFC 10-311] analyzing module bram_streamer
+INFO: [VRFC 10-311] analyzing module buff_idx_controller
+INFO: [VRFC 10-311] analyzing module weight_fifo
+INFO: [VRFC 10-311] analyzing module spk_in_fifo
+INFO: [VRFC 10-311] analyzing module tile_idx_fifo
+INFO: [VRFC 10-311] analyzing module mem_fifo
+INFO: [VRFC 10-311] analyzing module lif_scheduler
+INFO: [VRFC 10-311] analyzing module xbar_scheduler
+INFO: [VRFC 10-311] analyzing module synapse
+INFO: [VRFC 10-311] analyzing module synapse_array
+INFO: [VRFC 10-311] analyzing module lif
+INFO: [VRFC 10-311] analyzing module lif_array
+INFO: [VRFC 10-311] analyzing module adder
+INFO: [VRFC 10-311] analyzing module adder_tree
+INFO: [VRFC 10-311] analyzing module synapse_array_adder_tree
+INFO: [VRFC 10-311] analyzing module led_controller
+INFO: [VRFC 10-311] analyzing module top
+INFO: [VRFC 10-311] analyzing module en_done_controller
+INFO: [VRFC 10-311] analyzing module top_microblaze
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+"xvhdl --incr --relax -prj top_microblaze_vhdl.prj"
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_uartlite_0_0/sim/microblaze_axi_uartlite_0_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_axi_uartlite_0_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_rst_clk_wiz_0_100M_0/sim/microblaze_rst_clk_wiz_0_100M_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_rst_clk_wiz_0_100M_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_bram_ctrl_0_0/sim/microblaze_axi_bram_ctrl_0_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_axi_bram_ctrl_0_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_bram_ctrl_1_0/sim/microblaze_axi_bram_ctrl_1_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_axi_bram_ctrl_1_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_bram_ctrl_2_0/sim/microblaze_axi_bram_ctrl_2_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_axi_bram_ctrl_2_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_bram_ctrl_3_0/sim/microblaze_axi_bram_ctrl_3_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_axi_bram_ctrl_3_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/ip/ip_1/sim/bd_87ec_psr_aclk_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'bd_87ec_psr_aclk_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_microblaze_0_0/sim/microblaze_microblaze_0_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_microblaze_0_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_dlmb_v10_0/sim/microblaze_dlmb_v10_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_dlmb_v10_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_ilmb_v10_0/sim/microblaze_ilmb_v10_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_ilmb_v10_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_dlmb_bram_if_cntlr_0/sim/microblaze_dlmb_bram_if_cntlr_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_dlmb_bram_if_cntlr_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_ilmb_bram_if_cntlr_0/sim/microblaze_ilmb_bram_if_cntlr_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_ilmb_bram_if_cntlr_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_mdm_1_0/sim/microblaze_mdm_1_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_mdm_1_0'
+INFO: [VRFC 10-163] Analyzing VHDL file "C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_gpio_0_0/sim/microblaze_axi_gpio_0_0.vhd" into library xil_defaultlib
+INFO: [VRFC 10-3107] analyzing entity 'microblaze_axi_gpio_0_0'
+run_program: Time (s): cpu = 00:00:03 ; elapsed = 00:00:17 . Memory (MB): peak = 3618.949 ; gain = 0.000
+INFO: [USF-XSim-69] 'compile' step finished in '16' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+"xelab --incr --debug typical --relax --mt 2 -L xil_defaultlib -L axi_lite_ipif_v3_0_4 -L lib_pkg_v1_0_4 -L lib_srl_fifo_v1_0_4 -L lib_cdc_v1_0_3 -L axi_uartlite_v2_0_37 -L proc_sys_reset_v5_0_16 -L axi_bram_ctrl_v4_1_11 -L xlconstant_v1_1_9 -L smartconnect_v1_0 -L axi_infrastructure_v1_1_0 -L axi_register_slice_v2_1_33 -L axi_vip_v1_1_19 -L microblaze_v11_0_14 -L lmb_v10_v3_0_14 -L lmb_bram_if_cntlr_v4_0_25 -L blk_mem_gen_v8_4_9 -L mdm_v3_2_27 -L interrupt_control_v3_1_5 -L axi_gpio_v2_0_35 -L uvm -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot top_microblaze_behav xil_defaultlib.top_microblaze xil_defaultlib.glbl -log elaborate.log"
+Vivado Simulator v2024.2.0
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2024.2/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L axi_lite_ipif_v3_0_4 -L lib_pkg_v1_0_4 -L lib_srl_fifo_v1_0_4 -L lib_cdc_v1_0_3 -L axi_uartlite_v2_0_37 -L proc_sys_reset_v5_0_16 -L axi_bram_ctrl_v4_1_11 -L xlconstant_v1_1_9 -L smartconnect_v1_0 -L axi_infrastructure_v1_1_0 -L axi_register_slice_v2_1_33 -L axi_vip_v1_1_19 -L microblaze_v11_0_14 -L lmb_v10_v3_0_14 -L lmb_bram_if_cntlr_v4_0_25 -L blk_mem_gen_v8_4_9 -L mdm_v3_2_27 -L interrupt_control_v3_1_5 -L axi_gpio_v2_0_35 -L uvm -L xilinx_vip -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot top_microblaze_behav xil_defaultlib.top_microblaze xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'clkb' [../../../../../../src/hdl/bram/bram_streamer.sv:311]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 16 for port 'addrb' [../../../../../../src/hdl/bram/bram_streamer.sv:312]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 128 for port 'dinb' [../../../../../../src/hdl/bram/bram_streamer.sv:313]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 16 for port 'web' [../../../../../../src/hdl/bram/bram_streamer.sv:315]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'enb' [../../../../../../src/hdl/bram/bram_streamer.sv:316]
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'rst' [C:/Users/andre/Desktop/snn-fpga/src/hdl/top_microblaze.sv:106]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 13 for port 'BRAM_TILE_IDX_addr' [C:/Users/andre/Desktop/snn-fpga/src/hdl/top_microblaze.sv:110]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 13 for port 'BRAM_WEIGHT_addr' [C:/Users/andre/Desktop/snn-fpga/src/hdl/top_microblaze.sv:116]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 13 for port 'BRAM_INPUT_addr' [C:/Users/andre/Desktop/snn-fpga/src/hdl/top_microblaze.sv:122]
+WARNING: [VRFC 10-3091] actual bit length 16 differs from formal bit length 13 for port 'BRAM_SPK_addr' [C:/Users/andre/Desktop/snn-fpga/src/hdl/top_microblaze.sv:128]
+WARNING: [VRFC 10-5021] port 'tile_use_input' is not connected on this instance [../../../../../../src/hdl/bram/bram_streamer.sv:401]
+WARNING: [VRFC 10-5021] port 'interrupt' is not connected on this instance [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/sim/microblaze.v:696]
+WARNING: [VRFC 10-5021] port 'interrupt_ack' is not connected on this instance [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/sim/microblaze.v:734]
+WARNING: [VRFC 10-5021] port 'peripheral_reset' is not connected on this instance [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/sim/microblaze.v:810]
+WARNING: [VRFC 10-5021] port 'mb_reset' is not connected on this instance [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/ip/microblaze_axi_smc_0/bd_0/sim/bd_87ec.v:2800]
+WARNING: [VRFC 10-5021] port 'lmb_rst' is not connected on this instance [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/sim/microblaze.v:946]
+WARNING: [VRFC 10-5021] port 'lmb_rst' is not connected on this instance [C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.ip_user_files/bd/microblaze/sim/microblaze.v:992]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.numeric_std
+Compiling package ieee.std_logic_arith
+Compiling package xpm.vcomponents
+Compiling package axi_bram_ctrl_v4_1_11.axi_bram_ctrl_funcs
+Compiling package ieee.vital_timing
+Compiling package ieee.vital_primitives
+Compiling package unisim.vpkg
+Compiling package unisim.vcomponents
+Compiling package ieee.std_logic_unsigned
+Compiling package synopsys.attributes
+Compiling package ieee.std_logic_misc
+Compiling package axi_lite_ipif_v3_0_4.ipif_pkg
+Compiling package lib_pkg_v1_0_4.lib_pkg
+Compiling package mdm_v3_2_27.mdm_funcs
+Compiling package microblaze_v11_0_14.microblaze_types
+Compiling package microblaze_v11_0_14.microblaze_isa
+Compiling package microblaze_v11_0_14.mmu_types
+Compiling package lmb_bram_if_cntlr_v4_0_25.lmb_bram_if_funcs
+Compiling package smartconnect_v1_0.sc_util_v1_0_4_pkg
+Compiling module xil_defaultlib.en_done_controller
+Compiling module xil_defaultlib.led_controller
+Compiling module xil_defaultlib.buff_idx_controller(MAX_NEURONS=...
+Compiling module xil_defaultlib.dual_port_bram(DATA_WIDTH_A=32,D...
+Compiling module xil_defaultlib.asymmetric_dual_port_bram(ADDR_W...
+Compiling module xil_defaultlib.dual_port_bram(DATA_WIDTH_A=16,D...
+Compiling module xil_defaultlib.asymmetric_dual_port_bram(ADDR_W...
+Compiling module xil_defaultlib.dual_port_bram(DATA_WIDTH_A=1024...
+Compiling module xil_defaultlib.asymmetric_dual_port_bram(ADDR_W...
+Compiling module xil_defaultlib.dual_port_bram(DATA_WIDTH_A=128,...
+Compiling module xil_defaultlib.asymmetric_dual_port_bram(ADDR_W...
+Compiling module xil_defaultlib.dual_port_bram(DATA_WIDTH_A=128,...
+Compiling module xil_defaultlib.asymmetric_dual_port_bram(ADDR_W...
+Compiling module xil_defaultlib.dual_port_bram(DATA_WIDTH_A=32,D...
+Compiling module xil_defaultlib.asymmetric_dual_port_bram(ADDR_W...
+Compiling module xil_defaultlib.tile_idx_bram(BRAM_ADDR_WIDTH=16...
+Compiling module xil_defaultlib.weight_bram(BRAM_ADDR_WIDTH=16,B...
+Compiling module xil_defaultlib.spk_in_bram(BRAM_ADDR_WIDTH=16,B...
+Compiling module xil_defaultlib.input_bram(BRAM_ADDR_WIDTH=16,BR...
+Compiling module xil_defaultlib.lif_bram(BRAM_ADDR_WIDTH=16,NETW...
+Compiling module xil_defaultlib.bram_streamer(BRAM_ADDR_WIDTH=16...
+Compiling module xil_defaultlib.weight_fifo(CROSSBAR_NEURONS=16,...
+Compiling module xil_defaultlib.spk_in_fifo(CROSSBAR_NEURONS=16,...
+Compiling module xil_defaultlib.tile_idx_fifo(CROSSBAR_NEURONS=1...
+Compiling module xil_defaultlib.mem_fifo(CROSSBAR_NEURONS=16,BRA...
+Compiling module xil_defaultlib.lif_scheduler
+Compiling module xil_defaultlib.xbar_scheduler
+Compiling module xil_defaultlib.adder(WIDTH=8)
+Compiling module xil_defaultlib.adder_tree(N=16,WIDTH=8)
+Compiling module xil_defaultlib.synapse_array_adder_tree(CROSSBA...
+Compiling module xil_defaultlib.lif(THRESH=32,NETWORK_WIDTH=8)
+Compiling module xil_defaultlib.lif_array(CROSSBAR_NEURONS=16,TH...
+Compiling module xil_defaultlib.top_default
+Compiling architecture implementation of entity axi_bram_ctrl_v4_1_11.sng_port_arb [\sng_port_arb(c_s_axi_addr_width...]
+Compiling architecture implementation of entity axi_bram_ctrl_v4_1_11.wrap_brst [\wrap_brst(c_axi_addr_width=13,c...]
+Compiling architecture muxcy_v of entity unisim.MUXCY [muxcy_default]
+Compiling architecture muxcy_l_v of entity unisim.MUXCY_L [muxcy_l_default]
+Compiling architecture xorcy_v of entity unisim.XORCY [xorcy_default]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(0,15)\]
+Compiling architecture fdre_v of entity unisim.FDRE [fdre_default]
+Compiling architecture fdr_v of entity unisim.FDR [fdr_default]
+Compiling architecture imp of entity axi_bram_ctrl_v4_1_11.SRL_FIFO [\SRL_FIFO(c_data_bits=1,c_depth=...]
+Compiling architecture implementation of entity axi_bram_ctrl_v4_1_11.wr_chnl [\wr_chnl(c_axi_addr_width=13,c_a...]
+Compiling architecture implementation of entity axi_bram_ctrl_v4_1_11.rd_chnl [\rd_chnl(c_axi_addr_width=13,c_a...]
+Compiling architecture implementation of entity axi_bram_ctrl_v4_1_11.full_axi [\full_axi(c_s_axi_addr_width=13,...]
+Compiling architecture implementation of entity axi_bram_ctrl_v4_1_11.axi_bram_ctrl_top [\axi_bram_ctrl_top(c_bram_addr_w...]
+Compiling architecture implementation of entity axi_bram_ctrl_v4_1_11.axi_bram_ctrl [\axi_bram_ctrl(c_memory_depth=20...]
+Compiling architecture microblaze_axi_bram_ctrl_0_0_arch of entity xil_defaultlib.microblaze_axi_bram_ctrl_0_0 [microblaze_axi_bram_ctrl_0_0_def...]
+Compiling architecture microblaze_axi_bram_ctrl_1_0_arch of entity xil_defaultlib.microblaze_axi_bram_ctrl_1_0 [microblaze_axi_bram_ctrl_1_0_def...]
+Compiling architecture microblaze_axi_bram_ctrl_2_0_arch of entity xil_defaultlib.microblaze_axi_bram_ctrl_2_0 [microblaze_axi_bram_ctrl_2_0_def...]
+Compiling architecture microblaze_axi_bram_ctrl_3_0_arch of entity xil_defaultlib.microblaze_axi_bram_ctrl_3_0 [microblaze_axi_bram_ctrl_3_0_def...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.pselect_f [\pselect_f(c_ab=2,c_aw=2,c_bar="...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.pselect_f [\pselect_f(c_ab=2,c_aw=2,c_bar="...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.pselect_f [\pselect_f(c_ab=2,c_aw=2,c_bar="...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.pselect_f [\pselect_f(c_ab=2,c_aw=2,c_bar="...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.address_decoder [\address_decoder(c_bus_awidth=9,...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.slave_attachment [\slave_attachment(c_ard_addr_ran...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.axi_lite_ipif [\axi_lite_ipif(c_s_axi_addr_widt...]
+Compiling architecture implementation of entity lib_cdc_v1_0_3.cdc_sync [\cdc_sync(c_single_bit=0,c_vecto...]
+Compiling architecture implementation of entity lib_cdc_v1_0_3.cdc_sync [\cdc_sync(c_single_bit=0,c_vecto...]
+Compiling architecture imp of entity axi_gpio_v2_0_35.GPIO_Core [\GPIO_Core(c_aw=9,c_gpio_width=2...]
+Compiling architecture imp of entity axi_gpio_v2_0_35.axi_gpio [\axi_gpio(c_family="artix7",c_gp...]
+Compiling architecture microblaze_axi_gpio_0_0_arch of entity xil_defaultlib.microblaze_axi_gpio_0_0 [microblaze_axi_gpio_0_0_default]
+Compiling module xlconstant_v1_1_9.xlconstant_v1_1_9_xlconstant(CON...
+Compiling module xil_defaultlib.bd_87ec_one_0
+Compiling architecture fdre_v of entity unisim.FDRE [\FDRE(init='1')\]
+Compiling architecture implementation of entity lib_cdc_v1_0_3.cdc_sync [\cdc_sync(c_vector_width=2,c_mtb...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="1111111111111111")...]
+Compiling architecture srl16_v of entity unisim.SRL16 [\SRL16(init="1111111111111111")(...]
+Compiling architecture imp of entity proc_sys_reset_v5_0_16.lpf [\lpf(c_ext_rst_width=4,c_aux_rst...]
+Compiling architecture imp of entity proc_sys_reset_v5_0_16.upcnt_n [\upcnt_n(c_size=6)\]
+Compiling architecture imp of entity proc_sys_reset_v5_0_16.sequence_psr [sequence_psr_default]
+Compiling architecture imp of entity proc_sys_reset_v5_0_16.proc_sys_reset [\proc_sys_reset(c_family="artix7...]
+Compiling architecture bd_87ec_psr_aclk_0_arch of entity xil_defaultlib.bd_87ec_psr_aclk_0 [bd_87ec_psr_aclk_0_default]
+Compiling module xil_defaultlib.clk_map_imp_1VHI8M9
+Compiling module xpm.xpm_cdc_async_rst(DEST_SYNC_FF=3...
+Compiling module xil_defaultlib.bd_87ec_m00e_0
+Compiling module xil_defaultlib.m00_exit_pipeline_imp_37R7QY
+Compiling module xil_defaultlib.bd_87ec_m00arn_0
+Compiling module xil_defaultlib.bd_87ec_m00awn_0
+Compiling module xil_defaultlib.bd_87ec_m00bn_0
+Compiling module xil_defaultlib.bd_87ec_m00rn_0
+Compiling module xil_defaultlib.bd_87ec_m00wn_0
+Compiling module xil_defaultlib.m00_nodes_imp_PFD712
+Compiling module xil_defaultlib.bd_87ec_m00s2a_0
+Compiling module xil_defaultlib.bd_87ec_m01e_0
+Compiling module xil_defaultlib.m01_exit_pipeline_imp_7Z4OXM
+Compiling module xil_defaultlib.bd_87ec_m01arn_0
+Compiling module xil_defaultlib.bd_87ec_m01awn_0
+Compiling module xil_defaultlib.bd_87ec_m01bn_0
+Compiling module xil_defaultlib.bd_87ec_m01rn_0
+Compiling module xil_defaultlib.bd_87ec_m01wn_0
+Compiling module xil_defaultlib.m01_nodes_imp_1J4HI8W
+Compiling module xil_defaultlib.bd_87ec_m01s2a_0
+Compiling module xil_defaultlib.bd_87ec_m02e_0
+Compiling module xil_defaultlib.m02_exit_pipeline_imp_AHBRZU
+Compiling module xil_defaultlib.bd_87ec_m02arn_0
+Compiling module xil_defaultlib.bd_87ec_m02awn_0
+Compiling module xil_defaultlib.bd_87ec_m02bn_0
+Compiling module xil_defaultlib.bd_87ec_m02rn_0
+Compiling module xil_defaultlib.bd_87ec_m02wn_0
+Compiling module xil_defaultlib.m02_nodes_imp_1FTWJGB
+Compiling module xil_defaultlib.bd_87ec_m02s2a_0
+Compiling module xil_defaultlib.bd_87ec_m03e_0
+Compiling module xil_defaultlib.m03_exit_pipeline_imp_E4Q6KA
+Compiling module xil_defaultlib.bd_87ec_m03arn_0
+Compiling module xil_defaultlib.bd_87ec_m03awn_0
+Compiling module xil_defaultlib.bd_87ec_m03bn_0
+Compiling module xil_defaultlib.bd_87ec_m03rn_0
+Compiling module xil_defaultlib.bd_87ec_m03wn_0
+Compiling module xil_defaultlib.m03_nodes_imp_B15ZWT
+Compiling module xil_defaultlib.bd_87ec_m03s2a_0
+Compiling module xil_defaultlib.bd_87ec_m04e_0
+Compiling module xil_defaultlib.m04_exit_pipeline_imp_O7648Q
+Compiling module xil_defaultlib.bd_87ec_m04arn_0
+Compiling module xil_defaultlib.bd_87ec_m04awn_0
+Compiling module xil_defaultlib.bd_87ec_m04bn_0
+Compiling module xil_defaultlib.bd_87ec_m04rn_0
+Compiling module xil_defaultlib.bd_87ec_m04wn_0
+Compiling module xil_defaultlib.m04_nodes_imp_IBURBH
+Compiling module xil_defaultlib.bd_87ec_m04s2a_0
+Compiling module xil_defaultlib.bd_87ec_m05e_0
+Compiling module xil_defaultlib.m05_exit_pipeline_imp_HSHXRU
+Compiling module xil_defaultlib.bd_87ec_m05arn_0
+Compiling module xil_defaultlib.bd_87ec_m05awn_0
+Compiling module xil_defaultlib.bd_87ec_m05bn_0
+Compiling module xil_defaultlib.bd_87ec_m05rn_0
+Compiling module xil_defaultlib.bd_87ec_m05wn_0
+Compiling module xil_defaultlib.m05_nodes_imp_1PVIH17
+Compiling module xil_defaultlib.bd_87ec_m05s2a_0
+Compiling module xil_defaultlib.bd_87ec_s00a2s_0
+Compiling module xil_defaultlib.bd_87ec_s00mmu_0
+Compiling module xil_defaultlib.bd_87ec_s00sic_0
+Compiling module xil_defaultlib.bd_87ec_s00tr_0
+Compiling module xil_defaultlib.s00_entry_pipeline_imp_11XXIWP
+Compiling module xil_defaultlib.bd_87ec_sarn_0
+Compiling module xil_defaultlib.bd_87ec_sawn_0
+Compiling module xil_defaultlib.bd_87ec_sbn_0
+Compiling module xil_defaultlib.bd_87ec_srn_0
+Compiling module xil_defaultlib.bd_87ec_swn_0
+Compiling module xil_defaultlib.s00_nodes_imp_17KGUSJ
+Compiling module xil_defaultlib.bd_87ec_arinsw_0
+Compiling module xil_defaultlib.bd_87ec_aroutsw_0
+Compiling module xil_defaultlib.bd_87ec_awinsw_0
+Compiling module xil_defaultlib.bd_87ec_awoutsw_0
+Compiling module xil_defaultlib.bd_87ec_binsw_0
+Compiling module xil_defaultlib.bd_87ec_boutsw_0
+Compiling module xil_defaultlib.bd_87ec_arni_0
+Compiling module xil_defaultlib.bd_87ec_awni_0
+Compiling module xil_defaultlib.bd_87ec_bni_0
+Compiling module xil_defaultlib.bd_87ec_rni_0
+Compiling module xil_defaultlib.bd_87ec_wni_0
+Compiling module xil_defaultlib.i_nodes_imp_E3TYVJ
+Compiling module xil_defaultlib.bd_87ec_rinsw_0
+Compiling module xil_defaultlib.bd_87ec_routsw_0
+Compiling module xil_defaultlib.bd_87ec_winsw_0
+Compiling module xil_defaultlib.bd_87ec_woutsw_0
+Compiling module xil_defaultlib.switchboards_imp_1WING1J
+Compiling module xil_defaultlib.bd_87ec
+Compiling module xil_defaultlib.microblaze_axi_smc_0
+Compiling architecture rtl of entity axi_uartlite_v2_0_37.baudrate [\baudrate(c_ratio=54)\]
+Compiling architecture implementation of entity lib_cdc_v1_0_3.cdc_sync [\cdc_sync(c_mtbf_stages=4)\]
+Compiling architecture imp of entity lib_srl_fifo_v1_0_4.cntr_incr_decr_addn_f [\cntr_incr_decr_addn_f(c_size=5,...]
+Compiling architecture behavioral of entity lib_srl_fifo_v1_0_4.dynshreg_f [\dynshreg_f(c_depth=16,c_dwidth=...]
+Compiling architecture imp of entity lib_srl_fifo_v1_0_4.srl_fifo_rbu_f [\srl_fifo_rbu_f(c_dwidth=8,c_fam...]
+Compiling architecture imp of entity lib_srl_fifo_v1_0_4.srl_fifo_f [\srl_fifo_f(c_dwidth=8,c_family=...]
+Compiling architecture rtl of entity axi_uartlite_v2_0_37.uartlite_rx [\uartlite_rx(c_family="artix7")(...]
+Compiling architecture rtl of entity axi_uartlite_v2_0_37.uartlite_tx [\uartlite_tx(c_family="artix7")(...]
+Compiling architecture rtl of entity axi_uartlite_v2_0_37.uartlite_core [\uartlite_core(c_family="artix7"...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.address_decoder [\address_decoder(c_bus_awidth=4,...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.slave_attachment [\slave_attachment(c_ard_addr_ran...]
+Compiling architecture imp of entity axi_lite_ipif_v3_0_4.axi_lite_ipif [\axi_lite_ipif(c_s_axi_addr_widt...]
+Compiling architecture rtl of entity axi_uartlite_v2_0_37.axi_uartlite [\axi_uartlite(c_family="artix7",...]
+Compiling architecture microblaze_axi_uartlite_0_0_arch of entity xil_defaultlib.microblaze_axi_uartlite_0_0 [microblaze_axi_uartlite_0_0_defa...]
+Compiling module unisims_ver.IBUF
+Compiling module unisims_ver.MMCME2_ADV(CLKFBOUT_MULT_F=10.0,...
+Compiling module unisims_ver.BUFG
+Compiling module xil_defaultlib.microblaze_clk_wiz_0_0_clk_wiz
+Compiling module xil_defaultlib.microblaze_clk_wiz_0_0
+Compiling architecture bscane2_v of entity unisim.BSCANE2 [\BSCANE2(jtag_chain=2)(1,5)\]
+Compiling architecture imp of entity mdm_v3_2_27.MB_BSCANE2 [\MB_BSCANE2(c_target=artix7,jtag...]
+Compiling architecture lut1_v of entity unisim.LUT1 [\LUT1(init="10")(0,1)\]
+Compiling architecture imp of entity mdm_v3_2_27.MB_LUT1 [\MB_LUT1(c_target=artix7,init="1...]
+Compiling architecture bufg_v of entity unisim.BUFG [bufg_default]
+Compiling architecture imp of entity mdm_v3_2_27.MB_BUFG [\MB_BUFG(c_target=artix7)\]
+Compiling architecture imp of entity mdm_v3_2_27.xil_scan_reset_control [xil_scan_reset_control_default]
+Compiling architecture fdce_v of entity unisim.FDCE [fdce_default]
+Compiling architecture fdc_1_v of entity unisim.FDC_1 [fdc_1_default]
+Compiling architecture imp of entity mdm_v3_2_27.MB_FDC_1 [\MB_FDC_1(c_target=artix7)\]
+Compiling architecture fdre_1_v of entity unisim.FDRE_1 [fdre_1_default]
+Compiling architecture imp of entity mdm_v3_2_27.MB_FDRE_1 [\MB_FDRE_1(c_target=artix7)\]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="0000000101100111")...]
+Compiling architecture imp of entity mdm_v3_2_27.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_sta...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="0100001010000111")...]
+Compiling architecture imp of entity mdm_v3_2_27.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_sta...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="0100010001000011")...]
+Compiling architecture imp of entity mdm_v3_2_27.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_sta...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="0101100001001101")...]
+Compiling architecture imp of entity mdm_v3_2_27.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_sta...]
+Compiling architecture imp of entity mdm_v3_2_27.JTAG_CONTROL [\JTAG_CONTROL(c_target=artix7,c_...]
+Compiling architecture imp of entity mdm_v3_2_27.MDM_Core [\MDM_Core(c_target=artix7,c_jtag...]
+Compiling architecture imp of entity mdm_v3_2_27.MDM [\MDM(c_family="artix7",c_device=...]
+Compiling architecture microblaze_mdm_1_0_arch of entity xil_defaultlib.microblaze_mdm_1_0 [microblaze_mdm_1_0_default]
+Compiling architecture imp of entity microblaze_v11_0_14.mb_sync_bit [mb_sync_bit_default]
+Compiling architecture imp of entity microblaze_v11_0_14.DAXI_interface [\DAXI_interface(c_data_size=32,c...]
+Compiling architecture and2b1l_v of entity unisim.AND2B1L [and2b1l_default]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_AND2B1L [\MB_AND2B1L(c_target=artix7)\]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="1111111111111111")...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_use...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="0011111111111111")...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_use...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="0000000000011011")...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_use...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(15,0)\]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_use...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="0000000001100100")...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_use...]
+Compiling architecture srl16e_v of entity unisim.SRL16E [\SRL16E(init="0010010100000000")...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_SRL16E [\MB_SRL16E(c_target=artix7,c_use...]
+Compiling architecture imp of entity microblaze_v11_0_14.mb_sync_bit [\mb_sync_bit(c_levels=1,c_reset_...]
+Compiling architecture imp of entity microblaze_v11_0_14.mb_sync_vec [\mb_sync_vec(c_levels=1,c_reset_...]
+Compiling architecture imp of entity microblaze_v11_0_14.mb_sync_bit [\mb_sync_bit(c_levels=1)\]
+Compiling architecture imp of entity microblaze_v11_0_14.mb_sync_vec [\mb_sync_vec(c_width=10)\]
+Compiling architecture srlc16e_v of entity unisim.SRLC16E [\SRLC16E(0,15)\]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_SRLC16E [\MB_SRLC16E(c_target=artix7,c_us...]
+Compiling architecture imp of entity microblaze_v11_0_14.address_hit [\address_hit(c_target=artix7,c_u...]
+Compiling architecture imp of entity microblaze_v11_0_14.xil_scan_reset_control [xil_scan_reset_control_default]
+Compiling architecture imp of entity microblaze_v11_0_14.Debug [\Debug(c_data_size=32,c_instr_si...]
+Compiling architecture imp of entity microblaze_v11_0_14.interrupt_mode_converter [\interrupt_mode_converter(c_edge...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10010000000010010000...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=artix7,init="1...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="10010000000010010000...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=artix7,init="1...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_FDRE [\MB_FDRE(c_target=artix7)\]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_MUXCY_XORCY [\MB_MUXCY_XORCY(c_target=artix7)...]
+Compiling architecture muxf7_v of entity unisim.MUXF7 [muxf7_default]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_MUXF7 [\MB_MUXF7(c_target=artix7)\]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_FDR [\MB_FDR(c_target=artix7)\]
+Compiling architecture imp of entity microblaze_v11_0_14.PC_Module_gti [\PC_Module_gti(c_data_size=32,c_...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000000000...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=artix7,init="0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000000000001111...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=artix7,init="0...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="11111111000000001111...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=artix7,init="1...]
+Compiling architecture fdse_v of entity unisim.FDSE [fdse_default]
+Compiling architecture fds_v of entity unisim.FDS [fds_default]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_FDS [\MB_FDS(c_target=artix7)\]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="00000000111111110000...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=artix7,init="0...]
+Compiling architecture imp of entity microblaze_v11_0_14.PreFetch_Buffer_gti [\PreFetch_Buffer_gti(c_instr_siz...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_MUXCY [\MB_MUXCY(c_target=artix7)\]
+Compiling architecture imp of entity microblaze_v11_0_14.carry_and [\carry_and(c_target=artix7)\]
+Compiling architecture imp of entity microblaze_v11_0_14.jump_logic [\jump_logic(c_instr_size=32,c_ta...]
+Compiling architecture imp of entity microblaze_v11_0_14.carry_or [\carry_or(c_target=artix7)\]
+Compiling architecture imp of entity microblaze_v11_0_14.Decode_gti [\Decode_gti(c_data_size=32,c_ins...]
+Compiling architecture lut6_2_v of entity unisim.LUT6_2 [\LUT6_2(init="000000001111111100...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6_2 [\MB_LUT6_2(c_target=artix7,init=...]
+Compiling architecture ram32m_v of entity unisim.RAM32M [ram32m_default]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_RAM32M [\MB_RAM32M(c_target=artix7,c_use...]
+Compiling architecture imp of entity microblaze_v11_0_14.Register_File_gti [\Register_File_gti(c_data_size=3...]
+Compiling architecture imp of entity microblaze_v11_0_14.Operand_Select_gti [\Operand_Select_gti(c_data_size=...]
+Compiling architecture lut6_2_v of entity unisim.LUT6_2 [\LUT6_2(init="011000000111101010...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6_2 [\MB_LUT6_2(c_target=artix7,init=...]
+Compiling architecture imp of entity microblaze_v11_0_14.ALU_Bit [\ALU_Bit(c_target=artix7,c_allow...]
+Compiling architecture lut6_v of entity unisim.LUT6 [\LUT6(init="01100000011110101010...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=artix7,init="0...]
+Compiling architecture lut4_v of entity unisim.LUT4 [\LUT4(init="1111101000001010")(0...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT4 [\MB_LUT4(c_target=artix7,init="1...]
+Compiling architecture lut2_v of entity unisim.LUT2 [\LUT2(init="1000")(0,3)\]
+Compiling architecture mult_and_v of entity unisim.MULT_AND [mult_and_default]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_MULT_AND [\MB_MULT_AND(c_target=artix7)\]
+Compiling architecture imp of entity microblaze_v11_0_14.ALU_Bit [\ALU_Bit(c_target=artix7,c_allow...]
+Compiling architecture imp of entity microblaze_v11_0_14.ALU [\ALU(c_data_size=32,c_allow_lut6...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=rtl,init="1100...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=rtl,init="1100...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6 [\MB_LUT6(c_target=rtl,init="1100...]
+Compiling architecture imp of entity microblaze_v11_0_14.Shift_Logic_Module_gti [\Shift_Logic_Module_gti(c_data_s...]
+Compiling architecture imp of entity microblaze_v11_0_14.mul_unit [\mul_unit(c_data_size=32,c_targe...]
+Compiling architecture imp of entity microblaze_v11_0_14.Barrel_Shifter_gti [\Barrel_Shifter_gti(c_data_size=...]
+Compiling architecture imp of entity microblaze_v11_0_14.WB_Mux_Bit [\WB_Mux_Bit(c_target=artix7,c_lu...]
+Compiling architecture imp of entity microblaze_v11_0_14.WB_Mux [\WB_Mux(c_data_size=32,c_daddr_s...]
+Compiling architecture imp of entity microblaze_v11_0_14.Zero_Detect_gti [\Zero_Detect_gti(c_data_size=32,...]
+Compiling architecture imp of entity microblaze_v11_0_14.Byte_Doublet_Handle_gti [\Byte_Doublet_Handle_gti(c_data_...]
+Compiling architecture imp of entity microblaze_v11_0_14.Data_Flow_Logic [\Data_Flow_Logic(c_data_size=32,...]
+Compiling architecture msr_reg of entity microblaze_v11_0_14.msr_reg_gti [\msr_reg_gti(c_data_size=32,c_ta...]
+Compiling architecture lut6_2_v of entity unisim.LUT6_2 [\LUT6_2(init="111111110000000011...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6_2 [\MB_LUT6_2(c_target=artix7,init=...]
+Compiling architecture imp of entity microblaze_v11_0_14.mux_bus [\mux_bus(c_target=artix7,c_allow...]
+Compiling architecture lut6_2_v of entity unisim.LUT6_2 [\LUT6_2(init="100101101001011010...]
+Compiling architecture imp of entity microblaze_v11_0_14.MB_LUT6_2 [\MB_LUT6_2(c_target=artix7,init=...]
+Compiling architecture imp of entity microblaze_v11_0_14.exception_registers_gti [\exception_registers_gti(c_data_...]
+Compiling architecture imp of entity microblaze_v11_0_14.Fpu [\Fpu(c_data_size=32,c_target=art...]
+Compiling architecture imp of entity microblaze_v11_0_14.PVR [\PVR(c_data_size=32,c_daddr_size...]
+Compiling architecture imp of entity microblaze_v11_0_14.Data_Flow_gti [\Data_Flow_gti(c_data_size=32,c_...]
+Compiling architecture imp of entity microblaze_v11_0_14.read_data_mux [\read_data_mux(c_data_size=32,c_...]
+Compiling architecture imp of entity microblaze_v11_0_14.instr_mux [\instr_mux(c_instr_size=32,c_lmb...]
+Compiling architecture imp of entity microblaze_v11_0_14.MMU [\MMU(c_data_size=32,c_daddr_size...]
+Compiling architecture imp of entity microblaze_v11_0_14.MicroBlaze_GTi [\MicroBlaze_GTi(c_num_sync_ff_cl...]
+Compiling architecture imp of entity microblaze_v11_0_14.mb_sync_bit [\mb_sync_bit(c_reset_value='1')\]
+Compiling architecture imp of entity microblaze_v11_0_14.MicroBlaze_Core [\MicroBlaze_Core(c_freq=10000000...]
+Compiling architecture imp of entity microblaze_v11_0_14.MicroBlaze [\MicroBlaze(c_freq=100000000,c_e...]
+Compiling architecture microblaze_microblaze_0_0_arch of entity xil_defaultlib.microblaze_microblaze_0_0 [microblaze_microblaze_0_0_defaul...]
+Compiling architecture imp of entity lmb_bram_if_cntlr_v4_0_25.pselect_mask [\pselect_mask(c_bar="00000000000...]
+Compiling architecture imp of entity lmb_bram_if_cntlr_v4_0_25.lmb_mux [\lmb_mux(c_target=artix7,c_basea...]
+Compiling architecture imp of entity lmb_bram_if_cntlr_v4_0_25.lmb_bram_if_cntlr [\lmb_bram_if_cntlr(c_family="art...]
+Compiling architecture microblaze_dlmb_bram_if_cntlr_0_arch of entity xil_defaultlib.microblaze_dlmb_bram_if_cntlr_0 [microblaze_dlmb_bram_if_cntlr_0_...]
+Compiling architecture imp of entity lmb_v10_v3_0_14.lmb_v10 [\lmb_v10(c_lmb_num_slaves=1)\]
+Compiling architecture microblaze_dlmb_v10_0_arch of entity xil_defaultlib.microblaze_dlmb_v10_0 [microblaze_dlmb_v10_0_default]
+Compiling architecture imp of entity lmb_bram_if_cntlr_v4_0_25.pselect_mask [\pselect_mask(c_bar="00000000000...]
+Compiling architecture imp of entity lmb_bram_if_cntlr_v4_0_25.lmb_mux [\lmb_mux(c_target=artix7,c_basea...]
+Compiling architecture imp of entity lmb_bram_if_cntlr_v4_0_25.lmb_bram_if_cntlr [\lmb_bram_if_cntlr(c_family="art...]
+Compiling architecture microblaze_ilmb_bram_if_cntlr_0_arch of entity xil_defaultlib.microblaze_ilmb_bram_if_cntlr_0 [microblaze_ilmb_bram_if_cntlr_0_...]
+Compiling architecture microblaze_ilmb_v10_0_arch of entity xil_defaultlib.microblaze_ilmb_v10_0 [microblaze_ilmb_v10_0_default]
+Compiling module blk_mem_gen_v8_4_9.blk_mem_gen_v8_4_9_output_stage(...
+Compiling module blk_mem_gen_v8_4_9.blk_mem_gen_v8_4_9_softecc_outpu...
+Compiling module blk_mem_gen_v8_4_9.blk_mem_gen_v8_4_9_mem_module(C_...
+Compiling module blk_mem_gen_v8_4_9.blk_mem_gen_v8_4_9(C_FAMILY="art...
+Compiling module xil_defaultlib.microblaze_lmb_bram_0
+Compiling module xil_defaultlib.microblaze_0_local_memory_imp_HP...
+Compiling architecture imp of entity proc_sys_reset_v5_0_16.lpf [\lpf(c_ext_rst_width=4,c_aux_rst...]
+Compiling architecture imp of entity proc_sys_reset_v5_0_16.proc_sys_reset [\proc_sys_reset(c_family="artix7...]
+Compiling architecture microblaze_rst_clk_wiz_0_100m_0_arch of entity xil_defaultlib.microblaze_rst_clk_wiz_0_100M_0 [microblaze_rst_clk_wiz_0_100m_0_...]
+Compiling module xil_defaultlib.microblaze
+Compiling module xil_defaultlib.microblaze_wrapper
+Compiling module xil_defaultlib.top_microblaze
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot top_microblaze_behav
+run_program: Time (s): cpu = 00:00:04 ; elapsed = 00:00:46 . Memory (MB): peak = 3618.949 ; gain = 0.000
+INFO: [USF-XSim-69] 'elaborate' step finished in '46' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in 'C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "top_microblaze_behav -key {Behavioral:sim_1:Functional:top_microblaze} -tclbatch {top_microblaze.tcl} -protoinst "protoinst_files/bd_87ec.protoinst" -protoinst "protoinst_files/microblaze.protoinst" -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/bd_87ec.protoinst
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m00_exit_pipeline/m00_exit/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m00_exit_pipeline/m00_exit/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m00_exit_pipeline/m_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m00_exit_pipeline/s_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m00_sc2axi/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m01_exit_pipeline/m01_exit/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m01_exit_pipeline/m01_exit/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m01_exit_pipeline/m_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m01_exit_pipeline/s_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m01_sc2axi/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m02_exit_pipeline/m02_exit/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m02_exit_pipeline/m02_exit/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m02_exit_pipeline/m_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m02_exit_pipeline/s_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m02_sc2axi/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m03_exit_pipeline/m03_exit/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m03_exit_pipeline/m03_exit/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m03_exit_pipeline/m_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m03_exit_pipeline/s_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m03_sc2axi/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m04_exit_pipeline/m04_exit/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m04_exit_pipeline/m04_exit/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m04_exit_pipeline/m_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m04_exit_pipeline/s_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m04_sc2axi/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m05_exit_pipeline/m05_exit/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m05_exit_pipeline/m05_exit/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m05_exit_pipeline/m_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m05_exit_pipeline/s_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//m05_sc2axi/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//s00_axi2sc/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//s00_entry_pipeline/m_axi
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//s00_entry_pipeline/s00_mmu/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//s00_entry_pipeline/s00_mmu/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//s00_entry_pipeline/s00_si_converter/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//s00_entry_pipeline/s00_si_converter/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//s00_entry_pipeline/s00_transaction_regulator/M_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//s00_entry_pipeline/s00_transaction_regulator/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i/axi_smc/inst//s00_entry_pipeline/s_axi
+INFO: [Wavedata 42-565] Reading protoinst file protoinst_files/microblaze.protoinst
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_bram_ctrl_0/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_bram_ctrl_1/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_bram_ctrl_2/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_bram_ctrl_3/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_gpio_0/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_smc/M00_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_smc/M01_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_smc/M02_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_smc/M03_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_smc/M04_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_smc/M05_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_smc/S00_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//axi_uartlite_0/S_AXI
+INFO: [Wavedata 42-564]   Found protocol instance at /top_microblaze/microblaze/microblaze_i//microblaze_0/M_AXI_DP
+Time resolution is 1 ps
+source top_microblaze.tcl
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/tile_idx_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/spk_in_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/weight_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/input_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/mem_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/spk_in_bram.mem
+Block Memory Generator module top_microblaze.microblaze.microblaze_i.microblaze_0_local_memory.lmb_bram.inst.native_mem_mapped_module.blk_mem_gen_v8_4_9_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+xsim: Time (s): cpu = 00:00:09 ; elapsed = 00:00:05 . Memory (MB): peak = 3618.949 ; gain = 0.000
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'top_microblaze_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:27 ; elapsed = 00:01:21 . Memory (MB): peak = 3618.949 ; gain = 0.000
+restart
+INFO: [Wavedata 42-604] Simulation restarted
+add_force {/top_microblaze/clk} -radix hex {0 0ns} {1 5000ps} -repeat_every 10000ps
+add_force {/top_microblaze/microblaze/snn_en_tri_o} -radix hex {0 0ns}
+run 50 us
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/tile_idx_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/spk_in_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/weight_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/input_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/mem_bram.mem
+reading C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/spk_in_bram.mem
+Block Memory Generator module top_microblaze.microblaze.microblaze_i.microblaze_0_local_memory.lmb_bram.inst.native_mem_mapped_module.blk_mem_gen_v8_4_9_inst is using a behavioral model for simulation which will not precisely model memory collision behavior.
+add_force {/top_microblaze/microblaze/snn_en_tri_o} -radix hex {1 0ns}
+run 50 us
+add_force {/top_microblaze/microblaze/snn_en_tri_o} -radix hex {0 0ns}
+run 50 us
+add_force {/top_microblaze/microblaze/snn_en_tri_o} -radix hex {1 0ns}
+run 50 us

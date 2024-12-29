@@ -8,8 +8,9 @@ import matplotlib.pyplot as plt
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
+sz = 4
 MAX_NEURONS = 1024
-MAX_TILES = 64
+MAX_TILES = 256 
 NEURONS_PER_TILE = 16
 THRESH = 32 # for weight quantization
 
@@ -79,16 +80,19 @@ def compile_to_c(model, img=None, spk=None, mem=None):
         print(f"    write_tile({i}, {tile_idx[i][0]}, {tile_idx[i][1]});")
         for x in range(NEURONS_PER_TILE):
             for y in range(NEURONS_PER_TILE):
-                print(f"    write_weight({i}, {x}, {y}, {int(tiles[i][y][x])});")
+                if(int(tiles[i][y][x]) != 0):
+                    print(f"    write_weight({i}, {x}, {y}, {int(tiles[i][y][x])});")
 
     if(img is not None):
-        for i in range(64):
-            print(f"    write_network_input({i}, {int(round(img[i].item() * THRESH))});")
+        for i in range(sz*sz):
+            val = int(round(img[i].item() * THRESH))
+            if(val != 0):
+                print(f"    write_network_input({i}, {val});")
 
     print("}")
 
 def compile_to_uart(model, img=None, spk_out=None, mem=None):
-    ser = serial.Serial("/dev/USB0", baudrate=115200)		
+    ser = serial.Serial("/dev/USB0", baudrate=9600)		
 
     for i in range(len(tiles)):
         ser.write(f"0 {i} {tile_idx[i][0]} {tile_idx[i][1]}\n")
@@ -121,7 +125,7 @@ if __name__ == "__main__":
 
     multiply = transforms.Lambda(lambda img: torch.clamp(img*4, min=0, max=1))
     transform = transforms.Compose([
-        transforms.Resize((8, 8)),
+        transforms.Resize((sz, sz)),
         transforms.Grayscale(),
         transforms.ToTensor(),
         multiply
@@ -137,6 +141,6 @@ if __name__ == "__main__":
 
     if(mode == "c"):
         #tile_idx, tiles = compile(model)
-        compile_to_c(model, img=img.view(8*8), spk=[spk0, spk1, spk2], mem=[None, mem1, None])
+        compile_to_c(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2], mem=[None, mem1, None])
     elif(mode == "uart"):
-        compile_to_uart(model, img=img.view(8*8))
+        compile_to_uart(model, img=img.view(sz*sz))

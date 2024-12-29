@@ -3,8 +3,8 @@
 #include "xil_printf.h"
 #include "xil_io.h"
 #include "snn_driver.h"
-//#include "model.h"
-#include "read_model.h"
+#include "model.h"
+//#include "read_model.h"
 
 // overrides default SNN block memory
 // with own weights and runs the neural network
@@ -13,8 +13,12 @@
 int main()
 {
     init_platform();
+    setup_snn();
+    reset_model();
     write_model();
-	read_model();
+    //reset_model();
+    //dump_model(0);
+    //read_model();
 
     print("\n\r--------BEGINNING SNN INFERENCE--------------\n\r");
 
@@ -27,20 +31,20 @@ int main()
     }
 
     while(1){
-        if(timesteps == 100) break;
-        timestep(100);
-        if(cnt % (MAX_NEURONS / NEURONS_PER_TILE + 1) == 0) {
-            timesteps++;
-            for(int i = 7*NEURONS_PER_TILE; i < 7*NEURONS_PER_TILE+10; i++) {
-                int spk = read_spk_out(i);
-                vote[i - 7*NEURONS_PER_TILE] += spk;
-                xil_printf("%d ", spk);
-
-            }
-            xil_printf("\n\r");
-            usleep(10000);
+        timestep();
+        
+        u16 spk = read_spk_out(3);
+        
+        for(int i = 0; i < 16; i++) {
+            int spki = (spk & (1 << i)) > 0;
+            xil_printf("%d ", spki);
+            if(i < 10) vote[i] += spki;
         }
+
+        xil_printf("\n\r");
+
         cnt++;
+        if(cnt == 100) break;
     }
 
     xil_printf("\n\rspike voting: ");
@@ -59,3 +63,4 @@ int main()
     cleanup_platform();
     return 0;
 }
+

@@ -1,4 +1,5 @@
 `include "top.sv"
+`include "en_done_controller.sv"
 
 module top_microblaze(
     input wire clk,
@@ -15,7 +16,7 @@ module top_microblaze(
     localparam TILE_IDX_WIDTH = 16;
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
-    localparam THRESH = 32;
+    localparam THRESH = 127;
     localparam FIFO_LENGTH = 1;
 
     localparam WEIGHT_BRAM_DATA_WIDTH = BRAM_DATA_WIDTH;
@@ -51,9 +52,28 @@ module top_microblaze(
     wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_input_we;
     wire cpu_input_en;
 
+    wire snn_en_tri_o;
+    wire snn_done_tri_i;
+    wire snn_ready_tri_i;
+    wire snn_done;
+    wire snn_en;
+
+    wire [1:0] snn_in_tri_i;
+    assign snn_in_tri_i[0] = snn_done_tri_i;
+    assign snn_in_tri_i[1] = snn_ready_tri_i;
+
+    en_done_controller en_done_controller_0 (
+        .clk(clk),
+        .snn_en_tri_o(snn_en_tri_o),
+        .snn_done(snn_done_tri_i),
+        .snn_en(snn_en),
+        .snn_ready(snn_ready_tri_i)
+    );
+
     top top_0 (
         .clk(clk),
-        .sw(sw),
+        .snn_en(snn_en),
+        .snn_done(snn_done_tri_i),
         .led(led),
 
         .cpu_tile_idx_addr(cpu_tile_idx_addr),
@@ -109,6 +129,9 @@ module top_microblaze(
         .BRAM_SPK_din(cpu_spk_out_din),
         .BRAM_SPK_dout(cpu_spk_out_dout),
         .BRAM_SPK_en(cpu_spk_out_en),
-        .BRAM_SPK_we(cpu_spk_out_we)       
+        .BRAM_SPK_we(cpu_spk_out_we),   
+
+        .snn_en_tri_o(snn_en_tri_o),
+        .snn_in_tri_i(snn_in_tri_i)
     );
 endmodule

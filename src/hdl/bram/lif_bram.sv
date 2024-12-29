@@ -22,7 +22,8 @@ module lif_bram #(
     done,
     mem_addr, mem_dout, mem_din, mem_bram_en, mem_bram_rst, mem_bram_we,
     spk_out_addr, spk_out_dout, spk_out_din, spk_out_bram_en, spk_out_bram_rst, spk_out_bram_we,
-    has_spk_nxt
+    has_spk_nxt,
+    is_last_tile
 );
     localparam integer MEM_BRAM_DATA_WIDTH = CROSSBAR_NEURONS * NETWORK_WIDTH;
     localparam integer SPK_IN_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
@@ -60,6 +61,8 @@ module lif_bram #(
     output wire [SPK_IN_BRAM_DATA_WIDTH/8-1:0] spk_out_bram_we;
 
     output reg [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk_nxt;
+
+    input wire is_last_tile;
 
     //initial has_spk_nxt = 0;
 
@@ -125,7 +128,7 @@ module lif_bram #(
                         mem_bram_done <= 0;
                         mem_bram_en <= 1;
                     end else if(mem_bram_step == WAIT) begin
-                        if(mem_bram_done > 1) begin
+                        if(mem_bram_done > 0) begin
                             mem_bram_en <= 0;
                             mem_bram_step <= INCREMENT;
                         end
@@ -143,7 +146,7 @@ module lif_bram #(
                         mem_we_local <= 0;
                         mem_bram_en <= 1;
                     end else if(mem_bram_step == WAIT) begin
-                        if(mem_bram_done > 1) begin
+                        if(mem_bram_done > 0) begin
                             mem_in_flattened <= mem_dout;
                             mem_bram_en <= 0;
                             mem_bram_step <= INCREMENT;
@@ -182,7 +185,7 @@ module lif_bram #(
                         spk_out_bram_en <= 1;
                         has_spk_nxt[tile_idx_y] <= (|spk_out);
                     end else if(spk_out_bram_step == WAIT) begin
-                        if(spk_out_bram_done > 1) begin
+                        if(spk_out_bram_done > 0) begin
                             spk_out_bram_en <= 0;
                             spk_out_bram_step <= INCREMENT;
                         end
@@ -201,7 +204,7 @@ module lif_bram #(
                         spk_out_bram_step <= WAIT;
                         spk_out_bram_en <= 1;
                     end else if(spk_out_bram_step == WAIT) begin
-                        if(spk_out_bram_done > 1) begin
+                        if(spk_out_bram_done > 0) begin
                             spk_in <= spk_out_dout;
                             spk_out_bram_en <= 0;
                             spk_out_bram_step <= INCREMENT;

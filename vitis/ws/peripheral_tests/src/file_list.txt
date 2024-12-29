@@ -1,0 +1,4 @@
+C:\Users\andre\Desktop\snn-fpga\vitis\ws\peripheral_tests\src\gpio_header.h
+C:\Users\andre\Desktop\snn-fpga\vitis\ws\peripheral_tests\src\xgpio_tapp_example.c
+C:\Users\andre\Desktop\snn-fpga\vitis\ws\peripheral_tests\src\testperiph.c
+C:\Users\andre\Desktop\snn-fpga\vitis\ws\peripheral_tests\src\uartlite_header.h

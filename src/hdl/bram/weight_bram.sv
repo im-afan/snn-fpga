@@ -51,7 +51,7 @@ module weight_bram #(
     reg [4:0] bram_step;
 
     reg [15:0] weight_idx; // takes multiple steps to read weight
-    assign local_tile_done = (weight_idx == CROSSBAR_NEURONS*CROSSBAR_NEURONS);
+    assign local_tile_done = (weight_idx == CROSSBAR_NEURONS*CROSSBAR_NEURONS) && weight_fifo_push_done;
 
     wire fifo_done;
     assign fifo_done = (weight_fifo_push_done || ~weight_fifo_push);
@@ -91,7 +91,7 @@ module weight_bram #(
                     bram_we <= 0;
                     weight_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
-                    if(bram_done > 1) begin
+                    if(bram_done > 0) begin
                         weight_fifo_din <= dout;
                         weight_fifo_push <= 1;
                         bram_step <= INCREMENT;

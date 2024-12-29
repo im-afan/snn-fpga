@@ -15,9 +15,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
+sz = 4
+
 # Network Architecture
-num_inputs = 8*8
-num_hidden = 31 
+num_inputs = sz*sz
+num_hidden = 15 
 num_outputs = 10
 thresh = 1
 
@@ -102,7 +104,7 @@ if __name__ == "__main__":
     multiply = transforms.Lambda(lambda img: torch.clamp(img*4, min=0, max=thresh))
     # Define a transform
     transform = transforms.Compose([
-                transforms.Resize((8, 8)),
+                transforms.Resize((sz, sz)),
                 transforms.Grayscale(),
                 transforms.ToTensor(),
                 multiply])

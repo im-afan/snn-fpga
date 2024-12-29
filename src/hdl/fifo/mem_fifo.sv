@@ -37,8 +37,8 @@ module mem_fifo #(
 		genvar i, j;
 		for(i = 0; i < CROSSBAR_NEURONS; i++) begin
 			assign mem[i] = buffer[read_ptr][NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i];
-			//wire [NETWORK_WIDTH-1:0] mem_debug;
-			//assign mem_debug = mem[i];
+			wire [NETWORK_WIDTH-1:0] mem_debug;
+			assign mem_debug = mem[i];
 		end
 	endgenerate
 
