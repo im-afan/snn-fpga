@@ -31,7 +31,7 @@ module top(
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
     localparam THRESH = 127;
-    localparam FIFO_LENGTH = 1;
+    localparam FIFO_LENGTH = 2;
 
     localparam WEIGHT_BRAM_DATA_WIDTH = BRAM_DATA_WIDTH;
     localparam INPUT_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;

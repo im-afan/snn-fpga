@@ -67,7 +67,7 @@ module input_bram #(
             bram_step <= SEND;
             bram_en <= 0;
             input_fifo_push <= 0;
-            tile_done <= 1;
+            tile_done <= 0;
             go <= 0;
         end else begin
             if(new_tile && ~prev_new_tile && ~go) begin

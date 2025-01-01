@@ -25,7 +25,7 @@ module xbar_scheduler (
 );
 	wire ready;
 	wire pop_done;
-	assign ready = ~(weight_fifo_empty || spk_in_fifo_empty) && ~mac_out_fifo_full;
+	assign ready = ~(weight_fifo_empty || spk_in_fifo_empty || input_fifo_empty) && ~mac_out_fifo_full;
 	assign pop_done = (weight_fifo_pop_done && spk_in_fifo_pop_done && input_fifo_pop_done && mac_out_fifo_push_done) 
 					|| ~(weight_fifo_pop || spk_in_fifo_pop || input_fifo_pop || mac_out_fifo_push);
 

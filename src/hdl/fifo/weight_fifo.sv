@@ -25,7 +25,7 @@ module weight_fifo #(
     reg [7:0] read_ptr, write_ptr;
     reg [7:0] diff;
     assign full = (diff == LENGTH*DIN_PER_WIDTH);
-    assign empty = (diff > DIN_PER_WIDTH);
+    assign empty = (DIN_PER_WIDTH > diff);
 
     reg [BRAM_DATA_WIDTH-1:0] buffer [LENGTH * DIN_PER_WIDTH];
 

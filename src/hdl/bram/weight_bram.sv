@@ -59,6 +59,8 @@ module weight_bram #(
     assign fifo_full = weight_fifo_full;
     reg go;
     reg prev_new_tile;
+
+    assign weight_fifo_din = dout;
  
     always_ff @(posedge clk) begin
         if(~enable) begin
@@ -67,7 +69,7 @@ module weight_bram #(
             bram_en <= 0;
             weight_fifo_push <= 0;
             go <= 0;
-            tile_done <= 1;
+            tile_done <= 0;
         end else begin
             if(local_tile_done) begin
                 tile_done <= 1;
@@ -92,7 +94,7 @@ module weight_bram #(
                     weight_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
                     if(bram_done > 1) begin
-                        weight_fifo_din <= dout;
+                        //weight_fifo_din <= dout;
                         weight_fifo_push <= 1;
                         bram_step <= INCREMENT;
                         bram_en <= 0;
@@ -100,6 +102,7 @@ module weight_bram #(
                         bram_done <= bram_done + 1; // wait 1 clock cycle for bram to finish if it is active
                     end
                 end else if(bram_step == INCREMENT) begin
+                    weight_fifo_push <= 0;
                     weight_idx <= weight_idx + BRAM_DATA_WIDTH / NETWORK_WIDTH;
                     bram_step <= SEND;
                 end
