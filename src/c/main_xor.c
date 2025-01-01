@@ -7,6 +7,7 @@
 int main()
 {
     init_platform();
+    setup_snn();
 
     while(1) {
         timestep();

@@ -4,9 +4,9 @@
 
 module asymmetric_bram_tb;
 
-    localparam WEIGHT_BRAM_DATA_WIDTH = 32;
+    localparam WEIGHT_BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
-    localparam CPU_BRAM_DATA_WIDTH = 16;
+    localparam CPU_BRAM_DATA_WIDTH = 32;
 
     reg clk;
 
@@ -60,7 +60,7 @@ module asymmetric_bram_tb;
 
    		#10000
    		cpu_weight_en = 1;
-   		cpu_weight_addr = 3;
+   		cpu_weight_addr = 132;
    		cpu_weight_din = 32;
    		cpu_weight_we = 4'b1111;
 

@@ -98,6 +98,7 @@ module bram_streamer #(
     input wire [TILE_IDX_WIDTH-1:0] lif_tile_idx_y;
 
     localparam integer CPU_BRAM_DATA_WIDTH = 32;
+    localparam integer CPU_BRAM_DATA_WIDTH_WEIGHT = 128;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
     input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
@@ -106,9 +107,9 @@ module bram_streamer #(
     input wire cpu_tile_idx_en;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_weight_addr;
-    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
-    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
-    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
+    input wire [CPU_BRAM_DATA_WIDTH_WEIGHT-1:0] cpu_weight_din;
+    output wire [CPU_BRAM_DATA_WIDTH_WEIGHT-1:0] cpu_weight_dout;
+    input wire [CPU_BRAM_DATA_WIDTH_WEIGHT/8-1:0] cpu_weight_we;
     input wire cpu_weight_en;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_out_addr;
@@ -205,25 +206,25 @@ module bram_streamer #(
     );
 
     asymmetric_dual_port_bram #(
-        .DATA_WIDTH_A(TILE_IDX_BRAM_DATA_WIDTH),
-        .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
-        .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
+        .DATA_WIDTH_B(TILE_IDX_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
+        .DATA_WIDTH_A(CPU_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
         .MEM_PATH("tile_idx_bram.mem")
     ) bram0 (
-        .clka(clk),
-        .addra(addr_tile_idx),
-        .dina(din_tile_idx),
-        .douta(dout_tile_idx),
-        .wea(bram_we_tile_idx),
-        .ena(bram_en_tile_idx),
-
         .clkb(clk),
-        .addrb(cpu_tile_idx_addr),
-        .doutb(cpu_tile_idx_dout),
-        .dinb(cpu_tile_idx_din),
-        .web(cpu_tile_idx_we),
-        .enb(cpu_tile_idx_en)
+        .addrb(addr_tile_idx),
+        .dinb(din_tile_idx),
+        .doutb(dout_tile_idx),
+        .web(bram_we_tile_idx),
+        .enb(bram_en_tile_idx),
+
+        .clka(clk),
+        .addra(cpu_tile_idx_addr),
+        .douta(cpu_tile_idx_dout),
+        .dina(cpu_tile_idx_din),
+        .wea(cpu_tile_idx_we),
+        .ena(cpu_tile_idx_en)
     );
     
     asymmetric_dual_port_bram #(

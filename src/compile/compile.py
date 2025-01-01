@@ -8,11 +8,12 @@ import matplotlib.pyplot as plt
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
-sz = 4
+sz = 8
 MAX_NEURONS = 1024
 MAX_TILES = 256 
 NEURONS_PER_TILE = 16
-THRESH = 32 # for weight quantization
+QUANT_VAL = 4 # for weight quantization
+THRESH = 128 # must be a mutliple of quant_val
 
 # compile MLP from snntorch
 # only supports 1 membrane potential across all neurons
@@ -80,12 +81,13 @@ def compile_to_c(model, img=None, spk=None, mem=None):
         print(f"    write_tile({i}, {tile_idx[i][0]}, {tile_idx[i][1]});")
         for x in range(NEURONS_PER_TILE):
             for y in range(NEURONS_PER_TILE):
-                if(int(tiles[i][y][x]) != 0):
-                    print(f"    write_weight({i}, {x}, {y}, {int(tiles[i][y][x])});")
+                val = int(tiles[i][y][x]) * (THRESH // QUANT_VAL)
+                if(val != 0):
+                    print(f"    write_weight({i}, {x}, {y}, {val});")
 
     if(img is not None):
         for i in range(sz*sz):
-            val = int(round(img[i].item() * THRESH))
+            val = int(round(img[i].item() * QUANT_VAL) * (THRESH // QUANT_VAL))
             if(val != 0):
                 print(f"    write_network_input({i}, {val});")
 
@@ -101,8 +103,8 @@ def compile_to_uart(model, img=None, spk_out=None, mem=None):
                 ser.write(f"1 {i} {x} {y} {int(tiles[i][y][x])}\n")
 
     if(img is not None):
-        for i in range(64):
-            ser.write(f"2 {i} {int(round(img[i].item() * THRESH))}\n")
+        for i in range(sz*sz):
+            ser.write(f"2 {i} {int(round(img[i].item() * QUANT_VAL) * (THRESH // QUANT_VAL))}\n")
 
     ser.write("end\n")
 
@@ -123,7 +125,7 @@ if __name__ == "__main__":
     state_dict = torch.load("./mnist_16x16_spk.h5", weights_only=True)
     model.load_state_dict(state_dict)
 
-    multiply = transforms.Lambda(lambda img: torch.clamp(img*4, min=0, max=1))
+    multiply = transforms.Lambda(lambda img: torch.clamp(img, min=0, max=1))
     transform = transforms.Compose([
         transforms.Resize((sz, sz)),
         transforms.Grayscale(),
@@ -136,8 +138,11 @@ if __name__ == "__main__":
     test_loader = iter(DataLoader(mnist_test, batch_size=1, shuffle=True, drop_last=True))
     img, label = next(test_loader)
 
-    model.quantize(torch.tensor(THRESH))
-    spk0, spk1, spk2, mem1 = model((img.view(1, -1) * THRESH).round(), debug=True)
+    plt.imshow(img.view(sz, sz));
+    plt.show()
+
+    model.quantize(torch.tensor(QUANT_VAL))
+    spk0, spk1, spk2, mem1 = model((img.view(1, -1) * QUANT_VAL).round(), debug=True)
 
     if(mode == "c"):
         #tile_idx, tiles = compile(model)

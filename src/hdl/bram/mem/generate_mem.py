@@ -13,11 +13,12 @@ tile = [[[0 for i in range(CROSSBAR_NEURONS)] for i in range(CROSSBAR_NEURONS)] 
 mem = [0 for i in range(MAX_NEURONS)]
 snn_in = [0 for i in range(MAX_NEURONS)]
 
+"""
 snn_in[0] = 127;
 snn_in[1] = 0;
 snn_in[3] = 127;
 
-snn_in[47] = 127;
+snn_in[46] = 127;
 
 tile[0][0][4] = 127;
 tile[0][0][5] = -127;
@@ -41,15 +42,19 @@ tile[0][9][11] = 127;
 tile[0][10][12] = 127;
 tile[0][10][11] = 127;
 
-#tile[1][10][0] = 32;
-#tile[1][11][0] = 32;
-
 tile[1][0][15] = 32;
 
 for i in range(MAX_TILES):
 	tile_idx[i] = [i // 8, i % 8]
 
-#DEBUGGING
+"""
+tile[1][13][0] = 127
+tile[1][13][1] = 127
+
+snn_in[13] = 127
+tile_idx[0] = [1, 2]
+tile_idx[1] = [0, 0]
+
 """
 for i in range(MAX_TILES):
     tile_idx[i] = [1, 1]

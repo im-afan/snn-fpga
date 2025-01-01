@@ -33,7 +33,7 @@ int main()
     while(1){
         timestep();
         
-        u16 spk = read_spk_out(3);
+        u16 spk = read_spk_out(0);
         
         for(int i = 0; i < 16; i++) {
             int spki = (spk & (1 << i)) > 0;

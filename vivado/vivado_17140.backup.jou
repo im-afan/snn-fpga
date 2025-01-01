@@ -1,0 +1,46 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Tue Dec 31 11:37:53 2024
+# Process ID         : 17140
+# Current directory  : C:/Users/andre/Desktop/snn-fpga/vivado
+# Command line       : vivado.exe -mode tcl -source .\basys3_project.tcl
+# Log file           : C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
+# Journal file       : C:/Users/andre/Desktop/snn-fpga/vivado\vivado.jou
+# Running On         : DESKTOP-OVIC86T
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 19045
+# Processor Detail   : Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+# CPU Frequency      : 2304 MHz
+# CPU Physical cores : 8
+# CPU Logical cores  : 16
+# Host memory        : 34248 MB
+# Swap memory        : 5100 MB
+# Total Virtual      : 39349 MB
+# Available Virtual  : 26680 MB
+#-----------------------------------------------------------
+source {.\basys3_project.tcl}
+start_gui
+update_compile_order -fileset sources_1
+open_run impl_1
+report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
+open_bd_design {C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/sources_1/bd/microblaze/microblaze.bd}
+startgroup
+set_property CONFIG.DATA_WIDTH {128} [get_bd_cells axi_bram_ctrl_3]
+endgroup
+startgroup
+set_property CONFIG.DATA_WIDTH {128} [get_bd_cells axi_bram_ctrl_2]
+endgroup
+startgroup
+set_property CONFIG.DATA_WIDTH {128} [get_bd_cells axi_bram_ctrl_1]
+endgroup
+startgroup
+set_property -dict [list \
+  CONFIG.DATA_WIDTH {128} \
+  CONFIG.PROTOCOL {AXI4} \
+] [get_bd_cells axi_bram_ctrl_0]
+endgroup
+save_bd_design
+write_bd_tcl -force C:/Users/andre/Desktop/snn-fpga/src/hdl/microblaze.tcl

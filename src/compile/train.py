@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
-sz = 4
+sz = 8
 
 # Network Architecture
 num_inputs = sz*sz
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     dtype = torch.float
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-    multiply = transforms.Lambda(lambda img: torch.clamp(img*4, min=0, max=thresh))
+    multiply = transforms.Lambda(lambda img: torch.clamp(img, min=0, max=thresh))
     # Define a transform
     transform = transforms.Compose([
                 transforms.Resize((sz, sz)),

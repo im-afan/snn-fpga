@@ -41,6 +41,7 @@ module top(
     localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
 
     localparam CPU_BRAM_DATA_WIDTH = 32;
+    localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 128;
 
     input wire clk;
     //input wire [15:0] sw;
@@ -55,9 +56,9 @@ module top(
     input wire cpu_tile_idx_en;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_weight_addr;
-    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
-    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
-    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
+    input wire [CPU_BRAM_DATA_WIDTH_WEIGHT-1:0] cpu_weight_din;
+    output wire [CPU_BRAM_DATA_WIDTH_WEIGHT-1:0] cpu_weight_dout;
+    input wire [CPU_BRAM_DATA_WIDTH_WEIGHT/8-1:0] cpu_weight_we;
     input wire cpu_weight_en;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_out_addr;

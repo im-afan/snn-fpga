@@ -3,8 +3,8 @@
 # SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
 # IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
 # SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
-# Start of session at: Sat Dec 28 21:56:12 2024
-# Process ID         : 7864
+# Start of session at: Tue Dec 31 12:27:17 2024
+# Process ID         : 8168
 # Current directory  : C:/Users/andre/Desktop/snn-fpga/vivado
 # Command line       : vivado.exe -mode tcl -source .\basys3_project.tcl
 # Log file           : C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
@@ -19,22 +19,41 @@
 # Host memory        : 34248 MB
 # Swap memory        : 5100 MB
 # Total Virtual      : 39349 MB
-# Available Virtual  : 29789 MB
+# Available Virtual  : 25769 MB
 #-----------------------------------------------------------
 source {.\basys3_project.tcl}
 start_gui
 update_compile_order -fileset sources_1
+create_ip_run [get_files -of_objects [get_fileset sources_1] C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/sources_1/bd/microblaze/microblaze.bd]
+synth_design -top top_microblaze -part xc7a35tcpg236-1 -lint 
+reset_run synth_1
+launch_runs synth_1 -jobs 8
+wait_on_run synth_1
+launch_runs impl_1 -jobs 8
+wait_on_run impl_1
+open_bd_design {C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/sources_1/bd/microblaze/microblaze.bd}
+startgroup
+set_property CONFIG.DATA_WIDTH {64} [get_bd_cells axi_bram_ctrl_3]
+endgroup
+startgroup
+set_property CONFIG.DATA_WIDTH {64} [get_bd_cells axi_bram_ctrl_2]
+endgroup
+startgroup
+set_property CONFIG.DATA_WIDTH {64} [get_bd_cells axi_bram_ctrl_1]
+endgroup
+startgroup
+set_property CONFIG.DATA_WIDTH {64} [get_bd_cells axi_bram_ctrl_0]
+endgroup
+save_bd_design
+reset_run synth_1
+reset_run microblaze_axi_bram_ctrl_1_0_synth_1
+reset_run microblaze_axi_bram_ctrl_0_0_synth_1
+reset_run microblaze_axi_bram_ctrl_2_0_synth_1
+reset_run microblaze_axi_bram_ctrl_3_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+wait_on_run impl_1
 open_run impl_1
 report_timing_summary -delay_type min_max -report_unconstrained -check_timing_verbose -max_paths 10 -input_pins -routable_nets -name timing_1
-launch_simulation
-source top_microblaze.tcl
-restart
-add_force {/top_microblaze/clk} -radix hex {0 0ns} {1 5000ps} -repeat_every 10000ps
-add_force {/top_microblaze/microblaze/snn_en_tri_o} -radix hex {0 0ns}
-run 50 us
-add_force {/top_microblaze/microblaze/snn_en_tri_o} -radix hex {1 0ns}
-run 50 us
-add_force {/top_microblaze/microblaze/snn_en_tri_o} -radix hex {0 0ns}
-run 50 us
-add_force {/top_microblaze/microblaze/snn_en_tri_o} -radix hex {1 0ns}
-run 50 us
+write_hw_platform -fixed -include_bit -force -file C:/Users/andre/Desktop/snn-fpga/src/hdl/top_microblaze.xsa
+write_hw_platform -fixed -include_bit -force -file C:/Users/andre/Desktop/snn-fpga/vitis/top_microblaze.xsa
+open_bd_design {C:/Users/andre/Desktop/snn-fpga/vivado/snn_fpga/snn_fpga.srcs/sources_1/bd/microblaze/microblaze.bd}
