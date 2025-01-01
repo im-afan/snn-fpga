@@ -253,7 +253,7 @@ module bram_streamer #(
     asymmetric_dual_port_bram #(
         .DATA_WIDTH_A(WEIGHT_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
-        .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
+        .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH_WEIGHT),
         .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
         .MEM_PATH("weight_bram.mem")
     ) bram2 (

@@ -16,8 +16,13 @@ int main()
     setup_snn();
     reset_model();
     write_model();
+
+    write_tile(6, 0, 0);
+    write_tile(7, 1, 1);
+    write_tile(8, 2, 2);
+    write_tile(9, 3, 3);
     //reset_model();
-    //dump_model(0);
+    dump_model(0);
     //read_model();
 
     print("\n\r--------BEGINNING SNN INFERENCE--------------\n\r");
@@ -33,7 +38,7 @@ int main()
     while(1){
         timestep();
         
-        u16 spk = read_spk_out(0);
+        u16 spk = read_spk_out(6);
         
         for(int i = 0; i < 16; i++) {
             int spki = (spk & (1 << i)) > 0;
@@ -63,4 +68,3 @@ int main()
     cleanup_platform();
     return 0;
 }
-

@@ -27,6 +27,7 @@ module top_microblaze(
     localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
 
     localparam CPU_BRAM_DATA_WIDTH = 32;
+    localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 128;
 
     wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
     wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;
@@ -35,9 +36,9 @@ module top_microblaze(
     wire cpu_tile_idx_en;
 
     wire [BRAM_ADDR_WIDTH-1:0] cpu_weight_addr;
-    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_din;
-    wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_weight_dout;
-    wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_weight_we;
+    wire [CPU_BRAM_DATA_WIDTH_WEIGHT-1:0] cpu_weight_din;
+    wire [CPU_BRAM_DATA_WIDTH_WEIGHT-1:0] cpu_weight_dout;
+    wire [CPU_BRAM_DATA_WIDTH_WEIGHT/8-1:0] cpu_weight_we;
     wire cpu_weight_en;
 
     wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_out_addr;

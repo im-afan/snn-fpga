@@ -71,7 +71,7 @@ def compile_to_c(model, img=None, spk=None, mem=None):
     #print(f"{torch.stack(spk[0], dim=0)}")
     for i in range(len(spk[0])):
         #print(mem[1][i][0][:20].tolist())
-        print(spk[2][i][0].tolist())
+        print(spk[1][i][0].tolist())
     print("*/")
 
     print("#include \"snn_driver.h\"")
@@ -81,13 +81,13 @@ def compile_to_c(model, img=None, spk=None, mem=None):
         print(f"    write_tile({i}, {tile_idx[i][0]}, {tile_idx[i][1]});")
         for x in range(NEURONS_PER_TILE):
             for y in range(NEURONS_PER_TILE):
-                val = int(tiles[i][y][x]) * (THRESH // QUANT_VAL)
+                val = int(tiles[i][y][x] * (THRESH / QUANT_VAL))
                 if(val != 0):
                     print(f"    write_weight({i}, {x}, {y}, {val});")
 
     if(img is not None):
         for i in range(sz*sz):
-            val = int(round(img[i].item() * QUANT_VAL) * (THRESH // QUANT_VAL))
+            val = int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL))
             if(val != 0):
                 print(f"    write_network_input({i}, {val});")
 
@@ -104,7 +104,7 @@ def compile_to_uart(model, img=None, spk_out=None, mem=None):
 
     if(img is not None):
         for i in range(sz*sz):
-            ser.write(f"2 {i} {int(round(img[i].item() * QUANT_VAL) * (THRESH // QUANT_VAL))}\n")
+            ser.write(f"2 {i} {int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL))}\n")
 
     ser.write("end\n")
 
@@ -141,8 +141,9 @@ if __name__ == "__main__":
     plt.imshow(img.view(sz, sz));
     plt.show()
 
-    model.quantize(torch.tensor(QUANT_VAL))
+    model.quantize(torch.tensor(QUANT_VAL * 127/128))
     spk0, spk1, spk2, mem1 = model((img.view(1, -1) * QUANT_VAL).round(), debug=True)
+    print(mem1)
 
     if(mode == "c"):
         #tile_idx, tiles = compile(model)

@@ -59,11 +59,11 @@ class Net(nn.Module):
         mem2_rec = []
 
         for step in range(num_steps):
-            spk0_next, mem0 = self.spkgen(x, mem0)
+            spk0_next, mem0_next = self.spkgen(x, mem0)
             cur1 = self.fc1(spk0)
-            spk1_next, mem1 = self.lif1(cur1, mem1)
+            spk1_next, mem1_next = self.lif1(cur1, mem1)
             cur2 = self.fc2(spk1)
-            spk2_next, mem2 = self.lif2(cur2, mem2) 
+            spk2_next, mem2_next = self.lif2(cur2, mem2) 
 
             mem0 = torch.clamp(mem0, -self.spkgen.threshold, self.spkgen.threshold)
             mem1 = torch.clamp(mem1, -self.lif1.threshold, self.lif1.threshold)
@@ -78,6 +78,10 @@ class Net(nn.Module):
             spk0 = spk0_next
             spk1 = spk1_next
             spk2 = spk2_next
+
+            mem0 = mem0_next
+            mem1 = mem1_next
+            mem2 = mem2_next
 
 
 
