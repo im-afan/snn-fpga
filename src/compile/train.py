@@ -53,41 +53,40 @@ class Net(nn.Module):
 
         # Record the final layer
         spk0_rec = []
+        mem0_rec = []
         spk1_rec = []
         mem1_rec = []
         spk2_rec = []
         mem2_rec = []
 
         for step in range(num_steps):
-            spk0_next, mem0_next = self.spkgen(x, mem0)
+            spk0, mem0 = self.spkgen(x, mem0)
             cur1 = self.fc1(spk0)
-            spk1_next, mem1_next = self.lif1(cur1, mem1)
+            spk1_next, mem1 = self.lif1(cur1, mem1)
             cur2 = self.fc2(spk1)
-            spk2_next, mem2_next = self.lif2(cur2, mem2) 
+            spk2_next, mem2 = self.lif2(cur2, mem2) 
 
-            mem0 = torch.clamp(mem0, -self.spkgen.threshold, self.spkgen.threshold)
-            mem1 = torch.clamp(mem1, -self.lif1.threshold, self.lif1.threshold)
-            mem2 = torch.clamp(mem2, -self.lif2.threshold, self.lif2.threshold)
-            
+            #mem0 = torch.clamp(mem0, -self.spkgen.threshold, self.spkgen.threshold)
+            #mem1 = torch.clamp(mem1, -self.lif1.threshold, self.lif1.threshold)
+            #mem2 = torch.clamp(mem2, -self.lif2.threshold, self.lif2.threshold)
+
+            #spk0 = spk0_next
+            mem0_rec.append(mem0) 
             spk0_rec.append(spk0)
             spk1_rec.append(spk1)
             mem1_rec.append(mem1)
             spk2_rec.append(spk2)
             mem2_rec.append(mem2)
 
-            spk0 = spk0_next
+            #spk0 = spk0_next
             spk1 = spk1_next
             spk2 = spk2_next
-
-            mem0 = mem0_next
-            mem1 = mem1_next
-            mem2 = mem2_next
 
 
 
         if(not debug):
             return torch.stack(spk2_rec, dim=0), torch.stack(mem2_rec, dim=0)
-        return spk0_rec, spk1_rec, spk2_rec, mem1_rec
+        return spk0_rec, spk1_rec, spk2_rec, mem0_rec, mem1_rec
 
     def quantize(self, new_thresh):
         with torch.no_grad():

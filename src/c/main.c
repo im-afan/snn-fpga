@@ -40,7 +40,7 @@ int main()
         
         u16 spk = read_spk_out(6);
         
-        for(int i = 0; i < 16; i++) {
+        for(int i = 0; i < 10; i++) {
             int spki = (spk & (1 << i)) > 0;
             xil_printf("%d ", spki);
             if(i < 10) vote[i] += spki;

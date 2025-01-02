@@ -13,12 +13,14 @@ MAX_NEURONS = 1024
 MAX_TILES = 256 
 NEURONS_PER_TILE = 16
 QUANT_VAL = 4 # for weight quantization
-THRESH = 128 # must be a mutliple of quant_val
+THRESH = 64 # must be a mutliple of quant_val
 
 # compile MLP from snntorch
 # only supports 1 membrane potential across all neurons
 # only supports 0.5 leak
 # no bias
+
+img = None
 
 def round_up(x):
     return (x // NEURONS_PER_TILE + 1) * NEURONS_PER_TILE
@@ -71,7 +73,7 @@ def compile_to_c(model, img=None, spk=None, mem=None):
     #print(f"{torch.stack(spk[0], dim=0)}")
     for i in range(len(spk[0])):
         #print(mem[1][i][0][:20].tolist())
-        print(spk[1][i][0].tolist())
+        print(spk[2][i][0].tolist())
     print("*/")
 
     print("#include \"snn_driver.h\"")
@@ -108,6 +110,8 @@ def compile_to_uart(model, img=None, spk_out=None, mem=None):
 
     ser.write("end\n")
 
+def write_network_input(i, val):
+    img[0][0][i // sz][i % sz] = val / THRESH
 
 if __name__ == "__main__":
     try:
@@ -138,15 +142,34 @@ if __name__ == "__main__":
     test_loader = iter(DataLoader(mnist_test, batch_size=1, shuffle=True, drop_last=True))
     img, label = next(test_loader)
 
+    """img = torch.zeros_like(img)
+
+    write_network_input(12, 16);
+    write_network_input(19, 16);
+    write_network_input(20, 32);
+    write_network_input(27, 32);
+    write_network_input(28, 32);
+    write_network_input(29, 16);
+    write_network_input(34, 16);
+    write_network_input(35, 48);
+    write_network_input(36, 48);
+    write_network_input(37, 16);
+    write_network_input(43, 16);
+    write_network_input(44, 32);
+    write_network_input(52, 32);"""
+    
     plt.imshow(img.view(sz, sz));
     plt.show()
 
-    model.quantize(torch.tensor(QUANT_VAL * 127/128))
-    spk0, spk1, spk2, mem1 = model((img.view(1, -1) * QUANT_VAL).round(), debug=True)
-    print(mem1)
+
+    model.quantize(torch.tensor(QUANT_VAL-0.01))
+    spk0, spk1, spk2, mem0, mem1 = model((img.view(1, -1) * QUANT_VAL).round(), debug=True)
+    #print(mem0)
+    #for i in range(len(spk0)):
+    #    print(spk0[i][0, :16], mem0[i][0, :16]);
 
     if(mode == "c"):
         #tile_idx, tiles = compile(model)
-        compile_to_c(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2], mem=[None, mem1, None])
+        compile_to_c(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2], mem=[mem0, mem1, None])
     elif(mode == "uart"):
         compile_to_uart(model, img=img.view(sz*sz))

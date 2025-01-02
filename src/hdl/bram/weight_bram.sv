@@ -60,7 +60,7 @@ module weight_bram #(
     reg go;
     reg prev_new_tile;
 
-    assign weight_fifo_din = dout;
+    //assign weight_fifo_din = dout;
  
     always_ff @(posedge clk) begin
         if(~enable) begin
@@ -94,7 +94,7 @@ module weight_bram #(
                     weight_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
                     if(bram_done > 1) begin
-                        //weight_fifo_din <= dout;
+                        weight_fifo_din <= dout;
                         weight_fifo_push <= 1;
                         bram_step <= INCREMENT;
                         bram_en <= 0;

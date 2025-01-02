@@ -13,8 +13,7 @@ module top_standalone(
     localparam TILE_IDX_WIDTH = 16;
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;
-    localparam THRESH = 32;
-    localparam FIFO_LENGTH = 2;
+    localparam FIFO_LENGTH = 1;
 
     localparam WEIGHT_BRAM_DATA_WIDTH = BRAM_DATA_WIDTH;
     localparam INPUT_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
@@ -24,6 +23,7 @@ module top_standalone(
     localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
 
     localparam CPU_BRAM_DATA_WIDTH = 32;
+    localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 128;
 
     wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
     wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;

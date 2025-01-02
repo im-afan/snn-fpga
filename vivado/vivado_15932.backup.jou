@@ -3,8 +3,8 @@
 # SW Build 5239630 on Fri Nov 08 22:35:27 MST 2024
 # IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
 # SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
-# Start of session at: Mon Dec 30 13:46:28 2024
-# Process ID         : 18232
+# Start of session at: Wed Jan  1 11:38:56 2025
+# Process ID         : 15932
 # Current directory  : C:/Users/andre/Desktop/snn-fpga/vivado
 # Command line       : vivado.exe -mode tcl -source .\basys3_project.tcl
 # Log file           : C:/Users/andre/Desktop/snn-fpga/vivado/vivado.log
@@ -19,7 +19,15 @@
 # Host memory        : 34248 MB
 # Swap memory        : 5100 MB
 # Total Virtual      : 39349 MB
-# Available Virtual  : 25216 MB
+# Available Virtual  : 27293 MB
 #-----------------------------------------------------------
 source {.\basys3_project.tcl}
-finish
+start_gui
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+wait_on_run impl_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+wait_on_run impl_1
+write_hw_platform -fixed -include_bit -force -file C:/Users/andre/Desktop/snn-fpga/vitis/top_microblaze.xsa
