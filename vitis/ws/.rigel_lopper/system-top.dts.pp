@@ -332,6 +332,52 @@
    xlnx,name = "axi_gpio_0";
    xlnx,all-inputs = <1>;
   };
+  axi_quad_spi_0: axi_quad_spi@44a00000 {
+   xlnx,select-xpm = <0>;
+   compatible = "xlnx,axi-quad-spi-3.2" , "xlnx,xps-spi-2.00.a";
+   xlnx,lsb-stup = <0>;
+   xlnx,num-ss-bits = <0x1>;
+   xlnx,hasfifos = <1>;
+   xlnx,xip-mode = <0>;
+   xlnx,use-startup-ext = <0>;
+   xlnx,s-axi4-addr-width = <24>;
+   xlnx,byte-level-interrupt-en = <0>;
+   num-cs = <0x1>;
+   xlnx,xip-perf-mode = <1>;
+   xlnx,sck-ratio = <16>;
+   xlnx,s-axi4-id-width = <4>;
+   fifo-size = <16>;
+   xlnx,rable = <0>;
+   xlnx,multiples16 = <1>;
+   xlnx,master-mode = <0>;
+   xlnx,shared-startup = <0>;
+   xlnx,ip-name = "axi_quad_spi";
+   xlnx,qspi-board-interface = "Custom";
+   reg = <0x44a00000 0x10000>;
+   xlnx,dual-quad-mode = <0>;
+   xlnx,new-seq-en = <1>;
+   bits-per-word = <8>;
+   xlnx,num-transfer-bits = <8>;
+   xlnx,spi-memory = <1>;
+   xlnx,s-axi4-data-width = <32>;
+   xlnx,edk-iptype = "PERIPHERAL";
+   xlnx,slaveonly = <0>;
+   xlnx,use-startup-int = <0>;
+   xlnx,use-startup = <0>;
+   xlnx,type-of-axi4-interface = <0>;
+   xlnx,async-clk = <0>;
+   xlnx,spi-mode = <0>;
+   xlnx,sck-ratio1 = <1>;
+   status = "okay";
+   xlnx,fifo-depth = <16>;
+   xlnx,uc-family = <0>;
+   xlnx,spi-mem-addr-bits = <24>;
+   xlnx,axi-interface = <0>;
+   xlnx,Axi4-address = <0>;
+   xlnx,fifo-included = <1>;
+   xlnx,sub-family = "artix7";
+   xlnx,name = "axi_quad_spi_0";
+  };
   axi_uartlite_0: serial@40600000 {
    compatible = "xlnx,axi-uartlite-2.0" , "xlnx,xps-uartlite-1.00.a";
    clock-frequency = <100000000>;
@@ -469,6 +515,7 @@
  };
  aliases {
   serial0 = &axi_uartlite_0;
+  spi0 = &axi_quad_spi_0;
  };
  cpus_microblaze_0: cpus_microblaze@0 {
   address-map = <0xC0000000 &axi_bram_ctrl_0_memory 0xC0000000 0x2000>,
@@ -482,7 +529,8 @@
          <0x00000000 &microblaze_0_local_memory_dlmb_bram_if_cntlr_memory 0x00000000 0x4000>,
          <0x00000000 &microblaze_0_local_memory_dlmb_bram_if_cntlr 0x00000000 0x4000>,
          <0x40000000 &axi_gpio_0 0x40000000 0x10000>,
-         <0x40600000 &axi_uartlite_0 0x40600000 0x10000>;
+         <0x40600000 &axi_uartlite_0 0x40600000 0x10000>,
+         <0x44a00000 &axi_quad_spi_0 0x44a00000 0x10000>;
   #ranges-address-cells = <0x1>;
   #ranges-size-cells = <0x1>;
  };

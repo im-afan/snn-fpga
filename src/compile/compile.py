@@ -96,7 +96,7 @@ def compile_to_c(model, img=None, spk=None, mem=None):
     print("}")
 
 def compile_to_uart(model, img=None, spk_out=None, mem=None):
-    ser = serial.Serial("/dev/USB0", baudrate=9600)		
+    ser = serial.Serial("COM4", baudrate=9600)		
 
     for i in range(len(tiles)):
         ser.write(f"0 {i} {tile_idx[i][0]} {tile_idx[i][1]}\n")

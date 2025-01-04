@@ -25,7 +25,7 @@ thresh = 1
 
 # Temporal Dynamics
 num_steps = 25
-beta = 1
+beta = 0.5
 
 # Define Network
 class Net(nn.Module):

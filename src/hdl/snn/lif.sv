@@ -46,7 +46,8 @@ module lif#(
                     mem_out <= 0;
                 end else begin
                     spk_out <= 0;
-                    mem_out <= sum_clamp;
+                    if(spk_rst) mem_out <= sum_clamp >>> 1;
+                    else mem_out <= sum_clamp;
                 end
                 local_done <= 1;
             end else begin

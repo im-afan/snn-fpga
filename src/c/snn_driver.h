@@ -24,28 +24,28 @@ const u32 SNN_EN_CHANNEL = 2;
 
 XGpio gpio;
 
-void write_tile(u32 tile_idx, u16 x, u16 y) {
+void write_tile(u16 tile_idx, u16 x, u16 y) {
 	Xil_Out16(BASE_ADDR_TILE_IDX + 2*2*tile_idx, x);
     Xil_Out16(BASE_ADDR_TILE_IDX + 2*2*tile_idx + 2, y);
 }
 
-void write_weight(u32 tile_idx, u32 x, u32 y, s8 val) {
+void write_weight(u16 tile_idx, u8 x, u8 y, s8 val) {
 	Xil_Out8(BASE_ADDR_WEIGHT + CROSSBAR_NEURONS*CROSSBAR_NEURONS*tile_idx + x * CROSSBAR_NEURONS + y, (u8)val);
 }
 
-void write_network_input(u32 x, s8 val) {
+void write_network_input(u16 x, s8 val) {
 	Xil_Out8(BASE_ADDR_INPUT + x, (u8)val);
 }
 
-u16 read_spk_out(u32 x) {
+u16 read_spk_out(u16 x) {
 	return Xil_In16(BASE_ADDR_SPK + 2*x);
 }
 
-u16 read_tile_idx_x(u32 tile_idx) {
+u16 read_tile_idx_x(u16 tile_idx) {
     return Xil_In16(BASE_ADDR_TILE_IDX + 4*tile_idx);
 }
 
-u16 read_tile_idx_y(u32 tile_idx) {
+u16 read_tile_idx_y(u16 tile_idx) {
     return Xil_In16(BASE_ADDR_TILE_IDX + 4*tile_idx + 2);
 }
 
