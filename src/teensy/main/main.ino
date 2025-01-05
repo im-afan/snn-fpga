@@ -9,13 +9,6 @@ void setup() {
     setup_spi(); 
 
     reset_model();
-    /*write_weight(0, 0, 2, 64);
-    write_weight(0, 0, 3, -64);
-    write_weight(0, 1, 2, -64);
-    write_weight(0, 1, 3, 64);
-    write_weight(0, 2, 4, 64);
-    write_weight(0, 3, 4, 64);
-    write_network_input(0, 64);*/
     write_model();
     write_tile(6, 0, 0);
     write_tile(7, 1, 1);

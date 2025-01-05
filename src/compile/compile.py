@@ -8,11 +8,11 @@ import matplotlib.pyplot as plt
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
-sz = 8
+sz = 28
 MAX_NEURONS = 1024
-MAX_TILES = 256 
+MAX_TILES = 512 
 NEURONS_PER_TILE = 16
-QUANT_VAL = 4 # for weight quantization
+QUANT_VAL = 64 # for weight quantization
 THRESH = 64 # must be a mutliple of quant_val
 
 # compile MLP from snntorch
@@ -76,7 +76,7 @@ def compile_to_c(model, img=None, spk=None, mem=None):
         print(spk[2][i][0].tolist())
     print("*/")
 
-    print("#include \"snn_driver.h\"")
+    print("#include \"spi_driver.hpp\"")
     print("")
     print("void write_model() {")
     for i in range(len(tiles)):
@@ -94,6 +94,45 @@ def compile_to_c(model, img=None, spk=None, mem=None):
                 print(f"    write_network_input({i}, {val});")
 
     print("}")
+
+def compile_to_arr(model, img=None, spk=None, mem=None):
+    tile_idx, tiles = compile(model)
+    print("/* AUTO GENERATED CODE BY MODEL COMPILATION")
+    print(" * IT IS HIGHLY DISCOURAGED TO EDIT THIS!!!")
+    print(" */")
+
+    print("/* EXPECTED OUTPUT")
+    #print(f"{torch.stack(spk[0], dim=0)}")
+    for i in range(len(spk[0])):
+        #print(mem[1][i][0][:20].tolist())
+        print(spk[2][i][0].tolist())
+    print("*/")
+
+    print("uint16_t tile_idx_x[] = {")
+    for i in range(len(tiles)):
+        print(f"{tile_idx[i][0]},")
+    print("};\n")
+    print("uint16_t tile_idx_y[] = {")
+    for i in range(len(tiles)):
+        print(f"{tile_idx[i][1]},")
+    print("};\n")
+
+    print("int8_t weight[] = {")
+    for i in range(len(tiles)):
+        for x in range(NEURONS_PER_TILE):
+            for y in range(NEURONS_PER_TILE):
+                val = int(tiles[i][y][x] * (THRESH / QUANT_VAL))
+                print(f"{val},")
+    print("};")
+
+    print("int8_t network_input[] = {")
+    if(img is not None):
+        for i in range(sz*sz):
+            val = int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL))
+            if(val != 0):
+                print(f"{val},")
+
+    print("};")
 
 def compile_to_uart(model, img=None, spk_out=None, mem=None):
     ser = serial.Serial("COM4", baudrate=9600)		
@@ -170,6 +209,7 @@ if __name__ == "__main__":
 
     if(mode == "c"):
         #tile_idx, tiles = compile(model)
-        compile_to_c(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2], mem=[mem0, mem1, None])
+        #compile_to_c(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2], mem=[mem0, mem1, None])
+        compile_to_arr(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2], mem=[mem0, mem1, None])
     elif(mode == "uart"):
         compile_to_uart(model, img=img.view(sz*sz))

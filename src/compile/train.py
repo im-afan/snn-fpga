@@ -15,11 +15,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
-sz = 8
+sz = 28
 
 # Network Architecture
 num_inputs = sz*sz
-num_hidden = 15 
+num_hidden = 128
 num_outputs = 10
 thresh = 1
 

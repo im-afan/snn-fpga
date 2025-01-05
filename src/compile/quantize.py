@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
-THRESH = torch.tensor(127, dtype=torch.float32)
+THRESH = torch.tensor(64, dtype=torch.float32)
 
 if __name__ == "__main__":
     try:
