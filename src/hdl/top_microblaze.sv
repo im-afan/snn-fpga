@@ -17,7 +17,7 @@ module top_microblaze(
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam NETWORK_WIDTH = 8;
-    localparam MAX_TILES = 64;
+    localparam MAX_TILES = 512;
     localparam TILE_IDX_WIDTH = 16;
     localparam MAX_NEURONS = 1024;
     localparam CROSSBAR_NEURONS = 16;

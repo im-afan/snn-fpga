@@ -17,4 +17,7 @@ comp.import_files(from_loc=PATH + "/src/c/", files=["main.c", "snn_driver.h", "p
 comp = client.create_app_component(name="app_component_xor",platform = PATH + "/vitis/ws/platform/export/platform/platform.xpfm",domain = "standalone_microblaze_0")
 comp.import_files(from_loc=PATH + "/src/c/", files=["main_xor.c", "snn_driver.h", "platform.c", "platform.h"], dest_dir_in_cmp="src")
 
+comp = client.create_app_component(name="spi_listener",platform = PATH + "/vitis/ws/platform/export/platform/platform.xpfm",domain = "standalone_microblaze_0")
+comp.import_files(from_loc=PATH + "/src/c/", files=["main_spi.c", "snn_driver.h", "spi_driver.h"], dest_dir_in_cmp="src")
+
 

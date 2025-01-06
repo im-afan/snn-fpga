@@ -39,11 +39,11 @@ void setup_spi() {
 void spi_write(u16 x) {
     u8 idx;
     idx = 0;
-    u32 y = (1 << 16) | x; // {done, x}
+    u32 y = x; // {done, x}
     while(idx < 4) {
         while(!(XSpi_GetStatusReg(&SpiInstance) & XSP_SR_TX_FULL_MASK) && idx < 4) {
-            u8 val = (x % (1 << (idx*8+8))) >> (idx*8);
-            //xil_printf("wrote %d\n\r", val);
+            u8 val = (y % (1 << (idx*8+8))) >> (idx*8);
+            //xil_printf("write %d\n", val);
             XSpi_WriteReg(SPI_BASE_ADDR, XSP_DTR_OFFSET, val); 
             idx++;
         }
@@ -57,21 +57,21 @@ void spi_listen() {
     while(idx < 8) {
         while(!(XSpi_GetStatusReg(&SpiInstance) & XSP_SR_RX_EMPTY_MASK) && idx < 8) {
             u8 arg = XSpi_ReadReg(SPI_BASE_ADDR, XSP_DRR_OFFSET);
-            //xil_printf("got %d\n\r", arg);
+            //xil_printf("%d %d\n\r", idx, arg);
             if(idx == 0 && arg == SPI_DUMMY) continue;
             op[idx] = arg;
             idx++;
         }
     }
 
-    if(op[0] == 0) write_tile((op[1] << 8) | op[2], (op[3] << 8) | op[4], (op[5] << 8) | op[6]), spi_write(1);
-    if(op[0] == 1) write_weight((op[1] << 8) | op[2], op[3], op[4], op[5]), spi_write(1);
-    if(op[0] == 2) write_network_input((op[1] << 8) | op[2], op[3]), spi_write(1);
-    if(op[0] == 3) spi_write((u16)read_tile_idx_x((op[1] << 8) | op[2]));
-    if(op[0] == 4) spi_write((u16)read_tile_idx_y((op[1] << 8) | op[2]));
-    if(op[0] == 5) spi_write((u16)read_weight((op[1] << 8) | op[2], op[3], op[4]));
-    if(op[0] == 6) spi_write((u16)read_network_input((op[1] << 8) | op[2]));
-    if(op[0] == 7) spi_write((u16)read_spk_out((op[1] << 8) | op[2]));
-    if(op[0] == 8) timestep(), spi_write(1);
-    if(op[0] == 9) reset_model(), spi_write(1);
+    if(op[0] == 0) write_tile((op[1] << 8) | op[2], op[3], op[4]);
+    if(op[0] == 1) write_weight((op[1] << 8) | op[2], op[3], op[4], op[5]);
+    if(op[0] == 2) write_network_input((op[1] << 8) | op[2], op[3]);
+    if(op[0] == 3) spi_write(read_tile_idx_x((op[1] << 8) | op[2]));
+    if(op[0] == 4) spi_write(read_tile_idx_y((op[1] << 8) | op[2]));
+    if(op[0] == 5) spi_write(read_weight((op[1] << 8) | op[2], op[3], op[4]));
+    if(op[0] == 6) spi_write(read_network_input((op[1] << 8) | op[2]));
+    if(op[0] == 7) spi_write(read_spk_out((op[1] << 8) | op[2]));
+    if(op[0] == 8) timestep();
+    if(op[0] == 9) reset_model();
 }

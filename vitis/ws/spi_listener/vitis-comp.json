@@ -1,5 +1,5 @@
 {
-  "name": "spi_test",
+  "name": "spi_listener",
   "type": "HOST",
   "platform": "platform",
   "domain": "standalone_microblaze_0",

@@ -1,4 +1,4 @@
-# 2025-01-04T00:24:14.605640700
+# 2025-01-06T09:54:37.825832900
 import vitis
 
 client = vitis.create_client()
@@ -15,6 +15,11 @@ comp = client.create_app_component(name="app_component_xor",platform = "$COMPONE
 
 comp = client.get_component(name="app_component_xor")
 status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=["main_xor.c", "snn_driver.h", "platform.c", "platform.h"], dest_dir_in_cmp = "src")
+
+comp = client.create_app_component(name="spi_listener",platform = "$COMPONENT_LOCATION/../platform/export/platform/platform.xpfm",domain = "standalone_microblaze_0")
+
+comp = client.get_component(name="spi_listener")
+status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=["main_spi.c", "snn_driver.h", "spi_driver.h"], dest_dir_in_cmp = "src")
 
 vitis.dispose()
 

@@ -17,12 +17,21 @@ void transfer(uint8_t x) {
     delayMicroseconds(100);
 }
 
-uint16_t wait_done() {
-    delayMicroseconds(10000);
-    return SPI.transfer(DUMMY);
+uint32_t wait_done(int time) {
+    delayMicroseconds(time);
+    SPI.transfer(DUMMY);
+    uint32_t res = 0;
+    for(int i = 0; i < 4; i++) {
+        uint8_t x = SPI.transfer(DUMMY);
+        res = res | (x << 8*i);
+    }
+    return res;
 }
 
 void write_tile(uint16_t tile_idx, uint16_t x, uint16_t y) {
+    Serial.print("write_tile ");
+    Serial.print(tile_idx);
+    Serial.print("\n");
     digitalWrite(SS_PIN, LOW);
     transfer(0);
     transfer(tile_idx >> 8);
@@ -32,7 +41,7 @@ void write_tile(uint16_t tile_idx, uint16_t x, uint16_t y) {
     transfer(y >> 8);
     transfer(y % (1 << 8));
     transfer(0);
-    wait_done();
+    wait_done(10000);
     digitalWrite(SS_PIN, HIGH);
 }
 
@@ -46,12 +55,17 @@ void write_weight(uint16_t tile_idx, uint8_t x, uint8_t y, int8_t val) {
     transfer(val);
     transfer(0);
     transfer(0);
-    wait_done();
+    wait_done(10000);
     digitalWrite(SS_PIN, HIGH);
 
 }
 
 void write_network_input(uint16_t idx, int8_t val) {
+    Serial.print("write input ");
+    Serial.print(idx);
+    Serial.print(" ");
+    Serial.print(val);
+    Serial.print("\n");
     digitalWrite(SS_PIN, LOW);
     transfer(2);
     transfer(idx >> 8);
@@ -61,12 +75,13 @@ void write_network_input(uint16_t idx, int8_t val) {
     transfer(0);
     transfer(0);
     transfer(0);
-    wait_done();
+    wait_done(10000);
     digitalWrite(SS_PIN, HIGH);
 
 }
 
 void timestep() {
+    Serial.print("send timestep req\n");  
     digitalWrite(SS_PIN, LOW);
     transfer(8);
     transfer(0);
@@ -76,7 +91,7 @@ void timestep() {
     transfer(0);
     transfer(0);
     transfer(0);
-    wait_done();
+    wait_done(50000);
     digitalWrite(SS_PIN, HIGH);
 
 }
@@ -91,7 +106,7 @@ void reset_model() {
     transfer(0);
     transfer(0);
     transfer(0);
-    wait_done();
+    wait_done(50000);
     digitalWrite(SS_PIN, HIGH);
 
 }
@@ -106,7 +121,7 @@ uint16_t read_spk_out(uint16_t x) {
     transfer(0);
     transfer(0);
     transfer(0);
-    uint16_t res = wait_done();
+    uint32_t res = wait_done(1000);
     digitalWrite(SS_PIN, HIGH);
     return res;
 }

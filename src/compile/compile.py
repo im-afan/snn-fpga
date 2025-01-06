@@ -12,7 +12,7 @@ sz = 28
 MAX_NEURONS = 1024
 MAX_TILES = 512 
 NEURONS_PER_TILE = 16
-QUANT_VAL = 64 # for weight quantization
+QUANT_VAL = 8 # for weight quantization
 THRESH = 64 # must be a mutliple of quant_val
 
 # compile MLP from snntorch
@@ -129,8 +129,7 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
     if(img is not None):
         for i in range(sz*sz):
             val = int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL))
-            if(val != 0):
-                print(f"{val},")
+            print(f"{val},")
 
     print("};")
 

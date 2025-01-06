@@ -4,7 +4,7 @@
     {
       "type": "tcf-debug",
       "request": "launch",
-      "name": "spi_test_app_hw_1",
+      "name": "spi_listener_app_hw_1",
       "debugType": "baremetal-fpga",
       "attachToRunningTargetOptions": {
         "targetSetupMode": "standalone",
@@ -21,12 +21,12 @@
       "targetSetup": {
         "resetSystem": true,
         "programDevice": true,
-        "bitstreamFile": "${workspaceFolder}\\spi_test\\_ide\\bitstream\\top_microblaze.bit",
+        "bitstreamFile": "${workspaceFolder}\\spi_listener\\_ide\\bitstream\\top_microblaze.bit",
         "downloadElf": [
           {
             "core": "microblaze_0",
             "resetProcessor": true,
-            "elfFile": "${workspaceFolder}\\spi_test\\build\\spi_test.elf",
+            "elfFile": "${workspaceFolder}\\spi_listener\\build\\spi_listener.elf",
             "stopAtEntry": false
           }
         ]

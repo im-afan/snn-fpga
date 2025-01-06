@@ -5,15 +5,14 @@
 int cnt = 0;
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     setup_spi(); 
 
     reset_model();
+    //write_network_input(0, 63);
+    //write_network_input(1, 64);
+    //write_network_input(2, 47);
     write_model();
-    write_tile(6, 0, 0);
-    write_tile(7, 1, 1);
-    write_tile(8, 2, 2);
-    write_tile(9, 3, 3);
 }
 
 void loop() {
