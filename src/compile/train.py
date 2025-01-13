@@ -19,13 +19,13 @@ sz = 28
 
 # Network Architecture
 num_inputs = sz*sz
-num_hidden = 128
+num_hidden = 15
 num_outputs = 10
 thresh = 1
 
 # Temporal Dynamics
 num_steps = 25
-beta = 0.5
+beta = 1
 
 # Define Network
 class Net(nn.Module):
@@ -60,7 +60,7 @@ class Net(nn.Module):
         mem2_rec = []
 
         for step in range(num_steps):
-            spk0, mem0 = self.spkgen(x, mem0)
+            spk0_next, mem0 = self.spkgen(x, mem0)
             cur1 = self.fc1(spk0)
             spk1_next, mem1 = self.lif1(cur1, mem1)
             cur2 = self.fc2(spk1)
@@ -78,7 +78,7 @@ class Net(nn.Module):
             spk2_rec.append(spk2)
             mem2_rec.append(mem2)
 
-            #spk0 = spk0_next
+            spk0 = spk0_next
             spk1 = spk1_next
             spk2 = spk2_next
 
@@ -217,7 +217,7 @@ if __name__ == "__main__":
                 counter += 1
                 iter_counter +=1
 
-    torch.save(net.state_dict(), "./mnist_16x16_spk.h5")
+    torch.save(net.state_dict(), "./mnist_28x28_spk.h5")
 
     total = 0
     correct = 0

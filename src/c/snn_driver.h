@@ -24,6 +24,7 @@ const u32 SNN_EN_CHANNEL = 2;
 XGpio gpio;
 
 void write_tile(u16 tile_idx, u16 x, u16 y) {
+    //xil_printf("write_tile_idx %d\n\r", tile_idx);
 	Xil_Out16(BASE_ADDR_TILE_IDX + 2*2*tile_idx, x);
     Xil_Out16(BASE_ADDR_TILE_IDX + 2*2*tile_idx + 2, y);
 }
@@ -36,8 +37,15 @@ void write_network_input(u16 x, s8 val) {
 	Xil_Out8(BASE_ADDR_INPUT + x, (u8)val);
 }
 
+
+s8 read_network_input(u32 x) {
+    return (s8) Xil_In8(BASE_ADDR_INPUT + x);
+}
+
+
 u16 read_spk_out(u16 x) {
     //xil_printf("spk_out(%d) = %d\n\r", x, Xil_In16(BASE_ADDR_SPK + 2*x));
+    //xil_printf("input[%d] = %d\n\r", 11, read_network_input(11));
 	return Xil_In16(BASE_ADDR_SPK + 2*x);
 }
 
@@ -51,10 +59,6 @@ u16 read_tile_idx_y(u16 tile_idx) {
 
 s8 read_weight(u32 tile_idx, u32 x, u32 y) {
     return (s8) Xil_In8(BASE_ADDR_WEIGHT + CROSSBAR_NEURONS*CROSSBAR_NEURONS * tile_idx + x*CROSSBAR_NEURONS + y);
-}
-
-s8 read_network_input(u32 x) {
-    return (s8) Xil_In8(BASE_ADDR_INPUT + x);
 }
 
 void setup_snn() {
@@ -100,7 +104,8 @@ void reset_model() {
         }
         write_tile(i, 0, 0);
     }
-    for(int i = 0; i < MAX_NEURONS; i++) {
+    for(int i = 0; i < 1024*16; i++) {
+        //xil_printf("resetting idx %d\n\r", i);
         write_network_input(i, 0);
     }
 }

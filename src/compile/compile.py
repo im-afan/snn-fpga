@@ -12,7 +12,7 @@ sz = 28
 MAX_NEURONS = 1024
 MAX_TILES = 512 
 NEURONS_PER_TILE = 16
-QUANT_VAL = 8 # for weight quantization
+QUANT_VAL = 64 # for weight quantization
 THRESH = 64 # must be a mutliple of quant_val
 
 # compile MLP from snntorch
@@ -164,7 +164,7 @@ if __name__ == "__main__":
         mode = "c"	
 
     model = Net()
-    state_dict = torch.load("./mnist_16x16_spk.h5", weights_only=True)
+    state_dict = torch.load("./mnist_28x28_spk.h5", weights_only=True)
     model.load_state_dict(state_dict)
 
     multiply = transforms.Lambda(lambda img: torch.clamp(img, min=0, max=1))

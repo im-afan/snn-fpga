@@ -9,10 +9,8 @@ module top_microblaze(
     input wire usb_uart_rxd,
     output wire usb_uart_txd,
 
-    inout wire JA1, // SPI clock in
-    inout wire JA2, // SPI ss
-    inout wire JA3, // SPI MOSI (teensy master)
-    inout wire JA4 // SPI MISO
+    input wire JA1, // UART rx 
+    output wire JA2 // UART tx 
 );
     localparam BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
@@ -140,9 +138,7 @@ module top_microblaze(
         .snn_en_tri_o(snn_en_tri_o),
         .snn_in_tri_i(snn_in_tri_i),
 
-        .spi_sck_io(JA1),
-        .spi_ss_io(JA2),
-        .spi_io0_io(JA3),
-        .spi_io1_io(JA4)
+        .uart_pmod_rxd(JA1),
+        .uart_pmod_txd(JA2)
     );
 endmodule

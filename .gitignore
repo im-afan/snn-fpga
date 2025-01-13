@@ -1,6 +1,7 @@
 vivado/snn_fpga
 vitis/ws/app_component
 vitis/ws/app_component_xor
+vitis/ws/uart_listener
 vitis/ws/.wsdata
 vitis/ws/.rigel_looper
 vitis/ws/logs
