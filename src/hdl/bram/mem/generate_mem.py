@@ -45,6 +45,9 @@ tile[1][0][15] = 32;
 for i in range(MAX_TILES):
 	tile_idx[i] = [i // 8, i % 8]
 
+snn_in[523] = 127;
+tile_idx[4] = [32, 32];
+
 """
 tile[0][13][0] = 127
 tile[0][13][1] = 127

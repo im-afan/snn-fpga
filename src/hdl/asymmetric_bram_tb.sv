@@ -4,7 +4,7 @@
 
 module asymmetric_bram_tb;
 
-    localparam WEIGHT_BRAM_DATA_WIDTH = 32;
+    localparam WEIGHT_BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam CPU_BRAM_DATA_WIDTH = 32;
 

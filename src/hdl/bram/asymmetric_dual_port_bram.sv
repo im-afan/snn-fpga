@@ -21,7 +21,6 @@ module asymmetric_dual_port_bram #(
     input wire [DATA_WIDTH_B-1:0] dinb,   // Data input for port B
     output reg [DATA_WIDTH_B-1:0] doutb   // Data output for port B
 );
-    localparam BASE_PATH = "C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/";
     localparam MEM_SIZE = DATA_WIDTH_A * 256;
 	localparam offset_bits = $clog2(DATA_WIDTH_A / DATA_WIDTH_B);
 
@@ -56,12 +55,13 @@ module asymmetric_dual_port_bram #(
 	reg [2*DATA_WIDTH_A/DATA_WIDTH_B:0] ready;
 
 	generate
-		for(i = 1; i < 2*DATA_WIDTH_A / DATA_WIDTH_B; i++) begin
+		for(i = 1; i <= 2*DATA_WIDTH_A / DATA_WIDTH_B-1; i++) begin
 			if(i >= DATA_WIDTH_A / DATA_WIDTH_B)
 				assign dinb_local_arr[i - DATA_WIDTH_A / DATA_WIDTH_B] = mux[i];
-			else begin
+			//else begin
 				always @(posedge clkb) begin
-					if(!enb) begin
+					if(~enb) begin
+						//$display("zero ready asdofijnasdf");
 						mux[i] <= 0;
 						ready[i] <= 0;
 					end else begin
@@ -76,10 +76,10 @@ module asymmetric_dual_port_bram #(
 						end
 					end
 				end
-			end
+			//end
 		end
 
-		assign enb_local = ready[2*DATA_WIDTH_A/DATA_WIDTH_B];
+		assign enb_local = ready[2*DATA_WIDTH_A/DATA_WIDTH_B-1];
 	endgenerate
 
 	dual_port_bram #(
