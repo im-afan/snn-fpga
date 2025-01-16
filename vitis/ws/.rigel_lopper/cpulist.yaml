@@ -1,5 +1,0 @@
-microblaze_0:
-    ip_name: microblaze
-    supported_os:
-    - standalone
-    - freertos

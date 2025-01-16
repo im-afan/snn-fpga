@@ -12,7 +12,7 @@ tile_idx = [[0, 0] for i in range(MAX_TILES)]
 tile = [[[0 for i in range(CROSSBAR_NEURONS)] for i in range(CROSSBAR_NEURONS)] for i in range(MAX_TILES)]
 mem = [0 for i in range(MAX_NEURONS)]
 snn_in = [0 for i in range(MAX_NEURONS)]
-"""
+
 snn_in[0] = 127;
 snn_in[1] = 0;
 snn_in[3] = 127;
@@ -44,14 +44,15 @@ tile[0][10][11] = 127;
 tile[1][0][15] = 32;
 for i in range(MAX_TILES):
 	tile_idx[i] = [i // 8, i % 8]
-"""
 
+"""
 tile[0][13][0] = 127
 tile[0][13][1] = 127
 
 snn_in[13] = 127
 tile_idx[0] = [1, 2]
 tile_idx[1] = [0, 3]
+"""
 
 def bin_(num, bit_width=8):
     """Convert a signed decimal number to binary with a fixed bit width."""

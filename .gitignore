@@ -10,4 +10,9 @@ vitis/ws/.gitignore
 vitis/ws/.lock
 *.out
 *.vcd
+*.dmp
+*.log
+*.jou
+*.str
+*.Xil
 .wave/*

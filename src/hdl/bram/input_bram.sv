@@ -86,7 +86,7 @@ module input_bram #(
                     bram_we <= 0;
                     input_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
-                    if(bram_done > 1) begin
+                    if(bram_done > 6) begin
                         if(tile_use_input) input_fifo_din <= dout;
                         else input_fifo_din <= 0;
                         input_fifo_push <= 1;

@@ -25,7 +25,7 @@ void loop() {
                 Serial.print("\n");
         }
     }
-    Serial.println(read_spk_out(51)));
+    Serial.println(read_spk_out(51));
     Serial.print("\n");
     
     delay(100);

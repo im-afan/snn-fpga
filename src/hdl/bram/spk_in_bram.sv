@@ -91,7 +91,7 @@ module spk_in_bram #(
                     bram_we <= 0;
                     spk_in_fifo_push <= 0;
                 end else if(bram_step == WAIT) begin
-                    if(bram_done > 1) begin
+                    if(bram_done > 6) begin
                         spk_in_fifo_din <= dout;
                         spk_in_fifo_push <= 1;
                         bram_step <= INCREMENT;

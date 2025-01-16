@@ -318,7 +318,7 @@ module bram_streamer #(
     );
 
     wire [SPK_IN_BRAM_DATA_WIDTH-1:0] lif_spk_out_addr_mod;
-    assign lif_spk_out_addr_mod = lif_spk_out_addr % (MAX_NEURONS / CROSSBAR_NEURONS); // get rid of buff_idx addressing
+    assign lif_spk_out_addr_mod = lif_spk_out_addr[$clog2((MAX_TILES * CROSSBAR_NEURONS / 8))-1:0]; // get rid of buff_idx addressing
     asymmetric_dual_port_bram #(
         .DATA_WIDTH_B(SPK_IN_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
