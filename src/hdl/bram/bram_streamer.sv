@@ -98,7 +98,7 @@ module bram_streamer #(
     input wire [TILE_IDX_WIDTH-1:0] lif_tile_idx_y;
 
     localparam integer CPU_BRAM_DATA_WIDTH = 32;
-    localparam integer CPU_BRAM_DATA_WIDTH_WEIGHT = 128;
+    localparam integer CPU_BRAM_DATA_WIDTH_WEIGHT = 32;
 
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
     input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;

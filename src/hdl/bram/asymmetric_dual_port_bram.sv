@@ -58,25 +58,18 @@ module asymmetric_dual_port_bram #(
 		for(i = 1; i <= 2*DATA_WIDTH_A / DATA_WIDTH_B-1; i++) begin
 			if(i >= DATA_WIDTH_A / DATA_WIDTH_B)
 				assign dinb_local_arr[i - DATA_WIDTH_A / DATA_WIDTH_B] = mux[i];
-			//else begin
-				always @(posedge clkb) begin
-					if(~enb) begin
-						//$display("zero ready asdofijnasdf");
-						mux[i] <= 0;
-						ready[i] <= 0;
-					end else begin
-						if(i != 1 || ready[i]) begin
-							if(offset[offset_bits - ($clog2(i+1)-1) - 1]) mux[2*i+1] <= mux[i];
-							else mux[2*i] <= mux[i];
-							ready[2*i] <= ready[i];
-							ready[2*i+1] <= ready[i];
-						end else begin
-							mux[i] <= dinb;
-							ready[i] <= 1;
-						end
-					end
+
+			always @(posedge clkb) begin
+				if(i != 1 || ready[i]) begin
+					if(offset[offset_bits - ($clog2(i+1)-1) - 1]) mux[2*i+1] <= mux[i];
+					else mux[2*i] <= mux[i];
+					ready[2*i] <= ready[i];
+					ready[2*i+1] <= ready[i];
+				end else begin
+					mux[i] <= dinb;
+					ready[i] <= enb;
 				end
-			//end
+			end
 		end
 
 		assign enb_local = ready[2*DATA_WIDTH_A/DATA_WIDTH_B-1];

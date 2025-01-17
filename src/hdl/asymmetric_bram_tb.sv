@@ -4,7 +4,7 @@
 
 module asymmetric_bram_tb;
 
-    localparam WEIGHT_BRAM_DATA_WIDTH = 128;
+    localparam WEIGHT_BRAM_DATA_WIDTH = 1024;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam CPU_BRAM_DATA_WIDTH = 32;
 
@@ -28,7 +28,7 @@ module asymmetric_bram_tb;
         .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
         .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
-        .MEM_PATH("input_bram.mem")
+        .MEM_PATH("")
     ) bram2 (
         .clka(clk),
         .addra(addr_weight),

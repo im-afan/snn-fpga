@@ -41,7 +41,7 @@ module top(
     localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
 
     localparam CPU_BRAM_DATA_WIDTH = 32;
-    localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 128;
+    localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 32;
 
     input wire clk;
     //input wire [15:0] sw;
