@@ -349,9 +349,9 @@ proc create_root_design { parentCell } {
   # Create instance: axi_bram_ctrl_0, and set properties
   set axi_bram_ctrl_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_0 ]
   set_property -dict [list \
-    CONFIG.DATA_WIDTH {128} \
+    CONFIG.DATA_WIDTH {32} \
     CONFIG.PROTOCOL {AXI4} \
-    CONFIG.READ_LATENCY {2} \
+    CONFIG.READ_LATENCY {16} \
     CONFIG.SINGLE_PORT_BRAM {1} \
   ] $axi_bram_ctrl_0
 
@@ -360,7 +360,7 @@ proc create_root_design { parentCell } {
   set axi_bram_ctrl_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_1 ]
   set_property -dict [list \
     CONFIG.DATA_WIDTH {32} \
-    CONFIG.READ_LATENCY {2} \
+    CONFIG.READ_LATENCY {16} \
     CONFIG.SINGLE_PORT_BRAM {1} \
   ] $axi_bram_ctrl_1
 
@@ -369,7 +369,7 @@ proc create_root_design { parentCell } {
   set axi_bram_ctrl_2 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_2 ]
   set_property -dict [list \
     CONFIG.DATA_WIDTH {32} \
-    CONFIG.READ_LATENCY {2} \
+    CONFIG.READ_LATENCY {16} \
     CONFIG.SINGLE_PORT_BRAM {1} \
   ] $axi_bram_ctrl_2
 
@@ -378,7 +378,7 @@ proc create_root_design { parentCell } {
   set axi_bram_ctrl_3 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_bram_ctrl:4.1 axi_bram_ctrl_3 ]
   set_property -dict [list \
     CONFIG.DATA_WIDTH {32} \
-    CONFIG.READ_LATENCY {2} \
+    CONFIG.READ_LATENCY {16} \
     CONFIG.SINGLE_PORT_BRAM {1} \
   ] $axi_bram_ctrl_3
 

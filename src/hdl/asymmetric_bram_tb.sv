@@ -4,7 +4,7 @@
 
 module asymmetric_bram_tb;
 
-    localparam WEIGHT_BRAM_DATA_WIDTH = 1024;
+    localparam WEIGHT_BRAM_DATA_WIDTH = 128;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam CPU_BRAM_DATA_WIDTH = 32;
 
@@ -28,7 +28,7 @@ module asymmetric_bram_tb;
         .ADDR_WIDTH_A(BRAM_ADDR_WIDTH),
         .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_B(BRAM_ADDR_WIDTH),
-        .MEM_PATH("asdfasdf")
+        .MEM_PATH("input_bram.mem")
     ) bram2 (
         .clka(clk),
         .addra(addr_weight),
@@ -63,6 +63,14 @@ module asymmetric_bram_tb;
    		cpu_weight_addr = 180;
    		cpu_weight_din = 77;
    		cpu_weight_we = 16'b1111111111111111;
+
+        #10000
+        cpu_weight_en = 0;
+        cpu_weight_we = 0;
+        cpu_weight_addr = 0;
+
+        #10000
+        cpu_weight_en = 1;
 
    		#100000 
         $writememb(".wave/weight_bram_dump.mem", bram2.mem.mem);

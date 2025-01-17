@@ -1,14 +1,21 @@
 #include <stdio.h>
-#include "platform.h"
+//#include "platform.h"
 #include "xil_printf.h"
 #include "xil_io.h"
 #include "snn_driver.h"
 
 int main()
 {
-    init_platform();
     setup_snn();
 
+    write_network_input(0, 127);
+    usleep(1000);
+    xil_printf("%d\n", read_network_input(0));
+    write_tile(0, 3, 3);
+    xil_printf("%d\n", read_tile_idx_x(0));
+
+    write_weight(0, 0, 0, 5);
+    xil_printf("%d\n", read_weight(0, 0, 0));
     while(1) {
         timestep();
         for(int i = 0; i < 4; i++) {
@@ -25,6 +32,5 @@ int main()
         usleep(1000000);
     }
 
-    cleanup_platform();
     return 0;
 }
