@@ -5,6 +5,7 @@ int cnt = 0;
 
 void setup() {
     Serial.begin(115200);
+    Serial.print("alsdkjfnasdlkjfn\n");
     setup_uart();
     write_model();
 }
@@ -14,7 +15,7 @@ void loop() {
 
     timestep();
 
-    int x = 0;
+    /*int x = 0;
     for(int i = 0; i < 784 / 16; i++) {
         uint16_t spk_out = read_spk_out(i);
         for(int j = 0; j < 16; j++) {
@@ -24,8 +25,11 @@ void loop() {
             if(x % 28 == 0) 
                 Serial.print("\n");
         }
-    }
-    Serial.println(read_spk_out(51));
+    }*/
+
+    uint16_t spk = read_spk_out(51);
+    for(int i = 0; i < 10; i++) 
+        Serial.print((spk & (1 << i)) > 0), Serial.print(" ");
     Serial.print("\n");
     
     delay(100);

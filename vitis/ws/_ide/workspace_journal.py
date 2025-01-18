@@ -1,4 +1,4 @@
-# 2025-01-16T23:57:34.036773900
+# 2025-01-18T14:45:25.140632100
 import vitis
 
 client = vitis.create_client()
@@ -12,6 +12,7 @@ comp.build()
 
 status = platform.build()
 
+comp = client.get_component(name="uart_listener")
 comp.build()
 
 status = platform.build()

@@ -30,7 +30,7 @@ module top_microblaze(
     localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
 
     localparam CPU_BRAM_DATA_WIDTH = 32;
-    localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 32;
+    localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 128;
 
     wire [BRAM_ADDR_WIDTH-1:0] cpu_tile_idx_addr;
     wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_tile_idx_din;

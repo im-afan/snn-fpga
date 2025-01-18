@@ -71,8 +71,16 @@ module asymmetric_bram_tb;
 
         #10000
         cpu_weight_en = 1;
+        cpu_weight_addr = 0;
+        #10 cpu_weight_en = 0;
+        
+        #10000
+        cpu_weight_en = 1;
+        cpu_weight_addr = 180;
+        #10 cpu_weight_en = 0;
 
-   		#100000 
+
+   	#100000 
         $writememb(".wave/weight_bram_dump.mem", bram2.mem.mem);
    		$finish;
     end

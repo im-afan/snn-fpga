@@ -187,7 +187,7 @@
    xlnx,ecc-onoff-reset-value = <0>;
    xlnx,ecc-type = <0>;
    xlnx,rd-cmd-optimization = <0>;
-   xlnx,memory-depth = <65536>;
+   xlnx,memory-depth = <16384>;
    xlnx,use-ecc = <0>;
    xlnx,rable = <0>;
    xlnx,fault-inject = <0>;
@@ -203,11 +203,11 @@
    xlnx,ecc = <0>;
    xlnx,edk-iptype = "PERIPHERAL";
    status = "okay";
-   xlnx,data-width = <32>;
-   xlnx,bram-addr-width = <16>;
+   xlnx,data-width = <128>;
+   xlnx,bram-addr-width = <14>;
    xlnx,bram-inst-mode = "EXTERNAL";
    xlnx,s-axi-ctrl-data-width = <32>;
-   xlnx,mem-depth = <65536>;
+   xlnx,mem-depth = <16384>;
    xlnx,s-axi-id-width = <1>;
    xlnx,name = "axi_bram_ctrl_0";
   };
