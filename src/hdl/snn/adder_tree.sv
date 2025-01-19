@@ -8,8 +8,8 @@ module adder_tree #( // can be treated as mac_out_fifo
 	input wire push,
 	input wire en,
 	input wire has_in,
-	input wire [WIDTH-1:0] in [N],
-	output reg [WIDTH-1:0] out,
+	input wire signed [WIDTH-1:0] in [N],
+	output reg signed [WIDTH-1:0] out,
 	output reg has_out 
 );
 

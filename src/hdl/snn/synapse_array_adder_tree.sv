@@ -33,11 +33,11 @@ module synapse_array_adder_tree #( // TODO streaming inputs
     reg adder_tree_push;
     reg adder_tree_has_in;
     wire [CROSSBAR_NEURONS-1:0] adder_tree_has_out;
-    wire [NETWORK_WIDTH-1:0] adder_tree_out [CROSSBAR_NEURONS];
+    wire signed [NETWORK_WIDTH-1:0] adder_tree_out [CROSSBAR_NEURONS];
 
     generate
     	for(i = 0; i < CROSSBAR_NEURONS; i++) begin
-    		wire [NETWORK_WIDTH-1:0] adder_tree_in [CROSSBAR_NEURONS];
+    		wire signed [NETWORK_WIDTH-1:0] adder_tree_in [CROSSBAR_NEURONS];
     		adder_tree #(
     			.N(CROSSBAR_NEURONS),
     			.WIDTH(NETWORK_WIDTH)
