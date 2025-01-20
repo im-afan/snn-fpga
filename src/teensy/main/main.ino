@@ -28,7 +28,7 @@ void loop() {
     }*/
 
     uint16_t spk = read_spk_out(51);
-    for(int i = 0; i < 10; i++) 
+    for(int i = 0; i < 16; i++) 
         Serial.print((spk & (1 << i)) > 0), Serial.print(" ");
     Serial.print("\n");
     

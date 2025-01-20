@@ -74,7 +74,7 @@ module lif_bram #(
     localparam integer MEM_OFFSET = 0;
 
     wire [11:0] buff_offset_read;
-    assign buff_offset_read = (!buff_idx) * MAX_TILES * CROSSBAR_NEURONS / 8;
+    assign buff_offset_read = (buff_idx) * MAX_TILES * CROSSBAR_NEURONS / 8;
     wire [11:0] buff_offset_write;
     assign buff_offset_write = (!buff_idx) * MAX_TILES * CROSSBAR_NEURONS / 8;
 
@@ -198,7 +198,7 @@ module lif_bram #(
 
                 else begin
                     if(spk_out_bram_step == SEND) begin
-                        spk_out_addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_write;
+                        spk_out_addr <= SPK_OUT_OFFSET + tile_idx_y * CROSSBAR_NEURONS / 8 + buff_offset_read;
                         spk_out_bram_done <= 0;
                         spk_out_bram_we_local <= 0;
                         spk_out_bram_step <= WAIT;

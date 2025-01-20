@@ -22,7 +22,7 @@ module lif#(
     output reg done,
     output reg signed [NETWORK_WIDTH-1:0] mem_out
 );
-    localparam INT_MAX = (1 << NETWORK_WIDTH) - 1;
+    /*localparam INT_MAX = (1 << NETWORK_WIDTH) - 1;
 
     reg local_done = 0;
     wire signed [NETWORK_WIDTH-1:0] sum;
@@ -30,7 +30,14 @@ module lif#(
     wire overflow;
     assign sum = mem_in+mac_out;
     assign overflow = (mem_in[NETWORK_WIDTH-1] == mac_out[NETWORK_WIDTH-1]) && (mem_in[NETWORK_WIDTH-1] != sum[NETWORK_WIDTH-1]);
-    assign sum_clamp = overflow ? (mem_in[NETWORK_WIDTH-1] ? -INT_MAX : INT_MAX) : sum;
+    assign sum_clamp = overflow ? (mem_in[NETWORK_WIDTH-1] ? -INT_MAX : INT_MAX) : sum;*/
+    reg local_done = 0;
+    wire signed [NETWORK_WIDTH-1:0] sum_clamp;
+    adder #(.WIDTH(NETWORK_WIDTH)) adder_0 (
+        .in1(mac_out),
+        .in2(mem_in),
+        .out(sum_clamp)
+    );
 
     always_ff @(posedge clk) begin
         if(~enable) begin
@@ -38,16 +45,16 @@ module lif#(
             local_done <= 0;
         end else begin
             if(~local_done) begin
-                if(spk_in && ~spk_rst) begin
-                    spk_out <= 1;
-                    mem_out <= 0;
-                end else if(spk_rst && sum_clamp >= THRESH) begin
-                    spk_out <= 1;
-                    mem_out <= 0;
+                if(spk_rst && spk_in) begin
+                    mem_out <= mac_out;
+                    spk_out <= (mac_out >= THRESH);
                 end else begin
-                    spk_out <= 0;
-                    if(spk_rst) mem_out <= sum_clamp;
-                    else mem_out <= sum_clamp;
+                    if(sum_clamp >= THRESH) begin
+                        spk_out <= 1;
+                    end else begin
+                        spk_out <= 0;
+                    end
+                    mem_out <= sum_clamp;
                 end
                 local_done <= 1;
             end else begin

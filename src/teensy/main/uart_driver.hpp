@@ -42,6 +42,19 @@ void write_weight(uint16_t tile_idx, uint8_t x, uint8_t y, int8_t val) {
     wait_done();
 }
 
+int8_t read_weight(uint16_t tile_idx, uint8_t x, uint8_t y) {
+    transfer(5);
+    transfer(tile_idx >> 8);
+    transfer(tile_idx % (1 << 8));
+    transfer(x);
+    transfer(y);
+    transfer(0);
+    transfer(0);
+    transfer(0);
+    wait_done();
+    return rx_buff[0];
+}
+
 void write_network_input(uint16_t idx, int8_t val) {
     transfer(2);
     transfer(idx >> 8);

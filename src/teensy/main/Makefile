@@ -4,7 +4,7 @@ HOME = C:/Users/andre
 
 FQBN = teensy:avr:teensy40
 
-TEENSY_PORT = usb:0/140000/0/1
+TEENSY_PORT = usb:0/140000/0/2
 PORT = COM3
 
 LIBS = $(HOME)/Documents/Arduino/libraries

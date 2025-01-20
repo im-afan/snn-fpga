@@ -17,7 +17,7 @@ snn_in[0] = 127;
 snn_in[1] = 0;
 snn_in[3] = 127;
 
-snn_in[46] = 127;
+#snn_in[46] = 127;
 
 tile[0][0][4] = 127;
 tile[0][0][5] = -127;
@@ -41,12 +41,14 @@ tile[0][9][11] = 127;
 tile[0][10][12] = 127;
 tile[0][11][12] = 127;
 
-tile[1][0][15] = 32;
+#tile[1][0][15] = 32;
 for i in range(MAX_TILES):
-	tile_idx[i] = [i // 8, i % 8]
+    tile_idx[i] = [100, 100];
+for i in range(2):
+	tile_idx[i+1] = [i // 8, i % 8]
 
-snn_in[523] = 127;
-tile_idx[4] = [32, 32];
+#snn_in[523] = 127;
+#tile_idx[4] = [32, 32];
 
 """
 tile[0][13][0] = 127

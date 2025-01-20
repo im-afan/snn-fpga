@@ -1,3 +1,6 @@
+`ifndef ADDER_SV
+`define ADDER_SV
+
 module adder #(
 	parameter integer WIDTH
 )(
@@ -14,3 +17,5 @@ module adder #(
 
     assign out = sum_clamp;
 endmodule
+
+`endif

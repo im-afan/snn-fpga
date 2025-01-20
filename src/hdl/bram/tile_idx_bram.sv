@@ -72,7 +72,7 @@ module tile_idx_bram #(
     //assign has_spk[0] = ~0;
     //assign has_spk[1] = ~0;
     
-    reg [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] used_input;  // only use network input for the 1st cycle with that tile
+    reg [MAX_TILES - 1 : 0] used_input;  // only use network input for the 1st cycle with that tile
 
     //assign tile_idx_fifo_din = dout;
 
