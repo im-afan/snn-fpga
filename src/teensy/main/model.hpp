@@ -4,18 +4,11 @@
 void write_model(){
     reset_model();
 
-    /*int cur_tile = 0;
-    for(int i = 0; i <= 51; i++) {
-        write_tile(cur_tile, i, i);
-        cur_tile++;
-    }*/
-    //cur_tile = 0;
     int cur_tile = 0;
     for(int i = 0; i < 0; i++) {
         write_tile(cur_tile, 100, 100);
         cur_tile++;
     }
-    
 
     int tiles = sizeof(tile_idx_x) / sizeof((uint16_t) 0);
     int weight_idx = 0;
@@ -26,12 +19,7 @@ void write_model(){
         for(int j = 0; j < 16*16; j++) {
             int idx = weight_idx + j;
             if(weight[idx]) {
-                write_weight(i, j / 16, j % 16, weight[idx]); 
-                /*Serial.print("write ");
-                Serial.print(weight[idx]);
-                Serial.print(" got ");
-                Serial.print(read_weight(i, j/16, j%16));
-                Serial.print("\n");*/
+                write_weight(cur_tile, j / 16, j % 16, weight[idx]); 
             }
         }
         weight_idx += 16*16;

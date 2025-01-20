@@ -19,7 +19,7 @@ sz = 28
 
 # Network Architecture
 num_inputs = sz*sz
-num_hidden = 15
+num_hidden = 63
 num_outputs = 10
 thresh = 1
 
@@ -34,9 +34,9 @@ class Net(nn.Module):
 
         # Initialize layers
         self.spkgen = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
-        self.fc1 = nn.Linear(num_inputs, num_hidden, bias=False)
+        self.fc1 = nn.Linear(num_inputs, num_hidden)
         self.lif1 = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
-        self.fc2 = nn.Linear(num_hidden, num_outputs, bias=False)
+        self.fc2 = nn.Linear(num_hidden, num_outputs)
         self.lif2 = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
 
     def forward(self, x, debug=False):
@@ -95,6 +95,10 @@ class Net(nn.Module):
             self.lif2.threshold = new_thresh
             self.fc1.weight.data = torch.round(self.fc1.weight*new_thresh)
             self.fc2.weight.data = torch.round(self.fc2.weight*new_thresh)
+            if(self.fc1.bias is not None):
+                self.fc1.bias.data = torch.round(self.fc1.bias*new_thresh)
+            if(self.fc2.bias is not None):
+                self.fc2.bias.data = torch.round(self.fc2.bias*new_thresh)
 
 if __name__ == "__main__":
     # dataloader arguments

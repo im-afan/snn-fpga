@@ -30,6 +30,7 @@ def compile(model): # compile MLP
 
     tile_idx = []
     tiles = []
+    tiles_bias = []
 
     for name, param in model.named_parameters():
         if(not name.endswith("weight")):
@@ -61,7 +62,26 @@ def compile(model): # compile MLP
 
         neuron_idx = out_idx
 
-    return tile_idx, tiles
+    neuron_idx = 0
+
+    for name, param in model.named_parameters():
+        if(not name.endswith("bias")):
+            continue
+        bias = param.data
+
+        in_neurons = bias.shape[0]
+
+        in_idx = neuron_idx
+        out_idx = neuron_idx + round_up(in_neurons) 
+
+        pad = (0, round_up(in_neurons) - in_neurons)
+        bias_pad = F.pad(bias, pad, mode="constant", value=0) * THRESH / QUANT_VAL
+
+        tiles_bias += bias_pad.tolist()
+
+        neuron_idx = out_idx
+
+    return tile_idx, tiles, tiles_bias
 
 def compile_to_c(model, img=None, spk=None, mem=None):
     tile_idx, tiles = compile(model)
@@ -96,7 +116,7 @@ def compile_to_c(model, img=None, spk=None, mem=None):
     print("}")
 
 def compile_to_arr(model, img=None, spk=None, mem=None):
-    tile_idx, tiles = compile(model)
+    tile_idx, tiles, tiles_bias = compile(model)
     print("/* AUTO GENERATED CODE BY MODEL COMPILATION")
     print(" * IT IS HIGHLY DISCOURAGED TO EDIT THIS!!!")
     print(" */")
@@ -125,10 +145,16 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
                 print(f"{val},")
     print("};")
 
-    print("int8_t network_input[] = {")
+    network_input = []
     if(img is not None):
         for i in range(sz*sz):
-            val = int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL))
+            network_input.append(int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL)))
+    network_input += tiles_bias
+
+    print("int8_t network_input[] = {")
+    if(img is not None):
+        for i in range(len(network_input)):
+            val = int(network_input[i])
             print(f"{val},")
 
     print("};")
