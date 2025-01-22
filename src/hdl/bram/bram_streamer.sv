@@ -1,6 +1,10 @@
+`include "bram/fifo.sv"
+
 module bram_streamer (
     input wire clk,
+
     input wire enable,
+	input wire fifo_pop,
 
     input wire [2047:0] weight_dout,
     input wire [127:0] network_input_dout,
@@ -13,8 +17,9 @@ module bram_streamer (
     output wire [127:0] mem_in,
     output wire [15:0] spk_in,
     output reg [15:0] tile_idx_y,
-
+	
     output reg push_rst,
+	output reg push,
 
     output reg weight_en,
     output reg [16:0] weight_addr,
@@ -34,22 +39,23 @@ module bram_streamer (
     reg [15:0] y0;
     reg [15:0] x1;
     reg [15:0] y1;
-    reg [15:0] y2;
 
     assign weight = weight_dout;
-    assign network_input = network_input_dout;
-    assign mem_in = mem_in_dout; 
-    assign spk_in = spk_in_dout;
-    //assign tile_idx_y = y1;
-    //assign push_rst = (tile_idx_y != y0);
 
-    assign x0 = tile_idx_dout[15:0];
-    assign y0 = tile_idx_dout[31:16];
+    assign weight_addr = 16*16*idx2;
+    assign network_input_addr = 16*y0; 
+    assign mem_in_addr = 16*y0; 
+    assign spk_in_addr = 2*x0; 
+    assign tile_idx_addr = 4*idx0;
 
     always @(posedge clk) begin
         if(~enable) begin
             idx0 <= 0;
             idx1 <= 0;
+			idx2 <= 0;
+			x1 <= -1;
+			y1 <= -1;
+            push_rst <= 0;
         end else begin
             weight_en <= 1;
             network_input_en <= 1;
@@ -57,21 +63,60 @@ module bram_streamer (
             mem_in_en <= 1;
             tile_idx_en <= 1;
 
-            weight_addr <= 16*16*idx2;
-            network_input_addr <= 16*x0; 
-            mem_in_addr <= 16*y0; 
-            spk_in_addr <= 2*y0; 
-            tile_idx_addr <= 4*idx0;
+            y0 <= tile_idx_dout[31:16];
+            x0 <= tile_idx_dout[15:0];
 
-            x1 <= x0;
-            y1 <= y0;
-            y2 <= y1;
-            tile_idx_y <= y1;
-            push_rst <= (y2 != y1);
             idx0 <= idx0+1;
             idx1 <= idx0;
             idx2 <= idx1;
+
+			if(idx2 != idx1 && idx1 != idx0) begin
+                x1 <= x0;
+                y1 <= y0;
+                push <= 1;
+                push_rst <= (y1 != y0);
+            end else begin
+                y1 <= -1;
+                push <= 0;
+                push_rst <= 0;
+            end
+
         end
     end 
-endmodule
 
+	fifo #(.WIDTH(128), .LENGTH(16))
+	fifo_network_input (
+		.clk(clk),
+		.rst(~enable),
+		.din(network_input_dout),
+		.push(push_rst),
+		.pop(fifo_pop),
+		.empty(),
+		.full(),
+		.dout(network_input)
+	);
+
+	fifo #(.WIDTH(128), .LENGTH(16))
+	fifo_mem_in (
+		.clk(clk),
+		.rst(~enable),
+		.din(mem_in_dout),
+		.push(push_rst),
+		.pop(fifo_pop),
+		.empty(),
+		.full(),
+		.dout(mem_in)
+	);
+
+	fifo #(.WIDTH(16), .LENGTH(16))
+	fifo_tile_idx (
+		.clk(clk),
+		.rst(~enable),
+		.din(y1),
+		.push(push_rst),
+		.pop(fifo_pop),
+		.empty(),
+		.full(),
+		.dout(tile_idx_y)
+	);
+endmodule

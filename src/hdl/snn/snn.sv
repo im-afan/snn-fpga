@@ -4,8 +4,11 @@
 module snn
 (
     input wire clk,
-
+    input wire en,
+	
+	input wire push,
     input wire push_rst,
+
     input wire [2047:0] i_weight,
     input wire [127:0] i_network_input,
     input wire [127:0] i_mem_in,
@@ -41,7 +44,7 @@ module snn
         .NETWORK_WIDTH(8)
     ) synapse_array (
         .clk(clk),
-        .enable(1),
+        .enable(en),
         .push_rst(push_rst),
         .weight(weight),
         .spk_in(i_spk_in),
@@ -56,6 +59,7 @@ module snn
         .NETWORK_WIDTH(8)
     ) lif_array_0 (
         .clk(clk),
+        //.en(en),
         .rst(want_rst),
         .has_in(xbar_has_out),
         .mac_out(mac_out),

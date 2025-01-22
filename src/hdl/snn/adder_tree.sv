@@ -15,7 +15,7 @@ module adder_tree #( // can be treated as mac_out_fifo
 
 	reg cnt = 0;
 	reg [WIDTH-1:0] tree[2*N+1];
-	reg [$clog2(N)-1:0] mask;
+	reg [$clog2(N):0] mask;
 
 	always @(posedge clk) begin
 		if(~en) begin
@@ -67,6 +67,6 @@ module adder_tree #( // can be treated as mac_out_fifo
 		end
 	endgenerate	
 
-	assign has_out = mask[$clog2(N)-1];
+	assign has_out = mask[$clog2(N)];
 	assign out = tree[1];
 endmodule

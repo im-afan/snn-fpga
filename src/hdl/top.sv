@@ -1,24 +1,22 @@
 `timescale 1ns / 10ps
+`include "bram/asymmetric_dual_port_bram.sv"
 `include "bram/bram_streamer.sv"
-`include "bram/buff_idx_controller.sv"
-`include "fifo/weight_fifo.sv"
-`include "fifo/spk_in_fifo.sv"
-`include "fifo/tile_idx_fifo.sv"
-`include "fifo/mem_fifo.sv"
-`include "scheduler/lif_scheduler.sv"
-`include "scheduler/xbar_scheduler.sv"
-`include "snn/synapse_array.sv"
-`include "snn/lif_array.sv"
-`include "snn/synapse_array_adder_tree.sv"
+`include "bram/bram_writer.sv"
+`include "snn/snn.sv"
 `include "led_controller.sv"
 
 module top(
-    input wire clk,
+    /*input wire clk,
     input wire [15:0] sw,
-    input wire [15:0] led 
+    input wire [15:0] led */
 );
-    reg en = 1;
+    reg clk;
+    
+    reg en;
     wire push_rst;
+	wire push;
+
+    wire [15:0] led;
 
     wire [2047:0] weight_dout;
     wire [127:0] network_input_dout;
@@ -49,7 +47,7 @@ module top(
         .douta(tile_idx_dout),
         .dina(0),
         .wea(0),
-        .ena(tile_idx_en)
+        .ena(en)
     );
     
     asymmetric_dual_port_bram #(
@@ -64,7 +62,7 @@ module top(
         .dina(0),
         .douta(spk_in_dout),
         .wea(0),
-        .ena(spk_in_en)
+        .ena(en)
     );
 
     //wire [WEIGHT_BRAM_DATA_WIDTH-1:0] doutb2;
@@ -80,7 +78,7 @@ module top(
         .dina(0),
         .douta(weight_dout),
         .wea(0),
-        .ena(weight_en)
+        .ena(en)
     );
 
     //wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb3;
@@ -118,12 +116,14 @@ module top(
     bram_streamer bram_streamer_0 (
         .clk(clk),
         .enable(en),
+		.fifo_pop(lif_has_out),
+
         .weight_dout(weight_dout),
         .network_input_dout(network_input_dout),
         .mem_in_dout(mem_in_dout),
         .spk_in_dout(spk_in_dout),
         .tile_idx_dout(tile_idx_dout),
-
+		
         .weight_en(weight_en),
         .weight_addr(weight_addr),
         .network_input_en(network_input_en),
@@ -134,11 +134,15 @@ module top(
         .spk_in_addr(spk_in_addr),
         .tile_idx_en(tile_idx_en),
         .tile_idx_addr(tile_idx_addr),
-        .push_rst(push_rst)
+
+        .push_rst(push_rst),
+		.push(push)
     );
 
     snn snn_0 (
         .clk(clk),
+        .en(en),
+		.push(push),
         .push_rst(push_rst),
         .i_weight(weight_dout),
         .i_network_input(network_input_dout),
@@ -155,15 +159,22 @@ module top(
         .tile_idx_y(tile_idx_y)
     );
 
+    led_controller led_controller_0 (
+        .clk(clk),
+        .en(en),
+        .spk_out(spk_out_din),
+        .led(led)
+    );
+
     initial begin
         #0 en = 0;
         #50 en = 1;
-        #300 $finish;
+        #1000 $finish;
     end
 
     initial begin
-        $dumpfile(".wave/bram_dump.vcd");
-        $dumpvars(100, bram_streamer_tb);
+        $dumpfile(".wave/top_dump.vcd");
+        $dumpvars(100, top);
         clk = 0;
         forever #5 clk = ~clk;
     end

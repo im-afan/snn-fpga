@@ -1,4 +1,4 @@
-module bram_streamer (
+module bram_writer (
     input wire clk,
     input wire enable,
 
@@ -10,7 +10,7 @@ module bram_streamer (
     output reg spk_out_en,
     output reg [16:0] mem_out_addr,
     //output reg [127:0] mem_out_din,
-    output reg [16:0] spk_out_addr,
+    output reg [16:0] spk_out_addr
     //output reg [15:0] spk_out_din
 );
     

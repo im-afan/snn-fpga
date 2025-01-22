@@ -36,6 +36,8 @@ module synapse_array_adder_tree #( // TODO streaming inputs
     wire signed [NETWORK_WIDTH-1:0] adder_tree_out [CROSSBAR_NEURONS];
 	reg [$clog2(CROSSBAR_NEURONS):0] rst_fifo = 0;
 
+	wire [NETWORK_WIDTH*CROSSBAR_NEURONS-1:0] mac_out_debug;
+
     generate
 		genvar i, j;
     	for(i = 0; i < CROSSBAR_NEURONS; i++) begin
@@ -45,7 +47,7 @@ module synapse_array_adder_tree #( // TODO streaming inputs
     			.WIDTH(NETWORK_WIDTH)
     		) tree (
     			.clk(clk),
-    			.en(adder_tree_en),
+    			.en(enable),
     			.push(adder_tree_push),
     			.has_in(adder_tree_has_in),
     			.in(adder_tree_in),
@@ -62,6 +64,7 @@ module synapse_array_adder_tree #( // TODO streaming inputs
     			assign spk_in_debug = spk_in[j];
     			assign weight_debug = weight[j][i];
     		end
+			assign mac_out_debug[8*i+:8] = mac_out[i];
     	end
     endgenerate
 
@@ -70,6 +73,7 @@ module synapse_array_adder_tree #( // TODO streaming inputs
     		adder_tree_en <= 0;
     		adder_tree_push <= 0;
     		adder_tree_has_in <= 0;
+			rst_fifo <= 0;
     	end else begin
     		adder_tree_en <= 1;
     		adder_tree_push <= 1;	

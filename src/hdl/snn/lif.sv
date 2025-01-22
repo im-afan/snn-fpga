@@ -61,6 +61,7 @@ module lif#(
             if(has_in) begin
                 mem <= sum_clamp;
             end
+			has_out <= 0;
         end
     end
 endmodule
