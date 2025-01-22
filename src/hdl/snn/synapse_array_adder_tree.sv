@@ -6,15 +6,15 @@ module synapse_array_adder_tree #( // TODO streaming inputs
 ) (
     input wire clk,
     input wire enable,
+	input wire push_rst,
 
-    input wire [NETWORK_WIDTH-1:0] u_mac_in [CROSSBAR_NEURONS],
-    input wire [NETWORK_WIDTH-1:0] u_weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS],
+    input wire signed [NETWORK_WIDTH-1:0] weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS],
     input wire [CROSSBAR_NEURONS-1:0] spk_in,
-    //output reg [NETWORK_WIDTH-1:0] u_mac_out [CROSSBAR_NEURONS],
-    output reg [CROSSBAR_NEURONS*NETWORK_WIDTH-1:0] u_mac_out,
-    output reg done
+    output reg signed [NETWORK_WIDTH-1:0] mac_out [CROSSBAR_NEURONS],
+    output reg has_out,
+	output wire want_rst
 );
-    wire signed [NETWORK_WIDTH-1:0] weight[CROSSBAR_NEURONS][CROSSBAR_NEURONS];
+    /*wire signed [NETWORK_WIDTH-1:0] weight[CROSSBAR_NEURONS][CROSSBAR_NEURONS];
     wire signed [NETWORK_WIDTH-1:0] mac_out[CROSSBAR_NEURONS];
     wire signed [NETWORK_WIDTH-1:0] mac_in[CROSSBAR_NEURONS];
 
@@ -27,15 +27,17 @@ module synapse_array_adder_tree #( // TODO streaming inputs
             assign u_mac_out[NETWORK_WIDTH*(i+1)-1 : NETWORK_WIDTH*i] = mac_out[i];
             assign mac_in[i] = u_mac_in[i];
         end
-    endgenerate
+    endgenerate*/
 
     reg adder_tree_en;
     reg adder_tree_push;
     reg adder_tree_has_in;
     wire [CROSSBAR_NEURONS-1:0] adder_tree_has_out;
     wire signed [NETWORK_WIDTH-1:0] adder_tree_out [CROSSBAR_NEURONS];
+	reg [$clog2(CROSSBAR_NEURONS):0] rst_fifo = 0;
 
     generate
+		genvar i, j;
     	for(i = 0; i < CROSSBAR_NEURONS; i++) begin
     		wire signed [NETWORK_WIDTH-1:0] adder_tree_in [CROSSBAR_NEURONS];
     		adder_tree #(
@@ -50,7 +52,7 @@ module synapse_array_adder_tree #( // TODO streaming inputs
     			.out(adder_tree_out[i]),
     			.has_out(adder_tree_has_out[i])
     		);
-    		assign mac_out[i] = adder_tree_out[i] + mac_in[i];
+    		assign mac_out[i] = adder_tree_out[i];
     		for(j = 0; j < CROSSBAR_NEURONS; j++) begin
     			assign adder_tree_in[j] = spk_in[j] ? weight[j][i] : 0;
     			wire [NETWORK_WIDTH-1:0] adder_tree_in_debug;
@@ -72,8 +74,10 @@ module synapse_array_adder_tree #( // TODO streaming inputs
     		adder_tree_en <= 1;
     		adder_tree_push <= 1;	
     		adder_tree_has_in <= 1;
+			rst_fifo <= (rst_fifo << 1) | push_rst;
     	end
     end
 
-    assign done = &adder_tree_has_out;
+    assign has_out = &adder_tree_has_out;
+	assign want_rst = rst_fifo[$clog2(CROSSBAR_NEURONS)];
 endmodule

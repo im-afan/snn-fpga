@@ -2,7 +2,7 @@ import sys
 
 sys.stdout = open("bram.mem", "w")
 
-MAX_TILES = 256
+MAX_TILES = 512
 MAX_NEURONS = 1024
 TILE_IDX_WIDTH = 16
 CROSSBAR_NEURONS = 16
@@ -42,10 +42,10 @@ tile[0][10][12] = 127;
 tile[0][11][12] = 127;
 
 #tile[1][0][15] = 32;
+#for i in range(MAX_TILES):
+#    tile_idx[i] = [100, 100];
 for i in range(MAX_TILES):
-    tile_idx[i] = [100, 100];
-for i in range(2):
-	tile_idx[i+1] = [i // 8, i % 8]
+	tile_idx[i] = [i % 8, i // 8]
 
 #snn_in[523] = 127;
 #tile_idx[4] = [32, 32];
@@ -95,14 +95,14 @@ def write_tile_idx():
     printmem(memory, "./tile_idx_bram.mem", 32, 1024, bytewidth=16)
 
 def write_weight():
-    memory = ["0" for i in range(1024*1024)] 
+    memory = ["0" for i in range(2048*1024)] 
     for i in range(0, MAX_TILES):
         for j in range(CROSSBAR_NEURONS):
             for k in range(CROSSBAR_NEURONS):
                 base = (i*CROSSBAR_NEURONS*CROSSBAR_NEURONS + j*CROSSBAR_NEURONS + k) * NETWORK_WIDTH
                 #print(base, bin_(tile[i][j][k], 8))
                 memory[base:base+NETWORK_WIDTH] = bin_(tile[i][j][k], NETWORK_WIDTH)
-    printmem(memory, "./weight_bram.mem", 1024, 1024, rev=True);
+    printmem(memory, "./weight_bram.mem", 2048, 1024, rev=True);
 
 def write_input():
     memory = ["0" for i in range(8*1024)]
