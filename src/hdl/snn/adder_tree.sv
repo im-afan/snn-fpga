@@ -30,7 +30,7 @@ module adder_tree #( // can be treated as mac_out_fifo
 		for(i = 0; i < N; i++) begin
 			always @(posedge clk) begin
 				if(~en) begin
-					//tree[N+i] <= 0;
+					tree[N+i] <= 0;
 				end else begin
 					if(push) begin
 						if(has_in) begin

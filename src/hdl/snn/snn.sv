@@ -23,7 +23,7 @@ module snn
     reg signed [8-1:0] network_input [16];
     reg signed [8-1:0] mem_in [16];
     wire signed [8-1:0] mac_out [16];
-    reg signed [8-1:0] mem_out [16];
+    wire signed [8-1:0] mem_out [16];
     wire xbar_has_out;
     wire want_rst;
 
@@ -33,6 +33,10 @@ module snn
             assign network_input[i] = i_network_input[i*8 +: 8];
             assign mem_in[i] = i_mem_in[i*8 +: 8];
             assign o_mem_out[i*8 +: 8] = mem_out[i];
+
+            wire [7:0] mem_out_debug;
+            assign mem_out_debug = mem_out[i];
+
             for(j = 0; j < 16; j++) begin
                 assign weight[i][j] = i_weight[(16*i+j)*8 +: 8];
             end
@@ -46,6 +50,7 @@ module snn
         .clk(clk),
         .enable(en),
         .push_rst(push_rst),
+        .push(push),
         .weight(weight),
         .spk_in(i_spk_in),
         .mac_out(mac_out),
@@ -59,7 +64,7 @@ module snn
         .NETWORK_WIDTH(8)
     ) lif_array_0 (
         .clk(clk),
-        //.en(en),
+        .en(en),
         .rst(want_rst),
         .has_in(xbar_has_out),
         .mac_out(mac_out),
@@ -69,4 +74,5 @@ module snn
         .mem_out(mem_out),
         .has_out(lif_has_out)
     );
+
 endmodule

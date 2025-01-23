@@ -11,6 +11,8 @@ module lif#(
     parameter integer NETWORK_WIDTH
 )(
     input wire clk,
+
+    input wire en, 
     input wire rst, // want to reset spikes for next timestep? 
     input wire has_in,
 
@@ -48,20 +50,25 @@ module lif#(
     );
 
     always_ff @(posedge clk) begin
-        if(rst) begin
-            spk_out <= (mem >= THRESH);
-            mem_out <= (mem >= THRESH) ? 0 : mem;
-            if(has_in) begin
-                mem <= sum_clamp1;
-            end else begin
-                mem <= base_mem;
-            end
-            has_out <= 1;
+        if(~en) begin
+            mem <= 0;
+            has_out <= 0;
         end else begin
-            if(has_in) begin
-                mem <= sum_clamp;
+            if(rst) begin
+                spk_out <= (mem >= THRESH);
+                mem_out <= (mem >= THRESH) ? 0 : mem;
+                if(has_in) begin
+                    mem <= sum_clamp1;
+                end else begin
+                    mem <= base_mem;
+                end
+                has_out <= 1;
+            end else begin
+                if(has_in) begin
+                    mem <= sum_clamp;
+                end
+                has_out <= 0;
             end
-			has_out <= 0;
         end
     end
 endmodule

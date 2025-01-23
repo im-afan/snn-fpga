@@ -9,6 +9,7 @@ module lif_array #(
     parameter integer NETWORK_WIDTH
 ) (
     input wire clk,
+    input wire en,
     input wire rst,
     input wire has_in,
 
@@ -23,14 +24,17 @@ module lif_array #(
 );
 
     wire [CROSSBAR_NEURONS-1:0] has_out_wire;
+    wire [127:0] o_mem_out;
     generate
         genvar i;
         for(i = 0; i < CROSSBAR_NEURONS; i++) begin
+            assign o_mem_out[i*8 +: 8] = mem_out[i];
             lif #(
                 .THRESH(THRESH),
                 .NETWORK_WIDTH(NETWORK_WIDTH)
             ) neuron (
                 .clk(clk),
+                .en(en),
                 .rst(rst),
                 .has_in(has_in),
                 .mac_out(mac_out[i]),

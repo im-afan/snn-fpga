@@ -23,6 +23,8 @@ module top(
     wire [127:0] mem_in_dout;
     wire [15:0] spk_in_dout;
     wire [31:0] tile_idx_dout;
+    
+    wire [15:0] tile_idx_y;
 
     wire weight_en;
     wire [16:0] weight_addr;
@@ -34,6 +36,13 @@ module top(
     wire [16:0] spk_in_addr;
     wire tile_idx_en;
     wire [16:0] tile_idx_addr;
+
+    wire mem_out_en;
+    wire [16:0] mem_out_addr;
+    wire [127:0] mem_out_din;
+    wire spk_out_en;
+    wire [16:0] spk_out_addr;
+    wire [15:0] spk_out_din;
 
     asymmetric_dual_port_bram #(
         .DATA_WIDTH_B(32),
@@ -62,7 +71,14 @@ module top(
         .dina(0),
         .douta(spk_in_dout),
         .wea(0),
-        .ena(en)
+        .ena(en),
+
+        .clkb(clk),
+        .addrb(spk_out_addr),
+        .dinb(spk_out_din),
+        .doutb(),
+        .web(2'b1),
+        .enb(mem_out_en)
     );
 
     //wire [WEIGHT_BRAM_DATA_WIDTH-1:0] doutb2;
@@ -110,7 +126,14 @@ module top(
         .dina(0),
         .douta(mem_in_dout),
         .wea(0),
-        .ena(mem_in_en)
+        .ena(mem_in_en),
+
+        .clkb(clk),
+        .addrb(mem_out_addr),
+        .dinb(mem_out_din),
+        .doutb(),
+        .web(16'b1),
+        .enb(mem_out_en)
     );
 
     bram_streamer bram_streamer_0 (
@@ -123,6 +146,8 @@ module top(
         .mem_in_dout(mem_in_dout),
         .spk_in_dout(spk_in_dout),
         .tile_idx_dout(tile_idx_dout),
+
+        .tile_idx_y(tile_idx_y),
 		
         .weight_en(weight_en),
         .weight_addr(weight_addr),
@@ -149,14 +174,19 @@ module top(
         .i_mem_in(mem_in_dout),
         .i_spk_in(spk_in_dout),
         .o_spk_out(spk_out_din),
-        .o_mem_out(spk_out_din),
+        .o_mem_out(mem_out_din),
         .lif_has_out(lif_has_out)
     );
 
     bram_writer bram_writer_0 (
         .clk(clk),
-        .enable(en),
-        .tile_idx_y(tile_idx_y)
+        .en(en),
+        .has_out(lif_has_out),
+        .tile_idx_y(tile_idx_y),
+        .mem_out_en(mem_out_en),
+        .spk_out_en(spk_out_en),
+        .mem_out_addr(mem_out_addr),
+        .spk_out_addr(spk_out_addr)
     );
 
     led_controller led_controller_0 (
@@ -168,8 +198,16 @@ module top(
 
     initial begin
         #0 en = 0;
-        #50 en = 1;
-        #1000 $finish;
+        #100000
+        $writememb(".wave/spk_out_dump.mem", bram_spk_in.mem.mem);
+        $finish;
+    end
+
+    initial begin
+        forever begin
+            #100 en = 1;
+            #10000 en = 0;
+        end
     end
 
     initial begin

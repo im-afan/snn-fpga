@@ -7,6 +7,7 @@ module synapse_array_adder_tree #( // TODO streaming inputs
     input wire clk,
     input wire enable,
 	input wire push_rst,
+	input wire push,
 
     input wire signed [NETWORK_WIDTH-1:0] weight [CROSSBAR_NEURONS][CROSSBAR_NEURONS],
     input wire [CROSSBAR_NEURONS-1:0] spk_in,
@@ -48,7 +49,7 @@ module synapse_array_adder_tree #( // TODO streaming inputs
     		) tree (
     			.clk(clk),
     			.en(enable),
-    			.push(adder_tree_push),
+    			.push(push),
     			.has_in(adder_tree_has_in),
     			.in(adder_tree_in),
     			.out(adder_tree_out[i]),

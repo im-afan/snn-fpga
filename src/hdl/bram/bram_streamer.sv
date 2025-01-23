@@ -39,6 +39,10 @@ module bram_streamer (
     reg [15:0] y0;
     reg [15:0] x1;
     reg [15:0] y1;
+    reg [15:0] y2;
+
+    wire done;
+    assign done = (idx0 == 512);
 
     assign weight = weight_dout;
 
@@ -55,8 +59,9 @@ module bram_streamer (
 			idx2 <= 0;
 			x1 <= -1;
 			y1 <= -1;
+            y2 <= -1;
             push_rst <= 0;
-        end else begin
+        end else if(~done) begin
             weight_en <= 1;
             network_input_en <= 1;
             spk_in_en <= 1;
@@ -73,6 +78,7 @@ module bram_streamer (
 			if(idx2 != idx1 && idx1 != idx0) begin
                 x1 <= x0;
                 y1 <= y0;
+                y2 <= y1;
                 push <= 1;
                 push_rst <= (y1 != y0);
             end else begin
@@ -112,7 +118,7 @@ module bram_streamer (
 	fifo_tile_idx (
 		.clk(clk),
 		.rst(~enable),
-		.din(y1),
+		.din(y2),
 		.push(push_rst),
 		.pop(fifo_pop),
 		.empty(),
