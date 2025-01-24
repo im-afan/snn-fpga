@@ -6,7 +6,7 @@ module top_standalone(
     input wire [15:0] sw,
     output wire [15:0] led
 );
-    localparam BRAM_DATA_WIDTH = 1024;
+    localparam BRAM_DATA_WIDTH = 2048;
     localparam BRAM_ADDR_WIDTH = 16;
     localparam NETWORK_WIDTH = 8;
     localparam MAX_TILES = 64;

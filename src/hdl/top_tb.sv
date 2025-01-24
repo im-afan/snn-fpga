@@ -11,25 +11,27 @@ module top_tb;
         .led(led),
         .sw(sw)
     );
-
+    
     initial begin
-        forever #5 clk = ~clk;
+        #0 sw = 0;
+        #100000
+        $writememb(".wave/spk_out_dump.mem", top_0.top_0.bram_spk_in.mem.mem);
+        $writememb(".wave/mem_out_dump.mem", top_0.top_0.bram_mem_in.mem.mem);
+        $writememb(".wave/weight_dump.mem", top_0.top_0.bram_weight.mem.mem);
+        $finish;
     end
 
     initial begin
-        forever #150000 sw = ~sw;
+        forever begin
+            #100 sw = 1;
+            #10000 sw = 0;
+        end
     end
 
     initial begin
         $dumpfile(".wave/top_dump.vcd");
-        $dumpvars(100, top_tb);
-
-        #0 
+        $dumpvars(100, top_0);
         clk = 0;
-        sw = 0;
-        #2000000
-        //#15000
-        $writememb(".wave/spk_mem_dump.mem", top_0.top_0.bram_streamer_0.bram5.mem.mem);
-        $finish;
+        forever #5 clk = ~clk;
     end
 endmodule

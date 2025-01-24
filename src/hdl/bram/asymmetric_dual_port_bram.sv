@@ -53,34 +53,7 @@ module asymmetric_dual_port_bram #(
 
 	reg [DATA_WIDTH_B-1:0] mux [2*DATA_WIDTH_A/DATA_WIDTH_B+1];
 	reg [2*DATA_WIDTH_A/DATA_WIDTH_B:0] ready;
-
-	/*generate
-		for(i = 1; i <= 2*DATA_WIDTH_A / DATA_WIDTH_B-1; i++) begin
-			if(i >= DATA_WIDTH_A / DATA_WIDTH_B)
-				assign dinb_local_arr[i - DATA_WIDTH_A / DATA_WIDTH_B] = mux[i];
-
-			always @(posedge clkb) begin
-				if(~enb && enb_local) begin
-					mux[i] <= 0;
-					ready[i] <= 0;	
-				end
-				else begin
-					if(i != 1 || ready[i]) begin
-						if(offset[offset_bits - ($clog2(i+1)-1) - 1]) mux[2*i+1] <= mux[i];
-						else mux[2*i] <= mux[i];
-						ready[2*i] <= ready[i];
-						ready[2*i+1] <= ready[i];
-					end else begin
-						mux[i] <= dinb;
-						ready[i] <= enb;
-					end
-				end
-			end
-		end
-
-		assign enb_local = ready[2*DATA_WIDTH_A/DATA_WIDTH_B-1];
-	endgenerate*/
-
+	
 	dual_port_bram #(
     	.ADDR_WIDTH_A(ADDR_WIDTH_A),
     	.ADDR_WIDTH_B(ADDR_WIDTH_A),

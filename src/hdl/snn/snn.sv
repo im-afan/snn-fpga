@@ -17,7 +17,8 @@ module snn
     output wire [15:0] o_spk_out,
     output wire [127:0] o_mem_out,
 
-    output wire lif_has_out
+    output wire lif_has_out,
+    output wire busy
 );
     reg signed [8-1:0] weight [16][16];
     reg signed [8-1:0] network_input [16];

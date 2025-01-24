@@ -20,6 +20,7 @@ module bram_streamer (
 	
     output reg push_rst,
 	output reg push,
+    output reg done,
 
     output reg weight_en,
     output reg [16:0] weight_addr,
@@ -41,7 +42,6 @@ module bram_streamer (
     reg [15:0] y1;
     reg [15:0] y2;
 
-    wire done;
     assign done = (idx0 == 512);
 
     assign weight = weight_dout;
