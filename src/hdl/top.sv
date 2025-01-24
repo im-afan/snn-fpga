@@ -77,16 +77,16 @@ module top(
         .addrb(spk_out_addr),
         .dinb(spk_out_din),
         .doutb(),
-        .web(2'b1),
+        .web(2'b11),
         .enb(mem_out_en)
     );
 
     //wire [WEIGHT_BRAM_DATA_WIDTH-1:0] doutb2;
     asymmetric_dual_port_bram #(
         .DATA_WIDTH_A(2048),
-        .ADDR_WIDTH_A(16),
+        .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(2048),
-        .ADDR_WIDTH_B(16),
+        .ADDR_WIDTH_B(17),
         .MEM_PATH("weight_bram.mem")
     ) bram_weight (
         .clka(clk),
@@ -132,7 +132,7 @@ module top(
         .addrb(mem_out_addr),
         .dinb(mem_out_din),
         .doutb(),
-        .web(16'b1),
+        .web(16'b1111111111111111),
         .enb(mem_out_en)
     );
 
@@ -200,6 +200,7 @@ module top(
         #0 en = 0;
         #100000
         $writememb(".wave/spk_out_dump.mem", bram_spk_in.mem.mem);
+        $writememb(".wave/mem_out_dump.mem", bram_mem_in.mem.mem);
         $finish;
     end
 
