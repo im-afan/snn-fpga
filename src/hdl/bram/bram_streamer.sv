@@ -5,6 +5,7 @@ module bram_streamer (
 
     input wire enable,
 	input wire fifo_pop,
+    input wire buff_idx,
 
     input wire [2047:0] weight_dout,
     input wire [127:0] network_input_dout,
@@ -49,7 +50,7 @@ module bram_streamer (
     assign weight_addr = 16*16*idx2;
     assign network_input_addr = 16*y0; 
     assign mem_in_addr = 16*y0; 
-    assign spk_in_addr = 2*x0; 
+    assign spk_in_addr = 2*x0 + 2*256*buff_idx; 
     assign tile_idx_addr = 4*idx0;
 
     always @(posedge clk) begin
@@ -86,7 +87,8 @@ module bram_streamer (
                 push <= 0;
                 push_rst <= 0;
             end
-
+        end else begin
+            push <= 0;
         end
     end 
 

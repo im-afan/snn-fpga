@@ -1,4 +1,5 @@
 `timescale 1ns / 10ps
+`include "bram/buff_idx_controller.sv"
 `include "bram/asymmetric_dual_port_bram.sv"
 `include "bram/asymmetric_dpbram_switched.sv"
 `include "bram/bram_streamer.sv"
@@ -77,7 +78,7 @@ module top(
     wire snn_busy;
     wire stream_done;
     
-    assign done = (~snn_busy) && (~stream_done);
+    assign snn_done = (stream_done);
 
     wire [2047:0] weight_dout;
     wire [127:0] network_input_dout;
@@ -104,6 +105,14 @@ module top(
     wire spk_out_en;
     wire [16:0] spk_out_addr;
     wire [15:0] spk_out_din;
+
+    wire buff_idx;
+
+    buff_idx_controller buff_idx_controller_0 (
+        .clk(clk),
+        .en(en),
+        .buff_idx(buff_idx)
+    );
 
     asymmetric_dpbram_switched #(
         .DATA_WIDTH_A(32),
@@ -146,7 +155,32 @@ module top(
         .dinb(spk_out_din),
         .doutb(),
         .web(2'b11),
-        .enb(mem_out_en)
+        .enb(spk_out_en)
+    );
+
+    wire [16:0] spk_out_addr_mod;
+    assign spk_out_addr_mod = spk_out_addr % (2*256);
+    
+    asymmetric_dual_port_bram #(
+        .DATA_WIDTH_B(16),
+        .ADDR_WIDTH_B(16),
+        .DATA_WIDTH_A(CPU_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_A(16),
+        .MEM_PATH("spk_in_bram.mem")
+    ) bram_spk_out (
+        .clkb(clk),
+        .addrb(spk_out_addr_mod),
+        .dinb(spk_out_din),
+        .doutb(),
+        .web(2'b11),
+        .enb(spk_out_en),
+
+        .clka(clk),
+        .addra(cpu_spk_out_addr),
+        .dina(cpu_spk_out_din),
+        .douta(cpu_spk_out_dout),
+        .wea(cpu_spk_out_we),
+        .ena(0)
     );
 
     //wire [WEIGHT_BRAM_DATA_WIDTH-1:0] doutb2;
@@ -218,10 +252,12 @@ module top(
         .enb(mem_out_en)
     );
 
+
     bram_streamer bram_streamer_0 (
         .clk(clk),
         .enable(en),
         .done(stream_done),
+        .buff_idx(buff_idx),
 		.fifo_pop(lif_has_out),
 
         .weight_dout(weight_dout),
@@ -265,6 +301,7 @@ module top(
     bram_writer bram_writer_0 (
         .clk(clk),
         .en(en),
+        .buff_idx(buff_idx),
         .has_out(lif_has_out),
         .tile_idx_y(tile_idx_y),
         .mem_out_en(mem_out_en),

@@ -1,12 +1,7 @@
-module buff_idx_controller# (
-    parameter integer MAX_NEURONS,
-    parameter integer CROSSBAR_NEURONS
-) (
+module buff_idx_controller (
     input wire clk,
     input wire en, 
-    input wire [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk_nxt,
-    output reg buff_idx,
-    output reg [MAX_NEURONS / CROSSBAR_NEURONS - 1 : 0] has_spk
+    output reg buff_idx
 );
     reg flipped = 0;
     initial buff_idx = 0;
@@ -14,7 +9,6 @@ module buff_idx_controller# (
     always @(posedge clk) begin
         if(~en && ~flipped) begin
             buff_idx <= ~buff_idx;
-            has_spk <= has_spk_nxt;
             flipped <= 1;
         end
         else if(en) begin

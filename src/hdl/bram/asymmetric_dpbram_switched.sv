@@ -76,6 +76,9 @@ module asymmetric_dpbram_switched #(
             din = dinb;
         end else begin
             en = 0;
+            we = 0;
+            addr = 0;
+            din = 0;
         end
     end
 	

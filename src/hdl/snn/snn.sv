@@ -28,6 +28,8 @@ module snn
     wire xbar_has_out;
     wire want_rst;
 
+    assign busy = xbar_has_out || lif_has_out;
+
     generate
         genvar i, j;
         for(i = 0; i < 16; i++) begin
