@@ -29,6 +29,7 @@ add_files ../src/hdl/bram/mem/tile_idx_bram.mem
 #add_files ../src/hdl/top.sv
 #
 add_files ../src/hdl/top_microblaze.sv
+add_files ../src/hdl/top_standalone.sv
 add_files ../src/hdl/basys3-constraints.xdc
 
 source ../src/hdl/microblaze.tcl

@@ -76,7 +76,7 @@ module top_microblaze(
 
     top top_0 (
         .clk(clk),
-        .snn_en(snn_en),
+        .snn_en(snn_en_tri_o),
         .snn_done(snn_done_tri_i),
         .led(led),
 

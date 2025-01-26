@@ -7,6 +7,7 @@ from train import Net
 import matplotlib.pyplot as plt
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
+import generate_mem
 
 sz = 28
 MAX_NEURONS = 1024
@@ -81,39 +82,32 @@ def compile(model): # compile MLP
 
         neuron_idx = out_idx
 
+    sorted_tiles = [[tiles[i], tile_idx[i]] for i in range(len(tile_idx))]
+    sorted_tiles = sorted(sorted_tiles, key = lambda x: x[1][1])
+
+    tile_idx = [i[1] for i in sorted_tiles]
+    tiles = [i[0] for i in sorted_tiles]
+
     return tile_idx, tiles, tiles_bias
 
-def compile_to_c(model, img=None, spk=None, mem=None):
-    tile_idx, tiles = compile(model)
-    print("/* AUTO GENERATED CODE BY MODEL COMPILATION")
-    print(" * IT IS HIGHLY DISCOURAGED TO EDIT THIS!!!")
-    print(" */")
-
-    print("/* EXPECTED OUTPUT")
-    #print(f"{torch.stack(spk[0], dim=0)}")
-    for i in range(len(spk[0])):
-        #print(mem[1][i][0][:20].tolist())
-        print(spk[2][i][0].tolist())
-    print("*/")
-
-    print("#include \"spi_driver.hpp\"")
-    print("")
-    print("void write_model() {")
-    for i in range(len(tiles)):
-        print(f"    write_tile({i}, {tile_idx[i][0]}, {tile_idx[i][1]});")
-        for x in range(NEURONS_PER_TILE):
-            for y in range(NEURONS_PER_TILE):
-                val = int(tiles[i][y][x] * (THRESH / QUANT_VAL))
-                if(val != 0):
-                    print(f"    write_weight({i}, {x}, {y}, {val});")
-
+def compile_to_mem(model, img=None, spk=None, mem=None):
+    tile_idx, tile, tile_bias = compile(model)
+    network_input = []
     if(img is not None):
         for i in range(sz*sz):
-            val = int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL))
-            if(val != 0):
-                print(f"    write_network_input({i}, {val});")
+            network_input.append(int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL)))
+            if(i%16 == 0):
+                tile_idx.append([i // 16, i // 16])
+                tile.append([[0] * 16] * 16)
+    real_tile = tile.copy()
+    for i in range(len(tile)):
+        for j in range(len(tile[i])):
+            for k in range(len(tile[j])):
+                real_tile[i][j][k] = int(tile[i][k][j] * (THRESH / QUANT_VAL))
+                #print(tile[i][j][k])
 
-    print("}")
+    network_input += tile_bias
+    generate_mem.generate_mem(real_tile, tile_idx, network_input, spk_=spk)
 
 def compile_to_arr(model, img=None, spk=None, mem=None):
     tile_idx, tiles, tiles_bias = compile(model)
@@ -238,3 +232,5 @@ if __name__ == "__main__":
         compile_to_arr(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2], mem=[mem0, mem1, None])
     elif(mode == "uart"):
         compile_to_uart(model, img=img.view(sz*sz))
+    elif(mode == "mem"):
+        compile_to_mem(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2])

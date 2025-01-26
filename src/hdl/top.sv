@@ -318,5 +318,9 @@ module top(
     );
 
 
-
+    always @(posedge clk) begin
+        if(spk_out_en && spk_out_addr == 54*2) begin
+            $display("%b", spk_out_din[9:0]);
+        end
+    end
 endmodule
