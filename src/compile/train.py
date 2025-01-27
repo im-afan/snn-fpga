@@ -15,11 +15,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
-sz = 28
+sz = 16
 
 # Network Architecture
 num_inputs = sz*sz
-num_hidden = 63
+num_hidden = 15
 num_outputs = 10
 thresh = 1
 
@@ -34,9 +34,9 @@ class Net(nn.Module):
 
         # Initialize layers
         self.spkgen = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
-        self.fc1 = nn.Linear(num_inputs, num_hidden)
+        self.fc1 = nn.Linear(num_inputs, num_hidden, bias=False)
         self.lif1 = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
-        self.fc2 = nn.Linear(num_hidden, num_outputs)
+        self.fc2 = nn.Linear(num_hidden, num_outputs, bias=False)
         self.lif2 = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
 
     def forward(self, x, debug=False):

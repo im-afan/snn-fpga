@@ -35,6 +35,7 @@ module fifo #(
 
             if(pop) begin
                 diff <= diff - 1;
+                fifo[read_ptr] <= 0;
                 read_ptr <= (read_ptr + 1) % LENGTH;
             end
         end

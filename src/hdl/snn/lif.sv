@@ -45,7 +45,7 @@ module lif#(
 
     adder #(.WIDTH(NETWORK_WIDTH)) adder_2 (
         .in1(base_mem),
-        .in2(mac_out),
+        .in2(mem),
         .out(sum_clamp1)
     );
 
@@ -55,12 +55,12 @@ module lif#(
             has_out <= 0;
         end else begin
             if(rst) begin
-                spk_out <= (mem >= THRESH);
-                mem_out <= (mem >= THRESH) ? 0 : mem;
+                spk_out <= (sum_clamp1 >= THRESH);
+                mem_out <= (sum_clamp1 >= THRESH) ? 0 : sum_clamp1;
                 if(has_in) begin
-                    mem <= sum_clamp1;
+                    mem <= mac_out;
                 end else begin
-                    mem <= base_mem;
+                    mem <= 0;
                 end
                 has_out <= 1;
             end else begin

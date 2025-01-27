@@ -80,6 +80,12 @@ module top(
     
     assign snn_done = (stream_done);
 
+
+    wire [2047:0] weight;
+    wire [127:0] network_input;
+    wire [127:0] mem_in;
+    wire [15:0] spk_in;
+
     wire [2047:0] weight_dout;
     wire [127:0] network_input_dout;
     wire [127:0] mem_in_dout;
@@ -138,9 +144,9 @@ module top(
     
     asymmetric_dual_port_bram #(
         .DATA_WIDTH_A(16),
-        .ADDR_WIDTH_A(16),
+        .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(16),
-        .ADDR_WIDTH_B(16),
+        .ADDR_WIDTH_B(17),
         .MEM_PATH("spk_in_bram.mem")
     ) bram_spk_in (
         .clka(clk),
@@ -158,7 +164,8 @@ module top(
         .enb(spk_out_en)
     );
 
-    wire [16:0] spk_out_addr_mod;
+
+    wire [15:0] spk_out_addr_mod;
     assign spk_out_addr_mod = spk_out_addr % (2*256);
     
     asymmetric_dual_port_bram #(
@@ -182,6 +189,7 @@ module top(
         .wea(cpu_spk_out_we),
         .ena(0)
     );
+    //initial $monitor("%b", bram_spk_out.mem.mem[0]);
 
     //wire [WEIGHT_BRAM_DATA_WIDTH-1:0] doutb2;
     asymmetric_dpbram_switched #(
@@ -232,9 +240,9 @@ module top(
     //wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb4;
     asymmetric_dual_port_bram #(
         .DATA_WIDTH_A(128),
-        .ADDR_WIDTH_A(16),
+        .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(128),
-        .ADDR_WIDTH_B(16),
+        .ADDR_WIDTH_B(17),
         .MEM_PATH("mem_bram.mem")
     ) bram_mem_in (
         .clka(clk),
@@ -259,6 +267,11 @@ module top(
         .done(stream_done),
         .buff_idx(buff_idx),
 		.fifo_pop(lif_has_out),
+
+        .weight(weight),
+        .network_input(network_input),
+        .mem_in(mem_in),
+        .spk_in(spk_in),
 
         .weight_dout(weight_dout),
         .network_input_dout(network_input_dout),
@@ -288,10 +301,10 @@ module top(
         .en(en),
 		.push(push),
         .push_rst(push_rst),
-        .i_weight(weight_dout),
-        .i_network_input(network_input_dout),
-        .i_mem_in(mem_in_dout),
-        .i_spk_in(spk_in_dout),
+        .i_weight(weight),
+        .i_network_input(network_input),
+        .i_mem_in(mem_in),
+        .i_spk_in(spk_in),
         .o_spk_out(spk_out_din),
         .o_mem_out(mem_out_din),
         .lif_has_out(lif_has_out),
@@ -319,8 +332,9 @@ module top(
 
 
     always @(posedge clk) begin
-        if(spk_out_en && spk_out_addr == 54*2) begin
-            $display("%b", spk_out_din[9:0]);
+        if(spk_out_en && spk_out_addr == 36) begin
+            $display("%b", spk_out_din);
+            //$display("%b", mem_out_din);
         end
     end
 endmodule

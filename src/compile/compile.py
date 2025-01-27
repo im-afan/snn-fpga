@@ -9,7 +9,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import generate_mem
 
-sz = 28
+sz = 16
 MAX_NEURONS = 1024
 MAX_TILES = 512 
 NEURONS_PER_TILE = 16

@@ -4,7 +4,7 @@ module buff_idx_controller (
     output reg buff_idx
 );
     reg flipped = 0;
-    initial buff_idx = 0;
+    initial buff_idx = 1;
 
     always @(posedge clk) begin
         if(~en && ~flipped) begin

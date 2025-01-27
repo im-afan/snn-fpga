@@ -5,7 +5,7 @@ MAX_NEURONS = 1024
 TILE_IDX_WIDTH = 16
 CROSSBAR_NEURONS = 16
 NETWORK_WIDTH = 8
-PATH = "./"
+PATH = "../hdl/bram/mem"
 
 spk = None
 tile_idx = [[0, 0] for i in range(MAX_TILES)]
@@ -65,7 +65,7 @@ def endian(binary_string, width=8):
 def printmem(memory, path, width, depth, rev=False, bytewidth=8):
     #width1 = 32
     #depth = 256
-    #rev = False
+    #rev = True 
     with open(path, "w+") as sys.stdout:
         print("/* EXPECTED OUTPUT")
         #print(f"{torch.stack(spk[0], dim=0)}")
@@ -86,7 +86,7 @@ def write_tile_idx():
     memory = ["0" for i in range(32*1024)] 
     for i in range(0, len(tile_idx)):
         memory[TILE_IDX_WIDTH*2*i : TILE_IDX_WIDTH*2*(i+1)] = bin_(tile_idx[i][1], 16) + bin_(tile_idx[i][0], 16)
-    printmem(memory, "./tile_idx_bram.mem", 32, 1024, bytewidth=16)
+    printmem(memory, PATH + "/tile_idx_bram.mem", 32, 1024, bytewidth=16)
 
 def write_weight():
 
@@ -96,14 +96,14 @@ def write_weight():
             for k in range(CROSSBAR_NEURONS):
                 base = (i*CROSSBAR_NEURONS*CROSSBAR_NEURONS + j*CROSSBAR_NEURONS + k) * NETWORK_WIDTH
                 memory[base:base+NETWORK_WIDTH] = bin_(int(tile[i][j][k]), NETWORK_WIDTH)
-    printmem(memory, "./weight_bram.mem", 2048, 1024, rev=True);
+    printmem(memory, PATH + "/weight_bram.mem", 2048, 1024, rev=True);
 
 def write_input():
     memory = ["0" for i in range(8*1024)]
     for i in range(0, len(snn_in)):
         base = i*NETWORK_WIDTH
         memory[base:base+NETWORK_WIDTH] = bin_(int(snn_in[i]), NETWORK_WIDTH)
-    printmem(memory, "./input_bram.mem", 128, 1024, rev=True)
+    printmem(memory, PATH + "/input_bram.mem", 128, 1024, rev=True)
     
 
 def write_mem():
@@ -112,18 +112,18 @@ def write_mem():
         base = i*NETWORK_WIDTH
         #print(bin_(mem[i], 8))
         memory[base:base+NETWORK_WIDTH] = bin_(int(mem[i]), NETWORK_WIDTH)
-    printmem(memory, "./mem_bram.mem", 128, 1024, rev=True)
+    printmem(memory, PATH + "/mem_bram.mem", 128, 1024, rev=True)
 
 def write_spk_in():
     memory = ["0" for i in range(1024)]
     for i in range(0, MAX_NEURONS):
         base = i
         memory[base] = '0'
-    printmem(memory, "./spk_in_bram.mem", 16, 1024)
+    printmem(memory, PATH + "/spk_in_bram.mem", 16, 1024)
 
 def generate_mem(tile_, tile_idx_, network_input_, path=".", spk_=None):
     global tile, tile_idx, snn_in, PATH, spk
-    PATH = path
+    #PATH = path
     tile = tile_
     tile_idx = tile_idx_
     snn_in = network_input_ 

@@ -14,7 +14,7 @@ module top_tb;
     
     initial begin
         #0 sw = 0;
-        #1000000
+        #100000
         $writememb(".wave/spk_out_dump.mem", top_0.top_0.bram_spk_out.mem.mem);
         $writememb(".wave/spk_out_buffer_dump.mem", top_0.top_0.bram_spk_in.mem.mem);
         $writememb(".wave/mem_out_dump.mem", top_0.top_0.bram_mem_in.mem.mem);
