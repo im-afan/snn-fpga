@@ -1,6 +1,7 @@
 module fifo #(
     parameter integer WIDTH,
-    parameter integer LENGTH 
+    parameter integer LENGTH, 
+    parameter integer INIT_DIFF = 0
 ) (
     input wire clk,
     input wire rst,
@@ -22,8 +23,8 @@ module fifo #(
     always @(posedge clk) begin
         if(rst) begin
             read_ptr <= 0;
-            write_ptr <= 0;
-            diff <= 0;
+            write_ptr <= INIT_DIFF;
+            diff <= INIT_DIFF;
             for(integer i = 0; i < LENGTH; i++)
                 fifo[i] <= 0;
         end else begin

@@ -13,13 +13,17 @@ module snn
     input wire [127:0] i_network_input,
     input wire [127:0] i_mem_in,
     input wire [15:0] i_spk_in,
+    input wire [15:0] i_tile_idx_y,
 
     output wire [15:0] o_spk_out,
     output wire [127:0] o_mem_out,
-
+    output wire [15:0] o_tile_idx_y,
     output wire lif_has_out,
     output wire busy
 );
+    wire [127:0] network_input_dout;
+    wire [127:0] mem_in_dout;
+
     reg signed [8-1:0] weight [16][16];
     reg signed [8-1:0] network_input [16];
     reg signed [8-1:0] mem_in [16];
@@ -33,8 +37,8 @@ module snn
     generate
         genvar i, j;
         for(i = 0; i < 16; i++) begin
-            assign network_input[i] = i_network_input[i*8 +: 8];
-            assign mem_in[i] = i_mem_in[i*8 +: 8];
+            assign network_input[i] = network_input_dout[i*8 +: 8];
+            assign mem_in[i] = mem_in_dout[i*8 +: 8];
             assign o_mem_out[i*8 +: 8] = mem_out[i];
 
             wire [7:0] mem_out_debug;
@@ -76,6 +80,51 @@ module snn
         .spk_out(o_spk_out),
         .mem_out(mem_out),
         .has_out(lif_has_out)
+    );
+
+    fifo # ( // slidibgn window for network input
+        .WIDTH(128),
+        .LENGTH(16),
+        .INIT_DIFF(5)
+    ) fifo_network_input (
+        .clk(clk),
+        .rst(~en),
+        .din(i_network_input),
+        .push(push),
+        .pop(push),
+        .empty(),
+        .full(),
+        .dout(network_input_dout)
+    );
+
+    fifo # (
+        .WIDTH(128),
+        .LENGTH(16),
+        .INIT_DIFF(5)
+    ) fifo_mem_in (
+        .clk(clk),
+        .rst(~en),
+        .din(i_mem_in),
+        .push(push),
+        .pop(push),
+        .empty(),
+        .full(),
+        .dout(mem_in_dout)
+    );
+
+    fifo # (
+        .WIDTH(16),
+        .LENGTH(16),
+        .INIT_DIFF(5)
+    ) fifo_tile_idx (
+        .clk(clk),
+        .rst(~en),
+        .din(i_tile_idx_y),
+        .push(push),
+        .pop(push),
+        .empty(),
+        .full(),
+        .dout(o_tile_idx_y)
     );
 
 endmodule
