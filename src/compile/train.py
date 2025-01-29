@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
-sz = 16
+sz = 7
 
 # Network Architecture
 num_inputs = sz*sz
@@ -66,9 +66,9 @@ class Net(nn.Module):
             cur2 = self.fc2(spk1)
             spk2_next, mem2 = self.lif2(cur2, mem2) 
 
-            #mem0 = torch.clamp(mem0, -self.spkgen.threshold, self.spkgen.threshold)
-            #mem1 = torch.clamp(mem1, -self.lif1.threshold, self.lif1.threshold)
-            #mem2 = torch.clamp(mem2, -self.lif2.threshold, self.lif2.threshold)
+            mem0 = torch.clamp(mem0, -2*self.spkgen.threshold, 2*self.spkgen.threshold)
+            mem1 = torch.clamp(mem1, -2*self.lif1.threshold, 2*self.lif1.threshold)
+            mem2 = torch.clamp(mem2, -2*self.lif2.threshold, 2*self.lif2.threshold)
 
             #spk0 = spk0_next
             mem0_rec.append(mem0) 

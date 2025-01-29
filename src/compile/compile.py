@@ -9,7 +9,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import generate_mem
 
-sz = 16
+sz = 7
 MAX_NEURONS = 1024
 MAX_TILES = 512 
 NEURONS_PER_TILE = 16
@@ -47,6 +47,11 @@ def compile(model): # compile MLP
         pad = (0, round_up(in_neurons)-in_neurons, 0, round_up(out_neurons)-out_neurons)
         weight_pad = F.pad(weight, pad, mode="constant", value=0)
 
+        #if('2' not in name): 
+        #    weight_pad = torch.ones_like(weight_pad) * 64; #TODO DEBUGGING ONLY DEALKSDFJNASLKDJFN
+        #else:
+        #    weight_pad = torch.ones_like(weight_pad) * 1;
+
         #print(weight.shape, weight_pad.shape, round_up(weight.shape[0]), round_up(weight.shape[1]))
         #print(weight_pad[0:NEURONS_PER_TILE, 0:NEURONS_PER_TILE])
         #print(weight.shape)
@@ -78,6 +83,9 @@ def compile(model): # compile MLP
         pad = (0, round_up(in_neurons) - in_neurons)
         bias_pad = F.pad(bias, pad, mode="constant", value=0) * THRESH / QUANT_VAL
 
+        #if('2' not in name):
+        #    bias_pad = torch.ones_like(bias_pad) * 64 #TODO DEBUBGING
+
         tiles_bias += bias_pad.tolist()
 
         neuron_idx = out_idx
@@ -99,10 +107,12 @@ def compile_to_mem(model, img=None, spk=None, mem=None):
             if(i%16 == 0):
                 tile_idx.append([i // 16, i // 16])
                 tile.append([[0] * 16] * 16)
+    tile_idx = tile_idx + [[-1, -1]] * (MAX_TILES - len(tile_idx))
     real_tile = tile.copy()
     for i in range(len(tile)):
+        print(len(tile[i]))
         for j in range(len(tile[i])):
-            for k in range(len(tile[j])):
+            for k in range(len(tile[i][j])):
                 real_tile[i][j][k] = int(tile[i][k][j] * (THRESH / QUANT_VAL))
                 #print(tile[i][j][k])
 

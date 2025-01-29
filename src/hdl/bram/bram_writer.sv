@@ -20,6 +20,5 @@ module bram_writer (
     assign spk_out_addr = buff_idx ? tile_idx_y*2 : tile_idx_y * 2 + 2*256;
     assign pop = has_out;
 
-    
 endmodule
 

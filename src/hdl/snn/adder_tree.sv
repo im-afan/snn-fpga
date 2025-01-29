@@ -14,7 +14,7 @@ module adder_tree #( // can be treated as mac_out_fifo
 );
 
 	reg cnt = 0;
-	reg [WIDTH-1:0] tree[2*N+1];
+	reg signed [WIDTH-1:0] tree[2*N+1];
 	reg [$clog2(N):0] mask;
 
 	always @(posedge clk) begin
@@ -50,7 +50,7 @@ module adder_tree #( // can be treated as mac_out_fifo
 			);
 			always @(posedge clk) begin
 				if(~en) begin
-					//tree[i] = 0;
+					tree[i] <= 0;
 				end
 				else begin
 					if(push) begin

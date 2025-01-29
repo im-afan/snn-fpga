@@ -21,8 +21,8 @@ module snn
     output wire lif_has_out,
     output wire busy
 );
-    wire [127:0] network_input_dout;
-    wire [127:0] mem_in_dout;
+    wire [127:0] lif_network_input;
+    wire [127:0] lif_mem_in;
 
     reg signed [8-1:0] weight [16][16];
     reg signed [8-1:0] network_input [16];
@@ -32,13 +32,15 @@ module snn
     wire xbar_has_out;
     wire want_rst;
 
+    assign network_input_dout = i_network_input;
+    assign mem_in_dout = i_mem_in;
     assign busy = xbar_has_out || lif_has_out;
 
     generate
         genvar i, j;
         for(i = 0; i < 16; i++) begin
-            assign network_input[i] = network_input_dout[i*8 +: 8];
-            assign mem_in[i] = mem_in_dout[i*8 +: 8];
+            assign network_input[i] = lif_network_input[i*8 +: 8];
+            assign mem_in[i] = lif_mem_in[i*8 +: 8];
             assign o_mem_out[i*8 +: 8] = mem_out[i];
 
             wire [7:0] mem_out_debug;
@@ -82,49 +84,48 @@ module snn
         .has_out(lif_has_out)
     );
 
-    fifo # ( // slidibgn window for network input
-        .WIDTH(128),
-        .LENGTH(16),
-        .INIT_DIFF(5)
-    ) fifo_network_input (
-        .clk(clk),
-        .rst(~en),
-        .din(i_network_input),
-        .push(push),
-        .pop(push),
-        .empty(),
-        .full(),
-        .dout(network_input_dout)
-    );
-
-    fifo # (
-        .WIDTH(128),
-        .LENGTH(16),
-        .INIT_DIFF(5)
-    ) fifo_mem_in (
-        .clk(clk),
-        .rst(~en),
-        .din(i_mem_in),
-        .push(push),
-        .pop(push),
-        .empty(),
-        .full(),
-        .dout(mem_in_dout)
-    );
-
     fifo # (
         .WIDTH(16),
         .LENGTH(16),
-        .INIT_DIFF(5)
+        .INIT_DIFF(7)
     ) fifo_tile_idx (
         .clk(clk),
         .rst(~en),
         .din(i_tile_idx_y),
         .push(push),
         .pop(push),
+        .dout(o_tile_idx_y),
         .empty(),
-        .full(),
-        .dout(o_tile_idx_y)
+        .full()
+    );
+    
+    fifo # (
+        .WIDTH(128),
+        .LENGTH(16),
+        .INIT_DIFF(6)
+    ) fifo_network_input (
+        .clk(clk),
+        .rst(~en),
+        .din(i_network_input),
+        .push(push),
+        .pop(push),
+        .dout(lif_network_input),
+        .empty(),
+        .full()
     );
 
+    fifo # (
+        .WIDTH(128),
+        .LENGTH(16),
+        .INIT_DIFF(6)
+    ) fifo_mem_in (
+        .clk(clk),
+        .rst(~en),
+        .din(i_mem_in),
+        .push(push),
+        .pop(push),
+        .dout(lif_mem_in),
+        .empty(),
+        .full()
+    );
 endmodule

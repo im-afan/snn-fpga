@@ -15,7 +15,18 @@ module adder #(
     assign overflow = (in1[WIDTH-1] == in2[WIDTH-1]) && (in1[WIDTH-1] != sum[WIDTH-1]);
     assign sum_clamp = overflow ? (in1[WIDTH-1] ? -INT_MAX : INT_MAX) : sum;
 
-    assign out = sum_clamp;
+ 	assign out = sum_clamp;
+	//assign out = in1+in2;
+
+	/*reg signed [WIDTH:0] sum1;
+	always_comb begin
+		sum1 = in1 + in2;
+		if(sum1 > INT_MAX) out = INT_MAX;
+		else if(sum1 < -INT_MAX) out = -INT_MAX;
+		else out = sum1;
+	end*/
+
+	//assign out = in1+in2;
 endmodule
 
 `endif

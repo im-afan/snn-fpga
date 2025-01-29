@@ -13,6 +13,7 @@ tile = [[[0 for i in range(CROSSBAR_NEURONS)] for i in range(CROSSBAR_NEURONS)] 
 mem = [0 for i in range(MAX_NEURONS)]
 snn_in = [0 for i in range(MAX_NEURONS)]
 
+"""
 snn_in[0] = 127;
 snn_in[1] = 0;
 snn_in[3] = 127;
@@ -48,18 +49,35 @@ tile[8][9][6] = 64;
 #    tile_idx[i] = [100, 100];
 for i in range(MAX_TILES):
 	tile_idx[i] = [i % 8, i // 8]
-
-#snn_in[523] = 127;
-#tile_idx[4] = [32, 32];
-
 """
-tile[0][13][0] = 127
-tile[0][13][1] = 127
+for i in range(MAX_TILES):
+    tile_idx[i] = [100, 100]
 
-snn_in[13] = 127
-tile_idx[0] = [1, 2]
-tile_idx[1] = [0, 3]
-"""
+tile_idx[0] = [0, 4]
+tile_idx[1] = [1, 4]
+tile_idx[2] = [2, 4]
+tile_idx[3] = [3, 4]
+tile_idx[4] = [4, 5]
+tile_idx[5] = [0, 0]
+tile_idx[6] = [0, 1]
+tile_idx[7] = [0, 2]
+tile_idx[8] = [0, 3]
+
+snn_in[0] = 32
+snn_in[2] = 32
+snn_in[19] = 64 
+snn_in[38] = 32
+snn_in[60] = 64
+tile[0][0][2] = 32
+tile[0][2][2] = 32
+tile[0][2][3] = 64
+tile[1][3][1] = 64
+tile[2][6][4] = 32
+tile[3][12][4] = 32
+
+tile[4][2][3] = 32
+tile[4][3][3] = 32
+tile[4][4][1] = 64
 
 def bin_(num, bit_width=8):
     """Convert a signed decimal number to binary with a fixed bit width."""
