@@ -163,6 +163,50 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
 
     print("};")
 
+def compile_to_py(model, img=None, spk=None, mem=None):
+    tile_idx, tiles, tiles_bias = compile(model)
+    print("\"\"\" AUTO GENERATED CODE BY MODEL COMPILATION")
+    print(" * IT IS HIGHLY DISCOURAGED TO EDIT THIS!!!")
+    print(" \"\"\"")
+
+    print("\"\"\" EXPECTED OUTPUT")
+    #print(f"{torch.stack(spk[0], dim=0)}")
+    for i in range(len(spk[0])):
+        #print(mem[1][i][0][:20].tolist())
+        print(spk[2][i][0].tolist())
+    print("\"\"\"")
+
+    print("tile_idx = [")
+    for i in range(len(tiles)):
+        print(f"[{tile_idx[i][0]}, {tile_idx[i][1]}],")
+    print("]\n")
+
+    print("tile = [")
+    for i in range(len(tiles)):
+        print("[")
+        for x in range(NEURONS_PER_TILE):
+            print("[")
+            for y in range(NEURONS_PER_TILE):
+                val = int(tiles[i][y][x] * (THRESH / QUANT_VAL))
+                print(f"{val},")
+            print("],")
+        print("],")
+    print("]")
+
+    network_input = []
+    if(img is not None):
+        for i in range(sz*sz):
+            network_input.append(int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL)))
+    network_input += tiles_bias
+
+    print("snn_in = [")
+    if(img is not None):
+        for i in range(len(network_input)):
+            val = int(network_input[i])
+            print(f"{val},")
+
+    print("]")
+
 def compile_to_uart(model, img=None, spk_out=None, mem=None):
     ser = serial.Serial("COM4", baudrate=9600)		
 
@@ -244,3 +288,5 @@ if __name__ == "__main__":
         compile_to_uart(model, img=img.view(sz*sz))
     elif(mode == "mem"):
         compile_to_mem(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2])
+    elif(mode == "py"):
+        compile_to_py(model, img=img.view(sz*sz), spk=[spk0, spk1, spk2])
