@@ -9,7 +9,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import generate_mem
 
-sz = 7
+sz = 28
 MAX_NEURONS = 1024
 MAX_TILES = 512 
 NEURONS_PER_TILE = 16
@@ -179,6 +179,8 @@ def compile_to_py(model, img=None, spk=None, mem=None):
     print("tile_idx = [")
     for i in range(len(tiles)):
         print(f"[{tile_idx[i][0]}, {tile_idx[i][1]}],")
+    for i in range(sz*sz // 16):
+        print(f"[{i}, {i}],")
     print("]\n")
 
     print("tile = [")
@@ -238,7 +240,7 @@ if __name__ == "__main__":
         mode = "c"	
 
     model = Net()
-    state_dict = torch.load("./mnist_28x28_spk.h5", weights_only=True)
+    state_dict = torch.load("./mnist_28x28_spk_big.h5", weights_only=True)
     model.load_state_dict(state_dict)
 
     multiply = transforms.Lambda(lambda img: torch.clamp(img, min=0, max=1))

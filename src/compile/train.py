@@ -15,11 +15,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
-sz = 7
+sz = 28
 
 # Network Architecture
 num_inputs = sz*sz
-num_hidden = 15
+num_hidden = 128
 num_outputs = 10
 thresh = 1
 
@@ -39,15 +39,15 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(num_hidden, num_outputs, bias=False)
         self.lif2 = snn.Leaky(beta=beta, threshold=thresh, reset_mechanism="zero", reset_delay=False)
 
-    def forward(self, x, debug=False):
+    def forward(self, x, debug=False, device=torch.device("cpu")):
         #print(x.shape)
         # Initialize hidden states at t=0
         mem0 = self.spkgen.init_leaky()
         mem1 = self.lif1.init_leaky()
         mem2 = self.lif2.init_leaky()
-        spk0 = torch.zeros((x.shape[0], num_inputs)) 
-        spk1 = torch.zeros((x.shape[0], num_hidden))
-        spk2 = torch.zeros((x.shape[0], num_outputs))
+        spk0 = torch.zeros((x.shape[0], num_inputs)).to(device) 
+        spk1 = torch.zeros((x.shape[0], num_hidden)).to(device)
+        spk2 = torch.zeros((x.shape[0], num_outputs)).to(device)
 
         #print(spk0.shape, mem0.shape)
 
@@ -106,7 +106,9 @@ if __name__ == "__main__":
     data_path='/tmp/data/mnist'
 
     dtype = torch.float
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    #device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    #device = torch.device("mps") if torch.backends.mps.is_available() and torch.backends.mps.is_built() else torch.device("cpu")
+    device = torch.device("cpu")
 
     multiply = transforms.Lambda(lambda img: torch.clamp(img, min=0, max=thresh))
     # Define a transform
@@ -180,7 +182,7 @@ if __name__ == "__main__":
 
             # forward pass
             net.train()
-            spk_rec, mem_rec = net(data.view(batch_size, -1))
+            spk_rec, mem_rec = net(data.view(batch_size, -1), device=device)
 
             # initialize the loss & sum over time
             loss_val = torch.zeros((1), dtype=dtype, device=device)
@@ -221,7 +223,7 @@ if __name__ == "__main__":
                 counter += 1
                 iter_counter +=1
 
-    torch.save(net.state_dict(), "./mnist_28x28_spk.h5")
+    torch.save(net.state_dict(), "./mnist_28x28_spk_big.h5")
 
     total = 0
     correct = 0
