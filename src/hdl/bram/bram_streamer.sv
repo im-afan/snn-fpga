@@ -35,6 +35,7 @@ module bram_streamer (
     output reg [16:0] tile_idx_addr
 ); 
     reg [16:0] idx;
+    reg [16:0] idx1;
 
     assign weight_en = enable;
     assign network_input_en = enable;
@@ -42,14 +43,14 @@ module bram_streamer (
     assign spk_in_en = enable;
     assign tile_idx_en = enable;
 
-    assign weight_addr = idx * 16*16;
+    assign weight_addr = idx1 * 16*16;
     assign spk_in_addr = x * 2 + buff_idx*256*2;
     assign tile_idx_addr = idx * 4;
     assign mem_in_addr = y * 16;
     assign network_input_addr = y*16;
 
-    reg [2047:0] weight1;
-    reg [15:0] spk1;
+    //reg [2047:0] weight1;
+    //reg [15:0] spk1;
     reg [15:0] y;
     reg [15:0] x;
     reg [15:0] y1;
@@ -62,12 +63,14 @@ module bram_streamer (
         if(~enable) begin
             push <= 0; 
             idx <= 0;
+            idx1 <= 0;
         end else begin
             if(idx >= 0) begin
-                weight1 <= weight_dout;
+                //weight1 <= weight_dout;
                 //spk1 <= spk_in_dout;
 
-                weight <= weight1;
+                //weight <= weight1;
+                weight <= weight_dout;
                 spk_in <= spk_in_dout;
                 tile_idx_y <= y1;
                 mem_in <= mem_in_dout;
@@ -79,6 +82,7 @@ module bram_streamer (
                 push <= idx >= 2; 
             end
             idx <= idx + 1;
+            idx1 <= idx;
         end
     end
 endmodule

@@ -90,9 +90,11 @@ int snn_ready() {
 void timestep() {
     //xil_printf("want timestep\n\r");
 	snn_disable();
-	while(snn_ready() == 0);
+	//while(snn_ready() == 0) xil_printf("wait ready\n\r");
+    usleep(1000);
 	snn_enable();
-	while(snn_done() == 0);
+    usleep(1000);
+	//while(snn_done() == 0) xil_printf("wait done\n\r");
 }
 
 void reset_model() {

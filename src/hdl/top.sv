@@ -188,7 +188,7 @@ module top(
         .dina(cpu_spk_out_din),
         .douta(cpu_spk_out_dout),
         .wea(cpu_spk_out_we),
-        .ena(0)
+        .ena(cpu_spk_out_en)
     );
     //initial $monitor("%b", bram_spk_out.mem.mem[0]);
 

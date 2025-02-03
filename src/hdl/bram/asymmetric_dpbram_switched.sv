@@ -71,9 +71,9 @@ module asymmetric_dpbram_switched #(
             din = dina;
         end else if(enb) begin
             en = 1;
-            we = web;
-            addr = addrb;
-            din = dinb;
+            we = web_local;
+            addr = addrb_local;
+            din = dinb_local;
         end else begin
             en = 0;
             we = 0;

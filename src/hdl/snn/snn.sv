@@ -86,7 +86,7 @@ module snn
 
     fifo # (
         .WIDTH(16),
-        .LENGTH(16),
+        .LENGTH(8),
         .INIT_DIFF(7)
     ) fifo_tile_idx (
         .clk(clk),
@@ -101,7 +101,7 @@ module snn
     
     fifo # (
         .WIDTH(128),
-        .LENGTH(16),
+        .LENGTH(8),
         .INIT_DIFF(6)
     ) fifo_network_input (
         .clk(clk),
@@ -116,7 +116,7 @@ module snn
 
     fifo # (
         .WIDTH(128),
-        .LENGTH(16),
+        .LENGTH(8),
         .INIT_DIFF(6)
     ) fifo_mem_in (
         .clk(clk),

@@ -126,12 +126,14 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
     print(" */")
 
     print("/* EXPECTED OUTPUT")
+
     #print(f"{torch.stack(spk[0], dim=0)}")
     for i in range(len(spk[0])):
         #print(mem[1][i][0][:20].tolist())
         print(spk[2][i][0].tolist())
     print("*/")
 
+    """
     print("uint16_t tile_idx_x[] = {")
     for i in range(len(tiles)):
         print(f"{tile_idx[i][0]},")
@@ -148,6 +150,7 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
                 val = int(tiles[i][y][x] * (THRESH / QUANT_VAL))
                 print(f"{val},")
     print("};")
+    """
 
     network_input = []
     if(img is not None):
