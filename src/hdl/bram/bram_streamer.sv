@@ -33,7 +33,9 @@ module bram_streamer (
     output reg [16:0] spk_in_addr,
     output reg tile_idx_en,
     output reg [16:0] tile_idx_addr
-); 
+);
+    localparam integer MAX_TILES = 1024;
+
     reg [16:0] idx;
     reg [16:0] idx1;
 
@@ -65,24 +67,25 @@ module bram_streamer (
             idx <= 0;
             idx1 <= 0;
         end else begin
-            if(idx >= 0) begin
-                //weight1 <= weight_dout;
-                //spk1 <= spk_in_dout;
+            if(idx <= MAX_TILES) begin 
+                if(idx >= 0) begin
+                    //weight1 <= weight_dout;
+                    //spk1 <= spk_in_dout;
 
-                //weight <= weight1;
-                weight <= weight_dout;
-                spk_in <= spk_in_dout;
-                tile_idx_y <= y1;
-                mem_in <= mem_in_dout;
-                network_input <= network_input_dout;
-                y1 <= y;
-                y2 <= y1;
+                    //weight <= weight1;
+                    weight <= weight_dout;
+                    spk_in <= spk_in_dout;
+                    tile_idx_y <= y1;
+                    mem_in <= mem_in_dout;
+                    network_input <= network_input_dout;
+                    y1 <= y;
+                    y2 <= y1;
 
-                push_rst <= y2 != y1;
-                push <= idx >= 2; 
+                    push_rst <= y2 != y1;
+                    push <= idx >= 2; 
+                end
+                idx <= idx + 1;
+                idx1 <= idx;
             end
-            idx <= idx + 1;
-            idx1 <= idx;
-        end
     end
 endmodule

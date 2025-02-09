@@ -37,7 +37,7 @@ module top(
     localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
 
     localparam CPU_BRAM_DATA_WIDTH = 32;
-    localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 128;
+    localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 32;
 
     input wire clk;
     //input wire [15:0] sw;
@@ -209,7 +209,7 @@ module top(
 
         .clkb(clk),
         .addrb(cpu_weight_addr),
-        .doutb(cpu_weight_dout),
+        .doutb(),
         .dinb(cpu_weight_din),
         .web(cpu_weight_we),
         .enb(cpu_weight_en)
@@ -232,7 +232,7 @@ module top(
 
         .clkb(clk),
         .addrb(cpu_input_addr),
-        .doutb(cpu_input_dout),
+        .doutb(),
         .dinb(cpu_input_din),
         .web(cpu_input_we),
         .enb(cpu_input_en)

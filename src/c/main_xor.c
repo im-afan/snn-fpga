@@ -10,13 +10,13 @@ int main()
     setup_snn();
 
     for(int i = 0; i < 28*28; i++) {
-        network_input[i] = 2;
+        //network_input[i] = 2;
         write_network_input(i, network_input[i]);
         //write_network_input(i, network_input[i]);
     }
 
     for(int i = 0; i < 28; i++) {
-        for(int j = 0; j < 28; j++) xil_printf("%d ", read_network_input(i*28+j) != network_input[i*28+j]);
+        for(int j = 0; j < 28; j++) xil_printf("%d ", read_network_input(i*28+j));
             //xil_printf("%d ", network_input[i*28+j]);
         xil_printf("\n\r");
     }
