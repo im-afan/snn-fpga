@@ -76,3 +76,5 @@ status = platform.build()
 
 comp.build()
 
+vitis.dispose()
+

@@ -87,5 +87,6 @@ module bram_streamer (
                 idx <= idx + 1;
                 idx1 <= idx;
             end
+        end
     end
 endmodule
