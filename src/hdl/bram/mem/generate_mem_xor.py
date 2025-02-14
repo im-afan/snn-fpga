@@ -82,10 +82,10 @@ def printmem(memory, path, width, depth, rev=False, bytewidth=8):
 
 
 def write_tile_idx():
-    memory = ["0" for i in range(32*1024)] 
+    memory = ["0" for i in range(64*1024)] 
     for i in range(0, len(tile_idx)):
-        memory[TILE_IDX_WIDTH*2*i : TILE_IDX_WIDTH*2*(i+1)] = bin_(tile_idx[i][1], 16) + bin_(tile_idx[i][0], 16)
-    printmem(memory, "./tile_idx_bram.mem", 32, 1024, bytewidth=16)
+        memory[TILE_IDX_WIDTH*4*i : TILE_IDX_WIDTH*4*(i+1)] = bin_(tile_idx[i][3], 16) + bin_(tile_idx[i][2], 16) + bin_(tile_idx[i][1], 16) + bin_(tile_idx[i][0], 16)
+    printmem(memory, "./tile_idx_bram.mem", 64, 1024, bytewidth=16)
 
 def write_weight():
     memory = ["0" for i in range(2048*1024)] 

@@ -25,7 +25,7 @@ module top_tb;
     initial begin
         forever begin
             #100 sw = 1;
-            #10000 sw = 0;
+            //#10000 sw = 0;
         end
     end
 
