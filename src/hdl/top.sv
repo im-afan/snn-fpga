@@ -29,13 +29,6 @@ module top(
     localparam THRESH = 64;
     localparam FIFO_LENGTH = 1;
 
-    localparam WEIGHT_BRAM_DATA_WIDTH = BRAM_DATA_WIDTH;
-    localparam INPUT_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
-    localparam SPK_IN_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
-    localparam SPK_OUT_BRAM_DATA_WIDTH = CROSSBAR_NEURONS;
-    localparam MEM_BRAM_DATA_WIDTH = CROSSBAR_NEURONS*NETWORK_WIDTH;
-    localparam TILE_IDX_BRAM_DATA_WIDTH = 2*TILE_IDX_WIDTH;
-
     localparam CPU_BRAM_DATA_WIDTH = 32;
     localparam CPU_BRAM_DATA_WIDTH_WEIGHT = 32;
 
@@ -90,7 +83,7 @@ module top(
     wire [127:0] network_input_dout;
     wire [127:0] mem_in_dout;
     wire [15:0] spk_in_dout;
-    wire [31:0] tile_idx_dout;
+    wire [63:0] tile_idx_dout;
     
     wire [15:0] tile_idx_y;
     wire [15:0] tile_idx_y_bram;
@@ -112,17 +105,21 @@ module top(
     wire spk_out_en;
     wire [16:0] spk_out_addr;
     wire [15:0] spk_out_din;
+    wire [16:0] timed_spk_out_addr;
+
+    wire [15:0] timestep;
 
     wire buff_idx;
 
-    buff_idx_controller buff_idx_controller_0 (
+    /*buff_idx_controller buff_idx_controller_0 (
         .clk(clk),
         .en(en),
         .buff_idx(buff_idx)
-    );
+    );*/
+    assign buff_idx = timestep & 1;
 
     asymmetric_dpbram_switched #(
-        .DATA_WIDTH_A(32),
+        .DATA_WIDTH_A(64),
         .ADDR_WIDTH_A(16),
         .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_B(16),
@@ -171,13 +168,13 @@ module top(
     
     asymmetric_dual_port_bram #(
         .DATA_WIDTH_B(16),
-        .ADDR_WIDTH_B(16),
+        .ADDR_WIDTH_B(17),
         .DATA_WIDTH_A(CPU_BRAM_DATA_WIDTH),
-        .ADDR_WIDTH_A(16),
+        .ADDR_WIDTH_A(17),
         .MEM_PATH("spk_in_bram.mem")
     ) bram_spk_out (
         .clkb(clk),
-        .addrb(spk_out_addr_mod),
+        .addrb(timed_spk_out_addr),
         .dinb(spk_out_din),
         .doutb(),
         .web(2'b11),
@@ -268,6 +265,7 @@ module top(
         .done(stream_done),
         .buff_idx(buff_idx),
 		.fifo_pop(lif_has_out),
+        .timestep(timestep),
 
         .weight(weight),
         .network_input(network_input),
@@ -317,13 +315,15 @@ module top(
     bram_writer bram_writer_0 (
         .clk(clk),
         .en(en),
+        .timestep(timestep),
         .buff_idx(buff_idx),
         .has_out(lif_has_out),
         .tile_idx_y(tile_idx_y_bram),
         .mem_out_en(mem_out_en),
         .spk_out_en(spk_out_en),
         .mem_out_addr(mem_out_addr),
-        .spk_out_addr(spk_out_addr)
+        .spk_out_addr(spk_out_addr),
+        .timed_spk_out_addr(timed_spk_out_addr)
     );
 
     led_controller led_controller_0 (
@@ -335,7 +335,7 @@ module top(
 
 
     always @(posedge clk) begin
-        if(spk_out_en && spk_out_addr == 118) begin
+        if(spk_out_en && spk_out_addr_mod == 118) begin
             $display("%b", spk_out_din);
             //$display("%b", mem_out_din);
         end
