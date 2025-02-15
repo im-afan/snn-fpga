@@ -86,7 +86,9 @@ module top(
     wire [63:0] tile_idx_dout;
     
     wire [15:0] tile_idx_y;
+    wire [15:0] tile_idx_y_ext;
     wire [15:0] tile_idx_y_bram;
+    wire [15:0] tile_idx_y_ext_bram;
 
     wire weight_en;
     wire [16:0] weight_addr;
@@ -272,6 +274,7 @@ module top(
         .mem_in(mem_in),
         .spk_in(spk_in),
         .tile_idx_y(tile_idx_y),
+        .tile_idx_y_ext(tile_idx_y_ext),
 
         .weight_dout(weight_dout),
         .network_input_dout(network_input_dout),
@@ -305,9 +308,11 @@ module top(
         .i_mem_in(mem_in),
         .i_spk_in(spk_in),
         .i_tile_idx_y(tile_idx_y),
+        .i_tile_idx_y_ext(tile_idx_y_ext),
         .o_spk_out(spk_out_din),
         .o_mem_out(mem_out_din),
         .o_tile_idx_y(tile_idx_y_bram),
+        .o_tile_idx_y_ext(tile_idx_y_ext_bram),
         .lif_has_out(lif_has_out),
         .busy(snn_busy)
     );
@@ -319,6 +324,7 @@ module top(
         .buff_idx(buff_idx),
         .has_out(lif_has_out),
         .tile_idx_y(tile_idx_y_bram),
+        .tile_idx_y_ext(tile_idx_y_ext_bram),
         .mem_out_en(mem_out_en),
         .spk_out_en(spk_out_en),
         .mem_out_addr(mem_out_addr),

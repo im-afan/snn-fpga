@@ -14,10 +14,12 @@ module snn
     input wire [127:0] i_mem_in,
     input wire [15:0] i_spk_in,
     input wire [15:0] i_tile_idx_y,
+    input wire [15:0] i_tile_idx_y_ext,
 
     output wire [15:0] o_spk_out,
     output wire [127:0] o_mem_out,
     output wire [15:0] o_tile_idx_y,
+    input wire [15:0] o_tile_idx_y_ext,
     output wire lif_has_out,
     output wire busy
 );
@@ -95,6 +97,21 @@ module snn
         .push(push),
         .pop(push),
         .dout(o_tile_idx_y),
+        .empty(),
+        .full()
+    );
+
+    fifo # (
+        .WIDTH(16),
+        .LENGTH(8),
+        .INIT_DIFF(7)
+    ) fifo_tile_idx_ext (
+        .clk(clk),
+        .rst(~en),
+        .din(i_tile_idx_y_ext),
+        .push(push),
+        .pop(push),
+        .dout(o_tile_idx_y_ext),
         .empty(),
         .full()
     );

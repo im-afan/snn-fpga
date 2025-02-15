@@ -18,6 +18,7 @@ module bram_streamer (
     output reg [127:0] mem_in,
     output reg [15:0] spk_in,
     output reg [15:0] tile_idx_y,
+    output reg [15:0] tile_idx_y_ext,
 	
     output reg push_rst,
 	output reg push,
@@ -85,6 +86,7 @@ module bram_streamer (
                         weight <= weight_dout;
                         spk_in <= spk_in_dout;
                         tile_idx_y <= y1;
+                        tile_idx_y_ext <= y_ext1;
                         mem_in <= mem_in_dout;
                         network_input <= network_input_dout;
                         y1 <= y;
