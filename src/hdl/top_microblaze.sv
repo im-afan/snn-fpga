@@ -13,7 +13,7 @@ module top_microblaze(
     output wire JA2 // UART tx 
 );
     localparam BRAM_DATA_WIDTH = 2048;
-    localparam BRAM_ADDR_WIDTH = 16;
+    localparam BRAM_ADDR_WIDTH = 17;
     localparam NETWORK_WIDTH = 8;
     localparam MAX_TILES = 512;
     localparam TILE_IDX_WIDTH = 16;

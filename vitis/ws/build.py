@@ -3,7 +3,7 @@ import vitis
 
 #PATH = "/home/andrew/Desktop/snn-soc"
 #PATH = "/Users/andrew/Desktop/snn-fpga"
-PATH = "/Users/andrew/Desktop/snn-fpga"
+PATH = "C:/Users/andre/Desktop/snn-fpga"
 print(PATH + "/vitis/ws")
 
 client = vitis.create_client()

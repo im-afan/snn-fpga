@@ -1,4 +1,4 @@
-# 2025-02-08T21:31:20.444503700
+# 2025-02-15T17:33:34.510146600
 import vitis
 
 client = vitis.create_client()
@@ -14,7 +14,7 @@ status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=
 comp = client.create_app_component(name="app_component_xor",platform = "$COMPONENT_LOCATION/../platform/export/platform/platform.xpfm",domain = "standalone_microblaze_0")
 
 comp = client.get_component(name="app_component_xor")
-status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=["main_xor.c", "snn_driver.h"], dest_dir_in_cmp = "src")
+status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=["main_xor.c", "snn_driver.h", "model_params.h"], dest_dir_in_cmp = "src")
 
 comp = client.create_app_component(name="uart_listener",platform = "$COMPONENT_LOCATION/../platform/export/platform/platform.xpfm",domain = "standalone_microblaze_0")
 

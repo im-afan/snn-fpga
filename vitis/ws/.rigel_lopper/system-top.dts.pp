@@ -187,12 +187,12 @@
    xlnx,ecc-onoff-reset-value = <0>;
    xlnx,ecc-type = <0>;
    xlnx,rd-cmd-optimization = <0>;
-   xlnx,memory-depth = <65536>;
+   xlnx,memory-depth = <262144>;
    xlnx,use-ecc = <0>;
    xlnx,rable = <0>;
    xlnx,fault-inject = <0>;
    xlnx,ip-name = "axi_bram_ctrl";
-   reg = <0xc0000000 0x40000>;
+   reg = <0xc0000000 0x100000>;
    xlnx,bmg-instance = "EXTERNAL";
    xlnx,s-axi-ctrl-addr-width = <32>;
    xlnx,read-latency = <16>;
@@ -204,10 +204,10 @@
    xlnx,edk-iptype = "PERIPHERAL";
    status = "okay";
    xlnx,data-width = <32>;
-   xlnx,bram-addr-width = <16>;
+   xlnx,bram-addr-width = <18>;
    xlnx,bram-inst-mode = "EXTERNAL";
    xlnx,s-axi-ctrl-data-width = <32>;
-   xlnx,mem-depth = <65536>;
+   xlnx,mem-depth = <262144>;
    xlnx,s-axi-id-width = <1>;
    xlnx,name = "axi_bram_ctrl_0";
   };
@@ -218,12 +218,12 @@
    xlnx,ecc-onoff-reset-value = <0>;
    xlnx,ecc-type = <0>;
    xlnx,rd-cmd-optimization = <0>;
-   xlnx,memory-depth = <2048>;
+   xlnx,memory-depth = <262144>;
    xlnx,use-ecc = <0>;
    xlnx,rable = <0>;
    xlnx,fault-inject = <0>;
    xlnx,ip-name = "axi_bram_ctrl";
-   reg = <0xc2000000 0x2000>;
+   reg = <0xc2000000 0x100000>;
    xlnx,bmg-instance = "EXTERNAL";
    xlnx,s-axi-ctrl-addr-width = <32>;
    xlnx,read-latency = <16>;
@@ -235,10 +235,10 @@
    xlnx,edk-iptype = "PERIPHERAL";
    status = "okay";
    xlnx,data-width = <32>;
-   xlnx,bram-addr-width = <11>;
+   xlnx,bram-addr-width = <18>;
    xlnx,bram-inst-mode = "EXTERNAL";
    xlnx,s-axi-ctrl-data-width = <32>;
-   xlnx,mem-depth = <2048>;
+   xlnx,mem-depth = <262144>;
    xlnx,s-axi-id-width = <1>;
    xlnx,name = "axi_bram_ctrl_1";
   };
@@ -249,12 +249,12 @@
    xlnx,ecc-onoff-reset-value = <0>;
    xlnx,ecc-type = <0>;
    xlnx,rd-cmd-optimization = <0>;
-   xlnx,memory-depth = <8192>;
+   xlnx,memory-depth = <262144>;
    xlnx,use-ecc = <0>;
    xlnx,rable = <0>;
    xlnx,fault-inject = <0>;
    xlnx,ip-name = "axi_bram_ctrl";
-   reg = <0xc4000000 0x8000>;
+   reg = <0xc4000000 0x100000>;
    xlnx,bmg-instance = "EXTERNAL";
    xlnx,s-axi-ctrl-addr-width = <32>;
    xlnx,read-latency = <16>;
@@ -266,10 +266,10 @@
    xlnx,edk-iptype = "PERIPHERAL";
    status = "okay";
    xlnx,data-width = <32>;
-   xlnx,bram-addr-width = <13>;
+   xlnx,bram-addr-width = <18>;
    xlnx,bram-inst-mode = "EXTERNAL";
    xlnx,s-axi-ctrl-data-width = <32>;
-   xlnx,mem-depth = <8192>;
+   xlnx,mem-depth = <262144>;
    xlnx,s-axi-id-width = <1>;
    xlnx,name = "axi_bram_ctrl_2";
   };
@@ -280,12 +280,12 @@
    xlnx,ecc-onoff-reset-value = <0>;
    xlnx,ecc-type = <0>;
    xlnx,rd-cmd-optimization = <0>;
-   xlnx,memory-depth = <2048>;
+   xlnx,memory-depth = <262144>;
    xlnx,use-ecc = <0>;
    xlnx,rable = <0>;
    xlnx,fault-inject = <0>;
    xlnx,ip-name = "axi_bram_ctrl";
-   reg = <0xc6000000 0x2000>;
+   reg = <0xc6000000 0x100000>;
    xlnx,bmg-instance = "EXTERNAL";
    xlnx,s-axi-ctrl-addr-width = <32>;
    xlnx,read-latency = <16>;
@@ -297,10 +297,10 @@
    xlnx,edk-iptype = "PERIPHERAL";
    status = "okay";
    xlnx,data-width = <32>;
-   xlnx,bram-addr-width = <11>;
+   xlnx,bram-addr-width = <18>;
    xlnx,bram-inst-mode = "EXTERNAL";
    xlnx,s-axi-ctrl-data-width = <32>;
-   xlnx,mem-depth = <2048>;
+   xlnx,mem-depth = <262144>;
    xlnx,s-axi-id-width = <1>;
    xlnx,name = "axi_bram_ctrl_3";
   };
@@ -453,28 +453,28 @@
   xlnx,ip-name = "axi_bram_ctrl";
   device_type = "memory";
   memory_type = "memory";
-  reg = <0xC0000000 0x40000>;
+  reg = <0xC0000000 0x100000>;
  };
  axi_bram_ctrl_1_memory: memory@c2000000 {
   compatible = "xlnx,axi-bram-ctrl-4.1";
   xlnx,ip-name = "axi_bram_ctrl";
   device_type = "memory";
   memory_type = "memory";
-  reg = <0xC2000000 0x2000>;
+  reg = <0xC2000000 0x100000>;
  };
  axi_bram_ctrl_2_memory: memory@c4000000 {
   compatible = "xlnx,axi-bram-ctrl-4.1";
   xlnx,ip-name = "axi_bram_ctrl";
   device_type = "memory";
   memory_type = "memory";
-  reg = <0xC4000000 0x8000>;
+  reg = <0xC4000000 0x100000>;
  };
  axi_bram_ctrl_3_memory: memory@c6000000 {
   compatible = "xlnx,axi-bram-ctrl-4.1";
   xlnx,ip-name = "axi_bram_ctrl";
   device_type = "memory";
   memory_type = "memory";
-  reg = <0xC6000000 0x2000>;
+  reg = <0xC6000000 0x100000>;
  };
  microblaze_0_local_memory_dlmb_bram_if_cntlr_memory: memory@0 {
   compatible = "xlnx,lmb-bram-if-cntlr-4.0";
@@ -491,14 +491,14 @@
   serial1 = &axi_uartlite_1;
  };
  cpus_microblaze_0: cpus_microblaze@0 {
-  address-map = <0xC0000000 &axi_bram_ctrl_0_memory 0xC0000000 0x40000>,
-         <0xC0000000 &axi_bram_ctrl_0 0xC0000000 0x40000>,
-         <0xC2000000 &axi_bram_ctrl_1_memory 0xC2000000 0x2000>,
-         <0xC2000000 &axi_bram_ctrl_1 0xC2000000 0x2000>,
-         <0xC4000000 &axi_bram_ctrl_2_memory 0xC4000000 0x8000>,
-         <0xC4000000 &axi_bram_ctrl_2 0xC4000000 0x8000>,
-         <0xC6000000 &axi_bram_ctrl_3_memory 0xC6000000 0x2000>,
-         <0xC6000000 &axi_bram_ctrl_3 0xC6000000 0x2000>,
+  address-map = <0xC0000000 &axi_bram_ctrl_0_memory 0xC0000000 0x100000>,
+         <0xC0000000 &axi_bram_ctrl_0 0xC0000000 0x100000>,
+         <0xC2000000 &axi_bram_ctrl_1_memory 0xC2000000 0x100000>,
+         <0xC2000000 &axi_bram_ctrl_1 0xC2000000 0x100000>,
+         <0xC4000000 &axi_bram_ctrl_2_memory 0xC4000000 0x100000>,
+         <0xC4000000 &axi_bram_ctrl_2 0xC4000000 0x100000>,
+         <0xC6000000 &axi_bram_ctrl_3_memory 0xC6000000 0x100000>,
+         <0xC6000000 &axi_bram_ctrl_3 0xC6000000 0x100000>,
          <0x00000000 &microblaze_0_local_memory_dlmb_bram_if_cntlr_memory 0x00000000 0x4000>,
          <0x00000000 &microblaze_0_local_memory_dlmb_bram_if_cntlr 0x00000000 0x4000>,
          <0x40000000 &axi_gpio_0 0x40000000 0x10000>,

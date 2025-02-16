@@ -20,7 +20,7 @@ module top(
 );
     //reg clk;
     localparam BRAM_DATA_WIDTH = 2048;
-    localparam BRAM_ADDR_WIDTH = 16;
+    localparam BRAM_ADDR_WIDTH = 17;
     localparam NETWORK_WIDTH = 8;
     localparam MAX_TILES = 512;
     localparam TILE_IDX_WIDTH = 16;
@@ -122,9 +122,9 @@ module top(
 
     asymmetric_dpbram_switched #(
         .DATA_WIDTH_A(64),
-        .ADDR_WIDTH_A(16),
+        .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
-        .ADDR_WIDTH_B(16),
+        .ADDR_WIDTH_B(17),
         .MEM_PATH("tile_idx_bram.mem")
     ) bram_tile_idx (
         .ena(en),
@@ -217,9 +217,9 @@ module top(
     //wire [INPUT_BRAM_DATA_WIDTH-1:0] doutb3;
     asymmetric_dpbram_switched #(
         .DATA_WIDTH_A(128),
-        .ADDR_WIDTH_A(16),
+        .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
-        .ADDR_WIDTH_B(16),
+        .ADDR_WIDTH_B(17),
         .MEM_PATH("input_bram.mem")
     ) bram_input (
         .clka(clk),

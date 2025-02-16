@@ -19,7 +19,7 @@ module snn
     output wire [15:0] o_spk_out,
     output wire [127:0] o_mem_out,
     output wire [15:0] o_tile_idx_y,
-    input wire [15:0] o_tile_idx_y_ext,
+    output wire [15:0] o_tile_idx_y_ext,
     output wire lif_has_out,
     output wire busy
 );
