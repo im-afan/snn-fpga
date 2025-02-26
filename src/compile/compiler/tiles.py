@@ -28,11 +28,15 @@ class Tiles:
         self.tiles_bias += new_tiles.tiles_bias
          
 class MLPTiles(Tiles):
-    def __init__(self, model): # compile MLP 
+    def __init__(self, model, out_layer="fc2"): # compile MLP 
         neuron_idx = 0
         for name, param in model.named_parameters():
             if(not name.endswith("weight")):
                 continue
+
+            is_out = out_layer in name 
+            #print(name, out_layer, is_out)
+
             weight = param.data
 
             in_neurons = weight.shape[1]
@@ -49,7 +53,13 @@ class MLPTiles(Tiles):
                 for j in range(0, self.round_up(out_neurons) // self.NEURONS_PER_TILE):
                     x = j*self.NEURONS_PER_TILE
                     tile_weights = weight_pad[x:x+self.NEURONS_PER_TILE, y:y+self.NEURONS_PER_TILE]
-                    self.tile_idx.append([in_idx // self.NEURONS_PER_TILE + i, out_idx // self.NEURONS_PER_TILE + j])
+
+                    in_idx_ext = 0
+                    out_idx_ext = 0
+                    if(is_out):
+                        out_idx_ext = 1 + j
+
+                    self.tile_idx.append([in_idx // self.NEURONS_PER_TILE + i, out_idx // self.NEURONS_PER_TILE + j, in_idx_ext, out_idx_ext])
                     self.tiles.append(tile_weights)
 
             neuron_idx = out_idx

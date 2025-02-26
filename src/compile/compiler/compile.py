@@ -29,6 +29,14 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
     for i in range(len(tiles)):
         print(f"{tile_idx[i][1]},")
     print("};\n")
+    print("uint16_t tile_idx_x_ext[] = {")
+    for i in range(len(tiles)):
+        print(f"{tile_idx[i][2]},")
+    print("};\n")
+    print("uint16_t tile_idx_y_ext[] = {")
+    for i in range(len(tiles)):
+        print(f"{tile_idx[i][3]},")
+    print("};\n")
 
     print("int8_t weight[] = {")
     for i in range(len(tiles)):
@@ -53,6 +61,8 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
 
         print("};")
 
+
+
 def compile_to_py(model, img=None, spk=None, mem=None):
     tile_idx, tiles, tiles_bias = model.tile_idx, model.tiles, model.tiles_bias 
     print("\"\"\" AUTO GENERATED CODE BY MODEL COMPILATION")
@@ -67,7 +77,7 @@ def compile_to_py(model, img=None, spk=None, mem=None):
 
     print("tile_idx = [")
     for i in range(len(tiles)):
-        print(f"[{tile_idx[i][0]}, {tile_idx[i][1]}],")
+        print(f"[{tile_idx[i][0]}, {tile_idx[i][1], {tile_idx[i][2]}, {tile_idx[i][3]}}],")
     for i in range(sz*sz // 16):
         print(f"[{i}, {i}],")
     print("]\n")
