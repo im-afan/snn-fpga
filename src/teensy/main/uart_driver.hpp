@@ -91,11 +91,11 @@ void reset_model() {
     wait_done();
 }
 
-uint16_t read_spk_out(uint16_t x) {
+uint16_t read_spk_out(uint16_t x, uint8_t t) {
     transfer(7);
     transfer(x >> 8);
     transfer(x % (1 << 8));
-    transfer(0);
+    transfer(t);
     transfer(0);
     transfer(0);
     transfer(0);

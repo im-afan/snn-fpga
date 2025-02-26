@@ -21,7 +21,7 @@ module bram_writer # (
     assign mem_out_en = has_out;
     assign spk_out_en = has_out;
     assign mem_out_addr = tile_idx_y * 16;
-    assign spk_out_addr = buff_idx ? tile_idx_y*2 : tile_idx_y * 2 + 2*256;
+    assign spk_out_addr = buff_idx ? tile_idx_y*2 : tile_idx_y * 2 + 2*1024;
     assign timed_spk_out_addr = 2 * (MAX_OUT_TILES * timestep + tile_idx_y_ext);
     assign pop = has_out;
 

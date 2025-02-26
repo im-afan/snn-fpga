@@ -15,8 +15,10 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
 
     print("/* EXPECTED OUTPUT")
 
-    for i in range(len(spk[0])):
-        print(spk[2][i][0].tolist())
+    if(spk):
+        for i in range(len(spk[0])):
+            print(spk[2][i][0].tolist())
+
     print("*/")
 
     print("uint16_t tile_idx_x[] = {")
@@ -36,19 +38,20 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
                 print(f"{val},")
     print("};")
 
-    network_input = []
-    if(img is not None):
-        for i in range(sz*sz):
-            network_input.append(int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL)))
-    network_input += tiles_bias
+    if(img):
+        network_input = []
+        if(img is not None):
+            for i in range(sz*sz):
+                network_input.append(int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL)))
+        network_input += tiles_bias
 
-    print("int8_t network_input[] = {")
-    if(img is not None):
-        for i in range(len(network_input)):
-            val = int(network_input[i])
-            print(f"{val},")
+        print("int8_t network_input[] = {")
+        if(img is not None):
+            for i in range(len(network_input)):
+                val = int(network_input[i])
+                print(f"{val},")
 
-    print("};")
+        print("};")
 
 def compile_to_py(model, img=None, spk=None, mem=None):
     tile_idx, tiles, tiles_bias = model.tile_idx, model.tiles, model.tiles_bias 
@@ -56,10 +59,11 @@ def compile_to_py(model, img=None, spk=None, mem=None):
     print(" * IT IS HIGHLY DISCOURAGED TO EDIT THIS!!!")
     print(" \"\"\"")
 
-    print("\"\"\" EXPECTED OUTPUT")
-    for i in range(len(spk[0])):
-        print(spk[2][i][0].tolist())
-    print("\"\"\"")
+    if(spk):
+        print("\"\"\" EXPECTED OUTPUT")
+        for i in range(len(spk[0])):
+            print(spk[2][i][0].tolist())
+        print("\"\"\"")
 
     print("tile_idx = [")
     for i in range(len(tiles)):
@@ -80,16 +84,17 @@ def compile_to_py(model, img=None, spk=None, mem=None):
         print("],")
     print("]")
 
-    network_input = []
-    if(img is not None):
-        for i in range(sz*sz):
-            network_input.append(int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL)))
-    network_input += tiles_bias
+    if(img):
+        network_input = []
+        if(img is not None):
+            for i in range(sz*sz):
+                network_input.append(int(round(img[i].item() * QUANT_VAL) * (THRESH / QUANT_VAL)))
+        network_input += tiles_bias
 
-    print("snn_in = [")
-    if(img is not None):
-        for i in range(len(network_input)):
-            val = int(network_input[i])
-            print(f"{val},")
+        print("snn_in = [")
+        if(img is not None):
+            for i in range(len(network_input)):
+                val = int(network_input[i])
+                print(f"{val},")
 
-    print("]")
+        print("]")

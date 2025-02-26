@@ -51,7 +51,7 @@ void listen() {
     if(op[0] == 4) write(read_tile_idx_y((op[1] << 8) | op[2]));
     if(op[0] == 5) write(read_weight((op[1] << 8) | op[2], op[3], op[4]));
     if(op[0] == 6) write(read_network_input((op[1] << 8) | op[2]));
-    if(op[0] == 7) write(read_spk_out((op[1] << 8) | op[2]));
+    if(op[0] == 7) write(read_spk_out((op[1] << 8) | op[2]), op[3]);
     if(op[0] == 8) timestep(), write(0);
     if(op[0] == 9) reset_model(), write(0);
 }

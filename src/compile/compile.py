@@ -9,7 +9,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from compiler.tiles import *
 from compiler.compile import *
-
+from compiler.quantize import quantize
 
 sz = 28
 MAX_NEURONS = 1024
@@ -55,7 +55,8 @@ img, label = next(test_loader)
 plt.imshow(img.view(sz, sz));
 plt.show()
 
-model.quantize(torch.tensor(QUANT_VAL))
+#model.quantize(torch.tensor(QUANT_VAL))
+quantize(model, torch.tensor(QUANT_VAL))
 spk0, spk1, spk2, mem0, mem1 = model((img.view(1, -1) * QUANT_VAL).round(), debug=True)
 
 tile = MLPTiles(model)

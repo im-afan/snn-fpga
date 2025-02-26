@@ -5,6 +5,7 @@ module asymmetric_dpbram_switched #(
     parameter integer DATA_WIDTH_A,
     parameter integer ADDR_WIDTH_B,
     parameter integer DATA_WIDTH_B,
+    parameter integer DEPTH = 512,
     parameter MEM_PATH
 ) (
     input wire clka,               // Clock for port A
@@ -85,7 +86,8 @@ module asymmetric_dpbram_switched #(
 	single_port_bram #(
     	.BRAM_ADDR_WIDTH(ADDR_WIDTH_A),
     	.BRAM_DATA_WIDTH(DATA_WIDTH_A),
-    	.MEM_PATH(MEM_PATH)
+    	.MEM_PATH(MEM_PATH),
+        .DEPTH(DEPTH)
     ) mem (
     	.clk(clka),
     	.en(en),

@@ -5,7 +5,8 @@ module asymmetric_dual_port_bram #(
     parameter DATA_WIDTH_A, 
     parameter ADDR_WIDTH_B,
     parameter DATA_WIDTH_B,
-    parameter MEM_PATH
+    parameter MEM_PATH,
+	parameter integer DEPTH = 1024
 ) (
 	input wire clka,               // Clock for port A
     input wire ena,
@@ -59,7 +60,8 @@ module asymmetric_dual_port_bram #(
     	.ADDR_WIDTH_B(ADDR_WIDTH_A),
     	.DATA_WIDTH_A(DATA_WIDTH_A),
     	.DATA_WIDTH_B(DATA_WIDTH_A),
-    	.MEM_PATH(MEM_PATH)
+    	.MEM_PATH(MEM_PATH),
+		.DEPTH(DEPTH)
     ) mem (
     	.clka(clka),
     	.ena(ena),

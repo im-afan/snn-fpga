@@ -7,14 +7,12 @@ from compiler.tiles import MLPTiles
 from compiler.compile import *
 import torch
 from train_rl.policy import CustomActorCriticPolicy 
-import numpy as np
-import snn_serial.snn_driver as driver
-import serial
 
 #register_policy("CustomActorCriticPolicy", CustomActorCriticPolicy)
 
 name = sys.argv[1]
 env = make_vec_env(name)
+
 
 img = None
 try:
@@ -35,28 +33,12 @@ pop_encode = model.policy.pi_features_extractor.extractor
 net = model.policy.mlp_extractor.actor
 pop_decode = model.policy.action_net
 
-#net = quantize(net, torch.tensor(64))
+net = quantize(net, torch.tensor(64))
 
 tile = MLPTiles(net)
 
-ser = serial.Serial("/dev/ttyS0", baudrate=115200)
-
-obs = env.reset()
-while True:
-    obs = torch.from_numpy(obs)
-    x = torch.round(pop_encode(obs) * 64)
-    #x = net(x)
-
-    driver.write_input_arr(ser, x)
-    driver.timestep(ser)
-    x = driver.read_output_arr(ser, 8)
-    print(x)
-
-    action = pop_decode(x)
-    action = np.array([torch.argmax(action)])
-
-    #print(action)
-    #action, _states = model.predict(obs, deterministic=False)
-    obs, rewards, dones, info = env.step(action)
-    env.render("human")
+if(mode == "c"):
+    compile_to_arr(tile)
+elif(mode == "py"):
+    compile_to_py(tile)
 

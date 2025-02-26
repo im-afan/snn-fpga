@@ -14,7 +14,8 @@ module dual_port_bram #(
     parameter DATA_WIDTH_B,
     parameter ADDR_WIDTH_A,
     parameter ADDR_WIDTH_B,
-    parameter MEM_PATH
+    parameter MEM_PATH,
+    parameter integer DEPTH = 1024
 )(
     clka, addra, dina, douta, wea, ena,
     clkb, addrb, dinb, doutb, web, enb 
@@ -38,14 +39,14 @@ module dual_port_bram #(
     input wire [BRAM_DATA_WIDTH/8-1:0] web; // Byte-enable for write
     input wire enb;
 
-    localparam BASE_PATH = "C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/";
+    localparam BASE_PATH = "/Users/andrew/Desktop/snn-fpga/src/hdl/bram/mem/mlp/";
 
     localparam LOG_WORD_WIDTH = $clog2(BRAM_DATA_WIDTH / 8);
     // BRAM memory declaration
-    reg [BRAM_DATA_WIDTH-1:0] mem [1023:0];
+    reg [BRAM_DATA_WIDTH-1:0] mem [DEPTH-1:0];
 
     initial begin
-        for(integer asdf = 0; asdf < 1024; asdf++) begin
+        for(integer asdf = 0; asdf < DEPTH; asdf++) begin
             mem[asdf] = 0;
         end
         $display("reading %s", {BASE_PATH, MEM_PATH});

@@ -16,7 +16,8 @@ module top(
     cpu_tile_idx_addr, cpu_tile_idx_din, cpu_tile_idx_dout, cpu_tile_idx_en, cpu_tile_idx_we,
     cpu_weight_addr, cpu_weight_din, cpu_weight_dout, cpu_weight_en, cpu_weight_we,
     cpu_spk_out_addr, cpu_spk_out_din, cpu_spk_out_dout, cpu_spk_out_en, cpu_spk_out_we,
-    cpu_input_addr, cpu_input_din, cpu_input_dout, cpu_input_en, cpu_input_we
+    cpu_spk_in_addr, cpu_spk_in_din, cpu_spk_in_din, cpu_spk_in_en, cpu_spk_in_we,
+    cpu_input_addr, cpu_input_din, cpu_input_dout, cpu_input_en, cpu_input_we,
 );
     //reg clk;
     localparam BRAM_DATA_WIDTH = 2048;
@@ -56,6 +57,12 @@ module top(
     input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_spk_out_we;
     input wire cpu_spk_out_en;
 
+    input wire [BRAM_ADDR_WIDTH-1:0] cpu_spk_in_addr;
+    input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_in_din;
+    output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_spk_in_dout;
+    input wire [CPU_BRAM_DATA_WIDTH/8-1:0] cpu_spk_in_we;
+    input wire cpu_spk_in_en;
+
     input wire [BRAM_ADDR_WIDTH-1:0] cpu_input_addr;
     input wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_din;
     output wire [CPU_BRAM_DATA_WIDTH-1:0] cpu_input_dout;
@@ -84,6 +91,7 @@ module top(
     wire [127:0] mem_in_dout;
     wire [15:0] spk_in_dout;
     wire [63:0] tile_idx_dout;
+    wire [15:0] spk_in_ext_dout;
     
     wire [15:0] tile_idx_y;
     wire [15:0] tile_idx_y_ext;
@@ -100,6 +108,8 @@ module top(
     wire [16:0] spk_in_addr;
     wire tile_idx_en;
     wire [16:0] tile_idx_addr;
+    wire spk_in_ext_en;
+    wire [16:0] spk_in_ext_addr;
 
     wire mem_out_en;
     wire [16:0] mem_out_addr;
@@ -125,6 +135,7 @@ module top(
         .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_B(17),
+        .DEPTH(MAX_TILES),
         .MEM_PATH("tile_idx_bram.mem")
     ) bram_tile_idx (
         .ena(en),
@@ -141,13 +152,37 @@ module top(
         .dinb(cpu_tile_idx_din),
         .web(cpu_tile_idx_we)
     );
-    
+
+    asymmetric_dual_port_bram #(
+        .DATA_WIDTH_A(CPU_BRAM_DATA_WIDTH),
+        .ADDR_WIDTH_A(17),
+        .DATA_WIDTH_B(16),
+        .ADDR_WIDTH_B(17),
+        .MEM_PATH("spk_in_bram.mem"),
+        .DEPTH(2048)
+    ) bram_spk_in_ext (
+        .clka(clk),
+        .addra(cpu_spk_in_addr),
+        .dina(cpu_spk_in_din),
+        .douta(cpu_spk_in_dout),
+        .wea(cpu_spk_in_we),
+        .ena(en),
+
+        .clkb(clk),
+        .addrb(spk_in_ext_addr),
+        .dinb(),
+        .doutb(spk_in_ext_dout),
+        .web(0),
+        .enb(en)
+    );
+
     asymmetric_dual_port_bram #(
         .DATA_WIDTH_A(16),
         .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(16),
         .ADDR_WIDTH_B(17),
-        .MEM_PATH("spk_in_bram.mem")
+        .MEM_PATH("spk_in_bram.mem"),
+        .DEPTH(2048)
     ) bram_spk_in (
         .clka(clk),
         .addra(spk_in_addr),
@@ -173,7 +208,8 @@ module top(
         .ADDR_WIDTH_B(17),
         .DATA_WIDTH_A(CPU_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_A(17),
-        .MEM_PATH("spk_in_bram.mem")
+        .MEM_PATH("spk_in_bram.mem"),
+        .DEPTH(2048)
     ) bram_spk_out (
         .clkb(clk),
         .addrb(timed_spk_out_addr),
@@ -197,6 +233,7 @@ module top(
         .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH_WEIGHT),
         .ADDR_WIDTH_B(17),
+        .DEPTH(512),
         .MEM_PATH("weight_bram.mem")
     ) bram_weight (
         .clka(clk),
@@ -220,6 +257,7 @@ module top(
         .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_B(17),
+        .DEPTH(2048),
         .MEM_PATH("input_bram.mem")
     ) bram_input (
         .clka(clk),
@@ -280,6 +318,7 @@ module top(
         .network_input_dout(network_input_dout),
         .mem_in_dout(mem_in_dout),
         .spk_in_dout(spk_in_dout),
+        .spk_in_ext_dout(spk_in_ext_dout),
         .tile_idx_dout(tile_idx_dout),
 
 		
@@ -293,6 +332,8 @@ module top(
         .spk_in_addr(spk_in_addr),
         .tile_idx_en(tile_idx_en),
         .tile_idx_addr(tile_idx_addr),
+        .spk_in_ext_en(spk_in_ext_en),
+        .spk_in_ext_addr(spk_in_ext_addr),
 
         .push_rst(push_rst),
 		.push(push)

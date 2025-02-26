@@ -4,9 +4,10 @@
 void write_model(){
     //reset_model();
 
+    int cur_tile = 0;
     int tiles = sizeof(tile_idx_x) / sizeof((uint16_t) 0);
     int weight_idx = 0;
-    /*for(int i = 0; i < tiles; i++) {
+    for(int i = 0; i < tiles; i++) {
         Serial.print(cur_tile);
         Serial.print("\n");
         write_tile(cur_tile, tile_idx_x[i], tile_idx_y[i]);
@@ -18,12 +19,12 @@ void write_model(){
         }
         weight_idx += 16*16;
         cur_tile++;
-    }*/
+    }
 
+
+void write_input() {
     int n_input = sizeof(network_input) / 1;
     for(int i = 0; i < n_input; i++) {
-        Serial.print(network_input[i]);
-        if(i % 28 == 0) Serial.print("\n");
         write_network_input(i, network_input[i]);
     }
 }

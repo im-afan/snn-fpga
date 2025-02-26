@@ -18,11 +18,11 @@ create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
 #add_files ../src/hdl/bram/spk_in_bram.sv
 #add_files ../src/hdl/bram/weight_bram.sv
 ##
-add_files ../src/hdl/bram/mem/input_bram.mem
-add_files ../src/hdl/bram/mem/mem_bram.mem
-add_files ../src/hdl/bram/mem/spk_in_bram.mem
-add_files ../src/hdl/bram/mem/weight_bram.mem
-add_files ../src/hdl/bram/mem/tile_idx_bram.mem
+add_files ../src/hdl/bram/mem/mlp/input_bram.mem
+add_files ../src/hdl/bram/mem/mlp/mem_bram.mem
+add_files ../src/hdl/bram/mem/mlp/spk_in_bram.mem
+add_files ../src/hdl/bram/mem/mlp/weight_bram.mem
+add_files ../src/hdl/bram/mem/mlp/tile_idx_bram.mem
 #
 #add_files ../src/hdl/scheduler/lif_scheduler.sv
 #add_files ../src/hdl/scheduler/xbar_scheduler.sv

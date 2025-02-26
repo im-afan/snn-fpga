@@ -13,8 +13,9 @@ const u32 MAX_TILES = 512;
 
 const u32 BASE_ADDR_WEIGHT = XPAR_AXI_BRAM_CTRL_0_BASEADDR;
 const u32 BASE_ADDR_SPK = XPAR_AXI_BRAM_CTRL_1_BASEADDR;
-const u32 BASE_ADDR_INPUT = XPAR_AXI_BRAM_CTRL_2_BASEADDR;
+const u32 BASE_ADDR_INPUT = XPAR_AXI_BRAM_CTRL_2_BASEADDR; // direct current input
 const u32 BASE_ADDR_TILE_IDX = XPAR_AXI_BRAM_CTRL_3_BASEADDR;
+const u32 BASE_ADDR_SPK_IN = XPAR_AXI_BRAM_CTRL_4_BASEADDR; // spiking input
 
 const u32 BASE_ADDR_EN = XPAR_AXI_GPIO_0_BASEADDR;
 
@@ -23,10 +24,12 @@ const u32 SNN_EN_CHANNEL = 2;
 
 XGpio gpio;
 
-void write_tile(u16 tile_idx, u16 x, u16 y) {
+void write_tile(u16 tile_idx, u16 x, u16 y, u8 x_ext, u8 y_ext) {
     //xil_printf("write_tile_idx %d\n\r", tile_idx);
-	Xil_Out16(BASE_ADDR_TILE_IDX + 2*2*tile_idx, x);
-    Xil_Out16(BASE_ADDR_TILE_IDX + 2*2*tile_idx + 2, y);
+	Xil_Out16(BASE_ADDR_TILE_IDX + 4*2*tile_idx, x);
+    Xil_Out16(BASE_ADDR_TILE_IDX + 4*2*tile_idx + 2, y);
+    Xil_Out16(BASE_ADDR_TILE_IDX + 4*2*tile_idx + 4, x_ext);
+    Xil_Out16(BASE_ADDR_TILE_IDX + 4*2*tile_idx + 6, y_ext);
 }
 
 void write_weight(u16 tile_idx, u8 x, u8 y, s8 val) {
@@ -42,11 +45,8 @@ s8 read_network_input(u32 x) {
     return (s8) Xil_In8(BASE_ADDR_INPUT + x);
 }
 
-
-u16 read_spk_out(u16 x) {
-    //xil_printf("spk_out(%d) = %d\n\r", x, Xil_In16(BASE_ADDR_SPK + 2*x));
-    //xil_printf("input[%d] = %d\n\r", 11, read_network_input(11));
-	return Xil_In16(BASE_ADDR_SPK + 2*x);
+u16 read_spk_out(u16 x, u16 t) {
+	return Xil_In16(BASE_ADDR_SPK + 2*(8*x + t));
 }
 
 u16 read_tile_idx_x(u16 tile_idx) {
@@ -62,10 +62,6 @@ s8 read_weight(u32 tile_idx, u32 x, u32 y) {
 }
 
 void setup_snn() {
-	//XGpioPs gpio;	
-	//XGpioPs_Config *config;
-	//config = XGpioPs_LookupConfig(BASE_ADDR_EN);
-	//XGpioPs_CfgInitialize(&gpio, config, config->baseAddr);	
     XGpio_Initialize(&gpio, BASE_ADDR_EN);
 	XGpio_SetDataDirection(&gpio, SNN_EN_CHANNEL, 0x0);
 	XGpio_SetDataDirection(&gpio, SNN_STATUS_CHANNEL, 0x3);
@@ -88,13 +84,9 @@ int snn_ready() {
 }
 
 void timestep() {
-    //xil_printf("want timestep\n\r");
-	snn_disable();
-	//while(snn_ready() == 0) xil_printf("wait ready\n\r");
-    usleep(5);
 	snn_enable();
-    usleep(5);
-	//while(snn_done() == 0) xil_printf("wait done\n\r");
+    usleep(1024);
+    snn_disable();
 }
 
 void reset_model() {
