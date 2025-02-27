@@ -1,6 +1,6 @@
 SKETCH = main
 
-HOME = /Users/andrew
+HOME = C:/Users/andre
 
 FQBN = teensy:avr:teensy40
 

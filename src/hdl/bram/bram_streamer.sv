@@ -56,7 +56,7 @@ module bram_streamer (
     assign tile_idx_en = enable;
 
     assign weight_addr = idx1 * 16*16;
-    assign spk_in_addr = (x < 1024) ? x * 2 + buff_idx*1024*2 : 1023;
+    assign spk_in_addr = (x < 1024) ? x * 2 + buff_idx*1024 : 1023;
     assign tile_idx_addr = idx * 8;
     assign mem_in_addr = (y < 1024) ? y * 16 : 1023;
     assign network_input_addr = (y < 512) ? y*16 : 1023;

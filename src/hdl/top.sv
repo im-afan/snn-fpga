@@ -16,8 +16,8 @@ module top(
     cpu_tile_idx_addr, cpu_tile_idx_din, cpu_tile_idx_dout, cpu_tile_idx_en, cpu_tile_idx_we,
     cpu_weight_addr, cpu_weight_din, cpu_weight_dout, cpu_weight_en, cpu_weight_we,
     cpu_spk_out_addr, cpu_spk_out_din, cpu_spk_out_dout, cpu_spk_out_en, cpu_spk_out_we,
-    cpu_spk_in_addr, cpu_spk_in_din, cpu_spk_in_din, cpu_spk_in_en, cpu_spk_in_we,
-    cpu_input_addr, cpu_input_din, cpu_input_dout, cpu_input_en, cpu_input_we,
+    cpu_spk_in_addr, cpu_spk_in_din, cpu_spk_in_dout, cpu_spk_in_en, cpu_spk_in_we,
+    cpu_input_addr, cpu_input_din, cpu_input_dout, cpu_input_en, cpu_input_we
 );
     //reg clk;
     localparam BRAM_DATA_WIDTH = 2048;
@@ -153,13 +153,13 @@ module top(
         .web(cpu_tile_idx_we)
     );
 
-    asymmetric_dual_port_bram #(
+    /*asymmetric_dual_port_bram #(
         .DATA_WIDTH_A(CPU_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(16),
         .ADDR_WIDTH_B(17),
         .MEM_PATH("spk_in_bram.mem"),
-        .DEPTH(2048)
+        .DEPTH(0)
     ) bram_spk_in_ext (
         .clka(clk),
         .addra(cpu_spk_in_addr),
@@ -174,7 +174,7 @@ module top(
         .doutb(spk_in_ext_dout),
         .web(0),
         .enb(en)
-    );
+    );*/
 
     asymmetric_dual_port_bram #(
         .DATA_WIDTH_A(16),
@@ -182,7 +182,7 @@ module top(
         .DATA_WIDTH_B(16),
         .ADDR_WIDTH_B(17),
         .MEM_PATH("spk_in_bram.mem"),
-        .DEPTH(2048)
+        .DEPTH(1024)
     ) bram_spk_in (
         .clka(clk),
         .addra(spk_in_addr),
@@ -209,7 +209,7 @@ module top(
         .DATA_WIDTH_A(CPU_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_A(17),
         .MEM_PATH("spk_in_bram.mem"),
-        .DEPTH(2048)
+        .DEPTH(512)
     ) bram_spk_out (
         .clkb(clk),
         .addrb(timed_spk_out_addr),
@@ -257,7 +257,7 @@ module top(
         .ADDR_WIDTH_A(17),
         .DATA_WIDTH_B(CPU_BRAM_DATA_WIDTH),
         .ADDR_WIDTH_B(17),
-        .DEPTH(2048),
+        .DEPTH(512),
         .MEM_PATH("input_bram.mem")
     ) bram_input (
         .clka(clk),

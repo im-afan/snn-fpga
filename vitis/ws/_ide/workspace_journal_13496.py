@@ -1,4 +1,4 @@
-# 2025-02-15T17:33:34.510146600
+# 2025-02-26T23:51:57.244684800
 import vitis
 
 client = vitis.create_client()
@@ -9,12 +9,12 @@ platform = client.create_platform_component(name = "platform",hw_design = "$COMP
 comp = client.create_app_component(name="app_component",platform = "$COMPONENT_LOCATION/../platform/export/platform/platform.xpfm",domain = "standalone_microblaze_0")
 
 comp = client.get_component(name="app_component")
-status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=["main.c", "snn_driver.h", "model.h", "model_params.h"], dest_dir_in_cmp = "src")
+status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=["main_mnist.c", "snn_driver.h", "model.h", "model_params.h"], dest_dir_in_cmp = "src")
 
 comp = client.create_app_component(name="app_component_xor",platform = "$COMPONENT_LOCATION/../platform/export/platform/platform.xpfm",domain = "standalone_microblaze_0")
 
 comp = client.get_component(name="app_component_xor")
-status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=["main_xor.c", "snn_driver.h", "model_params.h"], dest_dir_in_cmp = "src")
+status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=["main_mnist.c", "snn_driver.h", "model_params.h"], dest_dir_in_cmp = "src")
 
 comp = client.create_app_component(name="uart_listener",platform = "$COMPONENT_LOCATION/../platform/export/platform/platform.xpfm",domain = "standalone_microblaze_0")
 

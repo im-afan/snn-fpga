@@ -15,7 +15,7 @@ const u32 BASE_ADDR_WEIGHT = XPAR_AXI_BRAM_CTRL_0_BASEADDR;
 const u32 BASE_ADDR_SPK = XPAR_AXI_BRAM_CTRL_1_BASEADDR;
 const u32 BASE_ADDR_INPUT = XPAR_AXI_BRAM_CTRL_2_BASEADDR; // direct current input
 const u32 BASE_ADDR_TILE_IDX = XPAR_AXI_BRAM_CTRL_3_BASEADDR;
-const u32 BASE_ADDR_SPK_IN = XPAR_AXI_BRAM_CTRL_4_BASEADDR; // spiking input
+//const u32 BASE_ADDR_SPK_IN = XPAR_AXI_BRAM_CTRL_4_BASEADDR; // spiking input
 
 const u32 BASE_ADDR_EN = XPAR_AXI_GPIO_0_BASEADDR;
 
@@ -46,7 +46,7 @@ s8 read_network_input(u32 x) {
 }
 
 u16 read_spk_out(u16 x, u16 t) {
-	return Xil_In16(BASE_ADDR_SPK + 2*(8*x + t));
+	return Xil_In16(BASE_ADDR_SPK + 2*(x + 8*t));
 }
 
 u16 read_tile_idx_x(u16 tile_idx) {
@@ -96,7 +96,7 @@ void reset_model() {
                 write_weight(i, j, k, 0);
             }
         }
-        write_tile(i, 0, 0);
+        write_tile(i, 0, 0, 0, 0);
     }
     for(int i = 0; i < 1024*16; i++) {
         //xil_printf("resetting idx %d\n\r", i);

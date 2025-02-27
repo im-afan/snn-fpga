@@ -46,7 +46,7 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
                 print(f"{val},")
     print("};")
 
-    if(img):
+    if(img is not None):
         network_input = []
         if(img is not None):
             for i in range(sz*sz):
@@ -77,9 +77,9 @@ def compile_to_py(model, img=None, spk=None, mem=None):
 
     print("tile_idx = [")
     for i in range(len(tiles)):
-        print(f"[{tile_idx[i][0]}, {tile_idx[i][1], {tile_idx[i][2]}, {tile_idx[i][3]}}],")
+        print(f"[{tile_idx[i][0]}, {tile_idx[i][1]}, {tile_idx[i][2]}, {tile_idx[i][3]}],")
     for i in range(sz*sz // 16):
-        print(f"[{i}, {i}],")
+        print(f"[{i}, {i}, {0}, {0}],")
     print("]\n")
 
     print("tile = [")
@@ -94,7 +94,7 @@ def compile_to_py(model, img=None, spk=None, mem=None):
         print("],")
     print("]")
 
-    if(img):
+    if(img is not None):
         network_input = []
         if(img is not None):
             for i in range(sz*sz):
