@@ -3,25 +3,26 @@
 #include "xil_printf.h"
 #include "xil_io.h"
 #include "snn_driver.h"
-#include "model_params.h"
 
 int main()
 {
     setup_snn();
-
-    for(int i = 0; i < 28*28; i++) {
-        write_network_input(i, network_input[i]);
-    }
-
-
-    int print_img = 0;
-    int cnt = 0;
+    reset_model();
+    
+    write_tile(0, 0, 0, 0, 0);
+    write_weight(0, 0, 2, 64);
+    write_weight(0, 1, 2, -64);
+    write_weight(0, 0, 3, -64);
+    write_weight(0, 1, 3, 64);
+    write_weight(0, 2, 4, 64);
+    write_weight(0, 3, 4, 64);
+    write_network_input(0, 64);
 
     timestep();
 
     for(int i = 0; i < 128; i++) {
         xil_printf("spk_out: ");
-        u16 spk = read_spk_out(1, i);
+        u16 spk = read_spk_out(0, i);
         for(int i = 0; i < 10; i++) {
             xil_printf("%d", (spk & (1 << i)) > 0);
         }
