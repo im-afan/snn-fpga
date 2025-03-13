@@ -35,15 +35,3 @@ This step may take several minutes (up to ~30 minutes).
 `app_component` (which may take a while to load in) and click build, then run. The board will print out
 the neuron activations at every SNN simulation timestep.
 
-## Codebase explanation
-
-`src/hdl`: hardware description language files, for synthesizing FPGA hardware
- * `network_bram_wrapper`: interface for `network_wrapper` to share BRAM with microblaze CPU
- * `core`: systolic array for spike propagation
- * `network_wrapper`: controls tiling of SNN and inputs to `core` and `lif`
- * `top_microblaze`: top-level design connecting `network_wrapper` to microblaze CPU
-
-`src/c`: high-level C code for controlling the FPGA soft-core CPU. 
-Shares memory with SNN hardware, allowing parameter, input, and output IO without resynthesyzing hardware.
-
-`src/compile`: framework for compiling snnTorch models into C code for FPGA acceleration.
