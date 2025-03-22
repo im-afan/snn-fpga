@@ -9,29 +9,29 @@ in place of the vivado and vitis commands.
 
 ## Setup
 
-1. Download this folder and `cd` into `big-snn/vivado`:\
+1. Vivado is very tricky with relative paths, so you need to change the BASE_PATH variable to match your own root folder in the following locations:
+`src/hdl/dual_port_bram.sv`
+`src/hdl/single_port_bram.sv`
+`vitis/ws/build.py`
+
+2. Download this folder and `cd` into `big-snn/vivado`:\
 	`git clone git@github.com:im-afan/snn-fpga.git`\
 	`cd snn-fpga`
 
-2. Initialize a Vivado project with the HDL files in `src/hdl` called "fpga\_risp\_microblaze" 
-and synthesize, then implement the hardware: 
-
- * For Cmod board: Run `vivado -mode tcl -source basys3_project.tcl`
-
- * For Basys3 board: Run `vivado -mode tcl -source cmod_project.tcl`
+3. Use Vivado to synthesize/implement the project:
+`cd vivado`\
+`vivado -mode tcl -source cmod_project.tcl`
 
 This step may take several minutes (up to ~30 minutes).
 
-3. Now, `cd` into `vitis/ws`
+4. Now, create a Vitis project to program the Microblaze CPU and flash the FPGA using UART:
+`cd ../vitis`\
+`vitis -s build.py`.
 
-4. Change the PATH variable in build.py to the path of the root folder of this repository.
-
-5. Intialize the Vitis workspace by running `vitis -s build.py`.
-
-6. Plug your Basys3/Cmod board into your computer. Open your favorite serial monitor 
+5. Plug your Basys3/Cmod board into your computer. Open your favorite serial monitor 
 (PuTTY on Linux or TeraTerm on Windows) and connect to the board.
 
-7. Finally, open Vitis and open the `vitis/ws` folder. In the left bar, select 
-`app_component` (which may take a while to load in) and click build, then run. The board will print out
-the neuron activations at every SNN simulation timestep.
+6. Finally, open Vitis and open the `vitis/ws` folder. In the left bar, select 
+`app_component_mnist` and click build, then run. The board will print out
+the neuron spikes at every SNN simulation timestep.
 
