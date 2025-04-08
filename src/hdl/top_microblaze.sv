@@ -3,8 +3,8 @@
 
 module top_microblaze(
     input wire clk,
-    input wire [15:0] sw,
-    output wire [15:0] led,
+    //input wire [15:0] sw,
+    //output wire [15:0] led,
 
     input wire usb_uart_rxd,
     output wire usb_uart_txd,
@@ -78,7 +78,7 @@ module top_microblaze(
         .clk(clk),
         .snn_en(snn_en_tri_o),
         .snn_done(snn_done_tri_i),
-        .led(led),
+        .led(),
 
         .cpu_tile_idx_addr(cpu_tile_idx_addr),
         .cpu_tile_idx_din(cpu_tile_idx_din),

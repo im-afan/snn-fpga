@@ -44,7 +44,8 @@ void listen() {
         idx += XUartLite_Recv(&uart, op + idx, 8 - idx);
     }
 
-    if(op[0] == 0) write_tile((op[1] << 8) | op[2], (op[3] << 8) | op[4], (op[5] << 8) | op[6]), write(0);
+    //if(op[0] == 0) write_tile((op[1] << 8) | op[2], (op[3] << 8) | op[4], (op[5] << 8) | op[6]), write(0);
+    if(op[0] == 0) write_tile((op[1] << 8) | op[2], op[3], op[4], op[5], op[6]);
     if(op[0] == 1) write_weight((op[1] << 8) | op[2], op[3], op[4], op[5]), write(0);
     if(op[0] == 2) write_network_input((op[1] << 8) | op[2], op[3]), write(0);
     if(op[0] == 3) write(read_tile_idx_x((op[1] << 8) | op[2]));

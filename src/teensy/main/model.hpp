@@ -10,7 +10,7 @@ void write_model(){
     for(int i = 0; i < tiles; i++) {
         Serial.print(cur_tile);
         Serial.print("\n");
-        write_tile(cur_tile, tile_idx_x[i], tile_idx_y[i]);
+        write_tile(cur_tile, tile_idx_x[i], tile_idx_y[i], tile_idx_x_ext[i], tile_idx_y_ext[i]);
         for(int j = 0; j < 16*16; j++) {
             int idx = weight_idx + j;
             if(weight[idx]) {

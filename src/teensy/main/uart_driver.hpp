@@ -18,14 +18,23 @@ void wait_done() {
     Serial1.readBytes(rx_buff, 4);
 }
 
-void write_tile(uint16_t tile_idx, uint16_t x, uint16_t y) {
-    transfer(0);
+void write_tile(uint16_t tile_idx, uint16_t x, uint16_t y, uint16_t x_ext, uint16_t y_ext) {
+    /*transfer(0);
     transfer(tile_idx >> 8);
     transfer(tile_idx % (1 << 8));
     transfer(x >> 8);
     transfer(x % (1 << 8));
     transfer(y >> 8);
     transfer(y % (1 << 8));
+    transfer(0);
+    wait_done();*/
+    transfer(0);
+    transfer(tile_idx >> 8);
+    transfer(tile_idx % (1 << 8));
+    transfer(x);
+    transfer(y);
+    transfer(x_ext);
+    transfer(y_ext);
     transfer(0);
     wait_done();
 }

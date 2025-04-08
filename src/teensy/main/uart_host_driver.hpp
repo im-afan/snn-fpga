@@ -11,7 +11,7 @@
 uint8_t rx_buff[4];
 uint8_t tx_buff[4];
 
-void setup_uart() {
+void setup_uart_host() {
     Serial.begin(115200);
 }
 
@@ -36,8 +36,8 @@ void listen() {
         transfer();
     } else if(op[0] == 1) {
         uint16_t spk_out = read_spk_out((op[1] << 8) | op[2], op[3]);
-        tx_buff[0] = spk_out & ((1 << 8)-1);
-        tx_buff[1] = spk_out & (((1 << 8)-1) << 8);
+        tx_buff[1] = spk_out >> 8;
+        tx_buff[0] = spk_out % (1 << 8);
         transfer(); 
     } else if(op[0] == 2) {
         timestep();

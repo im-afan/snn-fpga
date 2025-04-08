@@ -1,3 +1,4 @@
+4 64
 /* AUTO GENERATED CODE BY MODEL COMPILATION
  * IT IS HIGHLY DISCOURAGED TO EDIT THIS!!!
  */
@@ -67,6 +68,72 @@ uint16_t tile_idx_y[] = {
 10,
 10,
 10,
+};
+
+uint16_t tile_idx_x_ext[] = {
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+};
+
+uint16_t tile_idx_y_ext[] = {
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+0,
+1,
+1,
+1,
+1,
+1,
 };
 
 int8_t weight[] = {
