@@ -9,9 +9,11 @@ in place of the vivado and vitis commands.
 
 ## Setup (CMOD and Basys boards)
 I provided FPGA bitstream images for the CMOD and Basys boards, so synthesis and implementation is not required for these. To start, download this repo and the corresponding branch for your board:
+
 `git clone git@github.com:im-afan/snn-fpga.git` \
-`git checkout cmod`
-`cd snn-fpga`. Then, follow steps 1, 4, 5, and 6 in the custom build section.
+`git checkout cmod`\
+`cd snn-fpga`.\
+Then, follow steps 1, 4, 5, and 6 in the custom build section.
 
 
 ## Setup (custom build)
