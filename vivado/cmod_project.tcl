@@ -31,7 +31,7 @@ add_files ../src/hdl/bram/mem/mlp/tile_idx_bram.mem
 #
 add_files ../src/hdl/top_microblaze.sv
 add_files ../src/hdl/top_standalone.sv
-add_files ../src/hdl/cmod-constraints-constraints.xdc
+add_files ../src/hdl/cmod-constraints.xdc
 
 source ../src/hdl/microblaze.tcl
 make_wrapper -files [get_files microblaze.bd] -top

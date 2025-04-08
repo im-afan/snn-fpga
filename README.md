@@ -7,7 +7,14 @@ If you can't, you might need to [add the vivado command to your PATH](https://do
 If you are unable to add the two commands to your PATH, you can also run `{vivado install dir}/bin/vivado` and `{vitis install dir}/bin/vitis`
 in place of the vivado and vitis commands.
 
-## Setup
+## Setup (CMOD and Basys boards)
+I provided FPGA bitstream images for the CMOD and Basys boards, so synthesis and implementation is not required for these. To start, download this repo and the corresponding branch for your board:
+`git clone git@github.com:im-afan/snn-fpga.git` \
+`git checkout cmod`
+`cd snn-fpga`. Then, follow steps 1, 4, 5, and 6 in the custom build section.
+
+
+## Setup (custom build)
 
 1. Vivado is very tricky with relative paths, so you need to change the BASE_PATH variable to match your own root folder in the following locations:
 `src/hdl/dual_port_bram.sv`
