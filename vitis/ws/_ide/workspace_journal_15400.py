@@ -1,4 +1,4 @@
-# 2025-03-12T14:09:02.077756300
+# 2025-04-11T17:46:09.925609900
 import vitis
 
 client = vitis.create_client()
@@ -20,6 +20,4 @@ comp = client.create_app_component(name="uart_listener",platform = "$COMPONENT_L
 
 comp = client.get_component(name="uart_listener")
 status = comp.import_files(from_loc="$COMPONENT_LOCATION/../../../src/c", files=["main_uart.c", "snn_driver.h", "uart_driver.h"], dest_dir_in_cmp = "src")
-
-vitis.dispose()
 
