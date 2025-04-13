@@ -62,7 +62,7 @@
    xlnx,sco = <0>;
    xlnx,reset-msr-eip = <0>;
    xlnx,debug-interface = <0>;
-   clock-frequency = <100000000>;
+   clock-frequency = <12000000>;
    xlnx,use-ext-brk = <0>;
    xlnx,daddr-size = <32>;
    xlnx,debug-enabled = <1>;
@@ -140,7 +140,7 @@
    xlnx,enable-conversion = <1>;
    xlnx,num-sync-ff-clk-irq = <1>;
    xlnx,fsl-links = <0>;
-   timebase-frequency = <100000000>;
+   timebase-frequency = <12000000>;
    xlnx,icache-force-tag-lutram = <0>;
    xlnx,dcache-data-width = <0>;
    xlnx,dcache-victims = <0>;
@@ -148,7 +148,7 @@
    xlnx,debug-profile-size = <0>;
    xlnx,unaligned-exceptions = <0>;
    xlnx,lockstep-master = <0>;
-   xlnx,freq = <100000000>;
+   xlnx,freq = <12000000>;
    xlnx,number-of-pc-brk = <1>;
    xlnx,mmu-itlb-size = <2>;
    xlnx,imprecise-exceptions = <0>;
@@ -163,14 +163,14 @@
   clk_cpu_0: clk_cpu@0 {
    compatible = "fixed-clock";
    reg = <0>;
-   clock-frequency = <100000000>;
+   clock-frequency = <12000000>;
    clock-output-names = "clk_cpu";
    #clock-cells = <0>;
   };
   clk_bus_0: clk_bus_0@1 {
    compatible = "fixed-clock";
    reg = <1>;
-   clock-frequency = <100000000>;
+   clock-frequency = <12000000>;
    clock-output-names = "clk_bus_0";
    #clock-cells = <0>;
   };
@@ -310,7 +310,7 @@
    xlnx,all-outputs = <0>;
    #gpio-cells = <2>;
    xlnx,gpio-width = <2>;
-   clock-frequency = <100000000>;
+   clock-frequency = <12000000>;
    xlnx,rable = <0>;
    xlnx,dout-default = <0x0>;
    xlnx,is-dual = <1>;
@@ -334,9 +334,9 @@
   };
   axi_uartlite_0: serial@40600000 {
    compatible = "xlnx,axi-uartlite-2.0" , "xlnx,xps-uartlite-1.00.a";
-   clock-frequency = <100000000>;
+   clock-frequency = <12000000>;
    xlnx,uartlite-board-interface = "Custom";
-   xlnx,s-axi-aclk-freq-hz-d = <100>;
+   xlnx,s-axi-aclk-freq-hz-d = <12>;
    xlnx,rable = <0>;
    xlnx,ip-name = "axi_uartlite";
    reg = <0x40600000 0x10000>;
@@ -353,15 +353,15 @@
   };
   axi_uartlite_1: serial@40610000 {
    compatible = "xlnx,axi-uartlite-2.0" , "xlnx,xps-uartlite-1.00.a";
-   clock-frequency = <100000000>;
+   clock-frequency = <12000000>;
    xlnx,uartlite-board-interface = "Custom";
-   xlnx,s-axi-aclk-freq-hz-d = <100>;
+   xlnx,s-axi-aclk-freq-hz-d = <12>;
    xlnx,rable = <0>;
    xlnx,ip-name = "axi_uartlite";
    reg = <0x40610000 0x10000>;
-   xlnx,baudrate = <115200>;
+   xlnx,baudrate = <110>;
    clocks = <&clk_bus_0>;
-   current-speed = <115200>;
+   current-speed = <110>;
    xlnx,use-parity = <0>;
    xlnx,edk-iptype = "PERIPHERAL";
    xlnx,odd-parity = <0>;

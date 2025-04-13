@@ -3,7 +3,6 @@
 ## - uncomment the lines corresponding to used pins
 ## - rename the used ports (in each line, after get_ports) according to the top level signal names in the project
 
-# uncomment the lines under the clock signal, LED, and buttons sections, and change "btn" to "button".
 
 ## 12 MHz Clock Signal
 set_property -dict { PACKAGE_PIN L17   IOSTANDARD LVCMOS33 } [get_ports { clk }]; #IO_L12P_T1_MRCC_14 Sch=gclk
@@ -87,8 +86,8 @@ set_property -dict { PACKAGE_PIN L18   IOSTANDARD LVCMOS33 } [get_ports { JA4 }]
 #set_property -dict { PACKAGE_PIN V8    IOSTANDARD LVCMOS33 } [get_ports { pio48 }]; #IO_L14N_T2_SRCC_34 Sch=pio[48]
 
 ## UART
-set_property -dict { PACKAGE_PIN J18   IOSTANDARD LVCMOS33 } [get_ports { usb_uart_rxd }]; #IO_L7N_T1_D10_14 Sch=uart_rxd_out
-set_property -dict { PACKAGE_PIN J17   IOSTANDARD LVCMOS33 } [get_ports { usb_uart_txd  }]; #IO_L7P_T1_D09_14 Sch=uart_txd_in
+set_property -dict { PACKAGE_PIN J18   IOSTANDARD LVCMOS33 } [get_ports { usb_uart_txd }]; #IO_L7N_T1_D10_14 Sch=uart_rxd_out
+set_property -dict { PACKAGE_PIN J17   IOSTANDARD LVCMOS33 } [get_ports { usb_uart_rxd  }]; #IO_L7P_T1_D09_14 Sch=uart_txd_in
 
 ## Crypto 1 Wire Interface
 #set_property -dict { PACKAGE_PIN D17   IOSTANDARD LVCMOS33 } [get_ports { crypto_sda }]; #IO_0_14 Sch=crypto_sda

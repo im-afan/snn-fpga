@@ -129,7 +129,6 @@ set bCheckIPsPassed 1
 set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
-xilinx.com:ip:clk_wiz:6.0\
 xilinx.com:ip:axi_uartlite:2.0\
 xilinx.com:ip:proc_sys_reset:5.0\
 xilinx.com:ip:axi_bram_ctrl:4.1\
@@ -329,14 +328,11 @@ proc create_root_design { parentCell } {
 
 
   # Create ports
-  set clk [ create_bd_port -dir I -type clk -freq_hz 100000000 clk ]
+  set clk [ create_bd_port -dir I -type clk -freq_hz 12000000 clk ]
   set rst [ create_bd_port -dir I -type rst rst ]
   set_property -dict [ list \
    CONFIG.POLARITY {ACTIVE_LOW} \
  ] $rst
-
-  # Create instance: clk_wiz_0, and set properties
-  set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
 
   # Create instance: axi_uartlite_0, and set properties
   set axi_uartlite_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_0 ]
@@ -420,7 +416,7 @@ proc create_root_design { parentCell } {
 
   # Create instance: axi_uartlite_1, and set properties
   set axi_uartlite_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_uartlite_1 ]
-  set_property CONFIG.C_BAUDRATE {115200} $axi_uartlite_1
+  set_property CONFIG.C_BAUDRATE {110} $axi_uartlite_1
 
 
   # Create interface connections
@@ -445,14 +441,9 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net microblaze_0_ilmb_1 [get_bd_intf_pins microblaze_0/ILMB] [get_bd_intf_pins microblaze_0_local_memory/ILMB]
 
   # Create port connections
-  connect_bd_net -net clk_100MHz_1  [get_bd_ports clk] \
-  [get_bd_pins clk_wiz_0/clk_in1]
-  connect_bd_net -net clk_wiz_0_locked  [get_bd_pins clk_wiz_0/locked] \
-  [get_bd_pins rst_clk_wiz_0_100M/dcm_locked]
   connect_bd_net -net mdm_1_debug_sys_rst  [get_bd_pins mdm_1/Debug_SYS_Rst] \
-  [get_bd_pins rst_clk_wiz_0_100M/mb_debug_sys_rst] \
-  [get_bd_pins clk_wiz_0/reset]
-  connect_bd_net -net microblaze_0_Clk  [get_bd_pins clk_wiz_0/clk_out1] \
+  [get_bd_pins rst_clk_wiz_0_100M/mb_debug_sys_rst]
+  connect_bd_net -net microblaze_0_Clk  [get_bd_ports clk] \
   [get_bd_pins rst_clk_wiz_0_100M/slowest_sync_clk] \
   [get_bd_pins axi_uartlite_0/s_axi_aclk] \
   [get_bd_pins axi_bram_ctrl_0/s_axi_aclk] \
