@@ -10,3 +10,5 @@ status = platform.build()
 comp = client.get_component(name="app_component_mnist")
 comp.build()
 
+vitis.dispose()
+
