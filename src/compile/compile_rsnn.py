@@ -39,9 +39,9 @@ model = [
     [4, 3, THRESH],
     [4, 2, -THRESH],
     [3, 2, -THRESH],
-    [1, 5, THRESH*2-1],
-    [3, 5, THRESH*2-1],
-    [0, 5, -THRESH*2+1]
+    [1, 16, THRESH*2-1],
+    [3, 16, THRESH*2-1],
+    [0, 16, -THRESH*2+1]
 ]
 tile = RSNNTiles(model, MAX_TILES)
 if(mode == "c"):

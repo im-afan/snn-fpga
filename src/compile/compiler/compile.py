@@ -134,6 +134,7 @@ def compile_to_py(model, network_input=None, spk=None, mem=None):
         for x in range(NEURONS_PER_TILE):
             print("[")
             for y in range(NEURONS_PER_TILE):
+                #print("len", len(tiles[i]))
                 val = int(tiles[i][y][x] * (THRESH / QUANT_VAL))
                 print(f"{val},")
             print("],")

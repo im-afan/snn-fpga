@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import numpy as np
 
 class Tiles:
     MAX_NEURONS = 1024
@@ -99,18 +100,34 @@ class RSNNTiles(Tiles):
         mat = [[0 for i in range(neurons)] for j in range(neurons)]
         self.tiles_bias = [[0] for i in range(neurons // self.NEURONS_PER_TILE)]
 
+        
         for syn in graph:
             mat[syn[1]][syn[0]] = syn[2]
+
+        ##print(np.array(mat).shape)
+        mat = np.array(mat)
         
         for i in range(neurons // self.NEURONS_PER_TILE):
             for j in range(neurons // self.NEURONS_PER_TILE):
-                self.tiles.append(mat[j*self.NEURONS_PER_TILE:(j+1)*self.NEURONS_PER_TILE][i*self.NEURONS_PER_TILE:(i+1)*self.NEURONS_PER_TILE])
-                self.tile_idx.append([j, i, 0, 0]); 
+                #print(np.array(mat[j*self.NEURONS_PER_TILE:(j+1)*self.NEURONS_PER_TILE, i*self.NEURONS_PER_TILE:(i+1)*self.NEURONS_PER_TILE]).shape)
+                self.tiles.append(mat[j*self.NEURONS_PER_TILE:(j+1)*self.NEURONS_PER_TILE, i*self.NEURONS_PER_TILE:(i+1)*self.NEURONS_PER_TILE])
+                self.tile_idx.append([i, j, 0, 0]); 
+
+        #for i in range(len(self.tiles)): 
+        #    print(len(self.tiles[i]), len(self.tile_idx[i]))
 
         pad = max_tiles - len(self.tile_idx) 
+        #print(max_tiles, len(self.tiles), pad)
         for i in range(pad):
             self.tiles.append([[0] * self.NEURONS_PER_TILE] * self.NEURONS_PER_TILE)
             self.tile_idx.append([100, 100, 1, 1]);
+
+        sorted_tiles = [[self.tiles[i], self.tile_idx[i]] for i in range(len(self.tile_idx))]
+        sorted_tiles = sorted(sorted_tiles, key = lambda x: x[1][1])
+
+        self.tile_idx = [i[1] for i in sorted_tiles]
+        self.tiles = [i[0] for i in sorted_tiles]
+
 
 
     def round_up(self, x):

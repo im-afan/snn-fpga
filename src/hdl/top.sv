@@ -382,9 +382,9 @@ module top(
 
 
     always @(posedge clk) begin
-        if(spk_out_en && spk_out_addr_mod == 0) begin
+        //if(spk_out_en && spk_out_addr_mod <= 128) begin
+        if(spk_out_en) begin
             $display("%b", spk_out_din);
-            //$display("%b", mem_out_din);
         end
     end
 endmodule
