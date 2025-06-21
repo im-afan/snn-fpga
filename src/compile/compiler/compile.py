@@ -63,7 +63,7 @@ def compile_to_arr(model, img=None, spk=None, mem=None):
 
 
 
-def compile_to_py(model, img=None, spk=None, mem=None):
+def compile_to_py_img(model, img=None, spk=None, mem=None):
     tile_idx, tiles, tiles_bias = model.tile_idx, model.tiles, model.tiles_bias 
     print("\"\"\" AUTO GENERATED CODE BY MODEL COMPILATION")
     print(" * IT IS HIGHLY DISCOURAGED TO EDIT THIS!!!")
@@ -106,5 +106,47 @@ def compile_to_py(model, img=None, spk=None, mem=None):
             for i in range(len(network_input)):
                 val = int(network_input[i])
                 print(f"{val},")
+
+        print("]")
+
+def compile_to_py(model, network_input=None, spk=None, mem=None):
+    tile_idx, tiles, tiles_bias = model.tile_idx, model.tiles, model.tiles_bias 
+    print("\"\"\" AUTO GENERATED CODE BY MODEL COMPILATION")
+    print(" * IT IS HIGHLY DISCOURAGED TO EDIT THIS!!!")
+    print(" \"\"\"")
+
+    if(spk):
+        print("\"\"\" EXPECTED OUTPUT")
+        for i in range(len(spk[0])):
+            print(spk[2][i][0].tolist())
+        print("\"\"\"")
+
+    print("tile_idx = [")
+    for i in range(len(tiles)):
+        print(f"[{tile_idx[i][0]}, {tile_idx[i][1]}, {tile_idx[i][2]}, {tile_idx[i][3]}],")
+    #for i in range(sz*sz // 16):
+    #    print(f"[{i}, {i}, {0}, {0}],")
+    print("]\n")
+
+    print("tile = [")
+    for i in range(len(tiles)):
+        print("[")
+        for x in range(NEURONS_PER_TILE):
+            print("[")
+            for y in range(NEURONS_PER_TILE):
+                val = int(tiles[i][y][x] * (THRESH / QUANT_VAL))
+                print(f"{val},")
+            print("],")
+        print("],")
+    print("]")
+
+    if(network_input is not None):
+        network_input# += tiles_bias
+        #print(network_input)#, tiles_bias)
+
+        print("snn_in = [")
+        for i in range(len(network_input)):
+            val = int(network_input[i])
+            print(f"{val},")
 
         print("]")

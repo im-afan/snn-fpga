@@ -382,7 +382,7 @@ module top(
 
 
     always @(posedge clk) begin
-        if(spk_out_en && spk_out_addr_mod == 118) begin
+        if(spk_out_en && spk_out_addr_mod == 0) begin
             $display("%b", spk_out_din);
             //$display("%b", mem_out_din);
         end

@@ -89,7 +89,32 @@ class MLPTiles(Tiles):
         self.tile_idx = [i[1] for i in sorted_tiles]
         self.tiles = [i[0] for i in sorted_tiles]
 
-    
+   
+class RSNNTiles(Tiles):
+    def __init__(self, graph, max_tiles):
+        neurons = 0
+        for syn in graph:
+            neurons = max(neurons, max(syn[0], syn[1]))
+        neurons = self.round_up(neurons)
+        mat = [[0 for i in range(neurons)] for j in range(neurons)]
+        self.tiles_bias = [[0] for i in range(neurons // self.NEURONS_PER_TILE)]
+
+        for syn in graph:
+            mat[syn[1]][syn[0]] = syn[2]
+        
+        for i in range(neurons // self.NEURONS_PER_TILE):
+            for j in range(neurons // self.NEURONS_PER_TILE):
+                self.tiles.append(mat[j*self.NEURONS_PER_TILE:(j+1)*self.NEURONS_PER_TILE][i*self.NEURONS_PER_TILE:(i+1)*self.NEURONS_PER_TILE])
+                self.tile_idx.append([j, i, 0, 0]); 
+
+        pad = max_tiles - len(self.tile_idx) 
+        for i in range(pad):
+            self.tiles.append([[0] * self.NEURONS_PER_TILE] * self.NEURONS_PER_TILE)
+            self.tile_idx.append([100, 100, 1, 1]);
+
+
     def round_up(self, x):
         return (x // self.NEURONS_PER_TILE + 1) * self.NEURONS_PER_TILE
+    
+         
 

@@ -56,7 +56,7 @@ module lif#(
         end else begin
             if(rst) begin
                 spk_out <= (sum_clamp1 >= THRESH);
-                mem_out <= (sum_clamp1 >= THRESH) ? 0 : sum_clamp1;
+                mem_out <= (sum_clamp1 >= THRESH || sum_clamp1 < 0) ? 0 : sum_clamp1;
                 if(has_in) begin
                     mem <= mac_out;
                 end else begin

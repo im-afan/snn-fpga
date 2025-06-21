@@ -1,4 +1,6 @@
+import os
 import sys
+import shutil
 import torch
 from torch import nn
 import torch.nn.functional as F
@@ -10,6 +12,7 @@ from torch.utils.data import DataLoader
 from compiler.tiles import *
 from compiler.compile import *
 from compiler.quantize import quantize
+import time
 
 sz = 28
 MAX_NEURONS = 1024
@@ -24,11 +27,20 @@ THRESH = 64 # must be a mutliple of quant_val
 # no bias
 
 img = None
+out_folder = "compile_out"
+
 try:
-    out_path = sys.argv[2]
-    sys.stdout = open(out_path, "w")
+    out_folder = sys.argv[2]
 except Exception:
     pass
+
+try:
+    os.mkdir(out_folder)
+except FileExistsError:
+    pass
+
+out_path = out_folder + "/weights.py"
+sys.stdout = open(out_path, "w")
 
 try:
     mode = sys.argv[1]
@@ -64,5 +76,7 @@ tile = MLPTiles(model)
 if(mode == "c"):
     compile_to_arr(tile, img=img.view(sz*sz), spk=[spk0, spk1, spk2], mem=[mem0, mem1, None])
 elif(mode == "py"):
-    compile_to_py(tile, img=img.view(sz*sz), spk=[spk0, spk1, spk2])
+    compile_to_py_img(tile, img=img.view(sz*sz), spk=[spk0, spk1, spk2])
+    shutil.copy("./py_to_mem.py", out_folder + "/py_to_mem.py")
+    #os.system("cp py_to_mem.py compile_out && cd " + out_folder + " && python3 py_to_mem.py")    
 
