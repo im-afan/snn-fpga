@@ -1,0 +1,24 @@
+digraph G {
+    rankdir=LR;
+    node [shape=circle, style=filled, fillcolor=white];
+
+    // Nodes (automatically created by edges, but we can specify them explicitly if needed)
+    1; 2; 3; 4; 16;
+    
+    {rank = same; 1;}
+    {rank = same; 3; 4;}
+
+    // Black edges
+    1 -> 2 [color=black];
+    2 -> 3 [color=black];
+    3 -> 4 [color=black];
+    4 -> 3 [color=black];
+    4 -> 2 [color=blue];
+    3 -> 2 [color=blue];
+
+    // Red edges
+    1 -> 16 [color=red, penwidth=2];
+    3 -> 16 [color=red, penwidth=2];
+    
+    textnode [label = "1=input spikes\n16=output spikes\nblue=-1\nred=1/2\nblack=1\nall threshold=1, leak=0\nall bias[i]=0 except for bias[16]=-1", shape=none, fontsize=10]
+}
