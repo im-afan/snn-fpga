@@ -1,5 +1,9 @@
 # Spiking Neural Network on FPGA
 
+## Features & Limitations
+
+Currently only inference on the pretrained MNIST SNN is supported. We are working on a framework to generate HDL for a custom trained model.
+
 ## Preliminaries
 
 Make sure Vivado and Vitis are installed and that you can run the `vivado` and `vitis` commands in your terminal. 
@@ -8,7 +12,7 @@ If you are unable to add the two commands to your PATH, you can also run `{vivad
 in place of the vivado and vitis commands.
 
 ## Setup (CMOD and Basys boards)
-I provided FPGA bitstream images for the CMOD and Basys boards, so synthesis and implementation is not required for these. To start, download this repo and the corresponding branch for your board:
+FPGA bitstream images for the CMOD and Basys boards are provided, so synthesis and implementation is not required for these. To start, download this repo and the corresponding branch for your board:
 `git clone git@github.com:im-afan/snn-fpga.git` \
 `git checkout cmod-master`
 `cd snn-fpga`. Then, follow steps 1, 4, 5, and 6 in the custom build section.
@@ -21,7 +25,7 @@ I provided FPGA bitstream images for the CMOD and Basys boards, so synthesis and
 `src/hdl/single_port_bram.sv`
 `vitis/ws/build.py`
 
-2. Download this folder and `cd` into `big-snn/vivado`:\
+2. Download this folder and `cd` into it:\
 	`git clone git@github.com:im-afan/snn-fpga.git`\
 	`cd snn-fpga`
 
