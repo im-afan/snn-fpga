@@ -47,4 +47,5 @@ copy_and_replace("src/hdl", "build/src/hdl", "$SOURCE", path)
 copy_and_replace("src/c", "build/src/c", "$SOURCE", path)
 copy_and_replace("src/build_vitis", "build/vitis", "$SOURCE", path)
 copy_and_replace("src/build_vivado", "build/vivado", "$SOURCE", path)
+copy_and_replace("src/compile/compile_out", "build/src/hdl/bram/mem/mlp", "$SOURCE", path);
 
