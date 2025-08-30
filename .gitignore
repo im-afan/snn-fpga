@@ -16,3 +16,4 @@ vitis/ws/.lock
 *.str
 *.Xil
 .wave/*
+build/*

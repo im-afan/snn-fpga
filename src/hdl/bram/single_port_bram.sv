@@ -19,7 +19,9 @@ module single_port_bram #(
     input wire en;
        
     //localparam BASE_PATH = "C:/Users/andre/Desktop/snn-fpga/src/hdl/bram/mem/mlp/";
-    localparam BASE_PATH = "/Users/andrew/Desktop/snn-fpga/src/hdl/bram/mem/rsnn/";
+    //localparam BASE_PATH = "$SOURCE" + "/hdl/bram/mlp/";
+    //localparam BASE_PATH = "$SOURCE/bram/mem/mlp/";
+    localparam BASE_PATH = "$SOURCE/src/hdl/bram/mem/mlp/";
 
     localparam LOG_WORD_WIDTH = $clog2(BRAM_DATA_WIDTH / 8);
     // BRAM memory declaration

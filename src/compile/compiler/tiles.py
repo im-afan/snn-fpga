@@ -27,6 +27,12 @@ class Tiles:
         self.tiles += new_tiles.tiles
         self.tile_idx += new_tiles.tile_idx
         self.tiles_bias += new_tiles.tiles_bias
+
+
+    def round_up(self, x):
+        return (x // self.NEURONS_PER_TILE + 1) * self.NEURONS_PER_TILE
+
+
          
 class MLPTiles(Tiles):
     def __init__(self, model, out_layer="fc2"): # compile MLP 
@@ -130,8 +136,8 @@ class RSNNTiles(Tiles):
 
 
 
-    def round_up(self, x):
-        return (x // self.NEURONS_PER_TILE + 1) * self.NEURONS_PER_TILE
+    #def round_up(self, x):
+    #    return (x // self.NEURONS_PER_TILE + 1) * self.NEURONS_PER_TILE
     
          
 

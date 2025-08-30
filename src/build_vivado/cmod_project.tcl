@@ -1,3 +1,5 @@
+
+
 create_project -force snn_fpga ./snn_fpga -part xc7a35tcpg236-1
 
 
@@ -30,7 +32,7 @@ add_files ../src/hdl/bram/mem/mlp/tile_idx_bram.mem
 #
 add_files ../src/hdl/top_microblaze.sv
 add_files ../src/hdl/top_standalone.sv
-add_files ../src/hdl/basys3-constraints.xdc
+add_files ../src/hdl/cmod-constraints.xdc
 
 source ../src/hdl/microblaze.tcl
 make_wrapper -files [get_files microblaze.bd] -top
@@ -44,4 +46,3 @@ launch_runs impl_1 -to_step write_bitstream -jobs 12
 wait_on_run impl_1
 
 write_hw_platform -fixed -include_bit -force -file ../vitis/top_microblaze.xsa
-
