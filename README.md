@@ -13,19 +13,26 @@ in place of the vivado and vitis commands.
 ## Setup
 
 1. Create a `build` folder and run the build script. This builds the RTL and software code with the source directory and the compiled SNN parameters.
-`python3 build_project.py`
+```
+mkdir build
+python3 build_project.py
+```
 
-2. Use Vivado to synthesize RTL code:
-`cd build/vivado`
-`vivado -mode tcl -source basys3_project.tcl`
+3. Use Vivado to synthesize RTL code:
+```
+cd build/vivado
+vivado -mode tcl -source basys3_project.tcl
+```
 
-3. After synthesis is finished, build the Vitis project:
-`cd build/vitis`
-`vitis -s build_vitis.py`
+4. After synthesis is finished, build the Vitis project:
+```
+cd ../vitis
+vitis -s build_vitis.py
+```
 
-4. Plug your Basys3/Cmod board into your computer. Open a  serial monitor 
+5. Plug your Basys3/Cmod board into your computer. Open a  serial monitor 
 (PuTTY on Linux or TeraTerm on Windows) and connect to the board.
 
-5. Open Vitis and open the `build/vitis/ws` folder. In the left bar, select 
+6. Open Vitis and open the `build/vitis/ws` folder. In the left bar, select 
 `app_component_mnist` and click build, then run. The board will print out
 the neuron spikes at every SNN simulation timestep.
